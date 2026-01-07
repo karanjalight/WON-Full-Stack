@@ -1,0 +1,175 @@
+{% load static %}
+<!-- Header Section Start -->
+<header class="header-section header-inner">
+    <div class="header-top-section">
+        <div class="container-fluid">
+            <div class="header-top-wrapper">
+                <ul class="top-left">
+                    <li>
+                        <i class="far fa-envelope"></i>
+                        <a class="lowercase" href="mailto:info@won.org">info@won.org</a>
+                    </li>
+                    <li>
+                        <i class="far fa-map-marker-alt"></i>
+                        Nairobi, Kenya
+                    </li>
+                </ul>
+                <div class="social-icon">
+                    <a href="https://instagram.com/worldolympiadnetwork"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/won_global"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com/company/world-olympiad-network"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="header-sticky" class="header-1 header-4">
+        <div class="container-fluid">
+            <div class="mega-menu-wrapper">
+                <div class="header-main">
+                    <div class="header-left">
+                        <div class="logo">
+                            <div class="icon">
+                                <img style="height: 80px;" src="{% static 'img/brand/logowon.png' %}" alt="img">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-right d-flex justify-content-end align-items-center">
+                        <div class="mean__menu-wrapper">
+                            <div class="main-menu">
+                                <nav id="mobile-menu">
+                                    <ul>
+                                        <li><a href="{% url 'index' %}">Home</a></li>
+                                        <li><a href="{% url 'olympiads' %}">Olimpiads</a></li>
+                                        <li><a href="{% url 'subjects' %}">Subjects</a></li>
+                                        <li><a href="{% url 'destination' %}">Destinations</a></li>
+                                        <li class="has-dropdown">
+                                            <a href="/tutors">
+                                                Tutors
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <a href="/">All Tutors</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="/">Mathematics</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="/">Science</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/">English</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/">Computer Science</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!-- <li>
+                                            <a href="{% url 'olympiads' %}">
+                                                Olimpiads
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+                                            <ul class="submenu">
+                                                <li><a href="{% url 'olympiads' %}">All Olimpiads</a></li>
+                                                <li><a href="{% url 'olympiads' %}">International Mathematics Olyp (IMO)</a></li>
+                                                <li><a href="{% url 'olympiads' %}">General Knowledge Olympiad (GKO)</a></li>
+                                                <li><a href="{% url 'olympiads' %}">International English Olympiad (IEO)</a></li>
+                                                <li><a href="{% url 'olympiads' %}">National Science Olympiad (NSO)</a></li>
+                                                <li><a href="{% url 'olympiads' %}">National Cyber Olympiad (NCO)</a></li>
+                                                <li><a href="{% url 'olympiads' %}">International Olympiad on Astronomy and Astrophysics</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="has-dropdown">
+                                            <a href="{% url 'subjects' %}">
+                                                Subjects
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <a href="{% url 'subjects' %}">All Subjects</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'olympiads' %}?subject=mathematics">Mathematics</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'olympiads' %}?subject=science">Science</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'olympiads' %}?subject=english">English</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'olympiads' %}?subject=computer-science">Computer Science</a>
+                                                </li>
+                                            </ul>
+                                        </li> -->
+                                        <!-- <li class="has-dropdown">
+                                            <a href="{% url 'destination' %}">
+                                                Destinations
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <a href="{% url 'destination' %}">Africa</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'destination' %}">Asia</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'destination' %}">Europe</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'destination' %}">America</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'destination' %}">Australia</a>                                                       
+                                                </li>
+                                             </ul>
+                                        </li> -->
+                                        <li class="has-dropdown">
+                                            <a href="{% url 'news' %}">
+                                               Resources
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <a href="{% url 'news' %}">Past Papers</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'team' %}">Tutors</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'destination' %}">Travel Destinations</a>                                                       
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'news' %}">Subscriptions</a>                                                       
+                                                </li>
+                                             </ul>
+                                        </li>
+                                        
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="header-search">
+                            <button class="d-flex align-items-center search-toggle"><i class="far fa-search"></i></button>
+                        </div>
+                        <a href="{% url 'olympiads' %}" class="theme-btn">
+                            <span>Login</span> <i class="far fa-long-arrow-right"></i>
+                        </a>
+                        <div class="header__hamburger d-xl-none my-auto">
+                            <div class="sidebar__toggle">
+                                <div class="header-bar">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+

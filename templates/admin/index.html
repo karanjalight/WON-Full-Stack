@@ -1,0 +1,445 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Override default content padding to fill space */
+    #content {
+        padding: 15px 20px !important;
+        margin: 0 !important;
+    }
+    
+    .dashboard-container {
+        padding: 0;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    @media (max-width: 1200px) {
+        .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .stat-card {
+        background: #667eea;
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        opacity: 0.95;
+    }
+    
+    .stat-card.blue {
+        background: #3b82c0;
+    }
+    
+    .stat-card.green {
+        background: #2eb45b;
+    }
+    
+    .stat-card.orange {
+        background: #922a49;
+    }
+    
+    .stat-card-icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+        opacity: 0.9;
+    }
+    
+    .stat-card-value {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    
+    .stat-card-label {
+        font-size: 14px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .quick-actions {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 18px 20px;
+        margin-bottom: 25px;
+    }
+    
+    .quick-actions h2 {
+        margin-top: 0;
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+    
+    @media (max-width: 1200px) {
+        .quick-actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    .quick-action-btn {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.2s;
+    }
+    
+    .quick-action-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateX(5px);
+    }
+    
+    .quick-action-btn i {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+    
+    /* Module Sections */
+    .module-section {
+        margin-bottom: 30px;
+    }
+    
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #667eea;
+    }
+    
+    .section-icon {
+        font-size: 28px;
+        color: #667eea;
+        margin-right: 15px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 10px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+    
+    /* 3 Column Grid */
+    .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    @media (max-width: 1200px) {
+        .modules-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .modules-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .module-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+        border-left: 4px solid #667eea;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .module-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        transform: translateY(-3px);
+        border-left-color: #764ba2;
+    }
+    
+    .module-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .module-icon {
+        font-size: 28px;
+        color: #667eea;
+        margin-right: 12px;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+    
+    .module-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+        flex: 1;
+    }
+    
+    .module-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: auto;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .module-links li {
+        flex: 1;
+    }
+    
+    .module-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        color: #555;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s;
+        background: #f8f9fa;
+        font-size: 14px;
+    }
+    
+    .module-links a:hover {
+        background: #667eea;
+        color: white;
+    }
+    
+    .module-links a i {
+        margin-right: 6px;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1 style="margin-bottom: 20px; margin-top: 0; color: #333; font-size: 24px;">{% trans 'Dashboard' %}</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-card-value">{{ total_users|default:0 }}</div>
+            <div class="stat-card-label">Total Users</div>
+        </div>
+        
+        <div class="stat-card blue">
+            <div class="stat-card-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-card-value">{{ total_competitions|default:0 }}</div>
+            <div class="stat-card-label">Competitions</div>
+        </div>
+        
+        <div class="stat-card green">
+            <div class="stat-card-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-card-value">{{ total_applications|default:0 }}</div>
+            <div class="stat-card-label">Applications</div>
+        </div>
+        
+        <div class="stat-card orange">
+            <div class="stat-card-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-card-value">${{ total_revenue|default:"0.00" }}</div>
+            <div class="stat-card-label">Total Revenue</div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+        <div class="quick-actions-grid">
+            <a href="/admin/analytics/user-growth/" class="quick-action-btn">
+                <i class="fas fa-chart-line"></i>
+                <span>User Growth Analytics</span>
+            </a>
+            <a href="{% url 'admin:backend_user_add' %}" class="quick-action-btn">
+                <i class="fas fa-user-plus"></i>
+                <span>Add New User</span>
+            </a>
+            <a href="{% url 'admin:backend_competition_add' %}" class="quick-action-btn">
+                <i class="fas fa-plus-circle"></i>
+                <span>Create Competition</span>
+            </a>
+            <a href="{% url 'admin:backend_blogpost_add' %}" class="quick-action-btn">
+                <i class="fas fa-edit"></i>
+                <span>Write Blog Post</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Organized Modules by Category -->
+    {% regroup app_list|dictsort:"name" by name as app_groups %}
+    
+    {% for app in app_list %}
+        {% if app.models %}
+            <div class="module-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        {% if app.name == "Backend" %}
+                            <i class="fas fa-database"></i>
+                        {% elif app.name == "Auth" %}
+                            <i class="fas fa-shield-alt"></i>
+                        {% else %}
+                            <i class="fas fa-folder"></i>
+                        {% endif %}
+                    </div>
+                    <h2 class="section-title">{{ app.name }}</h2>
+                </div>
+                
+                <div class="modules-grid">
+                    {% for model in app.models %}
+                        <div class="module-card">
+                            <div class="module-header">
+                                <div class="module-icon">
+                                    {% if model.admin_url %}
+                                        {% if "User" in model.name and "Profile" not in model.name %}
+                                            <i class="fas fa-user-circle"></i>
+                                        {% elif "Parent" in model.name %}
+                                            <i class="fas fa-user-friends"></i>
+                                        {% elif "Student" in model.name %}
+                                            <i class="fas fa-user-graduate"></i>
+                                        {% elif "School" in model.name %}
+                                            <i class="fas fa-school"></i>
+                                        {% elif "Tutor" in model.name %}
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                        {% elif "Subscription Plan" in model.name %}
+                                            <i class="fas fa-crown"></i>
+                                        {% elif "User Subscription" in model.name %}
+                                            <i class="fas fa-id-card"></i>
+                                        {% elif "Payment" in model.name %}
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        {% elif "Subject" in model.name and "Tutor" not in model.name %}
+                                            <i class="fas fa-book"></i>
+                                        {% elif "Competition" in model.name and "Round" not in model.name %}
+                                            <i class="fas fa-trophy"></i>
+                                        {% elif "Round" in model.name %}
+                                            <i class="fas fa-flag-checkered"></i>
+                                        {% elif "Destination" in model.name %}
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        {% elif "Application" in model.name and "Document" not in model.name %}
+                                            <i class="fas fa-file-alt"></i>
+                                        {% elif "Document" in model.name %}
+                                            <i class="fas fa-file-upload"></i>
+                                        {% elif "Travel Quote" in model.name and "Item" not in model.name %}
+                                            <i class="fas fa-plane"></i>
+                                        {% elif "Quote Item" in model.name %}
+                                            <i class="fas fa-list"></i>
+                                        {% elif "Booking Request" in model.name %}
+                                            <i class="fas fa-calendar-check"></i>
+                                        {% elif "Session" in model.name and "Review" not in model.name %}
+                                            <i class="fas fa-video"></i>
+                                        {% elif "Review" in model.name %}
+                                            <i class="fas fa-star"></i>
+                                        {% elif "Resource" in model.name %}
+                                            <i class="fas fa-file-pdf"></i>
+                                        {% elif "Blog" in model.name %}
+                                            <i class="fas fa-blog"></i>
+                                        {% elif "FAQ" in model.name %}
+                                            <i class="fas fa-question-circle"></i>
+                                        {% elif "Email Template" in model.name %}
+                                            <i class="fas fa-envelope"></i>
+                                        {% elif "Notification" in model.name and "Scheduled" not in model.name %}
+                                            <i class="fas fa-bell"></i>
+                                        {% elif "Scheduled" in model.name %}
+                                            <i class="fas fa-clock"></i>
+                                        {% elif "Contact" in model.name %}
+                                            <i class="fas fa-inbox"></i>
+                                        {% elif "Activity" in model.name %}
+                                            <i class="fas fa-history"></i>
+                                        {% else %}
+                                            <i class="fas fa-table"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-lock"></i>
+                                    {% endif %}
+                                </div>
+                                <h3 class="module-title">{{ model.name }}</h3>
+                            </div>
+                            <ul class="module-links">
+                                {% if model.admin_url %}
+                                    <li>
+                                        <a href="{{ model.admin_url }}">
+                                            <i class="fas fa-list"></i>
+                                            <span>View</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if model.add_url %}
+                                    <li>
+                                        <a href="{{ model.add_url }}">
+                                            <i class="fas fa-plus"></i>
+                                            <span>Add</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

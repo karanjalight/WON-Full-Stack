@@ -1,0 +1,302 @@
+.testimonial-box-items {
+    position: relative;
+    border-radius: 10px;
+    background: #EFEEFA;
+    padding: 35px;
+    margin-top: 30px;
+
+    @include breakpoint (max-sm){
+      padding: 30px;
+    }
+    
+    .icon {
+        position: absolute;
+        bottom: 48px;
+        right: 35px;
+    }
+    .star {
+        color:#F7921E;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 30px;
+        font-family: $heading-font;
+
+        @include breakpoint (max-sm){
+            font-size: 18px;
+        }
+    }
+
+    .client-info {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        .client-content {
+            span {
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.testimonial-wrapper {
+
+    .testimonial-image {
+        position: relative;
+
+        @include breakpoint (max-md){
+            text-align: center;
+        }
+
+        img {
+            @include imgw;
+        }
+
+        .rating {
+            position: absolute;
+            bottom: -7%;
+            right: -26%;
+
+            @include breakpoint (max-xl){
+               display: none;
+            }
+        }
+    }
+
+    .testimonial-content {
+        margin-left: 60px;
+        position: relative;
+
+        .array-button {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 99;
+
+            @include breakpoint (max-md){
+               display: none;
+            }
+        }
+
+        @include breakpoint (max-xl){
+            margin-left: 0;
+        }
+
+        @include breakpoint (max-md){
+           text-align: center;
+        }
+
+        .star {
+            margin-bottom: 30px;
+            border-top: 1px solid rgba(21, 20, 21, 0.12);
+            padding-top: 30px;
+
+            i {
+                color: $theme-color-2;
+            }
+        }
+
+        h3 {
+            font-size: 32px;
+            letter-spacing: -0.64px;
+
+            @include breakpoint (max-xl){
+               font-size: 28px;
+            }
+
+            @include breakpoint (max-md){
+                font-size: 23px;
+            }
+
+            @include breakpoint (max-sm){
+               font-size: 20px;
+            }
+        }
+
+        .client-info-wrapper {
+            @include flex;
+            justify-content: space-between;
+            margin-top: 70px;
+
+            @include breakpoint (max-md){
+                margin-top: 35px;
+                flex-wrap: wrap;
+                gap: 30px;
+                justify-content: center
+            }
+
+            .client-info-item {
+                @include flex;
+                gap: 35px;
+
+                .client-info {
+                    @include flex;
+                    gap: 20px;
+
+                    .content {
+
+                        span {
+                            font-size: 14px;
+                            font-weight: 600;
+                            letter-spacing: -0.14px;
+                        }
+                    }
+                }
+
+                .icon {
+
+                    i{
+                        font-size: 43px;
+                        color: $theme-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.testimonial-wrapper-1 {
+    position: relative;
+
+    .testimonial-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+    }
+}
+
+.testimonial-box-items2 {
+    padding: 30px;
+    border: 1px solid rgba(21, 20, 21, 0.14);
+    border-radius: 28px;
+    margin-top: 30px;
+    
+    .star {
+        color:#F7921E;
+        margin-bottom: 20px;
+    }
+
+    .client-info-items {
+        margin-top: 30px;
+        @include flex;
+        justify-content: space-between;
+
+        .client-info {
+            @include flex;
+            gap: 20px;
+        }
+    }
+}
+
+.testimonial-section-3 {
+    position: relative;
+
+    .array-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        justify-content: space-between;
+        left: 10%;
+        right: 10%;
+
+        @include breakpoint (max-xxl){
+            display: none;
+        }
+    }
+}
+
+.testimonial-box-items-4 {
+    position: relative;
+    padding: 35px;
+    margin-top: 30px;
+    padding-top: 0;
+    z-index: 9;
+
+    &::before {
+        position: absolute;
+        top: 45px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: "";
+        border-radius: 28px;
+        background: $white;
+        box-shadow: 10px 9px 106.6px 55px rgba(5, 6, 60, 0.04);
+        z-index: -1;
+        width: 100%;
+        height: initial;
+    }
+    
+    .star {
+        color: $theme-color-2;
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+    .icon {
+        position: absolute;
+        right: 40px;
+        top: 80px;
+    }
+    h3 {
+        font-size: 22px;
+        font-weight: 500;
+        margin-top: 15px;
+    }
+    .client-info {
+        border-top: 1px dashed rgba(21, 20, 21, 0.21);
+        padding-top: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-top: 20px;
+
+        span {
+            font-size: 14px;
+            font-weight: 600;
+           
+        }
+    }
+}
+
+.testimonial-section-5 {
+    .section-title-area {
+        @include breakpoint (max-lg){
+            text-align: center;
+        }
+        .test-left-top {
+            @include flex;
+            gap: 14px;
+
+            .content {
+                h4 {
+                    font-size: 20px;
+                    font-weight: 600;
+
+                    @include breakpoint (max-lg){
+                        text-align: left;
+                    }
+                }
+
+                p {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+.testimonail-image-5 {
+    margin-top: 30px;
+    margin-bottom: -120px;
+
+    @include breakpoint (max-lg){
+        display: none;
+    }
+}

@@ -1,0 +1,380 @@
+.about-wrapper {
+
+    .about-image {
+        position: relative;
+
+        img {
+           @include imgw;
+            border-radius: 28px;
+        }
+
+        .about-box {
+            position: absolute;
+            left: 30px;
+            bottom: 30px;
+            background-color: $theme-color-2;
+            padding: 30px;
+            border-radius: 28px;
+
+            h2 {
+                font-size: 60px;
+                color: $white;
+            }
+
+            p {
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0.26px;
+                color: $white;
+            }
+        }
+    }
+
+    .about-content {
+       margin-left: 60px;
+
+       @include breakpoint (max-xl){
+             margin-left: 0;
+       }
+
+       @include breakpoint (max-md){
+            text-align: center;
+        }
+
+       .about-sideber {
+            padding: 30px 25px;
+            background-color: $white;
+            border-radius: 6px;
+            border-left: 6px solid $theme-color;
+            margin-top: 30px;
+
+            h5 {
+                font-weight: 600;
+                line-height: 167%
+            }
+       }
+
+       .about-icon-items {
+           @include flex;
+           gap: 50px;
+           margin-top: 35px;
+
+           @include breakpoint (max-xl){
+                flex-wrap: wrap;
+                gap: 30px;
+           }
+
+           @include breakpoint (max-md){
+                justify-content: center;
+            }
+
+           ul {
+              
+                li {
+                    font-size: 18px;
+                    font-weight: 700;
+                    letter-spacing: -0.18px;
+                    color: $text-color;
+
+                    @include breakpoint (max-md){
+                       display: grid;
+                       gap: 10px;
+                       justify-content: center;
+                       text-align: center;
+                    }
+
+                    &:not(:last-child) {
+                        margin-bottom: 12px;
+                    }
+
+                    svg {
+                        margin-right: 8px;
+
+                        @include breakpoint (max-md){
+                          display: block;
+                          text-align: center;
+                          margin-right: 0;
+                          width: 100%;
+                        }
+                    }
+                }
+           }
+       }
+
+       .about-btn {
+            @include flex;
+            gap: 20px;
+            margin-top: 50px;
+
+            @include breakpoint (max-xl){
+                flex-wrap: wrap;
+                gap: 30px;
+                margin-top: 30px;
+           }
+
+           @include breakpoint (max-md){
+                justify-content: center;
+            }
+       }
+    } 
+}
+
+.about-wrappper-2 {
+
+    .about-image {
+        position: relative;
+
+        img {
+            @include imgw;
+        }
+
+        .cricle-shape {
+            position: absolute;
+            top: 25%;
+            left: 5%;
+
+            @include breakpoint (max-xl){
+                display: none;
+            }
+        }
+
+        .counter-box {
+            padding: 30px;
+            right: -4%;
+            bottom: 14%;
+            position: absolute;
+            border-radius: 12px;
+            background: $white;
+            text-align: center;
+            line-height: 1;
+            box-shadow: 0px 4px 85.6px 17px rgba(0, 0, 0, 0.07);
+
+            @include breakpoint (max-xl){
+                display: none;
+            }
+
+            .content {
+
+                h2 {
+                    color: $theme-color-2;
+                    margin-bottom: 5px;
+                }
+
+                p {
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: $text-color;
+                }
+            }
+        }
+    }
+
+    .about-img-2 {
+        position: relative;
+
+        img {
+            @include imgw;
+            border-radius: 200px 200px 0 200px;
+        }
+
+        &.style-2 {
+           img {
+                border-radius: 200px 0 200px 200px;
+                margin-top: 20px;
+           }
+        }
+    }
+
+    .about-image-2 {
+        position: relative;
+
+        .percent-shape {
+            position: absolute;
+            left: 3%;
+            top: 40%;
+            z-index: 9;
+        }
+    }
+
+    .about-img-3 {
+        @include breakpoint (max-md){
+            height: 500px;
+        }
+        img {
+            @include imgw;
+            border-radius: 200px 200px 200px 0;
+            object-fit: cover;
+        }
+    }
+
+    .about-content {
+        margin-left: 50px;
+
+        @include breakpoint (max-xl){
+            margin-left: 0;
+        }
+
+        @include breakpoint (max-md){
+          text-align: center;
+        }
+
+        .about-area {
+            margin-top: 50px;
+
+            @include breakpoint (max-md){
+               margin-top: 40px;
+            }
+
+            @include breakpoint (max-sm){
+                margin-top: 30px;
+            }
+
+            .about-items {
+                display: flex;
+                gap: 30px;
+                margin-bottom: 50px;
+
+                @include breakpoint (max-md){
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 30px;
+                    text-align: center;
+                }
+    
+                .icon {
+                    i {
+                        color: $theme-color;
+                        font-size: 53px;
+                    }
+                }
+    
+                .content {
+    
+                    h4 {
+                        margin-bottom: 20px;
+                    }
+    
+                    p {
+                        font-size: 18px;
+                        font-weight: 500;
+                        color: $text-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .author-items {
+        @include flex;
+        gap: 22px;
+
+        @include breakpoint (max-xl){
+            flex-wrap: wrap;
+        }
+        
+        .author-contact {
+            @include flex;
+            gap: 15px;
+
+
+            .icon {
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                border-radius: 50%;
+                background-color: $theme-color-2;
+                text-align: center;
+            }
+
+            .content {
+                span {
+                    color: #6F7373;
+                    font-size: 14px;
+                    display: inline-block;
+                    margin-bottom: 2px;
+                }
+
+                h6 {
+                    font-size: 16px;
+                    font-weight: 800;
+                    font-family: $body-font;
+                }
+            }
+        }
+    }
+}
+
+.about-section {
+    position: relative;
+
+    .shape-1 {
+        position: absolute;
+        top: 20%;
+        left: 14%;
+
+        @include breakpoint (max-xl) {
+            display: none;
+        }
+    }
+}
+
+.about-wrapper-3 {
+    .about-image {
+        img {
+            @include imgw;
+            border-radius: 10px;
+        }
+    }
+
+    .about-content {
+        margin-left: 50px;
+
+        @include breakpoint (max-xl){
+            margin-left: 0;
+        }
+
+        @include breakpoint (max-md){
+            text-align: center;
+        }
+
+        .about-icon-items {
+            margin-left: -50%;
+            margin-top: 40px;
+            margin-bottom: 40px;
+
+            @include breakpoint (max-lg){
+                margin-left: 0;
+            }
+
+            .icon-items {
+                background-color: $white;
+                border-radius: 10px;
+                border: 1px solid rgba(35, 28, 37, 0.14);
+                padding: 25px;
+                @include flex;
+                gap: 18px;
+
+                @include breakpoint (max-md){
+                    justify-content: center;
+                    text-align: center;
+                    flex-wrap: wrap;
+                }
+
+                i {
+                    font-size: 45px;
+                    color: $theme-color;
+
+                    @include breakpoint (max-md){
+                       flex-basis: 100%;
+                    }
+                }
+
+                h4 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    letter-spacing: -0.4px;
+                }
+            }
+        }
+    }
+}

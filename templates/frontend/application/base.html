@@ -1,0 +1,284 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+ 
+{% block content %}
+<!-- Application Progress Bar -->
+<section class="application-progress section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="progress-steps">
+                    <div class="step-item {% if step >= 1 %}active{% endif %} {% if step > 1 %}completed{% endif %}">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Application Info</div>
+                    </div>
+                    <div class="step-item {% if step >= 2 %}active{% endif %} {% if step > 2 %}completed{% endif %}">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Travel Quote</div>
+                    </div>
+                    <div class="step-item {% if step >= 3 %}active{% endif %} {% if step > 3 %}completed{% endif %}">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Account</div>
+                    </div>
+                    <div class="step-item {% if step >= 4 %}active{% endif %} {% if step > 4 %}completed{% endif %}">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Profile</div>
+                    </div>
+                    <div class="step-item {% if step >= 5 %}active{% endif %} {% if step > 5 %}completed{% endif %}">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Documents</div>
+                    </div>
+                    <div class="step-item {% if step >= 6 %}active{% endif %} {% if step > 6 %}completed{% endif %}">
+                        <div class="step-number">6</div>
+                        <div class="step-label">Review</div>
+                    </div>
+                    <div class="step-item {% if step >= 7 %}active{% endif %}">
+                        <div class="step-number">7</div>
+                        <div class="step-label">Submit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Application Content -->
+<section class="application-content section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="application-card">
+                    <div class="application-header mb-4">
+                        <h2>{{ competition.name }}</h2>
+                        <p class="text-muted">Step {{ step }} of {{ total_steps }}</p>
+                    </div>
+                    
+                    {% block application_content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .application-progress {
+        background: #4D40CA !important;
+        color: white;
+        padding: 40px 0 !important;
+        min-height: 150px;
+        display: block !important;
+        visibility: visible !important;
+    }
+    
+    .progress-steps {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding: 0 20px;
+        flex-wrap: nowrap;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .progress-steps::before {
+        display: none !important;
+    }
+    
+    .step-item {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 20px;
+        margin: 0 auto 12px;
+        transition: all 0.3s ease;
+        border: 3px solid rgba(255,255,255,0.5);
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .step-item.active .step-number {
+        background: white;
+        color: #667eea;
+        transform: scale(1.15);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        border-color: white;
+    }
+    
+    .step-item.completed .step-number {
+        background: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+    
+    .step-item.completed .step-number::after {
+        content: '✓';
+        font-size: 28px;
+        line-height: 1;
+    }
+    
+    .step-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        visibility: visible !important;
+        opacity: 1 !important;
+        display: block !important;
+        margin-top: 5px;
+    }
+    
+    .step-item.active .step-label {
+        color: white;
+        font-weight: 700;
+        font-size: 15px;
+    }
+    
+    .application-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .application-header h2 {
+        color: #212529;
+        margin-bottom: 5px;
+    }
+    
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .form-actions .btn,
+    .form-actions .theme-btn {
+        border-radius: 50px;
+        padding: 12px 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+    
+    .form-actions .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        color: #6c757d;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .form-actions .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+    }
+    
+    @media (max-width: 991px) {
+        .progress-steps {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .step-item {
+            flex: 0 0 calc(33.333% - 10px);
+            margin-bottom: 20px;
+        }
+        
+        .step-label {
+            font-size: 12px;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+        }
+        
+        .application-card {
+            padding: 25px;
+            border-radius: 15px;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .form-actions .btn,
+        .form-actions .theme-btn {
+            width: 100%;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .step-item {
+            flex: 0 0 calc(50% - 10px);
+        }
+        
+        .step-label {
+            font-size: 11px;
+        }
+        
+        .progress-steps::before {
+            display: none;
+        }
+    }
+    
+    /* Fix form input text visibility */
+    .application-card input[type="text"],
+    .application-card input[type="email"],
+    .application-card input[type="tel"],
+    .application-card input[type="date"],
+    .application-card input[type="number"],
+    .application-card input[type="password"],
+    .application-card textarea,
+    .application-card select {
+        color: #212529 !important;
+        background-color: #fff !important;
+        border-radius: 50px;
+        border: 2px solid #e0e0e0;
+    }
+    
+    .application-card input::placeholder,
+    .application-card textarea::placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .application-card input:focus,
+    .application-card textarea:focus,
+    .application-card select:focus {
+        color: #212529 !important;
+        background-color: #fff !important;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .application-card textarea {
+        border-radius: 15px;
+    }
+</style>
+{% endblock %}
+

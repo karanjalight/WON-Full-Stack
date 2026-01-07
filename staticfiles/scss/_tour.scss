@@ -1,0 +1,2072 @@
+.tour-box-items {
+    margin-top: 30px;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    background: $white;
+    box-shadow: 10px 9px 106.6px 55px rgba(5, 6, 60, 0.04);
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+
+    .thumb {
+        
+        img {
+            @include imgw;
+            border-top-left-radius: 28px;
+            border-top-right-radius: 28px;
+        }
+    }
+
+    .content {
+        padding: 24px;
+
+        span {
+            font-size: 13px;
+            font-weight: 700;
+            color: $theme-color;
+        }
+
+        h4 {
+            font-weight: 500;
+            margin-bottom: 20px;
+
+            a {
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        h6 {
+            color: #818181;
+            border-bottom: 1px dashed rgba(21, 20, 21, 0.21);;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            font-family: $body-font;
+
+            span {
+                font-size: 18px;
+                font-weight: 900;
+            }
+
+            del {
+                color: rgba(129, 129, 129, 0.72);
+                font-weight: 500;
+                font-family: $body-font;
+            }
+        }
+
+        .list {
+            @include flex;
+            gap: 10px;
+
+            @include breakpoint (max-xxl){
+                flex-wrap: wrap;
+            }
+
+            li {
+                color: #818181;
+                font-weight: 500;
+                font-size: 14px;
+
+                i {
+                    color: $theme-color-2;
+                    margin: 5px;
+                }
+            }
+        }
+    }
+}
+
+.tour-box-items-2 {
+    border-radius: 28px;
+    border: 1px solid rgba(21, 20, 21, 0.14);
+    background: $white;
+    padding: 15px;
+    margin-top: 30px;
+
+    .tour-image {
+        position: relative;
+
+        &::before {
+            @include before;
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(21, 20, 21, 0.00) 0%, rgba(21, 20, 21, 0.78) 86.91%);
+        }
+
+        img {
+            @include imgw;
+            border-radius: 28px;
+        }
+
+        .post-bar {
+            @include flex;
+            justify-content: space-between;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+
+            &.style-2 {
+
+                .post-item {
+                    @include flex;
+                    gap: 20px;
+
+                    .post {
+
+                        &.bg-color {
+                            background-color: $theme-color;
+                        }
+                    }
+                }
+            }
+
+            .post {
+                font-size: 14px;
+                font-weight: 500;
+                color: $white;
+                background: $theme-color-2;
+                padding: 11px 19px;
+                border-radius: 72px;
+                line-height: 1;
+            }
+
+            .icon {
+                width: 39px;
+                height: 39px;
+                line-height: 45px;
+                border-radius: 100px;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.19);
+                color: $white;
+                @include transition;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $theme-color;
+                }
+            }
+        }
+    }
+
+    .tour-content {
+        padding: 25px 15px;
+
+        h3 {
+            a {
+                background-position: 0 95%;
+                background-repeat: no-repeat;
+                background-size: 0% 2px;
+                display: inline;
+
+                &:hover {
+                    color: $theme-color;
+                    background-size: 100% 2px;
+                    background-image: linear-gradient(var(--theme-color), var(--theme-color));
+                }
+            }
+        }
+
+        .meta {
+            margin-top: 10px;
+
+            li {
+                font-weight: 700;
+                font-size: 14px;
+            }
+        }
+
+        .rating-bar {
+            @include flex;
+            justify-content: space-between;
+            margin-top: 15px;
+
+            .rating {
+
+                li {
+                    font-size: 14px;
+                    font-weight: 700;
+
+                    i {
+                        color: $theme-color;
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .icon {
+                @include flex;
+                gap: 16px;
+
+                li {
+                    i {
+                        color: $text-color;
+                    }
+                }
+            }
+        }
+
+        .tour-btn {
+            margin-top: 15px;
+            @include flex;
+            justify-content: space-between;
+
+            @include breakpoint (max-xxl){
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .theme-btn {
+                padding: 5px 6px 5px 26px;
+
+                span {
+                    margin-right: 8px;
+                }
+
+                i {
+                    width: 34px;
+                    height: 34px;
+                    line-height: 34px;
+                }
+            }
+
+            h2 {
+                font-size: 32px;
+                font-weight: 500;
+
+                span {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #818181;
+                    font-family: $body-font;
+                }
+            }
+        }
+    }
+}
+
+.top-hotel-box-item {
+    margin-top: 30px;
+    border-radius: 28px;
+    padding: 10px;
+    padding-right: 0;
+    @include flex;
+    gap: 30px;
+    @include transition;
+    border: 1px solid rgba(21, 20, 21, 0.14);
+
+    @include breakpoint (max-xxxl){
+        flex-wrap: wrap;
+    }
+
+    .hotel-img {
+        max-width: 335px;
+        position: relative;
+
+        .icon {
+            width: 39px;
+            height: 39px;
+            line-height: 45px;
+            border-radius: 100px;
+            text-align: center;
+            background: $white;
+            color: $header-color;
+            @include transition;
+            cursor: pointer;
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+
+            &:hover {
+                background-color: $theme-color;
+                color: $white;
+            }
+        }
+
+        @include breakpoint (max-xxxl){
+           flex-basis: 100%;
+           max-width: initial;
+        }
+
+        img {
+            width:100%;
+            height: 100%;
+            border-radius: 28px;
+           
+        }
+    }
+
+    .hotel-content {
+        padding: 0 35px 0;
+        max-width: 380px;
+        padding-left: 0;
+
+        @include breakpoint (max-xxxl){
+            max-width: initial;
+            padding: 30px;
+            padding-top: 0;
+        }
+
+        .location-icon {
+            font-size: 14px;
+            font-weight: 700;
+            color: #818181;
+            margin-bottom: 10px;
+            display: inline-block;
+
+            i {
+                color: $theme-color;
+                margin-right: 10px;
+            }
+        }
+
+        h3 {
+            a {
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        .list-items {
+            margin-top: 25px;
+            @include flex;
+            gap: 40px;
+            border-bottom: 1px solid rgba(21, 20, 21, 0.14);
+            padding-bottom: 25px;
+
+            @include breakpoint (max-xl){
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            ul {
+                li {
+                    color: #818181;
+                    font-size: 14px;
+                    font-weight: 700;
+
+                    &:not(:last-child){
+                        margin-bottom: 15px;
+                    }
+
+                    svg {
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+
+        .btn-area {
+            @include flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+
+            @include breakpoint (max-xl){
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .theme-btn {
+                font-size: 16px;
+                border: 1px solid $theme-color;
+                background-color: transparent;
+                padding: 9px 10px 9px 25px;
+
+                span {
+                    color: $header-color;
+                    margin-right: 15px;
+                }
+
+                i {
+                    width: 34px;
+                    height: 34px;
+                    line-height: 34px;
+                    background-color: $theme-color;
+                    color: $white;
+                    @include transition;
+                }
+
+                &::before{
+                    background-color: $theme-color;
+                }
+
+                &::after{
+                    background-color: $theme-color;
+                }
+
+                &:hover {
+                    span {
+                        color: $white;
+                    }
+
+                    i {
+                        width: 34px;
+                        height: 34px;
+                        line-height: 34px;
+                        background-color: $white;
+                        color: $header-color;
+                    }
+                }
+            }
+
+            .price-titile {
+                font-size: 30px;
+                font-weight: 500;
+    
+                sub {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #818181;
+                    font-family: $body-font;
+                }
+            }
+        }
+    }
+
+    &.style-2 {
+        .hotel-content {
+            padding-right: 0;
+            padding-left: 35px;
+
+            @include breakpoint (max-xxxl){
+                max-width: initial;
+                padding: 30px;
+                //padding-top: 0;
+            }
+        }
+    }
+
+    &:hover {
+        background: #EFEEFA;
+    }
+}
+
+.amazing-tour-wrapper {
+    margin-left: -5%;
+    margin-right: -5%;
+
+    @include breakpoint (max-xl){
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+.amazing-tour-items {
+    margin-top: 30px;
+
+    .thumb {
+        position: relative;
+
+        .post-box {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background-color: $theme-color;
+            text-align: center;
+            
+            h4 {
+                font-size: 20px;
+                font-weight: 600;
+                color: $white;
+                line-height: 1;
+                padding-top: 20px;
+            }
+
+            span {
+                font-size: 14px;
+                font-weight: 700;
+                color: $white;
+            }
+        }
+
+        &::before {
+            @include before;
+            border-radius: 10px 10px 0 0;
+            background: linear-gradient(180deg, rgba(21, 20, 21, 0.00) 0%, rgba(21, 20, 21, 0.78) 86.91%);
+        }
+        img {
+            @include imgw;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .list-items {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            @include flex;
+            justify-content: space-between;
+
+            h6 {
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 72px;
+                background: rgba(255, 255, 255, 0.15);
+                color: $white;
+                padding: 11px 20px;
+                line-height: 1;
+            }
+
+            .popup-icon {
+                @include flex;
+                gap: 17px;
+    
+                li {
+                    a {
+                        color: $white;
+    
+                        &:hover {
+                            color: $theme-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        padding: 25px;
+        border-radius: 0px 0px 10px 10px;
+        background: #EFEEFA;
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 145%;
+
+            a {
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        .location-icon {
+            font-size: 14px;
+            font-weight: 700;
+            color: #818181;
+            display: block;
+            margin-top: 15px;
+
+            i {
+                color: $header-color;
+                margin-right: 5px;
+            }
+        }
+
+        .theme-btn {
+            font-size: 16px;
+            background-color: $white;
+            padding: 7px 10px 7px 30px;
+            margin-top: 15px;
+
+            span {
+                color: $theme-color;
+                margin-right: 15px;
+            }
+
+            i {
+                width: 34px;
+                height: 34px;
+                line-height: 34px;
+                background-color: $theme-color;
+                color: $white;
+                @include transition;
+            }
+
+            &::before{
+                background-color: $theme-color;
+            }
+
+            &::after{
+                background-color: $theme-color;
+            }
+
+            &:hover {
+                span {
+                    color: $white;
+                }
+
+                i {
+                    width: 34px;
+                    height: 34px;
+                    line-height: 34px;
+                    background-color: $white;
+                    color: $header-color;
+                }
+            }
+        }
+    }
+}
+
+.tour-details-wrapper {
+    .tour-details-items {
+        .details-thumb {
+            position: relative;
+
+            &::before {
+                @include before;
+                background: linear-gradient(185deg, rgba(0, 0, 0, 0.00) 63.28%, rgba(0, 0, 0, 0.82) 96.13%);
+                border-radius: 28px;
+            }
+
+            img {
+                @include imgw;
+                border-radius: 28px;
+            }
+        }
+
+        .details-content {
+            margin-top: 35px;
+
+            .location-icon {
+                font-weight: 700;
+                color: #818181;
+                display: inline-block;
+                margin-bottom: 20px;
+
+                i {
+                    color: $theme-color-2;
+                    margin-right: 5px;
+                }
+            }
+
+            h2 {
+                margin-bottom: 25px;
+                font-size: 48px;
+                font-weight: 600;
+
+                @include breakpoint (max-lg){
+                    font-size: 44px;
+                }
+
+                @include breakpoint (max-sm){
+                    font-size: 36px;
+                }
+            }
+
+            .destination-list-item {
+                margin-top: 40px;
+
+                .destination-list {
+                    margin-top: 20px;
+                    @include flex;
+                    gap: 70px;
+
+                    @include breakpoint (max-xxl){
+                        gap: 30px;
+                     }
+ 
+                     @include breakpoint (max-xl){
+                         flex-wrap: wrap;
+                     }
+
+                    li {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: $text-color;
+
+                        &:not(:last-child) {
+                            margin-bottom: 15px;
+                        }
+
+                        i {
+                            margin-right: 6px;
+                            color: $theme-color;
+                        }
+                    }
+                }
+            }
+
+            .tour-details-icon {
+                border-radius: 28px;
+                border: 1px solid rgba(99, 171, 69, 0.16);
+                background: rgba(239, 238, 250, .72);
+                padding: 50px 35px;
+                margin-top: 50px;
+                margin-bottom: 50px;
+
+                .icon {
+                    @include flex;
+                    gap: 15px;
+
+                    i {
+                        font-size: 45px;
+                        color: $theme-color;
+                    }
+
+                    h5 {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .faq-items {
+                border-radius: 28px;
+                border: 1px solid rgba(99, 171, 69, 0.16);
+                background: rgba(239, 238, 250, .72);
+                padding: 50px 35px;
+                // margin-top: 50px;
+                // margin-bottom: 50px;
+
+                h4 {
+                    font-size: 32px;
+                    font-weight: 600;
+                    margin-bottom: 30px;
+                }
+
+                .accordion-item {
+                    background-color: transparent;
+
+                   .accordion-header {
+                        .accordion-button {
+                            font-size: 18px;
+                            font-weight: 600;
+
+                            span {
+                                color: #F7921E;
+                            }
+                        }
+                   }
+                }
+            }
+
+            .map-area {
+               margin-top: 50px;
+
+                h3 {
+                    font-size: 32px;
+                    font-weight: 600;
+                    margin-bottom: 30px;
+                }
+
+                iframe {
+                    height: 346px;
+                    border-radius: 28px;
+                    width: 100%;
+                }
+            }
+
+            .review-area {
+                margin-top: 50px;
+
+                h3 {
+                    font-size: 32px;
+                    font-weight: 600;
+                    margin-bottom: 30px;
+                }
+
+                .courses-reviews-box-items {
+                    border-radius: 28px;
+                    background: #151415;
+                    padding: 45px;
+
+                    .courses-reviews-box {
+                        @include flex;
+                        gap: 35px;
+
+                        @include breakpoint (max-md){
+                            flex-wrap: wrap;
+                            gap: 20px;
+                        }
+
+                        .reviews-box {
+                            padding: 50px 34px;
+                            text-align: center;
+                            min-width: 257px;
+                            border-radius: 28px;
+                            background: rgba(255, 255, 255, 0.10);
+
+                            h2 {
+                                font-size: 70px;
+                                font-weight: 700;
+                                line-height: 1;
+                                color: $white;
+                            }
+
+                            .star {
+                                color: #F7921E;
+                                margin-bottom: 10px;
+                            }
+
+                            p {
+                                color: $white;
+                            }
+                        }
+                    }
+
+                    .reviews-ratting-right {
+                        max-width: 460px;
+                        width: 100%;
+
+                        .reviews-ratting-item {
+                            @include flex;
+                            gap: 30px;
+
+                            @include breakpoint (max-md){
+                                flex-wrap: wrap;
+                                gap: 20px;
+                            }
+
+                            &:not(:last-child){
+                                margin-bottom: 15px;
+                            }
+    
+                            .star {
+                                color: #F7921E;
+                                @include flex;
+                                gap: 7px;
+    
+                                i {
+                                    &.color-2 {
+                                        color: $text-color;
+                                    }
+                                }
+                            }
+    
+                            span {
+                                font-weight: 500;
+                                color: $white;
+                                font-size: 16px;
+                            }
+    
+                            .progress {
+                                background: rgba(247, 146, 30, 0.15);
+                                justify-content: flex-start;
+                                border-radius: 0;
+                                align-items: center;
+                                position: relative;
+                                display: flex;
+                                height: 5px;
+                                width: 100%;
+                                max-width: 244px;
+                            }
+                            
+                            .progress-value {
+                                animation: load 3s normal forwards;
+                                border-radius: 0;
+                                background: #F7921E;
+                                height: 5px;
+                                width: 0;
+                            }
+                            .style-two{
+                                animation: load2 3s normal forwards;
+                            }
+                            .style-three{
+                                animation: load3 3s normal forwards;
+                            }
+                            .style-four{
+                                animation: load4 3s normal forwards;
+                            }
+                            .style-five{
+                                animation: load5 3s normal forwards;
+                            }
+                            @keyframes load {
+                                0% { width: 0; }
+                                100% { width: 100%; }
+                            }
+                            @keyframes load2 {
+                                0% { width: 0; }
+                                100% { width: 90%; }
+                            }
+                            @keyframes load3 {
+                                0% { width: 0; }
+                                100% { width: 80%; }
+                            }
+                            @keyframes load4 {
+                                0% { width: 0; }
+                                100% { width: 70%; }
+                            }
+                            @keyframes load5 {
+                                0% { width: 0; }
+                                100% { width: 60%; }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .client-review-items {
+                margin-top: 50px;
+                margin-bottom: 50px;
+
+                h3 {
+                    font-size: 32px;
+                    font-weight: 600;
+                    margin-bottom: 30px;
+                }
+
+                .clinet-box-items {
+                    border-radius: 28px;
+                    border: 1px solid rgba(21, 20, 21, 0.14);
+                    background: $white;
+                    padding: 45px;
+
+                    .clinet-box {
+                        .star {
+                            color: #F7921E;
+                            margin-bottom: 20px;
+                        }
+    
+                        h5 {
+                            font-size: 18px;
+                            letter-spacing: -0.36px;
+                            font-weight: 500;
+                            line-height: 178%;
+                        }
+    
+                        .review-wrap-area {
+                            border-bottom: 1px solid rgba(21, 20, 21, 0.14);
+                            padding-bottom: 40px;
+                            margin-top: 40px;
+                
+                            @include breakpoint (max-lg) {
+                                flex-wrap: wrap;
+                                gap: 20px !important;
+                            }
+                
+                            .review-thumb {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 50%;
+                
+                                img {
+                                    @include imgw;
+                                    border-radius: 50%;
+                                }
+                            }
+                
+                            .review-content {
+                                width: 100%;
+                                flex-basis: 90%;
+                
+                                @include breakpoint (max-lg){
+                                    flex-basis: initial;
+                                }
+                
+                                .head-area {
+                                    .cont {
+                                        margin-bottom: 10px;
+                
+                                        h5 {
+                                            font-size: 20px;
+                                            font-weight: 600;
+                                        }
+                
+                                        span {
+                                            color: #455151;
+                                            font-size: 16px;
+                                            font-weight: 600;
+                                        }
+                                    }
+                
+                                    h6 {
+                                        font-weight: 600;
+                                        font-size: 20px;
+                                        text-decoration: underline;
+                                        color: $theme-color;
+            
+                                        a {
+                                            color: $theme-color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &.style-2 {
+                            padding-left: 100px;
+                            margin-top: 40px;
+
+                            @include breakpoint (max-xl){
+                               padding-left: 0;
+                            }
+
+                            .review-wrap-area {
+                                border-bottom: none;
+                                margin-top: 40px;
+                                padding-bottom: 0;
+                            }
+                        }
+                    }
+                }
+
+                .clinet-box-3 {
+                    border-radius: 28px;
+                    border: 1px solid rgba(21, 20, 21, 0.14);
+                    background: $white;
+                    padding: 45px;
+                    margin-top: 25px;
+
+                    .star {
+                        color: #F7921E;
+                        margin-bottom: 20px;
+                    }
+
+                    h5 {
+                        font-size: 18px;
+                        letter-spacing: -0.36px;
+                        font-weight: 500;
+                        line-height: 178%;
+                    }
+
+                    .review-wrap-area {
+                        margin-top: 40px;
+            
+                        @include breakpoint (max-lg) {
+                            flex-wrap: wrap;
+                            gap: 20px !important;
+                        }
+            
+                        .review-thumb {
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 50%;
+            
+                            img {
+                                @include imgw;
+                                border-radius: 50%;
+                            }
+                        }
+            
+                        .review-content {
+                            width: 100%;
+                            flex-basis: 90%;
+            
+                            @include breakpoint (max-lg){
+                                flex-basis: initial;
+                            }
+            
+                            .head-area {
+                                .cont {
+                                    margin-bottom: 10px;
+            
+                                    h5 {
+                                        font-size: 20px;
+                                        font-weight: 600;
+                                    }
+            
+                                    span {
+                                        color: #455151;
+                                        font-size: 16px;
+                                        font-weight: 600;
+                                    }
+                                }
+            
+                                h6 {
+                                    font-weight: 600;
+                                    font-size: 20px;
+                                    text-decoration: underline;
+                                    color: $theme-color;
+        
+                                    a {
+                                        color: $theme-color;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .review-comment-items {
+                border-radius: 28px;
+                border: 1px solid rgba(99, 171, 69, 0.16);
+                background: rgba(239, 238, 250, .72);
+                padding: 45px;
+
+                @include breakpoint (max-sm){
+                    padding: 30px;
+                }
+
+                h3 {
+                    font-size: 32px;
+                    margin-bottom: 40px;
+                }
+
+                ul {
+                    @include flex;
+                    gap: 70px;
+                    margin-bottom: 10px;
+
+                    @include breakpoint (max-xxl){
+                        flex-wrap: wrap;
+                        gap: 30px;
+                    }
+                    
+                    li {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: $header-color;
+                        @include flex;
+                        gap: 12px;
+                        flex-basis: 25%;
+
+                        @include breakpoint (max-xxl){
+                           flex-basis: initial;
+                        }
+
+                        .star {
+                            color: #F7921E;
+                        }
+                    }
+                }
+
+                h4 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    margin-top: 50px;
+                    margin-bottom: 25px;
+                }
+
+                .form-clt {
+                    input,textarea {
+                        border: none;
+                        outline: none;
+                        width: 100%;
+                        background-color: $white;
+                        padding: 20px 30px;
+                        line-height: 1;
+                        border-radius: 4px;
+                        color: #455151;
+
+                        &::placeholder {
+                            color: #455151;
+                        }
+                    }
+
+                    textarea {
+                        padding-bottom: 152px;
+                    }
+                }
+            }
+        }
+    }
+
+    .tour-details-sidebar {
+        .tour-sidebar-items {
+            border-radius: 28px;
+            background: #EFEEFA;
+            padding: 45px;
+
+            h3 {
+                font-size: 24px;
+            }
+
+            .form-list {
+                position: relative;
+                margin-top: 10px;
+
+                li {
+                    color: #455151;
+                    font-weight: 800;
+                    @include flex;
+                    justify-content: space-between;
+                    border-bottom: 1px solid rgba(21, 20, 21, 0.09);
+                    padding-bottom: 20px;
+                    padding-top: 15px;
+
+                    .form-clt {
+                        flex-basis: 55%;
+
+                        input {
+                            width: 100%;
+                            outline: none;
+                            border: none;
+                            padding: 11px 16px;
+                            color: #455151;
+                            background-color: $white;
+                            font-size: 16px;
+                            text-transform: capitalize;
+                            font-weight: 700;
+                            border-radius: 8px !important;
+                            border: 1px solid rgba(21, 20, 21, 0.15);
+                            color-scheme: dark;
+                            line-height: 1;
+                            font-size: 14px;
+            
+                            @include breakpoint (max-sm){
+                                padding: 12px 20px;
+                                font-size: 14px;
+                            }
+                            
+                            &::placeholder {
+                                color: #455151;
+                            }
+                        }
+
+                        .checkbox-single {
+                            position: relative;
+                            padding-left: 18px;
+                            cursor: pointer;
+                            display: block;
+            
+                             input {
+                                position: absolute;
+                                opacity: 0;
+                                cursor: pointer;
+                                height: 0;
+                                width: 0;
+                            }
+            
+            
+                            .checkbox-area {
+                                .checkmark {
+                                    position: absolute;
+                                    left: 0;
+                                    height: 20px;
+                                    width: 20px;
+                                    border-radius: 20px;
+                                    border: 1px solid rgba(21, 20, 21, 0.15);                    
+                                    background-color: $white;
+                                    top: 5px;
+                                    &::after {
+                                        content: "";
+                                    }
+                                }
+                                input:checked ~ .checkmark {
+                                    &::after {
+                                        content: "\f00c";
+                                        position: absolute;
+                                        font-family: $fa;
+                                        top: -5px;
+                                        left: 5px;
+                                        color: $theme-color;
+                                        font-size: 11px;
+                                    }
+            
+                                    background-color: $theme-color;
+                                }
+                                input:checked ~ .checkmark:after {
+                                    display: block;
+                                    color: $white;
+                                }
+                            }
+
+                            .text-color {
+                                color: #455151;
+                                font-size: 16px;
+                                font-style: normal;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+
+                .form-clt {
+                    position: relative;
+                }
+                .input-group-addon {
+                    position: absolute;
+                    right: 12px;
+                    top: 8px;
+                }
+            }
+
+            .tickets-list {
+                margin-top: 20px;
+                margin-bottom: 20px;
+                border-bottom: 1px solid rgba(21, 20, 21, 0.09);
+                padding-bottom: 24px;
+
+                p {
+                    font-size: 16px;
+                    color: #455151;
+                    font-weight: 800;
+                    margin-bottom: 10px;
+                }
+
+                ul {
+                    li {
+                        color: #455151;
+                        font-weight: 500;
+                        @include flex;
+                        justify-content: space-between;
+
+                        &:not(:last-child){
+                            margin-bottom: 20px;
+                        }
+
+
+                        b {
+                            font-weight: 700;
+                            color: $theme-color;
+                            padding-left: 10px;
+                        }
+
+                        .form-clt {
+                            flex-basis: 50%;
+
+                            .single-select {
+                                width: 100%;
+                                border-radius: 8px;
+                                border: 1px solid rgba(21, 20, 21, 0.15);
+                                background: $white;
+                                padding: 11px 16px;
+                                line-height: 1;
+                                font-size: 14px;
+                                color: #455151;
+                                font-weight: 700;
+                                height: initial;
+                                line-height: initial;
+
+                                &::after {
+                                    border-bottom: 1px solid #231C25;
+                                    border-right: 1px solid #231C25;
+                                    width: 8px;
+                                    height: 8px;
+                                }
+
+                                .list {
+                                    width: 100%;
+                                    background-color: $white;
+                                }
+
+                                .focus {
+                                    background-color: $white;
+                                }
+
+                                .option {
+                                    border: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .extra-items {
+                border-bottom: 1px solid rgba(21, 20, 21, 0.09);
+                padding-bottom: 24px;
+
+                p {
+                    color: #455151;
+                    font-size: 16px;
+                    font-weight: 800;
+                    margin-bottom: 20px;
+                }
+
+                .checkbox-single {
+                    position: relative;
+                    padding-left: 18px;
+                    cursor: pointer;
+    
+                     input {
+                        position: absolute;
+                        opacity: 0;
+                        cursor: pointer;
+                        height: 0;
+                        width: 0;
+                    }
+    
+                    &:not(:last-child){
+                        margin-bottom: 10px;
+                    }
+    
+                    .checkbox-area {
+                        .checkmark {
+                            position: absolute;
+                            left: 0;
+                            height: 20px;
+                            width: 20px;
+                            border-radius: 20px;
+                            border: 1px solid rgba(21, 20, 21, 0.15);
+                            top: 5px;
+                            background-color: $white;
+                            &::after {
+                                content: "";
+                            }
+                        }
+                        input:checked ~ .checkmark {
+                            &::after {
+                                content: "\f00c";
+                                position: absolute;
+                                font-family: $fa;
+                                top: -5px;
+                                left: 5px;
+                                color: $theme-color;
+                                font-size: 11px;
+                            }
+    
+                            background-color: $theme-color;
+                        }
+                        input:checked ~ .checkmark:after {
+                            display: block;
+                            color: $white;
+                        }
+                    }
+    
+                    .text-color {
+                        font-weight: 500;
+                        color: #455151;
+                        font-size: 16px;
+    
+                        .star {
+                            color: #FFA41B;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+
+            .total-list {
+                @include flex;
+                padding-top: 24px;
+                justify-content: space-between;
+                margin-bottom: 30px;
+                li {
+                    font-size: 20px;
+                    font-weight: 800;
+                    color: #151415;
+                }
+            }
+
+            .theme-btn {
+                width: 100%;
+                @include flex;
+                justify-content: space-between;
+                padding: 6px 15px 6px 30px;
+
+                span {
+                    margin-right: 0;
+                }
+            }
+
+            .text {
+                text-align: center;
+                text-transform: capitalize;
+                margin-top: 30px;
+            }
+        }
+
+        .offer-card {
+            padding: 45px;
+            border-radius: 28px;
+            height: 420px;
+            margin-top: 30px;
+
+            h3 {
+                font-size: 24px;
+                color: $white;
+                font-weight: 500;
+                margin-bottom: 30px;
+            }
+        }
+    }
+}
+
+.tour-main-item {
+    position: relative;
+
+    .tour-box-items-3 {
+        position: relative;
+        border-radius: 10px;
+        padding: 30px;
+        display: flex;
+        justify-content: space-between;
+    
+        &::before {
+            @include before;
+            background: rgba(255, 87, 34, 0.88);
+            border-radius: 10px;
+        }
+        
+        &.style-2 {
+
+            &::before {
+                @include before;
+                background: rgba(77, 64, 202, 0.88);
+            }
+        }
+
+        &.style-3 {
+
+            &::before {
+                @include before;
+                background: rgba(142, 64, 202, 0.91);
+            }
+        }
+
+        .tour-content {
+            position: relative;
+
+            br {
+                @include breakpoint (max-xl){
+                    display: none !important;
+                }
+            }
+    
+            h3 {
+                font-size: 30px;
+                color: $white;
+                margin-bottom: 35px;
+
+                @include breakpoint (max-xxl){
+                    font-size: 24px;
+                }
+            }
+    
+            .theme-btn {
+                padding: 5px 6px 5px 26px;
+                background-color: $white;
+                
+    
+                span {
+                    margin-right: 8px;
+                    color: $theme-color;
+                }
+    
+                i {
+                    width: 34px;
+                    height: 34px;
+                    line-height: 34px;
+                    background-color: $theme-color;
+                    color: $white;
+                }
+    
+                &::before {
+                    background-color: $theme-color;
+                }
+    
+                &::after {
+                    background-color: $theme-color;
+                }
+    
+                &:hover{
+                    background-color: $theme-color;
+                    color: $white;
+    
+                    span {
+                        color: $white;
+                    }
+    
+                    i {
+                        background-color: $white;
+                        color: $black;
+                    }
+    
+                    &::before{
+                        top: 100%;
+                    }
+                    &::after{
+                        bottom: -50%;
+                    }
+                }
+            }
+        }
+    
+        .percent-image {
+            position: relative;
+        }
+    }
+
+    .shape {
+        position: absolute;
+        bottom: 20px;
+        right: 0;
+    }
+}
+
+.tour-section2 {
+    position: relative;
+    padding-top: 100px;
+
+    &::before {
+        @include before;
+        background-color: $white;
+        top: 50%;
+    }
+}
+
+.tour-discover-wrapper {
+   
+    .tour-card-item {
+
+        .tour-image {
+
+            img {
+                @include imgw;
+                border-top-left-radius: 28px;
+                border-top-right-radius: 28px;
+            }
+        }
+
+        .tour-content {
+            background-color: $white;
+            border-radius: 28px;
+            padding: 25px;
+            margin-top: -50px;
+            position: relative;
+
+            h6 {
+                color: #818181;
+                border-bottom: 1px dashed rgba(21, 20, 21, 0.21);;
+                padding-bottom: 22px;
+                margin-bottom: 22px;
+    
+                span {
+                    font-size: 18px;
+                    font-weight: 900;
+                    color: $theme-color;
+                }
+            }
+
+            h4 {
+                margin-bottom: 15px;
+                font-weight: 500;
+
+                a {
+                    &:hover {
+                        color: $theme-color;
+                    }
+                }
+            }
+
+            ul {
+                margin-bottom: 10px;
+                li {
+                    font-weight: 500;
+                    color: #818181;
+
+                    i {
+                        color: rgba(251, 91, 50, 1);
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .list {
+                @include flex;
+                justify-content: space-between;
+
+                ul {
+                    li {
+                        color: #818181;
+                        font-weight: 500;
+                        font-size: 14px;
+        
+                        i {
+                            color: $theme-color-2;
+                            margin: 5px;
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+
+            .star {
+                display: inline-block;
+
+                i {
+                    color: rgba(251, 91, 50, 1);
+                }
+
+                span {
+                    font-weight: 700;
+                    color: #818181;
+                    margin-left: 8px;
+                }
+            }
+        }
+    }
+
+    .tour-slider {
+        margin-right: -80%;
+
+        @include breakpoint (max-xl){
+            margin-right: 0;
+        }
+    }
+}
+
+.tour-places-wrapper-4  {
+    margin-top: 30px;
+    background-color: $white;
+    border-radius: 28px;
+    box-shadow: 10px 9px 106.6px 55px rgba(5, 6, 60, 0.04);
+    padding: 10px 40px;
+    padding-right: 10px;
+    @include flex;
+    justify-content: space-between;
+
+    @include breakpoint (max-xl){
+        flex-wrap: wrap;
+        gap: 30px;  
+        padding: 30px;
+    }
+
+    .content {
+        max-width: 370px;
+
+        span {
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: $theme-color;
+            display: inline-block;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+
+            a {
+                background-position: 0 95%;
+                background-repeat: no-repeat;
+                background-size: 0% 2px;
+                display: inline;
+
+                &:hover {
+                    color: var(--theme-color);
+                    background-size: 100% 2px;
+                    background-image: -webkit-gradient(linear, left top, left bottom, from(var(--theme-color)), to(var(--theme-color)));
+                    background-image: linear-gradient(var(--theme-color), var(--theme-color));
+                }
+            }
+        }
+    }
+
+    .list {
+        max-width: 300px;
+
+        li {
+            font-size: 14px;
+            font-weight: 500;
+
+            i {
+                color: $theme-color-2;
+                margin-right: 10px;
+            }
+
+            &:not(:last-child){
+                margin-bottom: 15px;
+            }
+
+            .star {
+                i {
+                    color: $theme-color-2;
+                    margin-right: 0;
+                }
+
+                span {
+                    font-weight: 500;
+                    font-size: 14px;
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    .thumb {
+        max-width: 415px;
+        position: relative;
+
+        @include breakpoint (max-xl){
+           flex-basis: 100%;
+           max-width: initial;
+        }
+
+        img {
+            @include imgw;
+            border-radius: 28px;
+        }
+
+        .price-list {
+            display: grid;
+            align-items: center;
+            width: 86px;
+            border-radius: 50%;
+            height: 86px;
+            justify-content: center;
+            background-color: #4D40CA;
+            text-align: center;
+            position: absolute;
+            bottom: 15px;
+            left: 18px;
+
+            &.bg-2 {
+                background-color: #FF5722;
+            }
+
+            &.bg-3 {
+                background-color: #1EBDF7;
+            }
+
+            .price {
+                font-size: 20px;
+                font-weight: 600;
+                color: $white;
+                font-family: $heading-font;
+                margin-top: 5px;
+            }
+
+            .person {
+                color: $white;
+                margin-top: -30px;
+            }
+        }
+    }
+}
+
+.tour-box-items-5 {
+    margin-top: 30px;
+    padding: 50px 35px;
+    border-radius: 28px;
+    position: relative;
+    
+    &::before {
+        @include before;
+        background-color: rgba(247, 146, 30, 0.88);
+        border-radius: 28px;
+    }
+
+    &.bg-2 {
+        &::before {
+            background: rgba(30, 189, 247, 0.88);
+        }
+    }
+
+    .tour-content {
+        position: relative;
+        z-index: 999;
+
+        span {
+            color: $white;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        h3 {
+            color: $white;
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        p {
+            max-width: 300px;
+            font-weight: 500;
+            font-size: 16px;
+            color: $white;
+        }
+
+        .theme-btn {
+            padding: 5px 6px 5px 26px;
+            background-color: $white;
+            margin-top: 40px;
+
+            span {
+                margin-right: 8px;
+                color: $theme-color;
+            }
+
+            i {
+                width: 34px;
+                height: 34px;
+                line-height: 34px;
+                background-color: $theme-color;
+                color: $white;
+            }
+
+            &::before {
+                background-color: $theme-color;
+            }
+
+            &::after {
+                background-color: $theme-color;
+            }
+
+            &:hover{
+                background-color: $theme-color;
+                color: $white;
+
+                span {
+                    color: $white;
+                }
+
+                i {
+                    background-color: $white;
+                    color: $black;
+                }
+
+                &::before{
+                    top: 100%;
+                }
+                &::after{
+                    bottom: -50%;
+                }
+            }
+        }
+    }
+
+    .percent-image {
+        position: absolute;
+        bottom: 60px;
+        left: 60%;
+        transform: translateX(-50%);
+        z-index: 11;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+    }
+    
+
+    .shape-image {
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        right: 0;
+        z-index: 9;
+        max-width: 280px;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+
+        img {
+            @include imgw;
+            border-radius: 0 28px 28px 0;
+        }
+    }
+}
+
+
+.tour-wrapper-5 {
+    position: relative;
+    border-radius: 28px;
+    margin: 0 42px;
+    overflow: hidden;
+
+    @include breakpoint (max-xxl){
+        margin: 0;
+    }
+
+    &::before {
+        @include before;
+        border-radius: 28px;
+        background: rgba(21, 20, 21, 0.81);
+    }
+
+    .tour-box-items-6 {
+        background-color: $white;
+        padding: 10px;
+        border-radius: 28px;
+        position: relative;
+        margin-top: 30px;
+
+        .tour-image {
+            position: relative;
+
+            &::before {
+                @include before;
+                border-radius: 28px;
+                background: linear-gradient(180deg, rgba(21, 20, 21, 0.00) 0%, rgba(21, 20, 21, 0.73) 80.53%);
+            }
+
+            .star {
+                display: inline-block;
+                position: absolute;
+                left: 20px;
+                bottom: 20px;
+
+                i {
+                    color: rgba(251, 91, 50, 1);
+                }
+
+                span {
+                    font-weight: 700;
+                    font-size: 14px;
+                    color: $white;
+                    margin-left: 8px;
+                }
+            }
+            img {
+                @include imgw;
+                border-radius: 28px;
+            }
+        }
+
+        .tour-content {
+            padding: 30px 20px 20px;
+
+            h6 {
+                color: #818181;
+                margin-bottom: 22px;
+    
+                span {
+                    font-size: 18px;
+                    font-weight: 900;
+                    color: $theme-color;
+                }
+            }
+            
+            h5 {
+                margin-bottom: 25px;
+
+                a {
+                    &:hover {
+                        color: $theme-color;
+                    }
+                }
+            }
+
+            ul {
+                margin-bottom: 10px;
+
+                li {
+                    font-weight: 500;
+                    color: #818181;
+
+                    &:not(:last-child) {
+                        margin-bottom: 10px;
+                    }
+
+                    i {
+                        color: rgba(251, 91, 50, 1);
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+
+    .tour-slider-5 {
+        margin-left: -10%;
+        margin-right: -10%;
+
+        @include breakpoint (max-xxl){
+            margin: 0;
+        }
+    }
+
+    .swiper-dot4 {
+        position: relative;
+        z-index: 9;
+
+        .swiper-pagination-bullet {
+            width: 7px;
+            height: 7px;
+            transition: 0.6s;
+            background-color: rgba(255, 255, 255, 1);
+            opacity: 1;
+            border-radius: 100%;
+            position: relative;
+        }
+        .swiper-pagination-bullet.swiper-pagination-bullet-active {
+            background-color: $theme-color;
+            transition: 0.6s;
+            position: relative;
+            width: 30px;
+            border-radius: 30px;
+        }
+      
+      }
+}

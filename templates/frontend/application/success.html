@@ -1,0 +1,91 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}Application Submitted Successfully | WON{% endblock %}
+
+{% block content %}
+<section class="section-padding" style="padding: 100px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="success-card text-center">
+                    <div class="success-icon mb-4">
+                        <i class="fas fa-check-circle" style="font-size: 80px; color: #28a745;"></i>
+                    </div>
+                    <h2 class="mb-3">Application Submitted Successfully!</h2>
+                    <p class="text-muted mb-4">Your application has been received and is being processed.</p>
+                    
+                    <div class="application-details bg-light p-4 rounded mb-4">
+                        <h5 class="mb-3">Application Details</h5>
+                        <div class="row text-start">
+                            <div class="col-md-6 mb-2">
+                                <strong>Application Number:</strong><br>
+                                <span class="text-primary">{{ application.application_number }}</span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Competition:</strong><br>
+                                {{ application.competition.name }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Status:</strong><br>
+                                <span class="badge bg-info">{{ application.get_status_display }}</span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Submitted:</strong><br>
+                                {{ application.submitted_at|date:"F d, Y" }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps mb-4">
+                        <h5 class="mb-3">What's Next?</h5>
+                        <ul class="list-unstyled text-start" style="max-width: 500px; margin: 0 auto;">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> You will receive a confirmation email shortly</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Our team will review your application</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> You'll be notified of any additional requirements</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Travel quote will be sent to your email</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a href="{% url 'index' %}" class="theme-btn me-3">
+                            <span>Go to Home</span> <i class="far fa-long-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'download-quotation-pdf' application.id %}" class="theme-btn me-3">
+                            <span>Download Quotation PDF</span> <i class="far fa-download"></i>
+                        </a>
+                        <a href="{% url 'olympiads' %}" class="btn btn-outline-primary">
+                            <span>Browse More Competitions</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-card {
+        background: white;
+        border-radius: 10px;
+        padding: 50px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .success-icon {
+        animation: scaleIn 0.5s ease;
+    }
+    
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+</style>
+{% endblock %}
+

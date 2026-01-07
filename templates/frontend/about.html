@@ -1,0 +1,1133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <!--<< Header Area >>-->
+     <head>
+        <!-- ========== Meta Tags ========== -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="modinatheme">
+        <meta name="description" content="Travil - Travel & Tour Booking Html Template">
+        <!-- ======== Page title ============ -->
+        <title>Travil - Travel & Tour Booking Html Template</title>
+        <!--<< Favicon >>-->
+        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
+        <!--<< Bootstrap min.css >>-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <!--<< Font Awesome.css >>-->
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+        <!--<< Animate.css >>-->
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+        <!--<< Magnific Popup.css >>-->
+        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+        <!--<< MeanMenu.css >>-->
+        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
+        <!--<< Odometer.css >>-->
+        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
+        <!--<< Swiper Bundle.css >>-->
+        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+        <!--<< DatePicker.css >>-->
+        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
+        <!--<< Nice Select.css >>-->
+        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+        <!--<< Main.css >>-->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <!--<< Style.css >>-->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+
+    <body>
+
+       <!-- Preloader Start -->
+        <div id="preloader" class="preloader">
+            <div class="animation-preloader">
+                <div class="spinner">                
+                </div>
+                <div class="txt-loading">
+                    <span data-text-preloader="T" class="letters-loading">
+                        T
+                    </span>
+                    <span data-text-preloader="R" class="letters-loading">
+                        R
+                    </span>
+                    <span data-text-preloader="A" class="letters-loading">
+                        A
+                    </span>
+                    <span data-text-preloader="V" class="letters-loading">
+                        V
+                    </span>
+                    <span data-text-preloader="I" class="letters-loading">
+                        I
+                    </span>
+                    <span data-text-preloader="L" class="letters-loading">
+                        L
+                    </span>
+                </div>
+                <p class="text-center">Loading</p>
+            </div>
+            <div class="loader">
+                <div class="row">
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back To Top start -->
+        <button id="back-top" class="back-to-top">
+            <i class="fas fa-long-arrow-up"></i>
+        </button>
+
+        <!-- Offcanvas Area Start -->
+        <div class="fix-area">
+            <div class="offcanvas__info">
+                <div class="offcanvas__wrapper">
+                    <div class="offcanvas__content">
+                        <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
+                            <div class="offcanvas__logo">
+                                <a href="index.html">
+                                    <img src="{% static 'img/logo/black-logo.svg' %}" alt="logo-img">
+                                </a>
+                            </div>
+                            <div class="offcanvas__close">
+                                <button>
+                                <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="offcanvas-title">Hello There!</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, </p>
+                        <div class="mobile-menu fix mb-3"></div>
+                        <div class="offcanvas__contact">
+                            <h3>Get Appointment</h3>
+                            <form action="#" id="contact-form" method="POST" class="contact-form-items">
+                                <div class="row g-4">
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <input type="text" name="name" id="name33" placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <input type="text" name="name" id="email33" placeholder="Email Address">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="social-icon d-flex align-items-center">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas__overlay"></div>
+
+        {% include 'partials/navbar.html' %}
+        
+        <!-- Search Section Start -->
+        <div class="header-search-bar d-flex align-items-center">
+            <button class="search-close">×</button>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="search-bar">
+                            <div class="contact-form-box contact-search-form-box">
+                                <form action="#">
+                                    <input type="email" placeholder="Search here...">
+                                    <button type="submit"><i class="far fa-search"></i></button>
+                                </form>
+                                <p>Type above and press Enter to search. Press Close to cancel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="index.html">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            About Travil
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">About Travil</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!--Choose Us Section Start -->
+        <section class="choose-us-section section-padding">
+            <div class="container">
+                <div class="choose-us-wrapper">
+                    <div class="row g-4">
+                        <div class="col-xl-5 col-lg-4 col-md-6">
+                            <div class="choose-us-left-content">
+                                <div class="section-title">
+                                    <span class="wow fadeInUp">Why Choose Us</span>
+                                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Our Promise Quality, Service, & Memorable Travel</h2>
+                                </div>
+                                <p class="mt-4 mt-md-0 wow fadeInUp" data-wow-delay=".5s">
+                                    Join Hands with Our Trusted Partners to Discover Exclusive Travel Experiences, Unmatched Comfort.
+                                </p>
+                                <ul class="list-items wow fadeInUp" data-wow-delay=".3s">
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M23.1017 4.53435L13.8817 13.7544C13.3324 14.3036 12.5865 14.611 11.8089 14.611C11.766 14.611 11.7231 14.611 11.6778 14.6088C10.8573 14.5703 10.0888 14.1906 9.56215 13.5577L7.0102 10.3005C6.68923 9.87784 6.76156 9.27884 7.1752 8.94658C7.59337 8.60978 8.20818 8.67532 8.54499 9.09577L11.0811 12.3326C11.2529 12.5315 11.5015 12.6513 11.766 12.6604C12.0418 12.6739 12.3085 12.5699 12.5006 12.3755L21.7229 3.15554C21.7297 3.14649 21.7387 3.1397 21.7477 3.13068C22.1343 2.75545 22.7513 2.76676 23.1266 3.15554C23.4995 3.54205 23.4905 4.15912 23.1017 4.53435Z" fill="#4D40CA"/>
+                                            <path d="M20.0776 12.8158C19.8538 15.3361 18.6898 17.5649 16.947 19.1674C15.2065 20.7701 12.8874 21.742 10.3558 21.7555C4.96711 21.7555 0.600098 17.3885 0.600098 11.9999C0.600098 6.61114 4.96711 2.24414 10.3558 2.24414C12.6478 2.24414 14.8652 3.05108 16.6215 4.52257C17.0374 4.86163 17.0985 5.47646 16.7594 5.89463C16.4181 6.31052 15.8033 6.37382 15.3851 6.0325C15.3783 6.02798 15.3738 6.02122 15.367 6.01669C12.0624 3.25002 7.13931 3.68625 4.3749 6.99089C1.60822 10.2978 2.04447 15.2186 5.34911 17.9853C8.65376 20.752 13.5768 20.3135 16.3435 17.0088C17.3742 15.7769 18.0003 14.2557 18.1337 12.6553C18.1721 12.1219 18.6332 11.7218 19.1644 11.7602C19.1735 11.7602 19.1802 11.7625 19.187 11.7625C19.7227 11.8077 20.1228 12.2779 20.0776 12.8158Z" fill="#4D40CA"/>
+                                        </svg>
+                                        Trusted, Local Travel Experts
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M23.1017 4.53435L13.8817 13.7544C13.3324 14.3036 12.5865 14.611 11.8089 14.611C11.766 14.611 11.7231 14.611 11.6778 14.6088C10.8573 14.5703 10.0888 14.1906 9.56215 13.5577L7.0102 10.3005C6.68923 9.87784 6.76156 9.27884 7.1752 8.94658C7.59337 8.60978 8.20818 8.67532 8.54499 9.09577L11.0811 12.3326C11.2529 12.5315 11.5015 12.6513 11.766 12.6604C12.0418 12.6739 12.3085 12.5699 12.5006 12.3755L21.7229 3.15554C21.7297 3.14649 21.7387 3.1397 21.7477 3.13068C22.1343 2.75545 22.7513 2.76676 23.1266 3.15554C23.4995 3.54205 23.4905 4.15912 23.1017 4.53435Z" fill="#4D40CA"/>
+                                            <path d="M20.0776 12.8158C19.8538 15.3361 18.6898 17.5649 16.947 19.1674C15.2065 20.7701 12.8874 21.742 10.3558 21.7555C4.96711 21.7555 0.600098 17.3885 0.600098 11.9999C0.600098 6.61114 4.96711 2.24414 10.3558 2.24414C12.6478 2.24414 14.8652 3.05108 16.6215 4.52257C17.0374 4.86163 17.0985 5.47646 16.7594 5.89463C16.4181 6.31052 15.8033 6.37382 15.3851 6.0325C15.3783 6.02798 15.3738 6.02122 15.367 6.01669C12.0624 3.25002 7.13931 3.68625 4.3749 6.99089C1.60822 10.2978 2.04447 15.2186 5.34911 17.9853C8.65376 20.752 13.5768 20.3135 16.3435 17.0088C17.3742 15.7769 18.0003 14.2557 18.1337 12.6553C18.1721 12.1219 18.6332 11.7218 19.1644 11.7602C19.1735 11.7602 19.1802 11.7625 19.187 11.7625C19.7227 11.8077 20.1228 12.2779 20.0776 12.8158Z" fill="#4D40CA"/>
+                                        </svg>
+                                        Flexible, Hassle-Free Bookings
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M23.1017 4.53435L13.8817 13.7544C13.3324 14.3036 12.5865 14.611 11.8089 14.611C11.766 14.611 11.7231 14.611 11.6778 14.6088C10.8573 14.5703 10.0888 14.1906 9.56215 13.5577L7.0102 10.3005C6.68923 9.87784 6.76156 9.27884 7.1752 8.94658C7.59337 8.60978 8.20818 8.67532 8.54499 9.09577L11.0811 12.3326C11.2529 12.5315 11.5015 12.6513 11.766 12.6604C12.0418 12.6739 12.3085 12.5699 12.5006 12.3755L21.7229 3.15554C21.7297 3.14649 21.7387 3.1397 21.7477 3.13068C22.1343 2.75545 22.7513 2.76676 23.1266 3.15554C23.4995 3.54205 23.4905 4.15912 23.1017 4.53435Z" fill="#4D40CA"/>
+                                            <path d="M20.0776 12.8158C19.8538 15.3361 18.6898 17.5649 16.947 19.1674C15.2065 20.7701 12.8874 21.742 10.3558 21.7555C4.96711 21.7555 0.600098 17.3885 0.600098 11.9999C0.600098 6.61114 4.96711 2.24414 10.3558 2.24414C12.6478 2.24414 14.8652 3.05108 16.6215 4.52257C17.0374 4.86163 17.0985 5.47646 16.7594 5.89463C16.4181 6.31052 15.8033 6.37382 15.3851 6.0325C15.3783 6.02798 15.3738 6.02122 15.367 6.01669C12.0624 3.25002 7.13931 3.68625 4.3749 6.99089C1.60822 10.2978 2.04447 15.2186 5.34911 17.9853C8.65376 20.752 13.5768 20.3135 16.3435 17.0088C17.3742 15.7769 18.0003 14.2557 18.1337 12.6553C18.1721 12.1219 18.6332 11.7218 19.1644 11.7602C19.1735 11.7602 19.1802 11.7625 19.187 11.7625C19.7227 11.8077 20.1228 12.2779 20.0776 12.8158Z" fill="#4D40CA"/>
+                                        </svg>
+                                        Real-Time Itinerary Updates
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6">
+                            <div class="choose-us-img wow img-custom-anim-left">
+                                <img src="{% static 'img/choose-us/choose-us.jpg' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="choose-us-right">
+                                <h4 class="wow fadeInUp" data-wow-delay=".3s">
+                                    Experience the Difference: Choose Us for Your Next Adventure
+                                </h4>
+                                <p class="wow fadeInUp" data-wow-delay=".5s">
+                                    We offer carefully curated destinations and tours that capture the true essence of location, ensuring you experience.
+                                </p>
+                                <div class="client-img wow fadeInUp" data-wow-delay=".3s">
+                                    <img src="{% static 'img/choose-us/client-img.png' %}" alt="img">
+                                </div>
+                                <p class="wow fadeInUp" data-wow-delay=".5s">
+                                    Creating a successful digital services for innovative start-up and established businesses.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--  Marquee Section Start -->
+        <div class="marquee-section fix section-padding pt-0">
+            <div class="marque-wrapper">
+                <div class="swiper text-slider">
+                    <div class="swiper-wrapper slide-transtion">
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Mobile-Friendly Platform</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Eco-Friendly Travel Options</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Group Booking Discounts</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Real-Time Itinerary Updates</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Expert Travel Advisors</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Affordable Travel Deals</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Affordable Travel Deals</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="marque-wrapper style-2">
+                <div dir="rtl" class="swiper text-slider-2">
+                    <div class="swiper-wrapper slide-transtion">
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Secure Online Booking</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Verified Customer Reviews</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>24/7 Customer Support</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Exclusive Travel Packages</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Special Member Discounts</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Local Destination Insights</h3>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="marque-text">
+                                <img src="{% static 'img/marque.png' %}" alt="img">
+                                <h3>Affordable Travel Deals</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  Destination Section Start -->
+        <section class="destination-section-22 fix section-padding pt-0">
+            <div class="destination-wrapper-22">
+                <div class="swiper destination-auto-slider">
+                    <div class="swiper-wrapper slide-transtion">
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/19.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Belgium</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/20.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Thailand</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/21.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Vietnam</a></h3>
+                                    <p>30 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/22.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">England</a></h3>
+                                    <p>45 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/23.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Australia</a></h3>
+                                    <p>08 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/24.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Morocco</a></h3>
+                                    <p>34 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/25.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Argentina</a></h3>
+                                    <p>89 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/26.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Switzerland</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="destination-wrapper-22 style-2">
+                <div dir="rtl" class="swiper destination-auto-slider-2">
+                    <div class="swiper-wrapper slide-transtion">
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/26.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Dubai</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/27.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Hong Kong</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/28.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Pakistan</a></h3>
+                                    <p>45 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/29.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Afghanistan</a></h3>
+                                    <p>30 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/30.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Italy</a></h3>
+                                    <p>34 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/31.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Hungary</a></h3>
+                                    <p>08 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb">
+                                    <img src="{% static 'img/destinations/32.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Brazil</a></h3>
+                                    <p>70 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide brand-slide-element">
+                            <div class="destination-items">
+                                <div class="destination-thumb style-2">
+                                    <img src="{% static 'img/destinations/33.jpg' %}" alt="img">
+                                </div>
+                                <div class="destination-content">
+                                    <h3><a href="destination-details.html">Croatia</a></h3>
+                                    <p>89 + Places</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- about Section Start -->
+        <section class="about-section section-padding section-bg fix">
+            <div class="container">
+                <div class="about-wrappper-2">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="about-image">
+                                <img src="{% static 'img/about/02.png' %}" alt="img" class="wow img-custom-anim-left">
+                                <div class="cricle-shape float-bob-y">
+                                    <img src="{% static 'img/about/circle-shape.png' %}" alt="img">
+                                </div>
+                                <div class="counter-box float-bob-y">
+                                    <div class="content">
+                                        <h2><span class="count">345</span>+</h2>
+                                        <p>LOCATIONS WORLD WIDE</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="about-content">
+                                <div class="section-title">
+                                    <span class="wow fadeInUp">About Travil Agency</span>
+                                    <h2 class="wow fadeInUp" data-wow-delay=".3s">
+                                        Our Journey Memorable <br>
+                                        Adventures Worldwide
+                                    </h2>
+                                </div>
+                                <p class="mt-3 mt-md-0 wow fadeInUp" data-wow-delay=".5s">
+                                    Our attraction pass save you more than buying individual <br> tickets for your tour package system.
+                                </p>
+                                <div class="about-area">
+                                    <div class="about-items wow fadeInUp" data-wow-delay=".3s">
+                                        <div class="icon">
+                                            <i class="flaticon-support"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                24/7 Support for Hassle-Free Trips
+                                            </h4>
+                                            <p>
+                                                Our attraction pass save you more than buying individual tickets for your tour package system.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="about-items wow fadeInUp" data-wow-delay=".5s">
+                                        <div class="icon">
+                                            <i class="flaticon-exclusive"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                Exclusive Deals on Top Destinations
+                                            </h4>
+                                            <p>
+                                                Our attraction pass save you more than buying individual <br> tickets for your tour package system.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="about.html" class="theme-btn wow fadeInUp" data-wow-delay=".3s">
+                                    <span>More About Travil</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Section Start -->
+        <div class="brand-section fix section-padding">
+            <div class="container">
+                <p class="brand-text wow fadeInUp" data-wow-delay=".3s">
+                    Join Hands with Our Trusted Partners to Discover Exclusive Travel Experiences, Unmatched Comfort, and Seamless Journeys Worldwide
+                </p>
+                <div class="swiper brand-slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/01.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/02.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/03.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/04.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/05.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-img text-center">
+                                <img src="{% static 'img/brand/06.png' %}" alt="img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Section Start -->
+        <section class="team-section fix section-padding section-bg">
+            <div class="plane-shape float-bob-y">
+                <img src="{% static 'img/team/plane-shape.png' %}" alt="img">
+            </div>
+            <div class="plane-shape-2 float-bob-y">
+                <img src="{% static 'img/team/plane-2.png' %}" alt="img">
+            </div>
+            <div class="frame-shape float-bob-x">
+                <img src="{% static 'img/team/frame.png' %}" alt="img">
+            </div>
+            <div class="container">
+                <div class="section-title text-center">
+                    <span class="wow fadeInUp">Our Team</span>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Tours Guiding Team</h2>
+                    <p class="mt-3 wow fadeInUp" data-wow-delay=".5s">
+                        Our attraction passes save you more than buying individual tickets for your tour package <br> system. Our attraction passes save you more than for your travelling.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".2s">
+                        <div class="team-box-items">
+                            <div class="thumb">
+                                <img src="{% static 'img/team/01.jpg' %}" alt="img">
+                            </div>
+                            <div class="content">
+                                <p> Travel Consultant</p>
+                                <h3><a href="team-details.html">Alexandra Roberts</a></h3>
+                                <div class="social-icon">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".4s">
+                        <div class="team-box-items">
+                            <div class="thumb">
+                                <img src="{% static 'img/team/02.jpg' %}" alt="img">
+                            </div>
+                            <div class="content">
+                                <p>Operations Manager</p>
+                                <h3><a href="team-details.html">Michael Thompson</a></h3>
+                                <div class="social-icon">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".6s">
+                        <div class="team-box-items">
+                            <div class="thumb">
+                                <img src="{% static 'img/team/03.jpg' %}" alt="img">
+                            </div>
+                            <div class="content">
+                                <p>Marketing Specialist</p>
+                                <h3><a href="team-details.html">Sophia Chen</a></h3>
+                                <div class="social-icon">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".8s">
+                        <div class="team-box-items">
+                            <div class="thumb">
+                                <img src="{% static 'img/team/04.jpg' %}" alt="img">
+                            </div>
+                            <div class="content">
+                                <p> Tourist Guide</p>
+                                <h3><a href="team-details.html">Michel Smith</a></h3>
+                                <div class="social-icon">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-button text-center mt-5 wow fadeInUp" data-wow-delay=".3s">
+                    <a href="team.html" class="theme-btn">
+                        <span>View All Member</span> <i class="far fa-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cta App Section Start -->
+        <section class="cta-app-section fix section-padding section-bg pt-0">
+            <div class="container">
+                <div class="cta-app-wrapper bg-cover" style="background-image: url('{% static 'img/cta/cta-apps-bg.jpg' %}');">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="cta-app-content">
+                                <div class="section-title mb-0">
+                                    <span class="text-white wow fadeInUp">Download Mobile App</span>
+                                    <h2 class="text-white wow fadeInUp" data-wow-delay=".3s">We Are Available On the Store Get Our Mobile Apps</h2>
+                                    <p class="mt-4 text-white wow fadeInUp" data-wow-delay=".5s">
+                                        We offer carefully curated destinations and tours that capture the true essence of location, ensuring you experience. Our attraction pass save you more than buying individual tickets for your tour package system.
+                                    </p>
+                                </div>
+                                <h6 class="app-text wow fadeInUp" data-wow-delay=".3s">Your all-in-one travel app</h6>
+                                <div class="apps-items wow fadeInUp" data-wow-delay=".5s">
+                                    <a href="contact.html">
+                                        <img src="{% static 'img/apply-store.png' %}" alt="img">
+                                    </a>
+                                    <a href="contact.html">
+                                        <img src="{% static 'img/play-store.jpg' %}" alt="img">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6"></div>
+                    </div>
+                    <div class="app-image wow img-custom-anim-right">
+                        <img src="{% static 'img/cta/mobile-app.png' %}" alt="img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--  news-section Start -->
+        <section class="news-section section-padding pt-0">
+            <div class="container">
+                <div class="section-title text-center">
+                    <span class="wow fadeInUp">Latest Blog & News</span>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Latest Travel Insights and <br> Destination Guides</h2>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="news-card-items">
+                            <div class="news-image">
+                                <img src="{% static 'img/news/news-08.jpg' %}" alt="img">
+                                <ul class="post">
+                                    <li>
+                                        <i class="far fa-calendar"></i>
+                                        29 August, 2025
+                                    </li>
+                                    <li class="style-2">Travel</li>
+                                </ul>
+                            </div>
+                            <div class="news-content">
+                                <h3>
+                                    <a href="news-details.html">
+                                        The ultimate southwest USA road <br> trip itinerary for your traveling
+                                    </a>
+                                </h3>
+                                <p>
+                                    We offer carefully curated destinations and tours that capture the true essence.
+                                </p>
+                                <a href="news-details.html" class="theme-btn">
+                                    <span>Read More</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                        <div class="news-card-items">
+                            <div class="news-image">
+                                <img src="{% static 'img/news/news-09.jpg' %}" alt="img">
+                                <ul class="post">
+                                    <li>
+                                        <i class="far fa-calendar"></i>
+                                        29 August, 2025
+                                    </li>
+                                    <li class="style-2">Travel</li>
+                                </ul>
+                            </div>
+                            <div class="news-content">
+                                <h3>
+                                    <a href="news-details.html">
+                                        How can you traveling in London, <br> United kingdom from Italy
+                                    </a>
+                                </h3>
+                                <p>
+                                    We offer carefully curated destinations and tours that capture the true essence.
+                                </p>
+                                <a href="news-details.html" class="theme-btn">
+                                    <span>Read More</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                        <div class="news-card-items">
+                            <div class="news-image">
+                                <img src="{% static 'img/news/news-10.jpg' %}" alt="img">
+                                <ul class="post">
+                                    <li>
+                                        <i class="far fa-calendar"></i>
+                                        29 August, 2025
+                                    </li>
+                                    <li class="style-2">Travel</li>
+                                </ul>
+                            </div>
+                            <div class="news-content">
+                                <h3>
+                                    <a href="news-details.html">
+                                        The top 10 places to traveling in <br> the world with your family
+                                    </a>
+                                </h3>
+                                <p>
+                                    We offer carefully curated destinations and tours that capture the true essence.
+                                </p>
+                                <a href="tour-details.html" class="theme-btn">
+                                    <span>Read More</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section Start -->
+        <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
+            <div class="container">
+                <div class="footer-newsletter-items">
+                    <h2>Get Updated the Our Latest Newsletter</h2>
+                    <div class="footer-input">
+                        <input type="email" id="email2" placeholder="Enter your email">
+                        <button class="newsletter-btn" type="submit">
+                        Subscribe <i class="far fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="footer-wrapper">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-12">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <a href="index.html" class="footer-logo">
+                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
+                                    </a>
+                                </div>
+                                <div class="footer-content">
+                                    <div class="contact-info-items">
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/call.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Call Us</span>
+                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/mail.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Mail Us</span>
+                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="app-text">Your all-in-one travel app</h6>
+                                    <div class="apps-items">
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
+                                        </a>
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
+                                        </a>
+                                    </div>
+                                    <div class="social-icon">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-instagram"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Useful Links</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="destination.html">All Destination</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">24/7 Support</a>
+                                    </li>
+                                    <li>
+                                        <a href="team.html">Our Team</a>
+                                    </li>
+                                    <li>
+                                        <a href="tour.html">Tour Places</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Reviews</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>About Travil</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="about.html">About Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Legal Notice</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Terms & Condition</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Contact Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Apple Store</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-4">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Gallery</h3>
+                                </div>
+                                <div class="footer-gallery">
+                                    <div class="gallery-wrap">
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-1">
+                <div class="container">
+                    <div class="footer-bottom-wrapper">
+                        <p class="wow fadeInUp" data-wow-delay=".3s">
+                            © 2025 Travil LLC All rights reserved.
+                        </p>
+                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
+                            <li>
+                                <a href="contact.html">
+                                    Privacy 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Terms 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Site Map
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!--<< All JS Plugins >>-->
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <!--<< Bootstrap Js >>-->
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <!--<< Nice Select Js >>-->
+        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+        <!--<< Odometer Js >>-->
+        <script src="{% static 'js/odometer.min.js' %}"></script>
+        <!--<< Appear Js >>-->
+        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
+        <!--<< Datepicker Js >>-->
+        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+        <!--<< Swiper Slider Js >>-->
+        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+        <!--<< MeanMenu Js >>-->
+        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
+        <!--<< Magnific Popup Js >>-->
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <!--<< Wow Animation Js >>-->
+        <script src="{% static 'js/wow.min.js' %}"></script>
+        <!--<< Main.js >>-->
+        <script src="{% static 'js/main.js' %}"></script>
+    </body>
+</html>

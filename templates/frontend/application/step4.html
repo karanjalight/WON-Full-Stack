@@ -1,0 +1,185 @@
+{% extends 'frontend/application/base.html' %}
+{% load static %}
+
+{% block application_content %}
+<div class="step-content">
+    <h3 class="mb-4">Complete Your Profile</h3>
+    <p class="text-muted mb-4">Please provide additional information to complete your student profile.</p>
+    
+    <form method="post" id="applicationForm4">
+        {% csrf_token %}
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.date_of_birth.id_for_label }}">{{ form.date_of_birth.label }}</label>
+                    {{ form.date_of_birth }}
+                    {% if form.date_of_birth.errors %}
+                        <div class="text-danger small">{{ form.date_of_birth.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.grade_level.id_for_label }}">{{ form.grade_level.label }}</label>
+                    {{ form.grade_level }}
+                    {% if form.grade_level.errors %}
+                        <div class="text-danger small">{{ form.grade_level.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.current_school.id_for_label }}">{{ form.current_school.label }}</label>
+                    {{ form.current_school }}
+                    {% if form.current_school.errors %}
+                        <div class="text-danger small">{{ form.current_school.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <hr class="my-4">
+                <h5 class="mb-3">Guardian Information (if applicable)</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="{{ form.guardian_name.id_for_label }}">{{ form.guardian_name.label }}</label>
+                    {{ form.guardian_name }}
+                    {% if form.guardian_name.errors %}
+                        <div class="text-danger small">{{ form.guardian_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="{{ form.guardian_email.id_for_label }}">{{ form.guardian_email.label }}</label>
+                    {{ form.guardian_email }}
+                    {% if form.guardian_email.errors %}
+                        <div class="text-danger small">{{ form.guardian_email.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="{{ form.guardian_phone.id_for_label }}">{{ form.guardian_phone.label }}</label>
+                    {{ form.guardian_phone }}
+                    {% if form.guardian_phone.errors %}
+                        <div class="text-danger small">{{ form.guardian_phone.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.interests.id_for_label }}">{{ form.interests.label }}</label>
+                    {{ form.interests }}
+                    {% if form.interests.help_text %}
+                        <small class="form-text text-muted">{{ form.interests.help_text }}</small>
+                    {% endif %}
+                    {% if form.interests.errors %}
+                        <div class="text-danger small">{{ form.interests.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.achievements.id_for_label }}">{{ form.achievements.label }}</label>
+                    {{ form.achievements }}
+                    {% if form.achievements.errors %}
+                        <div class="text-danger small">{{ form.achievements.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <hr class="my-4">
+                <h5 class="mb-3">Document Information</h5>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.passport_number.id_for_label }}">{{ form.passport_number.label }}</label>
+                    {{ form.passport_number }}
+                    {% if form.passport_number.errors %}
+                        <div class="text-danger small">{{ form.passport_number.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.passport_expiry.id_for_label }}">{{ form.passport_expiry.label }}</label>
+                    {{ form.passport_expiry }}
+                    {% if form.passport_expiry.errors %}
+                        <div class="text-danger small">{{ form.passport_expiry.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.national_id.id_for_label }}">{{ form.national_id.label }}</label>
+                    {{ form.national_id }}
+                    {% if form.national_id.errors %}
+                        <div class="text-danger small">{{ form.national_id.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'application-step' step=3 %}" class="btn btn-outline-secondary">
+                <i class="far fa-arrow-left me-2"></i> Previous Step
+            </a>
+            <button type="submit" class="theme-btn">
+                <span>Continue to Documents</span> <i class="far fa-long-arrow-right"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #212529;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+    
+    .form-group textarea {
+        border-radius: 15px;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+</style>
+{% endblock %}
+

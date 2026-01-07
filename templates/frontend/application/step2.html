@@ -1,0 +1,134 @@
+{% extends 'frontend/application/base.html' %}
+{% load static %}
+
+{% block application_content %}
+<div class="step-content">
+    <h3 class="mb-4">Travel Quote Request</h3>
+    <p class="text-muted mb-4">Help us generate a personalized travel quote for your competition journey.</p>
+    
+    <form method="post" id="applicationForm2">
+        {% csrf_token %}
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.departure_city.id_for_label }}">{{ form.departure_city.label }} <span class="text-danger">*</span></label>
+                    {{ form.departure_city }}
+                    {% if form.departure_city.errors %}
+                        <div class="text-danger small">{{ form.departure_city.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.departure_country.id_for_label }}">{{ form.departure_country.label }} <span class="text-danger">*</span></label>
+                    {{ form.departure_country }}
+                    {% if form.departure_country.errors %}
+                        <div class="text-danger small">{{ form.departure_country.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.departure_date.id_for_label }}">{{ form.departure_date.label }} <span class="text-danger">*</span></label>
+                    {{ form.departure_date }}
+                    {% if form.departure_date.errors %}
+                        <div class="text-danger small">{{ form.departure_date.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.return_date.id_for_label }}">{{ form.return_date.label }} <span class="text-danger">*</span></label>
+                    {{ form.return_date }}
+                    {% if form.return_date.errors %}
+                        <div class="text-danger small">{{ form.return_date.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.number_of_passengers.id_for_label }}">{{ form.number_of_passengers.label }} <span class="text-danger">*</span></label>
+                    {{ form.number_of_passengers }}
+                    {% if form.number_of_passengers.errors %}
+                        <div class="text-danger small">{{ form.number_of_passengers.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.special_requests.id_for_label }}">{{ form.special_requests.label }}</label>
+                    {{ form.special_requests }}
+                    {% if form.special_requests.errors %}
+                        <div class="text-danger small">{{ form.special_requests.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info mt-4">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> Your travel quote will be generated and sent to your email. You can proceed with the application even if you haven't received the quote yet.
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'application-step' step=1 %}" class="btn btn-outline-secondary">
+                <i class="far fa-arrow-left me-2"></i> Previous Step
+            </a>
+            <button type="submit" class="theme-btn">
+                <span>Continue to Account Setup</span> <i class="far fa-long-arrow-right"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #212529;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+    
+    .form-group textarea {
+        border-radius: 15px;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+</style>
+{% endblock %}
+

@@ -1,0 +1,167 @@
+{% extends 'frontend/application/base.html' %}
+{% load static %}
+
+{% block application_content %}
+<div class="step-content">
+    <h3 class="mb-4">Application Information</h3>
+    <p class="text-muted mb-4">Please provide your basic information to start your application.</p>
+    
+    <form method="post" id="applicationForm1">
+        {% csrf_token %}
+        {{ form.competition }}
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} <span class="text-danger">*</span></label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div class="text-danger small">{{ form.first_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} <span class="text-danger">*</span></label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div class="text-danger small">{{ form.last_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="text-danger">*</span></label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger small">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="text-danger">*</span></label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="text-danger small">{{ form.phone.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.date_of_birth.id_for_label }}">{{ form.date_of_birth.label }} <span class="text-danger">*</span></label>
+                    {{ form.date_of_birth }}
+                    {% if form.date_of_birth.errors %}
+                        <div class="text-danger small">{{ form.date_of_birth.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <hr class="my-4">
+                <h5 class="mb-3">Emergency Contact</h5>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.emergency_contact_name.id_for_label }}">{{ form.emergency_contact_name.label }} <span class="text-danger">*</span></label>
+                    {{ form.emergency_contact_name }}
+                    {% if form.emergency_contact_name.errors %}
+                        <div class="text-danger small">{{ form.emergency_contact_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.emergency_contact_phone.id_for_label }}">{{ form.emergency_contact_phone.label }} <span class="text-danger">*</span></label>
+                    {{ form.emergency_contact_phone }}
+                    {% if form.emergency_contact_phone.errors %}
+                        <div class="text-danger small">{{ form.emergency_contact_phone.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.motivation_letter.id_for_label }}">{{ form.motivation_letter.label }}</label>
+                    {{ form.motivation_letter }}
+                    {% if form.motivation_letter.help_text %}
+                        <small class="form-text text-muted">{{ form.motivation_letter.help_text }}</small>
+                    {% endif %}
+                    {% if form.motivation_letter.errors %}
+                        <div class="text-danger small">{{ form.motivation_letter.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="{{ form.special_requirements.id_for_label }}">{{ form.special_requirements.label }}</label>
+                    {{ form.special_requirements }}
+                    {% if form.special_requirements.help_text %}
+                        <small class="form-text text-muted">{{ form.special_requirements.help_text }}</small>
+                    {% endif %}
+                    {% if form.special_requirements.errors %}
+                        <div class="text-danger small">{{ form.special_requirements.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'olympiad-details' competition.slug %}" class="btn btn-outline-secondary">
+                <i class="far fa-arrow-left me-2"></i> Back to Competition
+            </a>
+            <button type="submit" class="theme-btn">
+                <span>Continue to Travel Quote</span> <i class="far fa-long-arrow-right"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #212529;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+    
+    .form-group textarea {
+        border-radius: 15px;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+</style>
+{% endblock %}
+

@@ -1,0 +1,1045 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <!--<< Header Area >>-->
+     <head>
+        <!-- ========== Meta Tags ========== -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="modinatheme">
+        <meta name="description" content="WON - Academic Olympiad Competitions Platform">
+        <!-- ======== Page title ============ -->
+        <title>WON - Browse Olympiad Competitions</title>
+        <!--<< Favicon >>-->
+        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
+        <!--<< Bootstrap min.css >>-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <!--<< Font Awesome.css >>-->
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+        <!--<< Animate.css >>-->
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+        <!--<< Magnific Popup.css >>-->
+        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+        <!--<< MeanMenu.css >>-->
+        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
+        <!--<< Odometer.css >>-->
+        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
+        <!--<< Swiper Bundle.css >>-->
+        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+        <!--<< DatePicker.css >>-->
+        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
+        <!--<< Nice Select.css >>-->
+        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+        <!--<< Main.css >>-->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <!--<< Style.css >>-->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+
+    <body>
+
+       <!-- Preloader Start -->
+        <div id="preloader" class="preloader">
+            <div class="animation-preloader">
+                <div class="spinner">                
+                </div>
+                <div class="txt-loading">
+                    <span data-text-preloader="T" class="letters-loading">
+                        T
+                    </span>
+                    <span data-text-preloader="R" class="letters-loading">
+                        R
+                    </span>
+                    <span data-text-preloader="A" class="letters-loading">
+                        A
+                    </span>
+                    <span data-text-preloader="V" class="letters-loading">
+                        V
+                    </span>
+                    <span data-text-preloader="I" class="letters-loading">
+                        I
+                    </span>
+                    <span data-text-preloader="L" class="letters-loading">
+                        L
+                    </span>
+                </div>
+                <p class="text-center">Loading</p>
+            </div>
+            <div class="loader">
+                <div class="row">
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back To Top start -->
+        <button id="back-top" class="back-to-top">
+            <i class="fas fa-long-arrow-up"></i>
+        </button>
+
+        <!-- Offcanvas Area Start -->
+        <div class="fix-area">
+            <div class="offcanvas__info">
+                <div class="offcanvas__wrapper">
+                    <div class="offcanvas__content">
+                        <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
+                        <div class="offcanvas__logo">
+                            <a href="{% url 'index' %}" class="header-logo text-logo" style="font-size: 20px; font-weight: 700; color: #000;">WON — World Olympiad Network</a>
+                        </div>
+                            <div class="offcanvas__close">
+                                <button>
+                                <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="offcanvas-title">Welcome to WON</h3>
+                        <p>Discover Olympiads, apply with ease, and plan travel seamlessly.</p>
+                        <div class="mobile-menu fix mb-3"></div>
+                        <div class="offcanvas__contact">
+                            <h3>Contact Us</h3>
+                            <form action="#" id="contact-form" method="POST" class="contact-form-items">
+                                <div class="row g-4">
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <input type="text" name="name" id="name33" placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                    <div class="form-clt">
+                                        <input type="email" name="email" id="email33" placeholder="Email Address">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="social-icon d-flex align-items-center">
+                                <a href="https://instagram.com/worldolympiadnetwork"><i class="fab fa-instagram"></i></a>
+                                <a href="https://twitter.com/won_global"><i class="fab fa-twitter"></i></a>
+                                <a href="https://linkedin.com/company/world-olympiad-network"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas__overlay"></div>
+
+        {% include 'partials/navbar.html' %}
+        
+        <!-- Search Section Start -->
+        <div class="header-search-bar d-flex align-items-center">
+            <button class="search-close">×</button>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="search-bar">
+                            <div class="contact-form-box contact-search-form-box">
+                                <form action="#">
+                                    <input type="email" placeholder="Search here...">
+                                    <button type="submit"><i class="far fa-search"></i></button>
+                                </form>
+                                <p>Type above and press Enter to search. Press Close to cancel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="index.html">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            Browse Olympiads
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Browse All Olympiad Competitions</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!-- Olympiad Competitions Section Start -->
+        <section class="amazing-tour-section section-padding">
+            <div class="container">
+                <div class="amazing-tour-wrapper">
+                    <div class="row g-4">
+                        <div class="col-xl-3 col-lg-4">
+                            <div class="tour-sidebar-area sticky-style">
+                                <div class="tour-destination-sidebar">
+                                    <div class="booking-list-area">
+                                        <div class="booking-list">
+                                            <div class="icon">
+                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <h5>Location</h5>
+                                                <div class="form-clt">
+                                                    <div class="form">
+                                                        <select class="single-select w-100">
+                                                            <option>Select Competition Location</option>
+                                                            <option>United States</option>
+                                                            <option>United Kingdom</option>
+                                                            <option>Singapore</option>
+                                                            <option>Kenya</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="booking-list">
+                                            <div class="icon">
+                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <h5>Olympiad Category</h5>
+                                                <div class="form-clt">
+                                                    <div class="form">
+                                                        <select class="single-select w-100">
+                                                            <option>Choose Category</option>
+                                                            <option>Mathematics</option>
+                                                            <option>Science (Physics, Chemistry, Biology)</option>
+                                                            <option>Computer Science & Informatics</option>
+                                                            <option>Arts & Humanities</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="booking-list">
+                                            <div class="icon">
+                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <h5>Competition Date</h5>
+                                                <div class="form-clt">
+                                                    <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+                                                        <input class="form-control" type="text" placeholder="Select Date" readonly="">
+                                                        <span class="input-group-addon"><i class="far fa-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="booking-list style-2">
+                                            <div class="icon">
+                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <h5>Grade Level</h5>
+                                                <div class="form-clt">
+                                                    <div class="form">
+                                                        <select class="single-select w-100">
+                                                            <option>Select Grade Level</option>
+                                                            <option>Elementary (Grades 1-5)</option>
+                                                            <option>Middle School (Grades 6-8)</option>
+                                                            <option>High School (Grades 9-12)</option>
+                                                            <option>University Level</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tour-sidebar-widget">
+                                            <div class="wid-title">
+                                                <h3>Filter by Registration Fee</h3>
+                                            </div>
+                                            <div class="price-range-wrapper">
+                                                <div class="slider-container">
+                                                    <!-- Range sliders -->
+                                                    <input type="range" id="min-slider" class="slider" min="130" max="500"
+                                                        value="130">
+                                                    <input type="range" id="max-slider" class="slider" min="130" max="500"
+                                                        value="250">
+                                                </div>
+                                                <div class="price-text pt-4 d-flex gap-3">
+                                                    <label for="amount">Fee Range:</label>
+                                                    <input type="text" id="amount" readonly style="border:0;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tour-sidebar-widget">
+                                            <div class="wid-title">
+                                                <h3>Competition Format</h3>
+                                            </div>
+                                            <ul class="languages-list">
+                                                <li>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                Individual
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                Team
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                Virtual
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                In-Person
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                Hybrid
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                    <label class="checkbox-single">
+                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                            <span class="checkbox-area d-center">
+                                                                <input type="checkbox">
+                                                                <span class="checkmark d-center"></span>
+                                                            </span>
+                                                            <span class="text-color">
+                                                                Multi-Stage
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="tour-sidebar-widget">
+                                            <div class="wid-title">
+                                                <h3>Benefits & Features</h3>
+                                            </div>
+                                            <div class="checkbox-items">
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Certificate Provided
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Medal Awards
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Cash Prizes
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Study Materials
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Practice Tests
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            Mentorship Program
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <label class="checkbox-single mb-0">
+                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                        <span class="checkbox-area d-center">
+                                                            <input type="checkbox">
+                                                            <span class="checkmark d-center"></span>
+                                                        </span>
+                                                        <span class="text-color">
+                                                            University Recognition
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="search-widget">
+                                            <form action="#">
+                                                <button type="submit" class="theme-btn"><span>Search Olympiads</span><i class="fal fa-search"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="popular-posts">
+                                        <div class="single-post-item">
+                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-1.jpg' %}');"></div>
+                                            <div class="post-content">
+                                                <div class="star">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                               <h5><a href="tour-details.html">Math Olympiad Challenge</a></h5>
+                                                   
+                                                <p>
+                                                    From <b> $129.00 </b>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="single-post-item">
+                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-2.jpg' %}');"></div>
+                                            <div class="post-content">
+                                                <div class="star">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <h5><a href="tour-details.html">Science Olympiad Series</a></h5>
+                                                <p>
+                                                    From <b> $189.00 </b>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="single-post-item">
+                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-3.jpg' %}');"></div>
+                                            <div class="post-content">
+                                                <div class="star">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <h5><a href="tour-details.html">Coding Competition</a></h5>
+                                                <p>
+                                                    From <b> $229.00 </b>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-9 col-lg-8">
+                            <div class="row g-4">
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$333</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=600&fit=crop" alt="Mathematics Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Mathematics Olympiad (IMO)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$565</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop" alt="Physics Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Physics Olympiad (IPhO)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$290</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1554475901-4538ddfbccc2?w=800&h=600&fit=crop" alt="Chemistry Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1554475901-4538ddfbccc2?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Chemistry Olympiad (IChO)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$565</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop" alt="Informatics Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Olympiad in Informatics (IOI)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$855</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=800&h=600&fit=crop" alt="Biology Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Biology Olympiad (IBO)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$336</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=600&fit=crop" alt="Geography Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Geography Olympiad (iGeo)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="amazing-tour-items mt-0">
+                                        <div class="thumb">
+                                            <div class="post-box">
+                                                <h4>$636</h4>
+                                                <span>/ person</span>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=800&h=600&fit=crop" alt="Linguistics Olympiad">
+                                            <div class="list-items">
+                                                <h6>FEATURED</h6>
+                                                <ul class="popup-icon">
+                                                    <li>
+                                                        <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                            <i class="far fa-video"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=800&h=600&fit=crop" class="img-popup">
+                                                            <i class="far fa-camera"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h4>
+                                                <a href="tour-details.html">International Linguistics Olympiad (IOL)</a>
+                                            </h4>
+                                            <span class="location-icon">
+                                                <i class="far fa-map-marker-alt"></i>
+                                                132, Tic St, Wingston, New York 12401
+                                            </span>
+                                            <a href="tour-details.html" class="theme-btn">
+                                                <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
+                                <ul>
+                                    <li><a class="page-numbers" href="#">01</a></li>
+                                    <li><a class="page-numbers" href="#">02</a></li>
+                                    <li><a class="page-numbers" href="#">03</a></li>
+                                    <li><a class="page-numbers" href="#">04</a></li>
+                                    <li><a class="page-numbers" href="#">05</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section Start -->
+        <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
+            <div class="container">
+                <div class="footer-newsletter-items">
+                    <h2>Get Updated the Our Latest Newsletter</h2>
+                    <div class="footer-input">
+                        <input type="email" id="email2" placeholder="Enter your email">
+                        <button class="newsletter-btn" type="submit">
+                        Subscribe <i class="far fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="footer-wrapper">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-12">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <a href="index.html" class="footer-logo">
+                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
+                                    </a>
+                                </div>
+                                <div class="footer-content">
+                                    <div class="contact-info-items">
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/call.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Call Us</span>
+                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/mail.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Mail Us</span>
+                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="app-text">Your all-in-one travel app</h6>
+                                    <div class="apps-items">
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
+                                        </a>
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
+                                        </a>
+                                    </div>
+                                    <div class="social-icon">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-instagram"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Useful Links</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="destination.html">All Destination</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">24/7 Support</a>
+                                    </li>
+                                    <li>
+                                        <a href="team.html">Our Team</a>
+                                    </li>
+                                    <li>
+                                        <a href="tour.html">Tour Places</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Reviews</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>About Travil</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="about.html">About Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Legal Notice</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Terms & Condition</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Contact Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Apple Store</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-4">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Gallery</h3>
+                                </div>
+                                <div class="footer-gallery">
+                                    <div class="gallery-wrap">
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-1">
+                <div class="container">
+                    <div class="footer-bottom-wrapper">
+                        <p class="wow fadeInUp" data-wow-delay=".3s">
+                            © 2025 Travil LLC All rights reserved.
+                        </p>
+                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
+                            <li>
+                                <a href="contact.html">
+                                    Privacy 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Terms 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Site Map
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+               <!--<< All JS Plugins >>-->
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <!--<< Bootstrap Js >>-->
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <!--<< Nice Select Js >>-->
+        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+        <!--<< Odometer Js >>-->
+        <script src="{% static 'js/odometer.min.js' %}"></script>
+        <!--<< Appear Js >>-->
+        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
+        <!--<< Datepicker Js >>-->
+        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+        <!--<< Swiper Slider Js >>-->
+        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+        <!--<< MeanMenu Js >>-->
+        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
+        <!--<< Magnific Popup Js >>-->
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <!--<< Wow Animation Js >>-->
+        <script src="{% static 'js/wow.min.js' %}"></script>
+        <!--<< Main.js >>-->
+        <script src="{% static 'js/main.js' %}"></script>
+    </body>
+</html>

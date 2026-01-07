@@ -1,0 +1,1024 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block content %}
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% if competition.banner_image %}{{ competition.banner_image.url }}{% elif competition.image %}{{ competition.image.url }}{% else %}{% static 'img/hero/1.png' %}{% endif %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            <a href="{% url 'olympiads' %}">Olympiads</a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            {{ competition.name }}
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">{{ competition.name }}</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!--  Tour Details Section Start -->
+        <section class="tour-details-section section-padding">
+            <div class="container">
+                <div class="tour-details-wrapper">
+                    <div class="row g-">
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="tour-details-items">
+                                <div class="details-thumb">
+                                    {% if competition.image %}
+                                        <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+                                    {% else %}
+                                        <img src="{% static 'img/tour/default.jpg' %}" alt="{{ competition.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="details-content">
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        {{ competition.destination.city }}, {{ competition.destination.country }}
+                                    </span>
+                                    <h2>
+                                        {{ competition.name }}
+                                    </h2>
+                                    {% if competition.short_name %}
+                                    <p class="mb-2"><strong>Short Name:</strong> {{ competition.short_name }}</p>
+                                    {% endif %}
+                                    <div class="mb-3">
+                                        {{ competition.description|safe }}
+                                    </div>
+                                    {% if competition.requirements %}
+                                    <div class="mb-3">
+                                        <h4>Requirements</h4>
+                                        <div class="requirements-content">
+                                            {{ competition.requirements|safe }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <!-- <div class="destination-list-item">
+                                        <h4>
+                                            Competition Benefits & Features
+                                        </h4>
+                                        <div class="destination-list">
+                                            <ul class="list">
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    Official IMO Certificate
+                                                </li>
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    Gold, Silver & Bronze Medals
+                                                </li>
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    International Recognition
+                                                </li>
+                                            </ul>
+                                            <ul class="list">
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    Study Materials Provided
+                                                </li>
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    Expert Mentorship Program
+                                                </li>
+                                                <li>
+                                                    <i class="flaticon-check"></i>
+                                                    University Scholarship Opportunities
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="tour-details-icon">
+                                        <div class="row g-5 justity-content-end">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="flaticon-connection"></i>
+                                                    <h5>Virtual Participation</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="flaticon-cyber-security"></i>
+                                                    <h5>Secure Testing Environment</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="flaticon-guide"></i>
+                                                    <h5>Expert Mentorship</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="fas fa-book"></i>
+                                                    <h5>Study Resources</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="fas fa-certificate"></i>
+                                                    <h5>Official Certificates</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="fas fa-trophy"></i>
+                                                    <h5>Medals & Awards</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="fas fa-users"></i>
+                                                    <h5>Global Networking</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="icon">
+                                                    <i class="fas fa-graduation-cap"></i>
+                                                    <h5>University Recognition</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="faq-items">
+                                        <h4>Competition Schedule</h4>
+                                        <div class="faq-accordion">
+                                            <div class="accordion" id="accordion2">
+                                                <div class="accordion-item mb-3">
+                                                    <h5 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
+                                                            <span>Day 1:</span>  Registration & Opening Ceremony
+                                                        </button>
+                                                    </h5>
+                                                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                                        <div class="accordion-body">
+                                                            Welcome to IMO 2025! Check-in begins at 9:00 AM. Participants will receive their competition materials, ID badges, and information packets. The opening ceremony starts at 2:00 PM, featuring keynote speakers and an introduction to the competition rules and format. Networking session follows at 4:00 PM.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item mb-3">
+                                                    <h5 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                                            <span>Day 2:</span> First Competition Day (Problems 1-3)
+                                                        </button>
+                                                    </h5>
+                                                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                                        <div class="accordion-body">
+                                                            Competition Day 1: Participants will tackle problems 1, 2, and 3. The exam session runs from 9:00 AM to 1:30 PM (4.5 hours). Each problem is worth 7 points. Topics covered include algebra, number theory, and combinatorics. Lunch break at 2:00 PM, followed by optional problem discussion sessions at 4:00 PM.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item mb-3">
+                                                    <h5 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                                            <span>Day 3:</span>  Second Competition Day (Problems 4-6)
+                                                        </button>
+                                                    </h5>
+                                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                                        <div class="accordion-body">
+                                                            Competition Day 2: Participants will solve problems 4, 5, and 6. The exam session runs from 9:00 AM to 1:30 PM (4.5 hours). Topics include geometry, functional equations, and advanced problem-solving. These problems are typically more challenging than Day 1. Evening relaxation activities and cultural exchange programs available.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h5 class="accordion-header">
+                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                                            <span>Day 4:</span>   Results & Award Ceremony
+                                                        </button>
+                                                    </h5>
+                                                    <div id="faq4" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+                                                        <div class="accordion-body">
+                                                            Final day featuring the awards ceremony at 3:00 PM. Gold, Silver, and Bronze medals will be awarded to top performers. All participants receive official IMO certificates. Special recognition for perfect scores and outstanding solutions. Closing remarks by IMO leadership and announcement of next year's host country. Networking reception at 5:00 PM.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --> 
+                                    
+                                    <!-- Competition Venue & Destination Section -->
+                                    <div class="destination-list-item mt-5">
+                                        <h3 class="mb-4">
+                                            <i class="far fa-map-marker-alt me-2"></i> Competition Venue & Destination
+                                        </h3>
+                                        <div class="destination-info-wrapper">
+                                            {% if competition.destination.image %}
+                                            <div class="mb-4">
+                                                
+                                                <div class="google-map" style="height: 400px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1);"> 
+                                                    <iframe src="{{ competition.destination.iframe_url }}" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy"></iframe>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="destination-content">
+                                                <h4 class="mb-3">{{ competition.destination.city }}, {{ competition.destination.country }}</h4>
+                                                <div class="destination-meta mb-3">
+                                                    <ul class="list">
+                                                        <li>
+                                                            <i class="far fa-globe"></i>
+                                                            <strong>Region:</strong> {{ competition.destination.region|title }}
+                                                        </li>
+                                                        {% if competition.destination.package_price_min or competition.destination.package_price_max %}
+                                                        <li>
+                                                            <i class="far fa-dollar-sign"></i>
+                                                            <strong>Package Range:</strong> 
+                                                            {{ competition.destination.currency }}
+                                                            {% if competition.destination.package_price_min %}{{ competition.destination.package_price_min|floatformat:0 }}{% endif %}
+                                                            {% if competition.destination.package_price_min and competition.destination.package_price_max %} - {% endif %}
+                                                            {% if competition.destination.package_price_max %}{{ competition.destination.package_price_max|floatformat:0 }}{% endif %}
+                                                        </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                                {% if competition.destination.description %}
+                                                    <div class="mb-4">{{ competition.destination.description|safe }}</div>
+                                                {% endif %}
+                                                <a href="{% url 'contact' %}?subject=Travel Quote Request for {{ competition.destination.city }}" class="theme-btn mb-4">
+                                                    <span>Generate Trip Quotation</span> <i class="far fa-long-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Subject Details Section -->
+                                    <div class="destination-list-item mt-5">
+                                        <h3 class="mb-4">
+                                            <i class="fas fa-book me-2"></i> Subject: {{ competition.subject.name }}
+                                        </h3>
+                                        <div class="subject-info-wrapper">
+                                            <div class="d-flex align-items-start gap-3 mb-4">
+                                                {% if competition.subject.icon %}
+                                                    <div class="subject-icon-wrapper">
+                                                        <img src="{{ competition.subject.icon.url }}" alt="{{ competition.subject.name }}" style="max-width: 100px; height: auto; border-radius: 10px;">
+                                                    </div>
+                                                {% endif %}
+                                                <div class="flex-grow-1">
+                                                    {% if competition.subject.description %}
+                                                        <div class="mb-3 subject-description-preview">{{ competition.subject.description|safe }}</div>
+                                                    {% else %}
+                                                        <p class="mb-3">Explore {{ competition.subject.name }} Olympiad competitions and access expert tutors to help you prepare for success.</p>
+                                                    {% endif %}
+                                                    <div class="subject-stats d-flex flex-wrap gap-2 mb-3">
+                                                        <span class="badge bg-primary" style="padding: 8px 15px; font-size: 14px;">
+                                                            <i class="fas fa-trophy me-1"></i> {{ competition.subject.total_olympiads }} Competitions
+                                                        </span>
+                                                        <span class="badge bg-success" style="padding: 8px 15px; font-size: 14px;">
+                                                            <i class="fas fa-chalkboard-teacher me-1"></i> {{ competition.subject.total_tutors }} Tutors Available
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Quick Facts Card -->
+                                            <div class="subject-sidebar-card p-4 rounded mb-4" style="background: linear-gradient(135deg, #232f63 0%, #263b99  100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                                                <h5 class="mb-4 text-white">
+                                                    <i class="fas fa-chart-line me-2"></i> Quick Facts
+                                                </h5>
+                                                <ul class="list-unstyled mb-4">
+                                                    <li class="mb-3 d-flex align-items-center">
+                                                        <i class="fas fa-trophy me-3" style="font-size: 20px;"></i>
+                                                        <div>
+                                                            <strong style="display: block;">Total Competitions</strong>
+                                                            <span style="font-size: 24px; font-weight: bold;">{{ competition.subject.total_olympiads }}</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3 d-flex align-items-center">
+                                                        <i class="fas fa-chalkboard-teacher me-3" style="font-size: 20px;"></i>
+                                                        <div>
+                                                            <strong style="display: block;">Available Tutors</strong>
+                                                            <span style="font-size: 24px; font-weight: bold;">{{ competition.subject.total_tutors }}</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3 d-flex align-items-center">
+                                                        <i class="fas fa-book me-3" style="font-size: 20px;"></i>
+                                                        <div>
+                                                            <strong style="display: block;">Study Resources</strong>
+                                                            <span>Available</span>
+                                                        </div>
+                                                    </li>
+                                                </ul> 
+                                            </div>
+                                            
+                                            <button class="theme-btn mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#subjectDetails" aria-expanded="false" aria-controls="subjectDetails">
+                                                <span>View More Details & Tutors</span> <i class="far fa-long-arrow-right"></i>
+                                            </button>
+                                            
+                                            <!-- Collapsible Subject Details -->
+                                            <div class="collapse mt-3" id="subjectDetails">
+                                                <div class="subject-details-expanded">
+                                                    {% if competition.subject.description %}
+                                                        <div class="mb-4 p-4 bg-light rounded">
+                                                            <h5 class="mb-3">
+                                                                <i class="fas fa-info-circle me-2"></i> About {{ competition.subject.name }}
+                                                            </h5>
+                                                            <div class="mb-0">{{ competition.subject.description|safe }}</div>
+                                                        </div>
+                                                    {% endif %}
+                                                    
+                                                    <!-- Tutors Section -->
+                                                    {% if tutors %}
+                                                        <div class="tutors-section mt-4">
+                                                            <h5 class="mb-4">
+                                                                <i class="fas fa-chalkboard-teacher me-2"></i> Available Tutors for {{ competition.subject.name }}
+                                                            </h5>
+                                                            <div class="tutors-list">
+                                                                {% for tutor in tutors %}
+                                                                <div class="tutor-card p-4 border rounded mb-3" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                                                                    <div class="d-flex align-items-start gap-3">
+                                                                        {% if tutor.user.profile_picture %}
+                                                                            <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="rounded-circle" style="width: 70px; height: 70px; object-fit: cover; border: 3px solid #f0f0f0;">
+                                                                        {% else %}
+                                                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 3px solid #f0f0f0;">
+                                                                                <i class="fas fa-user text-white" style="font-size: 24px;"></i>
+                                                                            </div>
+                                                                        {% endif %}
+                                                                        <div class="flex-grow-1">
+                                                                            <h6 class="mb-1 fw-bold">
+                                                                                {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
+                                                                            </h6>
+                                                                            <p class="text-muted small mb-2">
+                                                                                <i class="fas fa-graduation-cap me-1"></i>{{ competition.subject.name }} Specialist
+                                                                            </p>
+                                                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                                                {% if tutor.average_rating %}
+                                                                                    <div class="star d-flex align-items-center">
+                                                                                        <i class="fas fa-star text-warning me-1"></i>
+                                                                                        <strong class="me-1">{{ tutor.average_rating|floatformat:1 }}</strong>
+                                                                                    </div>
+                                                                                    <span class="small text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
+                                                                                {% else %}
+                                                                                    <span class="small text-muted">No ratings yet</span>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            <p class="mb-3">
+                                                                                <strong class="text-primary" style="font-size: 18px;">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
+                                                                                <span class="text-muted small">/hour</span>
+                                                                            </p>
+                                                                            <a href="{% url 'team-details' tutor.user.id %}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
+                                                                                <span>View Profile</span> <i class="far fa-long-arrow-right"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4 text-center">
+                                                                <a href="{% url 'team' %}?subject={{ competition.subject.slug }}" class="theme-btn">
+                                                                    <span>View All Tutors for {{ competition.subject.name }}</span> <i class="far fa-long-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info mt-4">
+                                                            <i class="fas fa-info-circle me-2"></i>
+                                                            <p class="mb-0">No tutors available for {{ competition.subject.name }} at the moment. Check back soon!</p>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- <div class="review-area">
+                                        <h3>
+                                            Participant Reviews
+                                        </h3>
+                                        <div class="courses-reviews-box-items">
+                                            <div class="courses-reviews-box">
+                                                <div class="reviews-box">
+                                                    <h2><span class="odometer" data-count="4.9">00</span></h2>
+                                                    <div class="star">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    </div>
+                                                    <p>856+ Reviews</p>
+                                                </div>
+                                                <div class="reviews-ratting-right">
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-two"></div>
+                                                        </div>
+                                                        <span>Services</span>
+                                                    </div>
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-three"></div>
+                                                        </div>
+                                                        <span>Safety</span>
+                                                    </div>
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-three"></div>
+                                                        </div>
+                                                        <span>Guides</span>
+                                                    </div>
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-four"></div>
+                                                        </div>
+                                                        <span>Foods</span>
+                                                    </div>
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-five"></div>
+                                                        </div>
+                                                        <span>Hotels</span>
+                                                    </div>
+                                                    <div class="reviews-ratting-item">
+                                                        <div class="star">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-value style-five"></div>
+                                                        </div>
+                                                        <span>Places</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="client-review-items">
+                                        <h3>Clients Reviews</h3>
+                                        <div class="clinet-box-items">
+                                            <div class="clinet-box">
+                                                <div class="star">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <h5>
+                                                    "Our family trip was amazing from start to finish! The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
+                                                </h5>
+                                                <div class="review-wrap-area d-flex gap-4 align-items-center">
+                                                    <div class="review-thumb">
+                                                        <img src="{% static 'img/tour/client.png' %}" alt="img">
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                                            <div class="cont">
+                                                                <h5>Smith Thomas</h5>
+                                                                <span>from New York, USA</span>
+                                                            </div>
+                                                            <h6><a href="#">Reply</a></h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clinet-box style-2">
+                                                <div class="star">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <h5>
+                                                    The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
+                                                </h5>
+                                                <div class="review-wrap-area d-flex gap-4 align-items-center">
+                                                    <div class="review-thumb">
+                                                        <img src="{% static 'img/tour/client.png' %}" alt="img">
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                                            <div class="cont">
+                                                                <h5>Smith Thomas</h5>
+                                                                <span>from New York, USA</span>
+                                                            </div>
+                                                            <h6><a href="#">Reply</a></h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clinet-box-3">
+                                            <div class="star">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <h5>
+                                                "Our family trip was amazing from start to finish! The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
+                                            </h5>
+                                            <div class="review-wrap-area d-flex gap-4 align-items-center">
+                                                <div class="review-thumb">
+                                                    <img src="{% static 'img/tour/client.png' %}" alt="img">
+                                                </div>
+                                                <div class="review-content">
+                                                    <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                                        <div class="cont">
+                                                            <h5>Smith Thomas</h5>
+                                                            <span>from New York, USA</span>
+                                                        </div>
+                                                        <img src="{% static 'img/tour/quote.png' %}" alt="img">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="review-comment-items">
+                                        <h3>Add Your Reviews</h3>
+                                        <ul>
+                                            <li>
+                                                Services
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                Hotel
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                Places
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul class="mb-0">
+                                            <li>
+                                                Safety
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                Foods
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                Guides
+                                                <div class="star">
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <h4>Leave Feedback</h4>
+                                        <form action="#" id="contact-form" method="POST">
+                                            <div class="row g-4">
+                                                <div class="col-lg-6">
+                                                    <div class="form-clt">
+                                                        <input type="text" name="name" id="name" placeholder="Your name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-clt">
+                                                        <input type="text" name="phone" id="phone" placeholder="Your phone">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-clt">
+                                                        <input type="text" name="email2" id="email21" placeholder="Your email">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-clt">
+                                                        <textarea name="message" id="message" placeholder="Your comments..."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <button type="submit" class="theme-btn text-center">
+                                                        <span>Submit Reviews</span> <i class="far fa-long-arrow-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="tour-details-sidebar sticky-style">
+                                <div class="tour-sidebar-items">
+                                    <h3>Competition Registration</h3>
+                                    <ul class="form-list">
+                                        <li>
+                                            Competition Date:
+                                            <div class="form-clt">
+                                                <div class="input-group">
+                                                    <input class="form-control bg-white text-dark fw-bold" style="background-color: #fff !important; color: #212529 !important;" type="text" value="{{ competition.start_date|date:'M d' }} - {{ competition.end_date|date:'M d, Y' }}" readonly>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            Application Deadline:
+                                            <div class="form-clt">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" value="{{ competition.application_deadline|date:'M d, Y' }}" readonly>
+                                                    <span class="input-group-addon"><i class="far fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            Age Group:
+                                            <div class="form-clt">
+                                                <input class="form-control" type="text" value="{{ competition.age_group_min }}-{{ competition.age_group_max }} years" readonly>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            Subject:
+                                            <div class="form-clt">
+                                                <input class="form-control" type="text" value="{{ competition.subject.name }}" readonly>
+                                            </div>
+                                        </li>
+                                        <!-- <li>
+                                            Status:
+                                            <div class="form-clt">
+                                                <span class="badge {% if competition.status == 'upcoming' %}bg-success{% elif competition.status == 'ongoing' %}bg-primary{% elif competition.status == 'completed' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                                    {{ competition.get_status_display }}
+                                                </span>
+                                            </div>
+                                        </li> -->
+                                    </ul>
+                                    <div class="tickets-list">
+                                        <p>Registration Fee</p>
+                                        <ul>
+                                            <li>
+                                               {{ competition.currency }}{{ competition.base_price|floatformat:2 }}</b>
+                                                <div class="form-clt">
+                                                    <div class="form">
+                                                        <select class="single-select w-100" id="participants">
+                                                            <option value="1"> 01 Participant</option>
+                                                            <option value="2"> 02 Participants</option>
+                                                            <option value="3"> 03 Participants</option>
+                                                            <option value="4"> 04 Participants</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="extra-items">
+                                        <p>Add Extra:</p>
+                                        <label class="checkbox-single d-flex justify-content-between align-items-center">
+                                            <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                <span class="checkbox-area d-center">
+                                                    <input type="checkbox">
+                                                    <span class="checkmark d-center"></span>
+                                                </span>
+                                                <span class="text-color">
+                                                    Add service per booking
+                                                </span>
+                                            </span>
+                                            <span class="text-color">$45</span>
+                                        </label>
+                                        <label class="checkbox-single d-flex justify-content-between align-items-center">
+                                            <span class="d-flex gap-xl-3 gap-2 align-items-center">
+                                                <span class="checkbox-area d-center">
+                                                    <input type="checkbox">
+                                                    <span class="checkmark d-center"></span>
+                                                </span>
+                                                <span class="text-color">
+                                                    Add service per personal
+                                                </span>
+                                            </span>
+                                            <span class="text-color">$35</span>
+                                        </label>
+                                    </div>
+                                    <ul class="total-list">
+                                        <li>
+                                            Total:
+                                        </li>
+                                        <li id="total-price">
+                                            {{ competition.currency }}{{ competition.base_price|floatformat:2 }}
+                                        </li>
+                                    </ul>
+                                    {% if competition.is_application_open %}
+                                    <a href="{% url 'start-application' competition.slug %}" class="theme-btn">
+                                        <span>Apply Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                    {% else %}
+                                    <a href="#" class="theme-btn" style="opacity: 0.6; cursor: not-allowed;" onclick="return false;">
+                                        <span>Application Closed</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                    {% endif %}
+                                    <p class="text">Need any help?</p>
+                                </div>
+                                {% if competition.is_featured %}
+                                <div class="offer-card bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
+                                    <h3>Featured Competition</h3>
+                                    <p>This is a featured Olympiad competition</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Competitions Section -->
+        {% if related_competitions %}
+        <section class="tour-section fix section-padding">
+            <div class="container">
+                <div class="section-title-area text-center mb-5">
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Related Competitions</h2>
+                    <p class="wow fadeInUp" data-wow-delay=".5s">Explore other competitions in {{ competition.subject.name }}</p>
+                </div>
+                <div class="row g-4">
+                    {% for related in related_competitions %}
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="amazing-tour-items mt-0">
+                            <div class="thumb">
+                                <div class="post-box">
+                                    <h4>{{ related.currency }}{{ related.base_price|floatformat:0 }}</h4>
+                                    <span>/ person</span>
+                                </div>
+                                {% if related.image %}
+                                    <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/tour/default.jpg' %}" alt="{{ related.name }}">
+                                {% endif %}
+                                {% if related.is_featured %}
+                                <div class="list-items">
+                                    <h6>FEATURED</h6>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="content">
+                                <h4>
+                                    <a href="{% url 'olympiad-details' related.slug %}">{{ related.name }}</a>
+                                </h4>
+                                <span class="location-icon">
+                                    <i class="far fa-map-marker-alt"></i>
+                                    {{ related.destination.city }}, {{ related.destination.country }}
+                                </span>
+                                <a href="{% url 'olympiad-details' related.slug %}" class="theme-btn">
+                                    <span>View Details</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Professional styling for destination and subject sections */
+    .destination-list-item {
+        padding: 30px 0;
+    }
+    
+    .destination-list-item h3 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212529;
+        border-bottom: 3px solid var(--theme-color);
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .destination-info-wrapper {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+    
+    .destination-content h4 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 15px;
+    }
+    
+    .destination-meta .list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .destination-meta .list li {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .destination-meta .list li:last-child {
+        border-bottom: none;
+    }
+    
+    .destination-meta .list li i {
+        color: var(--theme-color);
+        font-size: 18px;
+        width: 25px;
+    }
+    
+    .map-area {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        height: fit-content;
+    }
+    
+    .map-area h5 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+    }
+    
+    .subject-info-wrapper {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+    
+    .subject-icon-wrapper {
+        flex-shrink: 0;
+    }
+    
+    .subject-stats .badge {
+        font-size: 14px;
+        padding: 10px 18px;
+        border-radius: 25px;
+    }
+    
+    .tutor-card {
+        background: #fff;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef !important;
+    }
+    
+    .tutor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
+        border-color: var(--theme-color) !important;
+    }
+    
+    .subject-sidebar-card {
+        position: relative;
+    }
+    
+    .tutors-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .subject-details-expanded {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .google-map {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .google-map iframe {
+        border-radius: 10px;
+    }
+    
+    .subject-description-preview {
+        max-height: 150px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .subject-description-preview::after {
+        content: '...';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: white;
+        padding-left: 10px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 991px) {
+        .subject-sidebar-card {
+            position: relative;
+            top: 0;
+            margin-top: 30px;
+        }
+        
+        .destination-list-item h3 {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Update total price based on number of participants
+    document.getElementById('participants').addEventListener('change', function() {
+        const basePrice = {{ competition.base_price }};
+        const participants = parseInt(this.value);
+        const total = basePrice * participants;
+        document.getElementById('total-price').textContent = '{{ competition.currency }}' + total.toFixed(2);
+    });
+</script>
+{% endblock %}

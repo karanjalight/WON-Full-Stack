@@ -1,0 +1,177 @@
+{% extends 'frontend/application/base.html' %}
+{% load static %}
+
+{% block application_content %}
+<div class="step-content">
+    <h3 class="mb-4">Upload Required Documents</h3>
+    <p class="text-muted mb-4">Please upload the required documents for your application.</p>
+    
+    <div class="documents-list mb-4">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Required Documents:</strong> Please upload all required documents. You can upload them one at a time.
+        </div>
+        
+        <div class="document-upload-section">
+            <h5 class="mb-3">Upload Document</h5>
+            <form id="documentUploadForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="document_type">Document Type <span class="text-danger">*</span></label>
+                            <select name="document_type" id="document_type" class="form-control" required>
+                                <option value="">Select document type...</option>
+                                <option value="passport">Passport</option>
+                                <option value="national_id">National ID</option>
+                                <option value="birth_certificate">Birth Certificate</option>
+                                <option value="recommendation_letter">Recommendation Letter</option>
+                                <option value="transcript">Academic Transcript</option>
+                                <option value="photo">Passport Photo</option>
+                                <option value="medical_form">Medical Form</option>
+                                <option value="consent_form">Parental Consent</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="document_file">File <span class="text-danger">*</span></label>
+                            <input type="file" name="file" id="document_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="expiry_date">Expiry Date (if applicable)</label>
+                            <input type="date" name="expiry_date" id="expiry_date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="theme-btn">
+                            <span>Upload Document</span> <i class="far fa-upload me-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="uploaded-documents mt-4">
+            <h5 class="mb-3">Uploaded Documents</h5>
+            <div id="documentsList" class="documents-grid">
+                <p class="text-muted">No documents uploaded yet. Upload your first document above.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-actions">
+        <a href="{% url 'application-step' step=4 %}" class="btn btn-outline-secondary">
+            <i class="far fa-arrow-left me-2"></i> Previous Step
+        </a>
+        <a href="{% url 'application-step' step=6 %}" class="theme-btn" id="continueToReview">
+            <span>Continue to Review</span> <i class="far fa-long-arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('documentUploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch('{% url "upload-document" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Add document to list
+                const documentsList = document.getElementById('documentsList');
+                if (documentsList.querySelector('.text-muted')) {
+                    documentsList.innerHTML = '';
+                }
+                
+                const docItem = document.createElement('div');
+                docItem.className = 'document-item p-3 border rounded mb-2';
+                docItem.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${document.getElementById('document_type').selectedOptions[0].text}</strong>
+                            <span class="badge bg-success ms-2">Uploaded</span>
+                        </div>
+                        <i class="fas fa-check-circle text-success"></i>
+                    </div>
+                `;
+                documentsList.appendChild(docItem);
+                
+                // Reset form
+                this.reset();
+                
+                // Show success message
+                alert('Document uploaded successfully!');
+            } else {
+                alert('Error: ' + (data.error || 'Failed to upload document'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while uploading the document.');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #212529;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        color: #212529 !important;
+        background-color: #fff !important;
+    }
+    
+    .form-group textarea {
+        border-radius: 15px;
+    }
+    
+    .document-item {
+        border-radius: 15px;
+    }
+    
+    .document-item {
+        background: #f8f9fa;
+    }
+    
+    .documents-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+</style>
+{% endblock %}
+

@@ -1,0 +1,919 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <!--<< Header Area >>-->
+     <head>
+        <!-- ========== Meta Tags ========== -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="modinatheme">
+        <meta name="description" content="Travil - Travel & Tour Booking Html Template">
+        <!-- ======== Page title ============ -->
+        <title>Travil - Travel & Tour Booking Html Template</title>
+        <!--<< Favicon >>-->
+        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
+        <!--<< Bootstrap min.css >>-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <!--<< Font Awesome.css >>-->
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+        <!--<< Animate.css >>-->
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+        <!--<< Magnific Popup.css >>-->
+        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+        <!--<< MeanMenu.css >>-->
+        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
+        <!--<< Odometer.css >>-->
+        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
+        <!--<< Swiper Bundle.css >>-->
+        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+        <!--<< DatePicker.css >>-->
+        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
+        <!--<< Nice Select.css >>-->
+        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+        <!--<< Main.css >>-->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <!--<< Style.css >>-->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+
+    <body>
+
+       <!-- Preloader Start -->
+        <div id="preloader" class="preloader">
+            <div class="animation-preloader">
+                <div class="spinner">                
+                </div>
+                <div class="txt-loading">
+                    <span data-text-preloader="T" class="letters-loading">
+                        T
+                    </span>
+                    <span data-text-preloader="R" class="letters-loading">
+                        R
+                    </span>
+                    <span data-text-preloader="A" class="letters-loading">
+                        A
+                    </span>
+                    <span data-text-preloader="V" class="letters-loading">
+                        V
+                    </span>
+                    <span data-text-preloader="I" class="letters-loading">
+                        I
+                    </span>
+                    <span data-text-preloader="L" class="letters-loading">
+                        L
+                    </span>
+                </div>
+                <p class="text-center">Loading</p>
+            </div>
+            <div class="loader">
+                <div class="row">
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back To Top start -->
+        <button id="back-top" class="back-to-top">
+            <i class="fas fa-long-arrow-up"></i>
+        </button>
+
+        <!-- Offcanvas Area Start -->
+        <div class="fix-area">
+            <div class="offcanvas__info">
+                <div class="offcanvas__wrapper">
+                    <div class="offcanvas__content">
+                        <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
+                            <div class="offcanvas__logo">
+                                <a href="index.html">
+                                    <img src="{% static 'img/logo/black-logo.svg' %}" alt="logo-img">
+                                </a>
+                            </div>
+                            <div class="offcanvas__close">
+                                <button>
+                                <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="offcanvas-title">Hello There!</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, </p>
+                        <div class="mobile-menu fix mb-3"></div>
+                        <div class="offcanvas__contact">
+                            <h3>Get Appointment</h3>
+                            <form action="#" id="contact-form" method="POST" class="contact-form-items">
+                                <div class="row g-4">
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <input type="text" name="name" id="name33" placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <input type="text" name="name" id="email33" placeholder="Email Address">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-clt">
+                                            <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="social-icon d-flex align-items-center">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas__overlay"></div>
+
+        {% include 'partials/navbar.html' %}
+        
+        <!-- Search Section Start -->
+        <div class="header-search-bar d-flex align-items-center">
+            <button class="search-close">×</button>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="search-bar">
+                            <div class="contact-form-box contact-search-form-box">
+                                <form action="#">
+                                    <input type="email" placeholder="Search here...">
+                                    <button type="submit"><i class="far fa-search"></i></button>
+                                </form>
+                                <p>Type above and press Enter to search. Press Close to cancel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="index.html">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            Our Tour Listing 2
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Our Tour Listing 2</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!-- Amazing Tour Section Start -->
+        <section class="amazing-tour-section section-padding fix">
+            <div class="container">
+                <div class="amazing-tour-wrapper">
+                    <div class="row g-4">
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$333</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/07.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/07.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Explore the Bustling Streets and Temples in Bangkok</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$565</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/08.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/08.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Acropolis, Parthenon, Plaka District 3 Day Athens Tour</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$290</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/09.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/09.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Step Back in Time at Ancient Ruins in Rome, Italy</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$565</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/10.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/10.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Explore Scenic Beaches and Temples in Bali, Indonesia</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$855</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/11.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/11.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Marvel at Majestic Mountains and Lakes in Banff, Canada</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$436</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/12.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/12.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Romance and Charm Await in Paris, France</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$234</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/09.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/12.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Woman standing near Colosseum, Rome</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$731</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/17.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/12.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Blue lake water view taken travel with daytimey</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$636</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/16.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/16.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Romance and Charm Await in Paris, France</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$336</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/17.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/17.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Explore Scenic Beaches and Temples in Bali, Indonesia</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$636</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/18.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/18.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Acropolis, Parthenon, Plaka District 3 Day Athens Tour</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                            <div class="amazing-tour-items mt-0">
+                                <div class="thumb">
+                                    <div class="post-box">
+                                        <h4>$436</h4>
+                                        <span>/ person</span>
+                                    </div>
+                                    <img src="{% static 'img/tour/19.jpg' %}" alt="img">
+                                    <div class="list-items">
+                                        <h6>FEATURED</h6>
+                                        <ul class="popup-icon">
+                                            <li>
+                                                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
+                                                    <i class="far fa-video"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% static 'img/tour/19.jpg' %}" class="img-popup">
+                                                    <i class="far fa-camera"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="tour-details.html">Romance and Charm Await in Paris, France</a>
+                                    </h4>
+                                    <span class="location-icon">
+                                        <i class="far fa-map-marker-alt"></i>
+                                        132, Tic St, Wingston, New York 12401
+                                    </span>
+                                    <a href="tour-details.html" class="theme-btn">
+                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
+                        <ul>
+                            <li><a class="page-numbers" href="#">01</a></li>
+                            <li><a class="page-numbers" href="#">02</a></li>
+                            <li><a class="page-numbers" href="#">03</a></li>
+                            <li><a class="page-numbers" href="#">04</a></li>
+                            <li><a class="page-numbers" href="#">05</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section Start -->
+        <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
+            <div class="container">
+                <div class="footer-newsletter-items">
+                    <h2>Get Updated the Our Latest Newsletter</h2>
+                    <div class="footer-input">
+                        <input type="email" id="email2" placeholder="Enter your email">
+                        <button class="newsletter-btn" type="submit">
+                        Subscribe <i class="far fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="footer-wrapper">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-12">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <a href="index.html" class="footer-logo">
+                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
+                                    </a>
+                                </div>
+                                <div class="footer-content">
+                                    <div class="contact-info-items">
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/call.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Call Us</span>
+                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="contact-items">
+                                            <div class="icon">
+                                                <img src="{% static 'img/mail.png' %}" alt="img">
+                                            </div>
+                                            <div class="content">
+                                                <span>Mail Us</span>
+                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="app-text">Your all-in-one travel app</h6>
+                                    <div class="apps-items">
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
+                                        </a>
+                                        <a href="contact.html">
+                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
+                                        </a>
+                                    </div>
+                                    <div class="social-icon">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-instagram"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Useful Links</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="destination.html">All Destination</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">24/7 Support</a>
+                                    </li>
+                                    <li>
+                                        <a href="team.html">Our Team</a>
+                                    </li>
+                                    <li>
+                                        <a href="tour.html">Tour Places</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Reviews</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>About Travil</h3>
+                                </div>
+                                <ul class="list-items">
+                                    <li>
+                                        <a href="about.html">About Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Legal Notice</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Terms & Condition</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Contact Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">Apple Store</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-4">
+                            <div class="footer-widget-items">
+                                <div class="widget-title">
+                                    <h3>Gallery</h3>
+                                </div>
+                                <div class="footer-gallery">
+                                    <div class="gallery-wrap">
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-item">
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
+                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
+                                                    <div class="icon">
+                                                        <i class="far fa-plus"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-1">
+                <div class="container">
+                    <div class="footer-bottom-wrapper">
+                        <p class="wow fadeInUp" data-wow-delay=".3s">
+                            © 2025 Travil LLC All rights reserved.
+                        </p>
+                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
+                            <li>
+                                <a href="contact.html">
+                                    Privacy 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Terms 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Site Map
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!--<< All JS Plugins >>-->
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <!--<< Bootstrap Js >>-->
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <!--<< Nice Select Js >>-->
+        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+        <!--<< Odometer Js >>-->
+        <script src="{% static 'js/odometer.min.js' %}"></script>
+        <!--<< Appear Js >>-->
+        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
+        <!--<< Datepicker Js >>-->
+        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+        <!--<< Swiper Slider Js >>-->
+        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+        <!--<< MeanMenu Js >>-->
+        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
+        <!--<< Magnific Popup Js >>-->
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <!--<< Wow Animation Js >>-->
+        <script src="{% static 'js/wow.min.js' %}"></script>
+        <!--<< Main.js >>-->
+        <script src="{% static 'js/main.js' %}"></script>
+    </body>
+</html>
