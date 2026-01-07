@@ -80,7 +80,7 @@ TEMPLATES = [
 # Static files configuration
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR.parent, 'assets'),  # Points to assets folder outside Django project
+    os.path.join(BASE_DIR, 'assets'),  # Points to assets folder at project root
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -174,7 +174,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "WON",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "World Olympiad Network",
+    "site_brand": "World Olympiad N",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
     "site_logo": None,

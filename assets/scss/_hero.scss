@@ -1,0 +1,1176 @@
+.hero-1 {
+    background: rgba(99, 171, 69, 0.12);
+    padding: 200px 0 0;
+    position: relative;
+
+    @include breakpoint (max-md){
+        padding-top: 150px;
+    }
+
+    @include breakpoint (max-sm){
+        padding-top: 120px;
+    }
+
+    .plane-shape {
+        position: absolute;
+        top: 20%;
+        left: 40%;
+        transform: translateX(-50%);
+        z-index: -1;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+    }
+
+    .offer-shape {
+        position: absolute;
+        right: 10%;
+        top: 20%;
+        animation: bounce-x 7s infinite linear;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+    }
+
+    .container-fluid {
+        padding: 0 150px;
+
+        @include breakpoint (max-xxxl){
+            padding: 0 50px;
+        }
+
+        @include breakpoint (max-xxl){
+            padding: 0 40px;
+        }
+
+        @include breakpoint (max-xl){
+            padding: 0 30px;
+        }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 99;
+
+        @include breakpoint (max-md){
+           margin: 0 auto;
+           text-align: center;
+        }
+
+        h6 {
+            font-size: 30px;
+            font-weight: 600;
+            color: $theme-color;
+            font-family: $sub-title-font;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            @include breakpoint (max-md){
+               font-size: 70px;
+            }
+
+            @include breakpoint (max-sm){
+                font-size: 50px;
+             }
+
+            span {
+                font-weight: 500;
+            }
+        }
+
+        p {
+            font-size: 20px;
+            max-width: 560px;
+            margin-top: 10px;
+
+            @include breakpoint (max-md){
+               font-size: 18px;
+            }
+
+            @include breakpoint (max-sm){
+                font-size: 16px;
+            }
+        }
+    }
+
+    .booking-list-area {
+        border-radius: 12px;
+        background: $white;
+        box-shadow: 0px 4px 85.6px 17px rgba(0, 0, 0, 0.11);
+        position: relative;
+        z-index: 9;
+        padding: 40px;
+        width: 1320px;
+        @include flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        z-index: 99;
+
+        @include breakpoint (max-xxl){
+            width: 1130px;
+        }
+
+        @include breakpoint (max-xl){
+            width: initial;
+            flex-wrap: wrap;
+            gap: 50px;
+            justify-content: start;
+        }
+
+        .booking-list {
+            display: flex;
+            gap: 15px;
+            max-width: 155px;
+            width: 100%;
+
+            @include breakpoint (max-xl){
+                max-width: initial;
+                flex-basis: 20%;
+            }
+
+            .content {
+                h5 {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #8E8F8F;
+                    font-family: $body-font;
+                }
+            }
+        }
+
+        .form-clt {
+            .nice-select {
+                padding: 0;
+                font-size: 16px;
+                text-transform: capitalize;
+                border-radius: 0;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                font-size: 16px;
+                font-family: $body-font;
+                color: $header-color;
+                font-weight: 800;
+
+                // @include breakpoint (max-md){
+                //     width: none;
+                // }
+    
+                &::after {
+                    right: -30px;
+                    border-bottom: 1px solid $header-color;
+                    border-right: 1px solid $header-color;
+                    width: 9px;
+                    height: 9px;
+                }
+    
+                .list {
+                    width: 100%;
+                    background-color: $bg-color;
+                    z-index: 9999;
+                }
+    
+                .focus {
+                    background-color: transparent;
+                    font-weight: 400;
+                    color: $text-color;
+                }
+    
+                .option {
+                    border: none;
+    
+                    &:hover {
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
+
+        .theme-btn {
+            padding: 18px 30px;
+
+            @include breakpoint (max-xl){
+                width: 100%;
+            }
+
+            span {
+                margin-right: 0;
+
+                i {
+                    width: initial;
+                    height: initial;
+                    line-height: initial;
+                    background-color: transparent;
+                    margin-left: 10px;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .hero-image {
+        width: 925px;
+        height: 925px;
+        margin-left: -100px;
+        margin-bottom: -120px;
+
+        @include breakpoint (max-xxxl){
+            width: 800px;
+            height: 800px;
+            margin-bottom: 0;
+        }
+
+        @include breakpoint (max-xxl){
+            width: 700px;
+            height: 700px;
+        }
+
+        @include breakpoint (max-xl){
+            margin-left: 0;
+            margin-bottom: 0;
+            margin: 0 auto;
+            width: 800px;
+            height: 800px;
+         }
+
+        @include breakpoint (max-lg){
+            width: 650px;
+            height: 650px;
+        }
+
+
+        @include breakpoint (max-md){
+            width: 550px;
+            height: 550px;
+        }
+
+        @include breakpoint (max-sm){
+            width: 450px;
+            height: 450px;
+        }
+
+        @media screen and (max-width: 500px) {
+            width: 400px;
+            height: 400px;
+        }
+
+        @include breakpoint (max-xxs){
+            width: 300px;
+            height: 300px;
+        }
+
+        img {
+            @include imgw;
+            border-radius: 50%;
+        }
+    }
+}
+
+.hero-2 {
+    position: relative;
+    z-index: 9;
+    padding: 250px 0 200px;
+
+    @include breakpoint (max-lg){
+        padding: 200px 0 160px;
+    }
+
+    @include breakpoint (max-md){
+        padding: 170px 0 140px;
+    }
+
+    @include breakpoint (max-sm){
+        padding: 150px 0 120px;
+    }
+
+    .container-fluid {
+        padding: 0 150px;
+
+        @include breakpoint (max-xl4){
+            padding: 0 50px;
+        }
+
+        @include breakpoint (max-xxl){
+            padding: 0 40px;
+        }
+
+        @include breakpoint (max-xl){
+            padding: 0 30px;
+        }
+    }
+
+    &::before {
+        @include before;
+        background: linear-gradient(87deg, rgba(0, 0, 0, 0.60) 35.11%, rgba(0, 0, 0, 0.00) 97.49%);
+        z-index: -1;
+    }
+
+   .hero-content {
+        max-width: 870px;
+        //text-align: center;
+        margin: 0 auto;
+
+        @include breakpoint (max-xl){
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 104px;
+            color: $white;
+            line-height: 100%;
+
+            span {
+                text-align: center;
+                margin-left: 100px;
+
+                @include breakpoint (max-xl){
+                    margin-left: 0;
+                }
+            }
+
+            @include breakpoint (max-xl){
+                font-size: 85px;
+            }
+
+            @include breakpoint (max-md){
+                font-size: 75px;
+                line-height: 110%;
+            }
+
+            @include breakpoint (max-sm){
+                font-size: 45px;
+            }
+        }
+
+        .client-info-items {
+            margin-top: 60px;
+            @include flex;
+            gap: 40px;
+
+            @include breakpoint (max-xl4){
+                flex-wrap: wrap;
+                gap: 30px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .content {
+                max-width: 495px;
+                @include flex;
+                gap: 20px;
+                border-right: 3px solid $white;
+                padding-right: 40px;
+
+                @include breakpoint (max-xl){
+                   border-right: none;
+                   padding-right: 0;
+                   flex-wrap: wrap;
+                   gap: 20px;
+                   justify-content: center;
+                   text-align: center;
+                }
+
+                p {
+                    font-size: 18px;
+                    color: $white;
+                    font-weight: bold;
+                    text-align: left;
+
+                    @include breakpoint (max-xl){
+                        text-align: center;
+                    }
+                }
+            }
+
+            .theme-btn {
+                background-color: #FF5722;
+            }
+        }
+   }
+}
+
+.hero-3 {
+    padding: 180px 0 110px;
+
+    @include breakpoint (max-md){
+        padding-top: 140px;
+        .row {
+            justify-content: center !important;
+        }
+    }
+
+    .container-fluid {
+        padding: 0 150px;
+
+        @include breakpoint (max-xxxl){
+            padding: 0 50px;
+        }
+
+        @include breakpoint (max-xxl){
+            padding: 0 40px;
+        }
+
+        @include breakpoint (max-xl){
+            padding: 0 30px;
+        }
+    }
+    
+    .hero-content {
+        @include breakpoint (max-md) {
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 104px;
+            font-weight: 900;
+            letter-spacing: 1.04px;
+            text-transform: uppercase;
+            line-height: 113%;
+            color: $white;
+
+            @include breakpoint (max-xxl){
+                font-size: 80px;
+            }
+
+            @include breakpoint (max-xl){
+                font-size: 60px;
+            }
+
+            @include breakpoint (max-md){
+                font-size: 60px;
+                line-height: 110%;
+            }
+
+            @include breakpoint (max-sm){
+                font-size: 45px;
+            }
+        }
+
+        p {
+            font-weight: 700;
+            color: $white;
+            max-width: 650px;
+            margin-top: 20px;
+        }
+
+        .button-items {
+            margin-top: 50px;
+            @include flex;
+            gap: 24px;
+
+            @include breakpoint (max-xl){
+                flex-wrap: wrap;
+            }
+
+            @include breakpoint (max-md) {
+               justify-content: center;
+            }
+
+            .theme-btn {
+                &.bg-2 {
+                    background-color: #FF5722;
+                }
+            }
+        }
+    }
+
+    .destination-box-items {
+        padding: 50px;
+        background-color: $white;
+        border-radius: 12px;
+        box-shadow: 0px 4px 85.6px 17px rgba(0, 0, 0, 0.11);
+        
+
+        @include breakpoint (max-md){
+            padding: 30px;
+        }
+
+        p {
+            font-weight: 500;
+            color: #455151;
+            margin-top: 10px;
+            margin-bottom: 30px;
+
+            b {
+                color: $theme-color;
+            }
+        }
+
+        .booking-list-area {
+    
+            .booking-list {
+                display: flex;
+                gap: 15px;
+                //width: 100%;
+                border: 1px solid rgba(21, 20, 21, 0.14);
+                padding: 20px 25px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+    
+                // &.style-2 {
+                //     margin-bottom: 40px;
+                //     padding-bottom: 0;
+                //     border-bottom: none;
+                // }
+    
+                .content {
+                    h5 {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #8E8F8F;
+                        font-family: $body-font;
+                    }
+                }
+            }
+    
+            .form-clt {
+                .nice-select {
+                    padding: 0;
+                    font-size: 16px;
+                    text-transform: capitalize;
+                    border-radius: 0;
+                    background-color: transparent;
+                    border: none;
+                    box-shadow: none;
+                    font-size: 16px;
+                    font-family: $body-font;
+                    color: $header-color;
+                    font-weight: 800;
+        
+                    &::after {
+                        right: -170px;
+                        border-bottom: 1px solid $header-color;
+                        border-right: 1px solid $header-color;
+                        width: 9px;
+                        height: 9px;
+
+                        @include breakpoint (max-xl4){
+                            right: -80px;
+                        }
+
+                        @include breakpoint (max-xl){
+                            right: -100px;
+                        }
+
+                        @include breakpoint (max-xxs){
+                            right: -50px;
+                        }
+                    }
+        
+                    .list {
+                        width: 100%;
+                        background-color: $bg-color;
+                        z-index: 9999;
+                    }
+        
+                    .focus {
+                        background-color: transparent;
+                        font-weight: 400;
+                        color: $text-color;
+                    }
+        
+                    .option {
+                        border: none;
+        
+                        &:hover {
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+
+        .theme-btn {
+            width: 100%;
+            @include flex;
+            justify-content: center;
+            background-color: transparent;
+            border: 1px solid $theme-color;
+            padding: 20px 15px 20px 30px;
+            margin-top: 30px;
+
+            span {
+                text-align: center;
+                color: $theme-color;
+                margin-right: 0;
+            }
+
+            i {
+                background-color: $theme-color;
+                color: $white;
+                position: absolute;
+                right: 6px;
+                top: 5px;
+                bottom: 5px;
+            }
+
+            &::before,&::after {
+                background-color: $theme-color;
+            }
+
+            &:hover {
+                background-color: $theme-color;
+
+                i {
+                    background-color: $white;
+                    color: $theme-color;
+                }
+
+                span {
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+.hero-4 {
+    position: relative;
+
+    .hero-items {
+        padding: 200px 0 260px;
+        position: relative;
+
+        .plane-shape {
+            position: absolute;
+            top: 35%;
+            left: 20%;
+
+            @include breakpoint (max-xxl){
+                display: none;
+            }
+        }
+
+        .plane-shape-2 {
+            position: absolute;
+            bottom: 19%;
+            right: 15%;
+
+            @include breakpoint (max-xxl){
+                display: none;
+            }
+        }
+
+        .hero-bg {
+            overflow: hidden;
+            position: absolute !important;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            z-index: -2;
+            background-size: cover;
+            transform: scale(1);
+            -webkit-transition: all 8s ease-out 0s;
+            -moz-transition: all 8s ease-out 0s;
+            -ms-transition: all 8s ease-out 0s;
+            -o-transition: all 8s ease-out 0s;
+            transition: all 8s ease-out 0s;
+    
+            &::before {
+                @include before;
+                background: rgba(21, 20, 21, 0.69);
+                z-index: -1;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+
+            h6 {
+                color: #FB5B32;
+                font-size: 22px;
+                font-weight: 600;
+                margin-bottom: 15px;
+                line-height: 1;
+            }
+
+            h1 {
+                font-weight: 700;
+                font-size: 94px;
+                color: $white;
+                text-transform: capitalize;
+
+                @include breakpoint (max-md){
+                    font-size: 70px;
+                }
+     
+                @include breakpoint (max-sm){
+                    font-size: 50px;
+                }
+
+                span {
+                    font-weight: 500;
+                    text-transform: capitalize;
+                }
+
+                .shape-text {
+                    position: relative;
+                    display: inline-block;
+                    margin-right: 30px;
+    
+                    &::before {
+                        position: absolute;
+                        bottom: -15px;
+                        left: 0;
+                        z-index: -1;
+                        right: 0;
+                        content: "";
+                        width: 100%;
+                        height: 32px;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-image: url(../../assets/img/hero/new/line-2.png);
+                        background-position: center;
+
+                        @include breakpoint (max-xl){
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            p {
+                font-size: 20px;
+                font-weight: 500;
+                color: $white;
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .booking-list-area-1 {
+        background: $white;
+        border-radius: 57.5px;
+        box-shadow: 0px 4px 85.6px 17px rgba(0, 0, 0, 0.11);
+        position: relative;
+        z-index: 9;
+        padding: 35px 40px;
+        @include flex;
+        justify-content: space-between;
+        margin-top: -65px;
+        z-index: 999;
+
+        @include breakpoint (max-xl){
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: start;
+        }
+
+        .booking-list {
+            display: flex;
+            gap: 15px;
+            line-height: 1;
+            width: 100%;
+
+            @include breakpoint (max-xl){
+                display: grid;
+                flex-basis: 100%;
+            }
+
+            .content {
+                h5 {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #8E8F8F;
+                    font-family: $body-font;
+                }
+            }
+        }
+
+        .form-clt {
+            .nice-select {
+                padding: 0;
+                font-size: 16px;
+                text-transform: capitalize;
+                border-radius: 0;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                font-size: 16px;
+                font-family: $body-font;
+                color: $header-color;
+                font-weight: 800;
+                padding-right: 20px;
+                height: initial;
+
+                // @include breakpoint (max-md){
+                //     width: none;
+                // }
+    
+                &::after {
+                    right: 0;
+                    border-bottom: 1px solid $header-color;
+                    border-right: 1px solid $header-color;
+                    width: 9px;
+                    height: 9px;
+                    top: 28%;
+                    margin-top: 0;
+                }
+            }
+
+            input {
+                padding: 0;
+                font-size: 16px;
+                text-transform: capitalize;
+                border-radius: 0;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                font-size: 16px;
+                font-family: $body-font;
+                color: $header-color;
+                font-weight: 800;
+                height: initial;
+            }
+
+        
+
+            .input-group-addon {
+                margin-left: -55px !important;
+                color: $header-color;
+            }
+        }
+
+        .theme-btn {
+            padding: 18px 30px;
+            width: 100%;
+            max-width: 170px;
+
+            @include breakpoint (max-xl){
+                width: 100%;
+                max-width: initial;
+            }
+
+            span {
+                margin-right: 0;
+
+                i {
+                    width: initial;
+                    height: initial;
+                    line-height: initial;
+                    background-color: transparent;
+                    margin-left: 10px;
+                    color: $white;
+                }
+            }
+        }
+
+        .form-control {
+            margin-top: 5px;
+            &::placeholder {
+                color: $header-color;
+            }
+        }
+    }
+
+    .swiper-slide-active .hero-bg {
+        -webkit-transform: scale(1.12);
+        -moz-transform: scale(1.12);
+        transform: scale(1.12);
+    }
+
+    .array-button {
+        position: absolute;
+        top: 47%;
+        left: 50px;
+        transform: translateY(-50%);
+        right: 50px;
+        z-index: 99;
+        @include flex;
+        justify-content: space-between;
+
+        @include breakpoint (max-xl){
+            display: none;
+        }
+
+        .array-prev,.array-next {
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: $white;
+
+            &:hover {
+                background-color: $theme-color;
+                color: $white;
+            }
+        }
+    }
+}
+
+.hero-5 {
+    padding: 100px 0 100px;
+    background-color: #FFEEE3;
+    position: relative;
+
+    .light-shape {
+        position: absolute;
+        top: 45px;
+        left: 7%;
+
+        @include breakpoint (max-xxl){
+            display: none;
+        }
+    }
+
+    .frame-shape {
+        position: absolute;
+        top: 40%;
+        left: 55%;
+
+        @include breakpoint (max-xxl){
+            display: none;
+        }
+    }
+
+    .container-fluid {
+        padding: 0 90px;
+
+        @include breakpoint (max-xxxl){
+            padding: 0 50px;
+        }
+
+        @include breakpoint (max-xxl){
+            padding: 0 40px;
+        }
+
+        @include breakpoint (max-xl){
+            padding: 0 30px;
+        }
+    }
+
+    .hero-content {
+        text-align: center;
+
+        h6 {
+            color: #FB5B32;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+
+        h1 {
+            font-size: 94px;
+            font-weight: 700;
+
+            @include breakpoint (max-md){
+                font-size: 70px;
+            }
+ 
+            @include breakpoint (max-sm){
+                font-size: 50px;
+            }
+
+            span {
+                font-weight: 500;
+            }
+
+            .shape-text {
+                position: relative;
+                display: inline-block;
+                margin-right: 30px;
+
+                &::before {
+                    position: absolute;
+                    bottom: -15px;
+                    left: 0;
+                    right: 0;
+                    content: "";
+                    width: 100%;
+                    height: 32px;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-image: url(../../assets/img/hero/new/line.png);
+                    background-position: center;
+
+                    @include breakpoint (max-xxl){
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        p {
+            font-size: 20px;
+            font-weight: 500;
+            max-width: 560px;
+            text-align: center;
+            margin: 20px auto 0;
+        }
+    }
+
+    .booking-list-area {
+        background: $white;
+        border-radius: 57.5px;
+        box-shadow: 0px 4px 85.6px 17px rgba(0, 0, 0, 0.11);
+        position: relative;
+        z-index: 9;
+        padding: 35px 40px;
+        @include flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        z-index: 99;
+
+        @include breakpoint (max-xxxl){
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: start;
+        }
+
+        .booking-list {
+            display: flex;
+            gap: 15px;
+            line-height: 1;
+            width: 100%;
+
+            @include breakpoint (max-xl){
+                display: grid;
+                flex-basis: 100%;
+            }
+
+            .content {
+                h5 {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #8E8F8F;
+                    font-family: $body-font;
+                }
+            }
+        }
+
+        .form-clt {
+            .nice-select {
+                padding: 0;
+                font-size: 16px;
+                text-transform: capitalize;
+                border-radius: 0;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                font-size: 16px;
+                font-family: $body-font;
+                color: $header-color;
+                font-weight: 800;
+                padding-right: 20px;
+                height: initial;
+
+                // @include breakpoint (max-md){
+                //     width: none;
+                // }
+    
+                &::after {
+                    right: 0;
+                    border-bottom: 1px solid $header-color;
+                    border-right: 1px solid $header-color;
+                    width: 9px;
+                    height: 9px;
+                    top: 28%;
+                    margin-top: 0;
+                }
+            }
+
+            input {
+                padding: 0;
+                font-size: 16px;
+                text-transform: capitalize;
+                border-radius: 0;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                font-size: 16px;
+                font-family: $body-font;
+                color: $header-color;
+                font-weight: 800;
+                height: initial;
+            }
+
+        
+
+            .input-group-addon {
+                margin-left: -55px !important;
+                color: $header-color;
+            }
+        }
+
+        .theme-btn {
+            padding: 18px 30px;
+            width: 100%;
+            max-width: 170px;
+
+            @include breakpoint (max-xxxl){
+                width: 100%;
+                max-width: initial;
+            }
+
+            span {
+                margin-right: 0;
+
+                i {
+                    width: initial;
+                    height: initial;
+                    line-height: initial;
+                    background-color: transparent;
+                    margin-left: 10px;
+                    color: $white;
+                }
+            }
+        }
+
+        .form-control {
+            margin-top: 5px;
+            &::placeholder {
+                color: $header-color;
+            }
+        }
+    }
+
+    .plane-shape {
+        position: absolute;
+        top: -177%;
+        left: 45px;
+
+        @include breakpoint (max-xxl){
+            display: none;
+        }
+    }
+
+    .hero-image-items {
+        margin-left: -15%;
+
+        @include breakpoint (max-xl){
+           margin-left: 0;
+        }
+
+        .hero-image {
+            img {
+                @include imgw;
+                border-radius: 200px 200px 0 200px;
+            }
+
+            &.style-2 {
+                margin-top: 24px;
+
+                img {
+                    border-radius: 200px 0 200px 200px;
+                }
+            }
+
+            
+            &.style-3 {
+                height: 645px;
+
+                img {
+                    border-radius: 200px 200px 200px 0;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
