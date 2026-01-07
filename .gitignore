@@ -1,0 +1,22 @@
+# Ignore virtual environment
+myprojectenv/
+
+# Ignore databases (common DB file types)
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+
+# Ignore Django / app generated DBs in any folder
+**/*.db
+**/*.sqlite3
+
+# Optional: Ignore environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
