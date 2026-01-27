@@ -61,12 +61,28 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         font-size: 14px;
+        color: #000;
     }
     .form-clt input:focus,
     .form-clt select:focus {
         outline: none;
         border-color: #007bff;
         box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    .password-wrapper {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #999;
+        z-index: 2;
+    }
+    .toggle-password:hover {
+        color: #333;
     }
 </style>
 {% endblock %}
@@ -210,7 +226,12 @@
                             <div class="col-lg-6">
                                 <div class="form-clt">
                                     <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-                                    {{ form.password1 }}
+                                    <div class="password-wrapper">
+                                        {{ form.password1 }}
+                                        <span class="toggle-password" data-target="id_password1">
+                                            <i class="far fa-eye"></i>
+                                        </span>
+                                    </div>
                                     {% if form.password1.errors %}
                                         <div class="text-danger small mt-1">
                                             {{ form.password1.errors }}
@@ -226,7 +247,12 @@
                             <div class="col-lg-6">
                                 <div class="form-clt">
                                     <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-                                    {{ form.password2 }}
+                                    <div class="password-wrapper">
+                                        {{ form.password2 }}
+                                        <span class="toggle-password" data-target="id_password2">
+                                            <i class="far fa-eye"></i>
+                                        </span>
+                                    </div>
                                     {% if form.password2.errors %}
                                         <div class="text-danger small mt-1">
                                             {{ form.password2.errors }}
@@ -268,5 +294,27 @@
 <!-- Signup Section End -->
 {% endblock %}
 
-
+{% block extra_js %}
+<script>
+    (function() {
+        const toggles = document.querySelectorAll('.toggle-password');
+        toggles.forEach(function(toggle) {
+            toggle.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (!input) return;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.querySelector('i').classList.remove('fa-eye');
+                    this.querySelector('i').classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.querySelector('i').classList.remove('fa-eye-slash');
+                    this.querySelector('i').classList.add('fa-eye');
+                }
+            });
+        });
+    })();
+</script>
+{% endblock %}
 
