@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8+0f!9negn%r6b&n5=dc@)%t7vlopeb^n$la=)bzsez33t)vm6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['worldolympiadsnetwork.org', 'www.worldolympiadsnetwork.org', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -93,10 +93,22 @@ WSGI_APPLICATION = 'won.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',  # consider moving this to an env var
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
