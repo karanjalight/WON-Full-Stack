@@ -1,0 +1,356 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Generate Travel Quote{% if destination %} - {{ destination.city }}, {{ destination.country }}{% endif %} | WON</title>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Section Start -->
+<div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% if destination and destination.image %}{{ destination.image.url }}{% else %}{% static 'img/breadcrumb-bg.jpg' %}{% endif %}');">
+    <div class="container-fluid">
+        <div class="page-heading">
+            <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><i class="far fa-slash"></i></li>
+                <li><a href="{% url 'destination' %}">Destinations</a></li>
+                {% if destination %}
+                <li><i class="far fa-slash"></i></li>
+                <li><a href="{% url 'destination-details' destination.slug %}">{{ destination.city }}</a></li>
+                {% endif %}
+                <li><i class="far fa-slash"></i></li>
+                <li>Generate Quote</li>
+            </ul>
+            <h1 class="wow fadeInUp" data-wow-delay=".5s">Generate Travel Quote{% if destination %} for {{ destination.city }}{% endif %}</h1>
+        </div>
+    </div>
+    <div class="plane-shape float-bob-x">
+        <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+    </div>
+</div>
+
+<!-- Travel Quote Form Section Start -->
+<section class="destination-details-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="quote-form-wrapper wow fadeInUp" data-wow-delay=".3s">
+                    <div class="quote-form-header text-center mb-4">
+                        <h2><i class="fas fa-plane"></i> Travel Quote Request</h2>
+                        <p class="text-muted">Fill out the form below to get a personalized travel quote. All fields marked with * are required.</p>
+                        {% if destination %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> You're requesting a quote for <strong>{{ destination.city }}, {{ destination.country }}</strong>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <form method="POST" id="travelQuoteForm" class="quote-form">
+                        {% csrf_token %}
+                        
+                        <!-- Contact Information Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title"><i class="fas fa-user"></i> Contact Information</h4>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name *</label>
+                                    {{ form.full_name }}
+                                    {% if form.full_name.errors %}
+                                        <div class="text-danger small">{{ form.full_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email Address *</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <div class="text-danger small">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number *</label>
+                                    {{ form.phone }}
+                                    {% if form.phone.errors %}
+                                        <div class="text-danger small">{{ form.phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Travel Details Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title"><i class="fas fa-map-marked-alt"></i> Travel Details</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.departure_city.id_for_label }}" class="form-label">Departure City *</label>
+                                    {{ form.departure_city }}
+                                    {% if form.departure_city.errors %}
+                                        <div class="text-danger small">{{ form.departure_city.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.departure_country.id_for_label }}" class="form-label">Departure Country *</label>
+                                    {{ form.departure_country }}
+                                    {% if form.departure_country.errors %}
+                                        <div class="text-danger small">{{ form.departure_country.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.departure_date.id_for_label }}" class="form-label">Departure Date *</label>
+                                    {{ form.departure_date }}
+                                    {% if form.departure_date.errors %}
+                                        <div class="text-danger small">{{ form.departure_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.return_date.id_for_label }}" class="form-label">Return Date *</label>
+                                    {{ form.return_date }}
+                                    {% if form.return_date.errors %}
+                                        <div class="text-danger small">{{ form.return_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.number_of_passengers.id_for_label }}" class="form-label">Number of Passengers *</label>
+                                    {{ form.number_of_passengers }}
+                                    {% if form.number_of_passengers.errors %}
+                                        <div class="text-danger small">{{ form.number_of_passengers.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.accommodation_preference.id_for_label }}" class="form-label">Accommodation Preference *</label>
+                                    {{ form.accommodation_preference }}
+                                    {% if form.accommodation_preference.errors %}
+                                        <div class="text-danger small">{{ form.accommodation_preference.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.flight_class.id_for_label }}" class="form-label">Flight Class *</label>
+                                    {{ form.flight_class }}
+                                    {% if form.flight_class.errors %}
+                                        <div class="text-danger small">{{ form.flight_class.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.budget_range.id_for_label }}" class="form-label">Budget Range (Optional)</label>
+                                    {{ form.budget_range }}
+                                    {% if form.budget_range.errors %}
+                                        <div class="text-danger small">{{ form.budget_range.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add-on Features Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title"><i class="fas fa-star"></i> Additional Services & Features</h4>
+                            <p class="text-muted small mb-3">Select any additional services you'd like to include in your travel package:</p>
+                            <div class="addon-features">
+                                <div class="row g-3">
+                                    {% for choice in form.addon_features %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-check addon-item">
+                                            {{ choice.tag }}
+                                            <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                                <strong>{{ choice.choice_label }}</strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if form.addon_features.errors %}
+                                <div class="text-danger small mt-2">{{ form.addon_features.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Special Requests Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title"><i class="fas fa-comments"></i> Special Requests</h4>
+                            <label for="{{ form.special_requests.id_for_label }}" class="form-label">Any special requirements, dietary restrictions, accessibility needs, etc.</label>
+                            {{ form.special_requests }}
+                            {% if form.special_requests.errors %}
+                                <div class="text-danger small">{{ form.special_requests.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Form Errors -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <!-- Submit Button -->
+                        <div class="form-actions text-center mt-4">
+                            <button type="submit" class="theme-btn">
+                                <i class="fas fa-paper-plane"></i> Generate Travel Quote
+                            </button>
+                            <p class="text-muted small mt-3">
+                                <i class="fas fa-info-circle"></i> Your quote will be generated instantly and you'll be able to download it as a PDF.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .quote-form-wrapper {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .quote-form-header h2 {
+        color: #212529;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    .quote-form-header h2 i {
+        color: var(--theme-color);
+        margin-right: 10px;
+    }
+    
+    .form-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        border-left: 4px solid var(--theme-color);
+    }
+    
+    .section-title {
+        color: #212529;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .section-title i {
+        color: var(--theme-color);
+        margin-right: 8px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 0.2rem rgba(var(--theme-color-rgb), 0.25);
+    }
+    
+    .addon-features {
+        margin-top: 15px;
+    }
+    
+    .addon-item {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        margin-bottom: 10px;
+    }
+    
+    .addon-item:hover {
+        border-color: var(--theme-color);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .addon-item .form-check-input:checked ~ .form-check-label {
+        color: var(--theme-color);
+        font-weight: 600;
+    }
+    
+    .addon-item .form-check-input:checked {
+        background-color: var(--theme-color);
+        border-color: var(--theme-color);
+    }
+    
+    .theme-btn {
+        background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-2) 100%);
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .theme-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .alert {
+        border-radius: 8px;
+        padding: 15px;
+    }
+    
+    @media (max-width: 768px) {
+        .quote-form-wrapper {
+            padding: 25px;
+        }
+        
+        .form-section {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Date validation
+        const departureDate = document.getElementById('id_departure_date');
+        const returnDate = document.getElementById('id_return_date');
+        
+        if (departureDate && returnDate) {
+            departureDate.addEventListener('change', function() {
+                const minDate = new Date(this.value);
+                minDate.setDate(minDate.getDate() + 1);
+                returnDate.min = minDate.toISOString().split('T')[0];
+            });
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            departureDate.min = today;
+        }
+        
+        // Form submission handling
+        const form = document.getElementById('travelQuoteForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Add loading state
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Quote...';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+
+

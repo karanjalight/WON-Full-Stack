@@ -94,7 +94,7 @@
                                     </div>
                                     {% endif %}
                                     
-                                    <div class="destination-list-item mb-4">
+                                    <!-- <div class="destination-list-item mb-4">
                                         <h4>
                                             <i class="fas fa-star"></i> Why Choose This Destination?
                                         </h4>
@@ -128,10 +128,10 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     
                                     {% if competitions %}
-                                    <div class="related-competitions mb-4">
+                                    <div class="related-competitions mt-4 mb-4">
                                         <h4>
                                             <i class="fas fa-trophy"></i> Upcoming Competitions in {{ destination.city }}
                                         </h4>
@@ -192,10 +192,10 @@
                                             <strong>City:</strong>
                                             <span>{{ destination.city }}</span>
                                         </li>
-                                        <li>
+                                        <!-- <li>
                                             <strong>Region:</strong>
                                             <span>{{ destination.get_region_display }}</span>
-                                        </li>
+                                        </li> -->
                                         {% if destination.continent %}
                                         <li>
                                             <strong>Continent:</strong>
@@ -238,9 +238,8 @@
                                     
                                     <!-- CTA: Generate Quote -->
                                     <div class="quote-cta mt-4">
-                                        <a href="{% url 'destination' %}?quote={{ destination.slug }}" class="theme-btn w-100 text-center" style="display: block; padding: 15px; font-size: 16px; font-weight: 600;">
-                                            <span><i class="fas fa-calculator"></i> Generate Travel Quote</span> 
-                                            <i class="far fa-long-arrow-right"></i>
+                                        <a href="{% url 'generate-travel-quote-destination' destination.slug %}" class="theme-btn w-100 text-center" style="display: block; padding: 15px; font-size: 16px; font-weight: 600;">
+                                          Generate Travel Quote
                                         </a>
                                         <p class="text-center text-muted small mt-2">
                                             Get a personalized travel quote for {{ destination.city }}
@@ -255,11 +254,11 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Offer Card -->
+                                <!-- Offer Card
                                 <div class="offer-card bg-cover mt-4 wow fadeInUp" data-wow-delay=".5s" style="background-image: url('{% static 'img/destinations/offter-card.jpg' %}');">
                                     <h3>Book Now and Enjoy Amazing Savings!</h3>
                                     <img src="{% static 'img/destinations/disocunt.png' %}" alt="img">
-                                </div>
+                                </div> -->
                                 
                                 <!-- Related Destinations -->
                                 {% if related_destinations %}

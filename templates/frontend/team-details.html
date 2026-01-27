@@ -1,526 +1,732 @@
+{% extends 'frontend/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <!--<< Header Area >>-->
-     <head>
-        <!-- ========== Meta Tags ========== -->
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="author" content="modinatheme">
-        <meta name="description" content="Travil - Travel & Tour Booking Html Template">
-        <!-- ======== Page title ============ -->
-        <title>Travil - Travel & Tour Booking Html Template</title>
-        <!--<< Favicon >>-->
-        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
-        <!--<< Bootstrap min.css >>-->
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <!--<< Font Awesome.css >>-->
-        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-        <!--<< Animate.css >>-->
-        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-        <!--<< Magnific Popup.css >>-->
-        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
-        <!--<< MeanMenu.css >>-->
-        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
-        <!--<< Odometer.css >>-->
-        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
-        <!--<< Swiper Bundle.css >>-->
-        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
-        <!--<< DatePicker.css >>-->
-        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
-        <!--<< Nice Select.css >>-->
-        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
-        <!--<< Main.css >>-->
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <!--<< Style.css >>-->
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    </head>
 
-    <body>
+{% block title %}
+<title>{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }} - Tutor Profile | WON</title>
+{% endblock %}
 
-       <!-- Preloader Start -->
-        <div id="preloader" class="preloader">
-            <div class="animation-preloader">
-                <div class="spinner">                
-                </div>
-                <div class="txt-loading">
-                    <span data-text-preloader="T" class="letters-loading">
-                        T
-                    </span>
-                    <span data-text-preloader="R" class="letters-loading">
-                        R
-                    </span>
-                    <span data-text-preloader="A" class="letters-loading">
-                        A
-                    </span>
-                    <span data-text-preloader="V" class="letters-loading">
-                        V
-                    </span>
-                    <span data-text-preloader="I" class="letters-loading">
-                        I
-                    </span>
-                    <span data-text-preloader="L" class="letters-loading">
-                        L
-                    </span>
-                </div>
-                <p class="text-center">Loading</p>
-            </div>
-            <div class="loader">
-                <div class="row">
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Back To Top start -->
-        <button id="back-top" class="back-to-top">
-            <i class="fas fa-long-arrow-up"></i>
-        </button>
-
-        <!-- Offcanvas Area Start -->
-        <div class="fix-area">
-            <div class="offcanvas__info">
-                <div class="offcanvas__wrapper">
-                    <div class="offcanvas__content">
-                        <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
-                            <div class="offcanvas__logo">
-                                <a href="index.html">
-                                    <img src="{% static 'img/logo/black-logo.svg' %}" alt="logo-img">
-                                </a>
-                            </div>
-                            <div class="offcanvas__close">
-                                <button>
-                                <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <h3 class="offcanvas-title">Hello There!</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, </p>
-                        <div class="mobile-menu fix mb-3"></div>
-                        <div class="offcanvas__contact">
-                            <h3>Get Appointment</h3>
-                            <form action="#" id="contact-form" method="POST" class="contact-form-items">
-                                <div class="row g-4">
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="name33" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="email33" placeholder="Email Address">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="social-icon d-flex align-items-center">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="offcanvas__overlay"></div>
-
-        {% include 'partials/navbar.html' %}
-        
-        <!-- Search Section Start -->
-        <div class="header-search-bar d-flex align-items-center">
-            <button class="search-close">×</button>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="search-bar">
-                            <div class="contact-form-box contact-search-form-box">
-                                <form action="#">
-                                    <input type="email" placeholder="Search here...">
-                                    <button type="submit"><i class="far fa-search"></i></button>
-                                </form>
-                                <p>Type above and press Enter to search. Press Close to cancel.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+{% block content %}
         <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%), url('{% if tutor.user.profile_picture %}{{ tutor.user.profile_picture.url }}{% else %}{% static 'img/index/tutor1.jpg' %}{% endif %}'); background-size: cover; background-position: center;">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                         <li>
-                            <a href="index.html">
+                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
                             Home
                             </a>
                         </li>
                         <li>
-                            <i class="far fa-slash"></i>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
                         </li>
                         <li>
-                            Tour Guide Details
+                            <a href="{% url 'team' %}" style="color: rgba(255,255,255,0.9);">Tutors</a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
+                        </li>
+                        <li style="color: white;">
+                            {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
                         </li>
                     </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Tour Guide Details</h1>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">
+                        {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
+                    </h1>
                 </div>
-            </div>
-            <div class="plane-shape float-bob-x">
-                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
             </div>
         </div>
 
-        <!-- Team Section Start -->
-        <section class="team-details-section fix section-padding">
+        <!-- Tutor Details Section Start -->
+        <section class="tutor-details-section section-padding">
             <div class="container">
-                <div class="team-details-wrapper">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-lg-5">
-                            <div class="team-details-image">
-                                <img src="{% static 'img/team/details.jpg' %}" alt="team-img">
-                            </div>
-                        </div>
-                        <div class="col-lg-7">
-                            <div class="team-details-content">
-                                <div class="details-info">
-                                    <h3>Salman Ahmed</h3>
-                                    <span>Software Engineer</span>
-                                </div>
-                                <p class="mt-3">
-                                    Mauris sapien neque, placerat ut dolor nec, egestas tincidunt felis. Sed in ornare quam, finibus dui aliquam justo duis eros quam, semper at libero sed, vehicula the  consequat arcu. In ornare, enim at egestas bibendum, ligula ante congue arcu, sed ornare sem nulla is nec magna. Morbi faucibus.
-                                </p>
-                                <div class="progress-area mt-4">
-                                    <div class="progress-wrap">
-                                        <div class="pro-items">
-                                            <div class="pro-head">
-                                                <h6 class="title">
-                                                    tour package 
-                                                </h6>
-                                                <span class="point">
-                                                90%
+                <div class="tutor-details-wrapper">
+                    <div class="row g-5">
+                        <!-- Main Content -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="tutor-details-main">
+                                <!-- Tutor Header Card -->
+                                <div class="tutor-header-card mb-4">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4 text-center">
+                                            <div class="tutor-profile-image-large">
+                                                {% if tutor.user.profile_picture %}
+                                                    <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="tutor-large-image">
+                                                {% else %}
+                                                    <div class="tutor-image-placeholder-large">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                {% endif %}
+                                                {% if tutor.is_featured %}
+                                                <span class="featured-badge-large">
+                                                    <i class="fas fa-star"></i> Featured Tutor
                                                 </span>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar"
-                                                    data-wow-duration=".9s" role="progressbar"
-                                                    style="width: 90%;" aria-valuenow="95" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        <div class="pro-items">
-                                            <div class="pro-head">
-                                                <h6 class="title">
-                                                    Travel
-                                                </h6>
-                                                <span class="point">
-                                                    95%
-                                                </span>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar"
-                                                    data-wow-duration=".9s" role="progressbar"
-                                                    style="width: 85%;" aria-valuenow="95" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
+                                        <div class="col-md-8">
+                                            <div class="tutor-header-info">
+                                                <h2 class="tutor-name-large">
+                                                    {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
+                                                </h2>
+                                                {% if tutor.specializations %}
+                                                <p class="tutor-specialization-large">
+                                                    <i class="fas fa-graduation-cap me-2"></i>{{ tutor.specializations }}
+                                                </p>
+                                                {% endif %}
+                                                
+                                                <!-- Rating -->
+                                                <div class="tutor-rating-large mb-3">
+                                                    {% if tutor.average_rating > 0 %}
+                                                    <div class="stars-large">
+                                                        {% with rating_int=tutor.average_rating|floatformat:0 %}
+                                                            {% if rating_int >= 1 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                            {% if rating_int >= 2 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                            {% if rating_int >= 3 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                            {% if rating_int >= 4 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                            {% if rating_int >= 5 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                        {% endwith %}
+                                                    </div>
+                                                    <span class="rating-text-large">
+                                                        <strong>{{ tutor.average_rating|floatformat:1 }}</strong>
+                                                        <span class="text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
+                                                    </span>
+                                                    {% else %}
+                                                    <span class="text-muted">No ratings yet</span>
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                <!-- Quick Stats -->
+                                                <div class="tutor-quick-stats">
+                                                    <div class="quick-stat-item">
+                                                        <i class="fas fa-clock"></i>
+                                                        <div>
+                                                            <strong>{{ tutor.experience_years }}+</strong>
+                                                            <span>Years Experience</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="quick-stat-item">
+                                                        <i class="fas fa-users"></i>
+                                                        <div>
+                                                            <strong>{{ tutor.total_sessions }}</strong>
+                                                            <span>Total Sessions</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="quick-stat-item">
+                                                        <i class="fas fa-dollar-sign"></i>
+                                                        <div>
+                                                            <strong>{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
+                                                            <span>Per Hour</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="social-icon">
-                                    <span>Social Media:</span>
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                
+                                <!-- About Section -->
+                                {% if tutor.qualifications %}
+                                <div class="tutor-section-card mb-4">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-user-graduate me-2"></i>Qualifications & Experience
+                                    </h3>
+                                    <div class="section-content">
+                                        {{ tutor.qualifications|linebreaks }}
+                                    </div>
                                 </div>
+                                {% endif %}
+                                
+                                <!-- Subjects Taught -->
+                                {% if tutor_subjects %}
+                                <div class="tutor-section-card mb-4">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-book me-2"></i>Subjects Taught
+                                    </h3>
+                                    <div class="subjects-grid">
+                                        {% for tutor_subject in tutor_subjects %}
+                                        <div class="subject-card-detailed">
+                                            <div class="subject-header-detailed">
+                                                {% if tutor_subject.subject.icon %}
+                                                    <img src="{{ tutor_subject.subject.icon.url }}" alt="{{ tutor_subject.subject.name }}" class="subject-icon-detailed">
+                                                {% endif %}
+                                                <h4>{{ tutor_subject.subject.name }}</h4>
+                                            </div>
+                                            {% if tutor_subject.experience_years > 0 %}
+                                            <p class="subject-experience">
+                                                <i class="fas fa-clock me-1"></i>{{ tutor_subject.experience_years }} years experience
+                                            </p>
+                                            {% endif %}
+                                            {% if tutor_subject.specialization_notes %}
+                                            <p class="subject-notes">{{ tutor_subject.specialization_notes|truncatewords:30 }}</p>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Specializations -->
+                                {% if tutor.specializations %}
+                                <div class="tutor-section-card mb-4">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-star me-2"></i>Specializations
+                                    </h3>
+                                    <div class="section-content">
+                                        <p>{{ tutor.specializations|linebreaks }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="team-single-history pt-5">
-                        <div class="title">
-                            <h3>Education Background</h3>
+                        
+                        <!-- Sidebar -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="tutor-sidebar sticky-style">
+                                <!-- Booking Card -->
+                                <div class="sidebar-card booking-card mb-4">
+                                    <div class="booking-header">
+                                        <h4>
+                                            <i class="fas fa-calendar-check me-2"></i>Book a Session
+                                        </h4>
+                                    </div>
+                                    <div class="booking-body">
+                                        <div class="price-display">
+                                            <span class="price-label">Hourly Rate</span>
+                                            <div class="price-amount-large">
+                                                {{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}
+                                                <span class="price-unit-small">/hour</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if tutor.is_accepting_students %}
+                                        <a href="{% url 'book-tutor-session' tutor.user.id %}" class="btn-book-now">
+                                            <i class="far fa-calendar-alt me-2"></i>Book a Session
+                                        </a>
+                                        {% if tutor.calendly_link %}
+                                        <a href="{{ tutor.calendly_link }}" target="_blank" class="btn-book-now" style="background: rgba(255,255,255,0.2); margin-top: 10px;">
+                                            <i class="fas fa-external-link-alt me-2"></i>Or Use Calendly
+                                        </a>
+                                        {% endif %}
+                                        {% else %}
+                                        <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="btn-book-now" style="background: rgba(255,255,255,0.3);">
+                                            <i class="fas fa-envelope me-2"></i>Contact to Book
+                                        </a>
+                                        {% endif %}
+                                        
+                                        <div class="availability-info">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            {% if tutor.is_accepting_students %}
+                                            <span class="text-success">Currently Accepting Students</span>
+                                            {% else %}
+                                            <span class="text-muted">Not Currently Accepting Students</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quick Info Card -->
+                                <div class="sidebar-card info-card mb-4">
+                                    <h4 class="card-title">
+                                        <i class="fas fa-info-circle me-2"></i>Quick Info
+                                    </h4>
+                                    <ul class="info-list">
+                                        <li>
+                                            <strong>Experience:</strong>
+                                            <span>{{ tutor.experience_years }}+ years</span>
+                                        </li>
+                                        <li>
+                                            <strong>Total Sessions:</strong>
+                                            <span>{{ tutor.total_sessions }}</span>
+                                        </li>
+                                        <li>
+                                            <strong>Rating:</strong>
+                                            <span>
+                                                {% if tutor.average_rating > 0 %}
+                                                    {{ tutor.average_rating|floatformat:1 }}/5.0
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <strong>Reviews:</strong>
+                                            <span>{{ tutor.total_reviews }}</span>
+                                        </li>
+                                        <li>
+                                            <strong>Subjects:</strong>
+                                            <span>{{ tutor_subjects|length }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Contact Card -->
+                                <div class="sidebar-card contact-card">
+                                    <h4 class="card-title">
+                                        <i class="fas fa-envelope me-2"></i>Get in Touch
+                                    </h4>
+                                    <div class="contact-actions">
+                                        <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="btn-contact">
+                                            <i class="fas fa-envelope me-2"></i>Send Message
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Related Tutors -->
+                                {% if related_tutors %}
+                                <div class="sidebar-card related-tutors-card mt-4">
+                                    <h4 class="card-title">
+                                        <i class="fas fa-users me-2"></i>Similar Tutors
+                                    </h4>
+                                    <div class="related-tutors-list">
+                                        {% for related in related_tutors|slice:":3" %}
+                                        <div class="related-tutor-item">
+                                            <a href="{% url 'team-details' related.user.id %}" class="d-flex align-items-center gap-3">
+                                                {% if related.user.profile_picture %}
+                                                <img src="{{ related.user.profile_picture.url }}" alt="{{ related.user.get_full_name }}" class="related-tutor-image">
+                                                {% else %}
+                                                <div class="related-tutor-placeholder">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                {% endif %}
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">
+                                                        {% if related.title %}{{ related.title }} {% endif %}{{ related.user.get_full_name|default:related.user.username }}
+                                                    </h6>
+                                                    <p class="text-muted small mb-0">
+                                                        {{ related.currency }}{{ related.hourly_rate|floatformat:0 }}/hour
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <h5 class="pt-5">Diploma in Web Design <span>2012 - 2014</span></h5>
-                        <p class="mt-3">
-                            Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's in the ou standard dummy text ever since the 1500s, when an unknown printer took.Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's in the abouti standard dummy
-                        </p>
-                        <h5 class="pt-5">Degree in UI/UX Design <span>2015 - 2016 </span></h5>
-                        <p class="mt-3">
-                            Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's in the ou standard dummy text ever since the 1500s, when an unknown printer took.Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's in the abouti standard dummy
-                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-         <!-- Footer Section Start -->
-         <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
-            <div class="container">
-                <div class="footer-newsletter-items">
-                    <h2>Get Updated the Our Latest Newsletter</h2>
-                    <div class="footer-input">
-                        <input type="email" id="email2" placeholder="Enter your email">
-                        <button class="newsletter-btn" type="submit">
-                        Subscribe <i class="far fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="footer-wrapper">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-12">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <a href="index.html" class="footer-logo">
-                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
-                                    </a>
-                                </div>
-                                <div class="footer-content">
-                                    <div class="contact-info-items">
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/call.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Call Us</span>
-                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/mail.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Mail Us</span>
-                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="app-text">Your all-in-one travel app</h6>
-                                    <div class="apps-items">
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
-                                        </a>
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
-                                        </a>
-                                    </div>
-                                    <div class="social-icon">
-                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="#"><i class="fab fa-instagram"></i></a>
-                                        <a href="#"><i class="fab fa-twitter"></i></a>
-                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Useful Links</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="destination.html">All Destination</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">24/7 Support</a>
-                                    </li>
-                                    <li>
-                                        <a href="team.html">Our Team</a>
-                                    </li>
-                                    <li>
-                                        <a href="tour.html">Tour Places</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Reviews</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>About Travil</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="about.html">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Legal Notice</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Terms & Condition</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Contact Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Apple Store</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-4 col-md-4">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Gallery</h3>
-                                </div>
-                                <div class="footer-gallery">
-                                    <div class="gallery-wrap">
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom-1">
-                <div class="container">
-                    <div class="footer-bottom-wrapper">
-                        <p class="wow fadeInUp" data-wow-delay=".3s">
-                            © 2025 Travil LLC All rights reserved.
-                        </p>
-                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
-                            <li>
-                                <a href="contact.html">
-                                    Privacy 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Terms 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Site Map
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
+{% endblock %}
 
-        <!--<< All JS Plugins >>-->
-        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-        <!--<< Bootstrap Js >>-->
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <!--<< Nice Select Js >>-->
-        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-        <!--<< Odometer Js >>-->
-        <script src="{% static 'js/odometer.min.js' %}"></script>
-        <!--<< Appear Js >>-->
-        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
-        <!--<< Datepicker Js >>-->
-        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
-        <!--<< Swiper Slider Js >>-->
-        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
-        <!--<< MeanMenu Js >>-->
-        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
-        <!--<< Magnific Popup Js >>-->
-        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <!--<< Wow Animation Js >>-->
-        <script src="{% static 'js/wow.min.js' %}"></script>
-        <!--<< Main.js >>-->
-        <script src="{% static 'js/main.js' %}"></script>
-    </body>
-</html>
+{% block extra_css %}
+<style>
+    .tutor-details-section {
+        background: #f8f9fa;
+        padding-top: 50px;
+        padding-bottom: 80px;
+    }
+    
+    .sticky-style {
+        position: sticky;
+        top: 100px;
+    }
+    
+    /* Tutor Header Card */
+    .tutor-header-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .tutor-profile-image-large {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    
+    .tutor-large-image {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #f0f0f0;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .tutor-image-placeholder-large {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 72px;
+        margin: 0 auto;
+        border: 5px solid #f0f0f0;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .featured-badge-large {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+    }
+    
+    .tutor-name-large {
+        font-size: 32px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 10px;
+    }
+    
+    .tutor-specialization-large {
+        font-size: 16px;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+    
+    .tutor-rating-large {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .stars-large {
+        display: flex;
+        gap: 4px;
+    }
+    
+    .stars-large i {
+        color: #ffc107;
+        font-size: 18px;
+    }
+    
+    .rating-text-large {
+        font-size: 16px;
+    }
+    
+    .tutor-quick-stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    
+    .quick-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .quick-stat-item i {
+        font-size: 24px;
+        color: var(--theme-color, #667eea);
+    }
+    
+    .quick-stat-item strong {
+        display: block;
+        font-size: 20px;
+        color: #212529;
+        font-weight: 700;
+    }
+    
+    .quick-stat-item span {
+        font-size: 12px;
+        color: #6c757d;
+    }
+    
+    /* Section Cards */
+    .tutor-section-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .section-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .section-content {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #495057;
+    }
+    
+    /* Subjects Grid */
+    .subjects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .subject-card-detailed {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .subject-card-detailed:hover {
+        background: #e9ecef;
+        transform: translateY(-3px);
+    }
+    
+    .subject-header-detailed {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .subject-icon-detailed {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    
+    .subject-header-detailed h4 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #212529;
+        margin: 0;
+    }
+    
+    .subject-experience {
+        font-size: 13px;
+        color: #6c757d;
+        margin: 8px 0;
+    }
+    
+    .subject-notes {
+        font-size: 14px;
+        color: #495057;
+        margin: 0;
+        line-height: 1.6;
+    }
+    
+    /* Sidebar Cards */
+    .sidebar-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .card-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .card-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    /* Booking Card */
+    .booking-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .booking-header h4 {
+        color: white;
+        border-bottom: 2px solid rgba(255,255,255,0.2);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .price-display {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .price-label {
+        display: block;
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 8px;
+    }
+    
+    .price-amount-large {
+        font-size: 42px;
+        font-weight: 700;
+        color: white;
+    }
+    
+    .price-unit-small {
+        font-size: 18px;
+        opacity: 0.9;
+    }
+    
+    .btn-book-now {
+        background: white;
+        color: #667eea;
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+        display: block;
+        transition: all 0.3s ease;
+        margin-bottom: 15px;
+    }
+    
+    .btn-book-now:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .availability-info {
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    /* Info List */
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .info-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .info-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .info-list strong {
+        color: #212529;
+        font-weight: 600;
+    }
+    
+    .info-list span {
+        color: #6c757d;
+    }
+    
+    /* Contact Card */
+    .btn-contact {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        display: block;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-contact:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    /* Related Tutors */
+    .related-tutors-list {
+        margin-top: 15px;
+    }
+    
+    .related-tutor-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .related-tutor-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .related-tutor-item a {
+        text-decoration: none;
+        color: #212529;
+        transition: all 0.3s ease;
+    }
+    
+    .related-tutor-item a:hover {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .related-tutor-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #f0f0f0;
+    }
+    
+    .related-tutor-placeholder {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        border: 2px solid #f0f0f0;
+    }
+    
+    .related-tutor-item h6 {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 991px) {
+        .sticky-style {
+            position: relative;
+            top: 0;
+            margin-top: 30px;
+        }
+        
+        .tutor-quick-stats {
+            flex-direction: column;
+        }
+        
+        .quick-stat-item {
+            width: 100%;
+        }
+        
+        .subjects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

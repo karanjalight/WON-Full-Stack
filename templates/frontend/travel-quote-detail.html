@@ -1,0 +1,369 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Travel Quote {{ quote.quote_number }} | WON</title>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Section Start -->
+<div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% if quote.destination.image %}{{ quote.destination.image.url }}{% else %}{% static 'img/breadcrumb-bg.jpg' %}{% endif %}');">
+    <div class="container-fluid">
+        <div class="page-heading">
+            <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><i class="far fa-slash"></i></li>
+                <li><a href="{% url 'destination' %}">Destinations</a></li>
+                <li><i class="far fa-slash"></i></li>
+                <li><a href="{% url 'destination-details' quote.destination.slug %}">{{ quote.destination.city }}</a></li>
+                <li><i class="far fa-slash"></i></li>
+                <li>Quote {{ quote.quote_number }}</li>
+            </ul>
+            <h1 class="wow fadeInUp" data-wow-delay=".5s">Travel Quote Generated</h1>
+        </div>
+    </div>
+    <div class="plane-shape float-bob-x">
+        <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+    </div>
+</div>
+
+<!-- Quote Detail Section Start -->
+<section class="destination-details-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Success Message -->
+                <div class="alert alert-success wow fadeInUp" data-wow-delay=".3s">
+                    <h4><i class="fas fa-check-circle"></i> Quote Generated Successfully!</h4>
+                    <p class="mb-0">Your travel quote has been generated. You can download it as a PDF below.</p>
+                </div>
+
+                <!-- Quote Summary Card -->
+                <div class="quote-summary-card wow fadeInUp" data-wow-delay=".4s">
+                    <div class="quote-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2><i class="fas fa-file-invoice"></i> Travel Quote</h2>
+                                <p class="quote-number mb-0">Quote Number: <strong>{{ quote.quote_number }}</strong></p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{% url 'download-travel-quote-pdf' quote.id %}" class="theme-btn">
+                                    <i class="fas fa-download"></i> Download PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quote-body">
+                        <!-- Quote Info -->
+                        <div class="quote-info-section mb-4">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <h5><i class="fas fa-info-circle"></i> Quote Information</h5>
+                                    <ul class="quote-info-list">
+                                        <li><strong>Quote Date:</strong> {{ quote.created_at|date:"F d, Y" }}</li>
+                                        <li><strong>Valid Until:</strong> {{ quote.quote_valid_until|date:"F d, Y" }}</li>
+                                        <li><strong>Status:</strong> <span class="badge bg-success">{{ quote.get_status_display }}</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><i class="fas fa-user"></i> Customer Information</h5>
+                                    <ul class="quote-info-list">
+                                        <li><strong>Name:</strong> {{ quote.user.get_full_name|default:quote.user.username }}</li>
+                                        <li><strong>Email:</strong> {{ quote.user.email }}</li>
+                                        <li><strong>Phone:</strong> {{ quote.user.phone|default:"N/A" }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Travel Details -->
+                        <div class="travel-details-section mb-4">
+                            <h5><i class="fas fa-map-marked-alt"></i> Travel Details</h5>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <strong>Destination:</strong>
+                                        <p>{{ quote.destination.city }}, {{ quote.destination.country }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <strong>Departure From:</strong>
+                                        <p>{{ quote.departure_city }}, {{ quote.departure_country }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="detail-item">
+                                        <strong>Departure Date:</strong>
+                                        <p>{{ quote.departure_date|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="detail-item">
+                                        <strong>Return Date:</strong>
+                                        <p>{{ quote.return_date|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="detail-item">
+                                        <strong>Number of Passengers:</strong>
+                                        <p>{{ quote.number_of_passengers }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quote Breakdown -->
+                        <div class="quote-breakdown-section mb-4">
+                            <h5><i class="fas fa-list"></i> Quote Breakdown</h5>
+                            <div class="table-responsive">
+                                <table class="table quote-items-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-end">Unit Price</th>
+                                            <th class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in quote_items %}
+                                        <tr>
+                                            <td>{{ item.description }}</td>
+                                            <td class="text-center">{{ item.quantity }}</td>
+                                            <td class="text-end">{{ quote.currency }} {{ item.unit_cost|floatformat:2 }}</td>
+                                            <td class="text-end"><strong>{{ quote.currency }} {{ item.total_cost|floatformat:2 }}</strong></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="total-row">
+                                            <td colspan="3" class="text-end"><strong>Total Estimate:</strong></td>
+                                            <td class="text-end"><strong>{{ quote.currency }} {{ quote.total_estimate|floatformat:2 }}</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Special Requests -->
+                        {% if quote.special_requests %}
+                        <div class="special-requests-section mb-4">
+                            <h5><i class="fas fa-comments"></i> Special Requests</h5>
+                            <p>{{ quote.special_requests|linebreaks }}</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Action Buttons -->
+                        <div class="quote-actions text-center mt-4">
+                            <a href="{% url 'download-travel-quote-pdf' quote.id %}" class="theme-btn me-3">
+                                <i class="fas fa-download"></i> Download PDF Quote
+                            </a>
+                            <a href="{% url 'contact' %}?quote={{ quote.quote_number }}" class="btn btn-outline-primary">
+                                <i class="fas fa-envelope"></i> Contact Us About This Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="quote-info-box wow fadeInUp" data-wow-delay=".5s">
+                    <h5><i class="fas fa-info-circle"></i> Important Information</h5>
+                    <ul>
+                        <li>This quote is valid until <strong>{{ quote.quote_valid_until|date:"F d, Y" }}</strong>.</li>
+                        <li>Prices are estimates and may vary based on availability and booking date.</li>
+                        <li>Final pricing will be confirmed upon booking.</li>
+                        <li>For any inquiries or modifications, please contact us using the button above.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .quote-summary-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .quote-header {
+        background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-2) 100%);
+        color: white;
+        padding: 30px;
+    }
+    
+    .quote-header h2 {
+        color: white;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    
+    .quote-number {
+        color: rgba(255,255,255,0.9);
+        font-size: 14px;
+    }
+    
+    .quote-body {
+        padding: 30px;
+    }
+    
+    .quote-info-section h5,
+    .travel-details-section h5,
+    .quote-breakdown-section h5,
+    .special-requests-section h5 {
+        color: #212529;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .quote-info-section h5 i,
+    .travel-details-section h5 i,
+    .quote-breakdown-section h5 i,
+    .special-requests-section h5 i {
+        color: var(--theme-color);
+        margin-right: 8px;
+    }
+    
+    .quote-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .quote-info-list li {
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .quote-info-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .detail-item strong {
+        color: #212529;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .detail-item p {
+        margin: 0;
+        color: #6c757d;
+    }
+    
+    .quote-items-table {
+        margin-top: 20px;
+    }
+    
+    .quote-items-table thead {
+        background: #f8f9fa;
+    }
+    
+    .quote-items-table th {
+        font-weight: 600;
+        color: #212529;
+        padding: 15px;
+    }
+    
+    .quote-items-table td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+    
+    .total-row {
+        background: #f8f9fa;
+        font-size: 18px;
+    }
+    
+    .total-row td {
+        padding: 20px 15px;
+    }
+    
+    .quote-info-box {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        border-left: 4px solid var(--theme-color);
+    }
+    
+    .quote-info-box h5 {
+        color: #212529;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    
+    .quote-info-box h5 i {
+        color: var(--theme-color);
+        margin-right: 8px;
+    }
+    
+    .quote-info-box ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    .quote-info-box ul li {
+        margin-bottom: 10px;
+        color: #6c757d;
+    }
+    
+    .theme-btn {
+        background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-2) 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .theme-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .quote-body {
+            padding: 20px;
+        }
+        
+        .quote-header {
+            padding: 20px;
+        }
+        
+        .quote-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .theme-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+

@@ -1,188 +1,32 @@
+{% extends 'frontend/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <!--<< Header Area >>-->
-     <head>
-        <!-- ========== Meta Tags ========== -->
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="author" content="modinatheme">
-        <meta name="description" content="Travil - Travel & Tour Booking Html Template">
-        <!-- ======== Page title ============ -->
-        <title>Travil - Travel & Tour Booking Html Template</title>
-        <!--<< Favicon >>-->
-        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
-        <!--<< Bootstrap min.css >>-->
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <!--<< Font Awesome.css >>-->
-        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-        <!--<< Animate.css >>-->
-        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-        <!--<< Magnific Popup.css >>-->
-        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
-        <!--<< MeanMenu.css >>-->
-        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
-        <!--<< Odometer.css >>-->
-        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
-        <!--<< Swiper Bundle.css >>-->
-        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
-        <!--<< DatePicker.css >>-->
-        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
-        <!--<< Nice Select.css >>-->
-        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
-        <!--<< Main.css >>-->
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <!--<< Style.css >>-->
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    </head>
 
-    <body>
+{% block title %}
+<title>Tutors - Expert Olympiad Preparation Tutors | WON</title>
+{% endblock %}
 
-       <!-- Preloader Start -->
-        <div id="preloader" class="preloader">
-            <div class="animation-preloader">
-                <div class="spinner">                
-                </div>
-                <div class="txt-loading">
-                    <span data-text-preloader="T" class="letters-loading">
-                        T
-                    </span>
-                    <span data-text-preloader="R" class="letters-loading">
-                        R
-                    </span>
-                    <span data-text-preloader="A" class="letters-loading">
-                        A
-                    </span>
-                    <span data-text-preloader="V" class="letters-loading">
-                        V
-                    </span>
-                    <span data-text-preloader="I" class="letters-loading">
-                        I
-                    </span>
-                    <span data-text-preloader="L" class="letters-loading">
-                        L
-                    </span>
-                </div>
-                <p class="text-center">Loading</p>
-            </div>
-            <div class="loader">
-                <div class="row">
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Back To Top start -->
-        <button id="back-top" class="back-to-top">
-            <i class="fas fa-long-arrow-up"></i>
-        </button>
-
-        <!-- Offcanvas Area Start -->
-        <div class="fix-area">
-        <div class="offcanvas__info">
-            <div class="offcanvas__wrapper">
-                <div class="offcanvas__content">
-                    <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
-                        <div class="offcanvas__logo">
-                            <a href="index.html">
-                                <img src="{% static 'img/logo/black-logo.svg' %}" alt="logo-img">
-                            </a>
-                        </div>
-                        <div class="offcanvas__close">
-                            <button>
-                            <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <h3 class="offcanvas-title">Hello There!</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, </p>
-                    <div class="mobile-menu fix mb-3"></div>
-                    <div class="offcanvas__contact">
-                        <h3>Get Appointment</h3>
-                        <form action="#" id="contact-form" method="POST" class="contact-form-items">
-                            <div class="row g-4">
-                                <div class="col-lg-12">
-                                    <div class="form-clt">
-                                        <input type="text" name="name" id="name33" placeholder="Name">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-clt">
-                                        <input type="text" name="name" id="email33" placeholder="Email Address">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-clt">
-                                        <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="social-icon d-flex align-items-center">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <div class="offcanvas__overlay"></div>
-
-        {% include 'partials/navbar.html' %}
-    
-        <!-- Search Section Start -->
-        <div class="header-search-bar d-flex align-items-center">
-            <button class="search-close">×</button>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="search-bar">
-                            <div class="contact-form-box contact-search-form-box">
-                                <form action="#">
-                                    <input type="email" placeholder="Search here...">
-                                    <button type="submit"><i class="far fa-search"></i></button>
-                                </form>
-                                <p>Type above and press Enter to search. Press Close to cancel.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+{% block content %}
         <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%), url('{% static 'img/index/tutor1.jpg' %}'); background-size: cover; background-position: center;">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                         <li>
-                            <a href="index.html">
+                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
                             Home
                             </a>
                         </li>
                         <li>
-                            <i class="far fa-slash"></i>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
                         </li>
-                        <li>
-                            Tour Guide Team
+                        <li style="color: white;">
+                            Our Tutors
                         </li>
                     </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Tour Guide Team</h1>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">Expert Tutors</h1>
+                    <p class="wow fadeInUp" data-wow-delay=".7s" style="color: rgba(255,255,255,0.95); font-size: 18px; margin-top: 15px; max-width: 700px;">
+                        Connect with Olympiad-approved tutors for one-on-one coaching, mock exams, and strategy sessions.
+                    </p>
                 </div>
             </div>
             <div class="plane-shape float-bob-x">
@@ -190,391 +34,615 @@
             </div>
         </div>
 
-        <!--  Team Section Start -->
-        <section class="team-section fix section-padding">
+        <!-- Tutors Section Start -->
+        <section class="tutors-section fix section-padding" style="background: #f8f9fa; padding-top: 60px; padding-bottom: 80px;">
             <div class="container">
                 <div class="row g-4">
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/01.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p> Travel Consultant</p>
-                                <h3><a href="team-details.html">Alexandra Roberts</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/02.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p>Operations Manager</p>
-                                <h3><a href="team-details.html">Michael Thompson</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/03.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p>Marketing Specialist</p>
-                                <h3><a href="team-details.html">Sophia Chen</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/04.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p> Tourist Guide</p>
-                                <h3><a href="team-details.html">Michel Smith</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/05.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p> Travel Consultant</p>
-                                <h3><a href="team-details.html">Alexandra Roberts</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
+                    <!-- Filter Sidebar -->
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="tutor-filters-sidebar sticky-style">
+                            <div class="filter-card">
+                                <h4 class="filter-title">
+                                    <i class="fas fa-filter me-2"></i>Filter Tutors
+                                </h4>
+                                
+                                <form method="get" action="{% url 'team' %}" id="filter-form">
+                                    <!-- Search -->
+                                    <div class="filter-group">
+                                        <label class="filter-label">Search</label>
+                                        <input type="text" name="search" class="form-control" placeholder="Name, title, specialization..." value="{{ search_query }}">
+                                    </div>
+                                    
+                                    <!-- Subject Filter -->
+                                    <div class="filter-group">
+                                        <label class="filter-label">Subject</label>
+                                        <select name="subject" class="form-select">
+                                            <option value="">All Subjects</option>
+                                            {% for subject in subjects %}
+                                            <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>
+                                                {{ subject.name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Rate Range -->
+                                    <div class="filter-group">
+                                        <label class="filter-label">Hourly Rate</label>
+                                        <div class="rate-range-inputs">
+                                            <input type="number" name="min_rate" class="form-control" placeholder="Min" value="{{ min_rate }}" step="0.01" min="0">
+                                            <span class="range-separator">-</span>
+                                            <input type="number" name="max_rate" class="form-control" placeholder="Max" value="{{ max_rate }}" step="0.01" min="0">
+                                        </div>
+                                        {% if rate_range.min_rate and rate_range.max_rate %}
+                                        <small class="text-muted">Range: {{ rate_range.min_rate|floatformat:0 }} - {{ rate_range.max_rate|floatformat:0 }} USD</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Sort By -->
+                                    <div class="filter-group">
+                                        <label class="filter-label">Sort By</label>
+                                        <select name="sort" class="form-select">
+                                            <option value="featured" {% if sort_by == 'featured' %}selected{% endif %}>Featured First</option>
+                                            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+                                            <option value="rate_low" {% if sort_by == 'rate_low' %}selected{% endif %}>Price: Low to High</option>
+                                            <option value="rate_high" {% if sort_by == 'rate_high' %}selected{% endif %}>Price: High to Low</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Filter Buttons -->
+                                    <div class="filter-actions">
+                                        <button type="submit" class="btn-filter-apply">
+                                            <i class="fas fa-search me-2"></i>Apply Filters
+                                        </button>
+                                        <a href="{% url 'team' %}" class="btn-filter-reset">
+                                            <i class="fas fa-redo me-2"></i>Reset
+                                        </a>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/06.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p>Operations Manager</p>
-                                <h3><a href="team-details.html">Michael Thompson</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    
+                    <!-- Tutors Listing -->
+                    <div class="col-xl-9 col-lg-8">
+                        <!-- Results Count -->
+                        {% if tutors %}
+                        <div class="results-header mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="mb-1" style="font-size: 24px; font-weight: 700; color: #212529;">
+                                        {% if search_query or current_subject or min_rate or max_rate %}
+                                            Found <strong>{{ tutors.paginator.count }}</strong> tutor{{ tutors.paginator.count|pluralize }}
+                                        {% else %}
+                                            {{ tutors.paginator.count }} Expert Tutor{{ tutors.paginator.count|pluralize }} Available
+                                        {% endif %}
+                                    </h3>
+                                    {% if search_query or current_subject or min_rate or max_rate %}
+                                    <p class="text-muted mb-0" style="font-size: 14px;">
+                                        {% if search_query %}<span class="badge bg-primary me-1">Search: "{{ search_query }}"</span>{% endif %}
+                                        {% if current_subject %}<span class="badge bg-info me-1">Subject: {{ current_subject|title }}</span>{% endif %}
+                                        {% if min_rate or max_rate %}<span class="badge bg-success me-1">Rate Filter Active</span>{% endif %}
+                                    </p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/07.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p>Marketing Specialist</p>
-                                <h3><a href="team-details.html">Sophia Chen</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                        
+                        <!-- Tutors Grid -->
+                        <div class="row g-4">
+                            {% for tutor in tutors %}
+                            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="{% cycle '.2s' '.4s' '.6s' %}">
+                                <div class="tutor-card">
+                                    <div class="tutor-card-header">
+                                        {% if tutor.is_featured %}
+                                        <span class="featured-badge">
+                                            <i class="fas fa-star"></i> Featured
+                                        </span>
+                                        {% endif %}
+                                        <div class="tutor-image-wrapper">
+                                            {% if tutor.user.profile_picture %}
+                                                <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="tutor-image">
+                                            {% else %}
+                                                <div class="tutor-image-placeholder">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="tutor-card-body">
+                                        <div class="tutor-name-section">
+                                            <h4 class="tutor-name">
+                                                {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
+                                            </h4>
+                                            {% if tutor.specializations %}
+                                            <p class="tutor-specialization">
+                                                <i class="fas fa-graduation-cap me-1"></i>{{ tutor.specializations|truncatewords:8 }}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Subjects -->
+                                        <div class="tutor-subjects">
+                                            {% for tutor_subject in tutor.subjects.all|slice:":3" %}
+                                            <span class="subject-badge">{{ tutor_subject.subject.name }}</span>
+                                            {% endfor %}
+                                            {% if tutor.subjects.count > 3 %}
+                                            <span class="subject-badge">+{{ tutor.subjects.count|add:"-3" }} more</span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Rating -->
+                                        <div class="tutor-rating">
+                                            {% if tutor.average_rating > 0 %}
+                                            <div class="stars">
+                                                {% with rating_int=tutor.average_rating|floatformat:0 %}
+                                                    {% if rating_int >= 1 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                    {% if rating_int >= 2 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                    {% if rating_int >= 3 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                    {% if rating_int >= 4 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                    {% if rating_int >= 5 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                {% endwith %}
+                                            </div>
+                                            <span class="rating-text">
+                                                <strong>{{ tutor.average_rating|floatformat:1 }}</strong>
+                                                <span class="text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
+                                            </span>
+                                            {% else %}
+                                            <span class="text-muted">No ratings yet</span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Stats -->
+                                        <div class="tutor-stats">
+                                            <div class="stat-item">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                <span>{{ tutor.experience_years }}+ years</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <i class="fas fa-users"></i>
+                                                <span>{{ tutor.total_sessions }} sessions</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Price -->
+                                        <div class="tutor-price">
+                                            <span class="price-amount">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</span>
+                                            <span class="price-unit">/hour</span>
+                                        </div>
+                                    </div>
+                                    <div class="tutor-card-footer">
+                                        <a href="{% url 'team-details' tutor.user.id %}" class="btn-view-profile">
+                                            <span>View Profile</span>
+                                            <i class="far fa-long-arrow-right"></i>
+                                        </a>
+                                        {% if tutor.calendly_link %}
+                                        <a href="{{ tutor.calendly_link }}" target="_blank" class="btn-book-session">
+                                            <i class="far fa-calendar-alt"></i> Book Session
+                                        </a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
-                        <div class="team-box-items mt-0">
-                            <div class="thumb">
-                                <img src="{% static 'img/team/08.jpg' %}" alt="img">
-                            </div>
-                            <div class="content">
-                                <p> Tourist Guide</p>
-                                <h3><a href="team-details.html">Michel Smith</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                </div>
+                        
+                        <!-- Pagination -->
+                        {% if tutors.has_other_pages %}
+                        <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
+                            <ul>
+                                {% if tutors.has_previous %}
+                                    <li><a class="page-numbers" href="?page={{ tutors.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">Previous</a></li>
+                                {% endif %}
+                                
+                                {% for num in tutors.paginator.page_range %}
+                                    {% if tutors.number == num %}
+                                        <li><a class="page-numbers current" href="#">{{ num }}</a></li>
+                                    {% elif num > tutors.number|add:'-3' and num < tutors.number|add:'3' %}
+                                        <li><a class="page-numbers" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if tutors.has_next %}
+                                    <li><a class="page-numbers" href="?page={{ tutors.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">Next</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <!-- No Results -->
+                        <div class="no-results text-center py-5">
+                            <div style="max-width: 500px; margin: 0 auto;">
+                                <i class="fas fa-user-graduate" style="font-size: 64px; color: #dee2e6; margin-bottom: 20px;"></i>
+                                <h3 style="margin-bottom: 15px; color: #2c3e50; font-weight: 600;">No tutors found</h3>
+                                {% if search_query or current_subject or min_rate or max_rate %}
+                                    <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.7;">
+                                        No tutors match your search criteria. Try adjusting your filters.
+                                    </p>
+                                    <a href="{% url 'team' %}" class="theme-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 30px;">
+                                        <span>View All Tutors</span> <i class="far fa-arrow-right"></i>
+                                    </a>
+                                {% else %}
+                                    <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.7;">
+                                        There are currently no tutors available. Please check back later.
+                                    </p>
+                                    <a href="{% url 'index' %}" class="theme-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 30px;">
+                                        <span>Go to Home</span> <i class="far fa-arrow-right"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </section>
 
-         <!-- Footer Section Start -->
-         <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
-            <div class="container">
-                <div class="footer-newsletter-items">
-                    <h2>Get Updated the Our Latest Newsletter</h2>
-                    <div class="footer-input">
-                        <input type="email" id="email2" placeholder="Enter your email">
-                        <button class="newsletter-btn" type="submit">
-                        Subscribe <i class="far fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="footer-wrapper">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-12">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <a href="index.html" class="footer-logo">
-                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
-                                    </a>
-                                </div>
-                                <div class="footer-content">
-                                    <div class="contact-info-items">
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/call.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Call Us</span>
-                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/mail.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Mail Us</span>
-                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="app-text">Your all-in-one travel app</h6>
-                                    <div class="apps-items">
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
-                                        </a>
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
-                                        </a>
-                                    </div>
-                                    <div class="social-icon">
-                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="#"><i class="fab fa-instagram"></i></a>
-                                        <a href="#"><i class="fab fa-twitter"></i></a>
-                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Useful Links</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="destination.html">All Destination</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">24/7 Support</a>
-                                    </li>
-                                    <li>
-                                        <a href="team.html">Our Team</a>
-                                    </li>
-                                    <li>
-                                        <a href="tour.html">Tour Places</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Reviews</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>About Travil</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="about.html">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Legal Notice</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Terms & Condition</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Contact Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Apple Store</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-4 col-md-4">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Gallery</h3>
-                                </div>
-                                <div class="footer-gallery">
-                                    <div class="gallery-wrap">
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom-1">
-                <div class="container">
-                    <div class="footer-bottom-wrapper">
-                        <p class="wow fadeInUp" data-wow-delay=".3s">
-                            © 2025 Travil LLC All rights reserved.
-                        </p>
-                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
-                            <li>
-                                <a href="contact.html">
-                                    Privacy 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Terms 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Site Map
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
+{% endblock %}
 
-        <!--<< All JS Plugins >>-->
-        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-        <!--<< Bootstrap Js >>-->
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <!--<< Nice Select Js >>-->
-        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-        <!--<< Odometer Js >>-->
-        <script src="{% static 'js/odometer.min.js' %}"></script>
-        <!--<< Appear Js >>-->
-        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
-        <!--<< Datepicker Js >>-->
-        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
-        <!--<< Swiper Slider Js >>-->
-        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
-        <!--<< MeanMenu Js >>-->
-        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
-        <!--<< Magnific Popup Js >>-->
-        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <!--<< Wow Animation Js >>-->
-        <script src="{% static 'js/wow.min.js' %}"></script>
-        <!--<< Main.js >>-->
-        <script src="{% static 'js/main.js' %}"></script>
-    </body>
-</html>
+{% block extra_css %}
+<style>
+    .tutors-section {
+        background: #f8f9fa;
+    }
+    
+    .sticky-style {
+        position: sticky;
+        top: 100px;
+    }
+    
+    /* Filter Sidebar */
+    .filter-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+    
+    .filter-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .filter-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .filter-group {
+        margin-bottom: 20px;
+    }
+    
+    .filter-label {
+        display: block;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .filter-group .form-control,
+    .filter-group .form-select {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-group .form-control:focus,
+    .filter-group .form-select:focus {
+        border-color: var(--theme-color, #667eea);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    .rate-range-inputs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .rate-range-inputs .form-control {
+        flex: 1;
+    }
+    
+    .range-separator {
+        color: #6c757d;
+        font-weight: 600;
+    }
+    
+    .filter-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 25px;
+    }
+    
+    .btn-filter-apply {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-filter-apply:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .btn-filter-reset {
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #e0e0e0;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        width: 100%;
+        display: inline-block;
+    }
+    
+    .btn-filter-reset:hover {
+        background: #e9ecef;
+        color: #495057;
+        text-decoration: none;
+    }
+    
+    /* Tutor Cards */
+    .tutor-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .tutor-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    }
+    
+    .tutor-card-header {
+        position: relative;
+        padding: 20px 20px 0;
+    }
+    
+    .featured-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        z-index: 2;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .tutor-image-wrapper {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #f0f0f0;
+        position: relative;
+    }
+    
+    .tutor-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .tutor-image-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 48px;
+    }
+    
+    .tutor-card-body {
+        padding: 0 20px 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .tutor-name-section {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .tutor-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+    
+    .tutor-specialization {
+        font-size: 13px;
+        color: #6c757d;
+        margin: 0;
+    }
+    
+    .tutor-subjects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+    
+    .subject-badge {
+        background: #f0f4ff;
+        color: #667eea;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    
+    .tutor-rating {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .stars {
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        margin-bottom: 5px;
+    }
+    
+    .stars i {
+        color: #ffc107;
+        font-size: 14px;
+    }
+    
+    .rating-text {
+        font-size: 13px;
+        color: #495057;
+    }
+    
+    .tutor-stats {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 15px;
+        padding: 15px 0;
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #6c757d;
+    }
+    
+    .stat-item i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .tutor-price {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .price-amount {
+        font-size: 28px;
+        font-weight: 700;
+        color: #667eea;
+    }
+    
+    .price-unit {
+        font-size: 14px;
+        color: #6c757d;
+        margin-left: 5px;
+    }
+    
+    .tutor-card-footer {
+        padding: 0 20px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-view-profile {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .btn-view-profile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-book-session {
+        background: #f8f9fa;
+        color: #667eea;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .btn-book-session:hover {
+        background: #e9ecef;
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .results-header {
+        background: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .no-results {
+        background: white;
+        padding: 60px 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    @media (max-width: 991px) {
+        .sticky-style {
+            position: relative;
+            top: 0;
+            margin-bottom: 30px;
+        }
+        
+        .tutor-card {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}
