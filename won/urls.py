@@ -45,9 +45,14 @@ urlpatterns = [
     path('news/', views.news, name='news'),
     path('news/<int:pk>/', views.news_details, name='news-details'),
     
-    # Team (Tutors)
-    path('team/', views.team, name='team'),
-    path('team/<int:pk>/', views.team_details, name='team-details'),
+    # Tutors
+    path('tutors/', views.team, name='team'),
+    path('tutors/<uuid:pk>/', views.team_details, name='team-details'),
+    path('tutors/<uuid:pk>/book/', views.book_tutor_session, name='book-tutor-session'),
+    path('tutor-session/<uuid:session_id>/confirmation/', views.tutor_session_confirmation, name='tutor-session-confirmation'),
+    # Redirect old team URLs to tutors for backward compatibility
+    path('team/', RedirectView.as_view(url='/tutors/', permanent=True), name='team-old'),
+    path('team/<uuid:pk>/', RedirectView.as_view(pattern_name='team-details', permanent=True), name='team-details-old'),
     
     # Tours (Competitions/Olympiads)
     path('tour/', views.tour, name='tour'),
@@ -66,6 +71,23 @@ urlpatterns = [
     path('application/success/<uuid:application_id>/', views.application_success, name='application-success'),
     path('application/<uuid:application_id>/quotation/pdf/', views.download_quotation_pdf, name='download-quotation-pdf'),
     path('application/upload-document/', views.upload_document, name='upload-document'),
+    
+    # Travel Quote Generation
+    path('travel-quote/', views.generate_travel_quote, name='generate-travel-quote'),
+    path('travel-quote/<slug:slug>/', views.generate_travel_quote, name='generate-travel-quote-destination'),
+    path('travel-quote/detail/<uuid:quote_id>/', views.travel_quote_detail, name='travel-quote-detail'),
+    path('travel-quote/<uuid:quote_id>/download/', views.download_travel_quote_pdf, name='download-travel-quote-pdf'),
+    
+    # Subscriptions
+    path('subscriptions/parents/', views.subscription_parents, name='subscription-parents'),
+    path('subscriptions/schools/', views.subscription_schools, name='subscription-schools'),
+    path('subscriptions/students/', views.subscription_students, name='subscription-students'),
+    
+    # Authentication
+    path('login/', views.login_view, name='login'),
+    path('signup/', views.signup_view, name='signup'),
+    path('logout/', views.logout_view, name='logout'),
+    path('account/', views.account_view, name='account'),
 ]
 
 # Custom 404 handler

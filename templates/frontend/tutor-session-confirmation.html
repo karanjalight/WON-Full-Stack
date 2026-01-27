@@ -1,0 +1,500 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Session Confirmed - {{ session.session_number }} | WON</title>
+{% endblock %}
+
+{% block content %}
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.9) 0%, rgba(25, 135, 84, 0.9) 100%), url('{% static 'img/index/tutor1.jpg' %}'); background-size: cover; background-position: center;">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
+                        </li>
+                        <li style="color: white;">
+                            Session Confirmed
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">Session Confirmed!</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Section Start -->
+        <section class="confirmation-section section-padding" style="background: #f8f9fa; padding-top: 60px; padding-bottom: 80px;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-8 col-lg-10">
+                        <div class="confirmation-card">
+                            <!-- Success Icon -->
+                            <div class="success-icon-wrapper">
+                                <div class="success-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Confirmation Header -->
+                            <div class="confirmation-header text-center mb-4">
+                                <h2>Your Session Has Been Booked!</h2>
+                                <p class="text-muted">Session Number: <strong>{{ session.session_number }}</strong></p>
+                            </div>
+                            
+                            <!-- Session Details -->
+                            <div class="session-details-card">
+                                <h3 class="details-title">
+                                    <i class="fas fa-info-circle me-2"></i>Session Details
+                                </h3>
+                                
+                                <div class="details-grid">
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-user-graduate"></i> Tutor
+                                        </div>
+                                        <div class="detail-value">
+                                            {% if session.tutor.title %}{{ session.tutor.title }} {% endif %}{{ session.tutor.user.get_full_name|default:session.tutor.user.username }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-book"></i> Subject
+                                        </div>
+                                        <div class="detail-value">{{ session.subject.name }}</div>
+                                    </div>
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-calendar-alt"></i> Date & Time
+                                        </div>
+                                        <div class="detail-value">
+                                            {{ session.scheduled_at|date:"F d, Y" }} at {{ session.scheduled_at|time:"g:i A" }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-clock"></i> Duration
+                                        </div>
+                                        <div class="detail-value">{{ session.duration_minutes }} minutes</div>
+                                    </div>
+                                    
+                                    {% if session.topic %}
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-lightbulb"></i> Topic
+                                        </div>
+                                        <div class="detail-value">{{ session.topic }}</div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-dollar-sign"></i> Amount
+                                        </div>
+                                        <div class="detail-value price-value">
+                                            {{ session.currency }}{{ session.amount|floatformat:2 }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-info-circle"></i> Status
+                                        </div>
+                                        <div class="detail-value">
+                                            <span class="status-badge status-{{ session.status }}">
+                                                {{ session.get_status_display }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-credit-card"></i> Payment Status
+                                        </div>
+                                        <div class="detail-value">
+                                            <span class="status-badge payment-{{ session.payment_status }}">
+                                                {{ session.get_payment_status_display }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% if session.description %}
+                                <div class="session-description mt-4">
+                                    <h5>Session Description:</h5>
+                                    <p>{{ session.description|linebreaks }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Next Steps -->
+                            <div class="next-steps-card">
+                                <h3 class="steps-title">
+                                    <i class="fas fa-list-check me-2"></i>What's Next?
+                                </h3>
+                                <ul class="steps-list">
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <strong>Confirmation Email</strong>
+                                            <p>You will receive a confirmation email with all session details shortly.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <strong>Payment</strong>
+                                            <p>Complete payment to confirm your session. Payment link will be sent via email.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <strong>Meeting Link</strong>
+                                            <p>You'll receive the meeting link (Zoom/Google Meet) before your session starts.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <strong>Reminder</strong>
+                                            <p>We'll send you a reminder 24 hours before your scheduled session.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="confirmation-actions">
+                                <a href="{% url 'team-details' session.tutor.user.id %}" class="btn-view-tutor">
+                                    <i class="fas fa-user-graduate me-2"></i>View Tutor Profile
+                                </a>
+                                <a href="{% url 'team' %}" class="btn-browse-tutors">
+                                    <i class="fas fa-search me-2"></i>Browse More Tutors
+                                </a>
+                                <a href="{% url 'index' %}" class="btn-go-home">
+                                    <i class="fas fa-home me-2"></i>Go to Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .confirmation-section {
+        background: #f8f9fa;
+    }
+    
+    .confirmation-card {
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .success-icon-wrapper {
+        margin-bottom: 30px;
+    }
+    
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+        animation: scaleIn 0.5s ease-out;
+    }
+    
+    .success-icon i {
+        font-size: 60px;
+        color: white;
+    }
+    
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    
+    .confirmation-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 10px;
+    }
+    
+    .session-details-card {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        text-align: left;
+    }
+    
+    .details-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .details-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .detail-label {
+        font-size: 13px;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .detail-label i {
+        color: var(--theme-color, #667eea);
+        margin-right: 6px;
+    }
+    
+    .detail-value {
+        font-size: 16px;
+        color: #212529;
+        font-weight: 600;
+    }
+    
+    .price-value {
+        font-size: 24px;
+        color: #28a745;
+        font-weight: 700;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    
+    .status-scheduled {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-confirmed {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .status-completed {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .payment-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .payment-paid {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .session-description {
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .session-description h5 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 10px;
+    }
+    
+    .session-description p {
+        color: #495057;
+        line-height: 1.6;
+    }
+    
+    .next-steps-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        text-align: left;
+    }
+    
+    .steps-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .steps-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .steps-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .steps-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .steps-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .steps-list li i {
+        color: #28a745;
+        font-size: 24px;
+        margin-top: 2px;
+    }
+    
+    .steps-list li strong {
+        display: block;
+        font-size: 16px;
+        color: #212529;
+        margin-bottom: 5px;
+    }
+    
+    .steps-list li p {
+        color: #6c757d;
+        font-size: 14px;
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .confirmation-actions {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+        padding-top: 40px;
+        border-top: 2px solid #e9ecef;
+    }
+    
+    .btn-view-tutor,
+    .btn-browse-tutors,
+    .btn-go-home {
+        padding: 12px 25px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-view-tutor {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .btn-view-tutor:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-browse-tutors {
+        background: #f8f9fa;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+    
+    .btn-browse-tutors:hover {
+        background: #667eea;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-go-home {
+        background: #e9ecef;
+        color: #495057;
+        border: 1px solid #dee2e6;
+    }
+    
+    .btn-go-home:hover {
+        background: #dee2e6;
+        color: #212529;
+        text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+        .confirmation-card {
+            padding: 30px 20px;
+        }
+        
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .confirmation-actions {
+            flex-direction: column;
+        }
+        
+        .btn-view-tutor,
+        .btn-browse-tutors,
+        .btn-go-home {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+
+

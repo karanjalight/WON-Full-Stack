@@ -222,7 +222,7 @@
                                         Your Child is <br>
                                         A global Champion
                                     </p>
-                                    <a href="tour-details.html" class="theme-btn">
+                                    <a href="{% url 'subscription-parents' %}" class="theme-btn">
                                         <span>Get Started</span> <i class="far fa-long-arrow-right"></i>
                                     </a>
                                 </div>
@@ -245,7 +245,7 @@
                                     <p class="text-white mb-4 font-weight-bold">
                                         Showcase your school <br> to be global leaders
                                     </p>
-                                    <a href="tour-details.html" class="theme-btn">
+                                    <a href="{% url 'subscription-schools' %}" class="theme-btn">
                                         <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
                                     </a>
                                 </div>
@@ -268,7 +268,7 @@
                                     <p class="text-white mb-4 font-weight-bold">
                                         Access resources and <br> Excell Abroad
                                     </p>
-                                    <a href="tour-details.html" class="theme-btn">
+                                    <a href="{% url 'subscription-students' %}" class="theme-btn">
                                         <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
                                     </a>
                                 </div>
@@ -673,6 +673,7 @@
 
 
         <br><br><br>
+        
 
         <!--  Top Destination Section Start -->
         <section class=" pb-0">
@@ -779,26 +780,69 @@
                         </div>
                     </div>
                 </div>
-                <div class="cta-wrapper-4 section-padding bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
-                    <div class="section-title text-center mb-0">
-                        <span class="wow fadeInUp">Special Offer</span>
-                        <h2 class="text-white wow fadeInUp" data-wow-delay=".3s">Grab Up To 39% Off On <br> Your Favorite Destination</h2>
+                
+                
+            </div>
+        </section>
+        <br><br><br>
+        <!--tour Package Section Start -->
+        <section class="tour-package-section fix mb-5 section-bg-2 section-padding">
+            <div class="container">
+                <div class="section-title text-center">
+                    <span class="wow fadeInUp">Prepare for your Olympiad</span>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">
+                       Study Resources
+                    </h2>
+                    <p class="mt-3 wow fadeInUp" data-wow-delay=".5s">
+                        Explore our collection of study resources designed to help you prepare for international Olympiads.
+                    </p>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-xl-6 col-lg-12 col-md-12 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="tour-box-items-5 bg-cover" style="background-image: url({% static 'img/hero/1.png' %});">
+                            <div class="tour-content">
+                                <span>Resource Library</span>
+                                <h3>
+                                    Past Papers
+                                </h3>
+                                <p>Download curated past papers with answer keys for IMO, IPhO, IChO, and beyond. Each pack includes examiner insights and suggested solution paths.</p>
+                                <a href="resources.html" class="theme-btn">
+                                    <span>Browse Papers</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                            <div class="percent-image">
+                                <img src="{% static 'img/tour/circle.png' %}" alt="img">
+                            </div>
+                            <div class="shape-image">
+                                <img src= "{% static 'img/index/pastpaper.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
+                            </div>
+                        </div>
                     </div>
-                    <a href="tour-details.html" class="theme-btn wow fadeInUp" data-wow-delay=".5s">
-                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                    </a>
-                    <div class="discount-shape float-bob-y">
-                        <img src="{% static 'img/cta/discount.png' %}" alt="img">
-                    </div>
-                    <div class="bag-shape float-bob-x">
-                        <img src="{% static 'img/cta/bag.png' %}" alt="img">
-                    </div>
-                    <div class="plane-shape">
-                        <img src="{% static 'img/cta/olane-shape.png' %}" alt="img">
+                    <div class="col-xl-6 col-lg-12 col-md-12 wow fadeInUp" data-wow-delay=".5s">
+                        <div class="tour-box-items-5 bg-2 bg-cover" style="background-image: url({% static 'img/index/tutor1.jpg' %});">
+                            <div class="tour-content">
+                                <span>Mentorship</span>
+                                <h3>
+                                    Certified Tutors
+                                </h3>
+                                <p>Connect with Olympiad-approved tutors for one-on-one coaching, mock exams, and strategy sessions. Sessions are available in-person and virtually.</p>
+                                <a href="/tutors" class="theme-btn">
+                                    <span>Book a Tutor</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                            <!-- <div class="percent-image">
+                                <img src="{% static 'img/tour/circle.png' %}" alt="img">
+                            </div> -->
+                            <div class="shape-image">
+                                <img src="{% static 'img/index/tutor2.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section> 
+        
 
         <!-- Tour Section Start -->
         <section class="tour-section fix section-padding">
@@ -1020,139 +1064,101 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-         <!--tour Package Section Start -->
-         <section class="tour-package-section fix mb-5 section-bg-2 section-padding">
-            <div class="container">
-                <div class="section-title text-center">
-                    <span class="wow fadeInUp">Prepare for your Olympiad</span>
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">
-                       Study Resources
-                    </h2>
-                    <p class="mt-3 wow fadeInUp" data-wow-delay=".5s">
-                        Explore our collection of study resources designed to help you prepare for international Olympiads.
-                    </p>
-                </div>
-                <div class="row">
-                    
-                    <div class="col-xl-6 col-lg-12 col-md-12 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="tour-box-items-5 bg-cover" style="background-image: url({% static 'img/hero/1.png' %});">
-                            <div class="tour-content">
-                                <span>Resource Library</span>
-                                <h3>
-                                    Past Papers
-                                </h3>
-                                <p>Download curated past papers with answer keys for IMO, IPhO, IChO, and beyond. Each pack includes examiner insights and suggested solution paths.</p>
-                                <a href="resources.html" class="theme-btn">
-                                    <span>Browse Papers</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                            <div class="percent-image">
-                                <img src="{% static 'img/tour/circle.png' %}" alt="img">
-                            </div>
-                            <div class="shape-image">
-                                <img src= "{% static 'img/index/pastpaper.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
-                            </div>
-                        </div>
+                <br>
+                <div class="cta-wrapper-4 section-padding bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
+                    <div class="section-title text-center mb-0">
+                        <span class="wow fadeInUp">Special Offer</span>
+                        <h2 class="text-white wow fadeInUp" data-wow-delay=".3s">Grab Up To 39% Off On <br> Your Favorite Destination</h2>
                     </div>
-                    <div class="col-xl-6 col-lg-12 col-md-12 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="tour-box-items-5 bg-2 bg-cover" style="background-image: url({% static 'img/index/tutor1.jpg' %});">
-                            <div class="tour-content">
-                                <span>Mentorship</span>
-                                <h3>
-                                    Certified Tutors
-                                </h3>
-                                <p>Connect with Olympiad-approved tutors for one-on-one coaching, mock exams, and strategy sessions. Sessions are available in-person and virtually.</p>
-                                <a href="tutors.html" class="theme-btn">
-                                    <span>Book a Tutor</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                            <!-- <div class="percent-image">
-                                <img src="{% static 'img/tour/circle.png' %}" alt="img">
-                            </div> -->
-                            <div class="shape-image">
-                                <img src="{% static 'img/index/tutor2.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
-                            </div>
-                        </div>
+                    <a href="tour-details.html" class="theme-btn wow fadeInUp" data-wow-delay=".5s">
+                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                    </a>
+                    <div class="discount-shape float-bob-y">
+                        <img src="{% static 'img/cta/discount.png' %}" alt="img">
                     </div>
-                </div>
-            </div>
-        </section> 
-
-
-<br>
-        <!--  Team Section Start -->
-        <section class="team-section-4 section-padding pt-0">
-            <div class="container">
-                <div class="section-title text-center">
-                    <span class="wow fadeInUp">Expert Tutors</span>
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Meet Our Olympiad Preparation Tutors</h2>
-                    <p class="mt-3 mt-mb-0 wow fadeInUp" data-wow-delay=".5s">
-                        Access vetted tutors specializing in Olympiad preparation. Get personalized support <br> and resources to excel in international competitions.
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                        <div class="team-card-items-4">
-                            <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
-                            <div class="content">
-                                <span>Mathematics Olympiad</span>
-                                <h3><a href="team-details.html">Dr. Amina Akoto</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fas fa-envelope"></i></a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="bag-shape float-bob-x">
+                        <img src="{% static 'img/cta/bag.png' %}" alt="img">
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
-                        <div class="team-card-items-4">
-                            <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
-                            <div class="content">
-                                <span>Physics Olympiad</span>
-                                <h3><a href="team-details.html">Prof. Kwame Mensah</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fas fa-envelope"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
-                        <div class="team-card-items-4">
-                            <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
-                            <div class="content">
-                                <span>Chemistry Olympiad</span>
-                                <h3><a href="team-details.html">Dr. Fatima Okonkwo</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fas fa-envelope"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
-                        <div class="team-card-items-4">
-                            <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
-                            <div class="content">
-                                <span>Informatics Olympiad</span>
-                                <h3><a href="team-details.html">Mr. David Muriuki</a></h3>
-                                <div class="social-icon">
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fas fa-envelope"></i></a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="plane-shape">
+                        <img src="{% static 'img/cta/olane-shape.png' %}" alt="img">
                     </div>
                 </div>
             </div>
         </section>
+
+         
+
+<!--  Team Section Start -->
+<!-- <section class="team-section-4 section-padding pt-0">
+    <div class="container">
+        <div class="section-title text-center">
+            <span class="wow fadeInUp">Expert Tutors</span>
+            <h2 class="wow fadeInUp" data-wow-delay=".3s">Meet Our Olympiad Preparation Tutors</h2>
+            <p class="mt-3 mt-mb-0 wow fadeInUp" data-wow-delay=".5s">
+                Access vetted tutors specializing in Olympiad preparation. Get personalized support <br> and resources to excel in international competitions.
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                <div class="team-card-items-4">
+                    <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
+                    <div class="content">
+                        <span>Mathematics Olympiad</span>
+                        <h3><a href="team-details.html">Dr. Amina Akoto</a></h3>
+                        <div class="social-icon">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
+                <div class="team-card-items-4">
+                    <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
+                    <div class="content">
+                        <span>Physics Olympiad</span>
+                        <h3><a href="team-details.html">Prof. Kwame Mensah</a></h3>
+                        <div class="social-icon">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
+                <div class="team-card-items-4">
+                    <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
+                    <div class="content">
+                        <span>Chemistry Olympiad</span>
+                        <h3><a href="team-details.html">Dr. Fatima Okonkwo</a></h3>
+                        <div class="social-icon">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
+                <div class="team-card-items-4">
+                    <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80'); background-size: cover; background-position: center;"></div>
+                    <div class="content">
+                        <span>Informatics Olympiad</span>
+                        <h3><a href="team-details.html">Mr. David Muriuki</a></h3>
+                        <div class="social-icon">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
 
 
         <!-- Tour-descover-section Start -->

@@ -1,0 +1,294 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>My Account - WON — World Olympiad Network</title>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .account-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .account-header {
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        margin: 0 auto 20px;
+    }
+    .info-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    .info-label {
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 5px;
+    }
+    .info-value {
+        color: #333;
+        font-size: 16px;
+    }
+    .badge-type {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .badge-student { background: #e3f2fd; color: #1976d2; }
+    .badge-parent { background: #f3e5f5; color: #7b1fa2; }
+    .badge-school { background: #e8f5e9; color: #388e3c; }
+    .badge-tutor { background: #fff3e0; color: #f57c00; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Section Start -->
+<section class="breadcrumb-section fix section-bg bg-cover" style="background-image: url('{% static 'img/breadcrumb/breadcrumb.jpg' %}');">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <h2 class="breadcrumb-title">My Account</h2>
+            <ul class="breadcrumb-menu">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li class="active">Account</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Account Section Start -->
+<section class="contact-section fix section-padding">
+    <div class="container">
+        <div class="row">
+            <!-- Profile Information -->
+            <div class="col-lg-4">
+                <div class="account-card">
+                    <div class="account-header text-center">
+                        <div class="profile-avatar">
+                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        </div>
+                        <h3>{{ user.get_full_name|default:user.username }}</h3>
+                        <span class="badge-type badge-{{ user.user_type }}">
+                            {{ user.get_user_type_display }}
+                        </span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                    
+                    {% if user.phone %}
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">{{ user.phone }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if user.country or user.city %}
+                    <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">
+                            {% if user.city %}{{ user.city }}{% endif %}
+                            {% if user.city and user.country %}, {% endif %}
+                            {% if user.country %}{{ user.country }}{% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="info-item">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value">{{ user.date_joined|date:"F Y" }}</div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'logout' %}" class="theme-btn w-100">
+                            <span>Logout</span> <i class="far fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Details -->
+            <div class="col-lg-8">
+                <!-- User Type Specific Information -->
+                {% if user.user_type == 'student' %}
+                    <div class="account-card">
+                        <h4 class="mb-4">Student Information</h4>
+                        {% if profile_data.date_of_birth %}
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">{{ profile_data.date_of_birth|date:"F d, Y" }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.grade_level %}
+                        <div class="info-item">
+                            <div class="info-label">Grade Level</div>
+                            <div class="info-value">{{ profile_data.grade_level }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.current_school %}
+                        <div class="info-item">
+                            <div class="info-label">Current School</div>
+                            <div class="info-value">{{ profile_data.current_school }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.interests %}
+                        <div class="info-item">
+                            <div class="info-label">Interests</div>
+                            <div class="info-value">
+                                {% if profile_data.interests|length > 0 %}
+                                    {{ profile_data.interests|join:", " }}
+                                {% else %}
+                                    Not specified
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Applications -->
+                    {% if applications %}
+                    <div class="account-card">
+                        <h4 class="mb-4">Recent Applications</h4>
+                        {% for application in applications %}
+                        <div class="info-item">
+                            <div class="info-label">{{ application.competition.name }}</div>
+                            <div class="info-value">
+                                Status: <strong>{{ application.get_status_display }}</strong>
+                                <br>
+                                <small class="text-muted">Applied: {{ application.created_at|date:"M d, Y" }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                {% elif user.user_type == 'parent' %}
+                    <div class="account-card">
+                        <h4 class="mb-4">Parent Information</h4>
+                        {% if profile_data.occupation %}
+                        <div class="info-item">
+                            <div class="info-label">Occupation</div>
+                            <div class="info-value">{{ profile_data.occupation }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.number_of_children %}
+                        <div class="info-item">
+                            <div class="info-label">Number of Children</div>
+                            <div class="info-value">{{ profile_data.number_of_children }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif user.user_type == 'school' %}
+                    <div class="account-card">
+                        <h4 class="mb-4">School Information</h4>
+                        {% if profile_data.school_name %}
+                        <div class="info-item">
+                            <div class="info-label">School Name</div>
+                            <div class="info-value">{{ profile_data.school_name }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.school_type %}
+                        <div class="info-item">
+                            <div class="info-label">School Type</div>
+                            <div class="info-value">{{ profile_data.school_type|title }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.total_students %}
+                        <div class="info-item">
+                            <div class="info-label">Total Students</div>
+                            <div class="info-value">{{ profile_data.total_students }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.active_olympiad_students %}
+                        <div class="info-item">
+                            <div class="info-label">Active Olympiad Students</div>
+                            <div class="info-value">{{ profile_data.active_olympiad_students }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif user.user_type == 'tutor' %}
+                    <div class="account-card">
+                        <h4 class="mb-4">Tutor Information</h4>
+                        {% if profile_data.title %}
+                        <div class="info-item">
+                            <div class="info-label">Title</div>
+                            <div class="info-value">{{ profile_data.title }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.specializations %}
+                        <div class="info-item">
+                            <div class="info-label">Specializations</div>
+                            <div class="info-value">{{ profile_data.specializations }}</div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.hourly_rate %}
+                        <div class="info-item">
+                            <div class="info-label">Hourly Rate</div>
+                            <div class="info-value">
+                                {{ profile_data.currency }} {{ profile_data.hourly_rate }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if profile_data.average_rating %}
+                        <div class="info-item">
+                            <div class="info-label">Rating</div>
+                            <div class="info-value">
+                                {{ profile_data.average_rating }}/5.0 
+                                ({{ profile_data.total_reviews }} reviews)
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+                <!-- Travel Quotes -->
+                {% if travel_quotes %}
+                <div class="account-card">
+                    <h4 class="mb-4">Recent Travel Quotes</h4>
+                    {% for quote in travel_quotes %}
+                    <div class="info-item">
+                        <div class="info-label">{{ quote.destination.city }}, {{ quote.destination.country }}</div>
+                        <div class="info-value">
+                            Status: <strong>{{ quote.get_status_display }}</strong>
+                            <br>
+                            <small class="text-muted">Requested: {{ quote.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Account Section End -->
+{% endblock %}
+
+
+

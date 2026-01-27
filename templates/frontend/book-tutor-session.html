@@ -1,0 +1,596 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Book Session with {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }} | WON</title>
+{% endblock %}
+
+{% block content %}
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%), url('{% if tutor.user.profile_picture %}{{ tutor.user.profile_picture.url }}{% else %}{% static 'img/index/tutor1.jpg' %}{% endif %}'); background-size: cover; background-position: center;">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
+                        </li>
+                        <li>
+                            <a href="{% url 'team' %}" style="color: rgba(255,255,255,0.9);">Tutors</a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
+                        </li>
+                        <li>
+                            <a href="{% url 'team-details' tutor.user.id %}" style="color: rgba(255,255,255,0.9);">{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}</a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
+                        </li>
+                        <li style="color: white;">
+                            Book Session
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">Book a Session</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Section Start -->
+        <section class="booking-section section-padding" style="background: #f8f9fa; padding-top: 60px; padding-bottom: 80px;">
+            <div class="container">
+                <div class="row g-5">
+                    <!-- Booking Form -->
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="booking-form-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-calendar-check me-2"></i>Session Details
+                                </h2>
+                                <p class="text-muted">Fill in the details below to book your session</p>
+                            </div>
+                            
+                            {% if messages %}
+                            <div class="alert-messages mb-4">
+                                {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            <form method="post" class="booking-form">
+                                {% csrf_token %}
+                                {{ form.tutor }}
+                                
+                                <div class="form-section">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-book me-2"></i>Subject & Topic
+                                    </h4>
+                                    
+                                    <div class="form-group mb-4">
+                                        <label for="{{ form.subject.id_for_label }}" class="form-label">
+                                            Subject <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.subject }}
+                                        {% if form.subject.errors %}
+                                        <div class="text-danger small">{{ form.subject.errors }}</div>
+                                        {% endif %}
+                                        {% if form.subject.help_text %}
+                                        <small class="form-text text-muted">{{ form.subject.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group mb-4">
+                                        <label for="{{ form.topic.id_for_label }}" class="form-label">
+                                            Topic (Optional)
+                                        </label>
+                                        {{ form.topic }}
+                                        {% if form.topic.errors %}
+                                        <div class="text-danger small">{{ form.topic.errors }}</div>
+                                        {% endif %}
+                                        {% if form.topic.help_text %}
+                                        <small class="form-text text-muted">{{ form.topic.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group mb-4">
+                                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                                            Description (Optional)
+                                        </label>
+                                        {{ form.description }}
+                                        {% if form.description.errors %}
+                                        <div class="text-danger small">{{ form.description.errors }}</div>
+                                        {% endif %}
+                                        {% if form.description.help_text %}
+                                        <small class="form-text text-muted">{{ form.description.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-clock me-2"></i>Schedule
+                                    </h4>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <label for="{{ form.scheduled_at.id_for_label }}" class="form-label">
+                                                Date & Time <span class="text-danger">*</span>
+                                            </label>
+                                            {{ form.scheduled_at }}
+                                            {% if form.scheduled_at.errors %}
+                                            <div class="text-danger small">{{ form.scheduled_at.errors }}</div>
+                                            {% endif %}
+                                            {% if form.scheduled_at.help_text %}
+                                            <small class="form-text text-muted">{{ form.scheduled_at.help_text }}</small>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-4">
+                                            <label for="{{ form.duration_minutes.id_for_label }}" class="form-label">
+                                                Duration <span class="text-danger">*</span>
+                                            </label>
+                                            {{ form.duration_minutes }}
+                                            {% if form.duration_minutes.errors %}
+                                            <div class="text-danger small">{{ form.duration_minutes.errors }}</div>
+                                            {% endif %}
+                                            {% if form.duration_minutes.help_text %}
+                                            <small class="form-text text-muted">{{ form.duration_minutes.help_text }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% if not user.is_authenticated or user.user_type != 'student' %}
+                                <div class="form-section">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-user me-2"></i>Your Information
+                                    </h4>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Please log in as a student to book a session, or provide your contact information below.
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4 mb-4">
+                                            <label for="{{ form.student_name.id_for_label }}" class="form-label">
+                                                Full Name
+                                            </label>
+                                            {{ form.student_name }}
+                                            {% if form.student_name.errors %}
+                                            <div class="text-danger small">{{ form.student_name.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-4">
+                                            <label for="{{ form.student_email.id_for_label }}" class="form-label">
+                                                Email
+                                            </label>
+                                            {{ form.student_email }}
+                                            {% if form.student_email.errors %}
+                                            <div class="text-danger small">{{ form.student_email.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-4">
+                                            <label for="{{ form.student_phone.id_for_label }}" class="form-label">
+                                                Phone
+                                            </label>
+                                            {{ form.student_phone }}
+                                            {% if form.student_phone.errors %}
+                                            <div class="text-danger small">{{ form.student_phone.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="form-section">
+                                    <div class="form-check mb-4">
+                                        {{ form.terms_accepted }}
+                                        <label class="form-check-label" for="{{ form.terms_accepted.id_for_label }}">
+                                            {{ form.terms_accepted.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {% if form.terms_accepted.errors %}
+                                        <div class="text-danger small">{{ form.terms_accepted.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-submit-booking">
+                                        <i class="fas fa-check me-2"></i>Confirm Booking
+                                    </button>
+                                    <a href="{% url 'team-details' tutor.user.id %}" class="btn-cancel">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Tutor Summary Sidebar -->
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="booking-summary-card sticky-style">
+                            <h3 class="summary-title">
+                                <i class="fas fa-user-graduate me-2"></i>Tutor Summary
+                            </h3>
+                            
+                            <div class="tutor-summary">
+                                <div class="tutor-summary-header">
+                                    {% if tutor.user.profile_picture %}
+                                        <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="summary-tutor-image">
+                                    {% else %}
+                                        <div class="summary-tutor-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div class="tutor-summary-info">
+                                        <h4>{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}</h4>
+                                        {% if tutor.specializations %}
+                                        <p class="text-muted small">{{ tutor.specializations|truncatewords:10 }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-details">
+                                    <div class="summary-item">
+                                        <strong>Hourly Rate:</strong>
+                                        <span class="price-highlight">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}/hour</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Experience:</strong>
+                                        <span>{{ tutor.experience_years }}+ years</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Total Sessions:</strong>
+                                        <span>{{ tutor.total_sessions }}</span>
+                                    </div>
+                                    {% if tutor.average_rating > 0 %}
+                                    <div class="summary-item">
+                                        <strong>Rating:</strong>
+                                        <span>
+                                            {% with rating_int=tutor.average_rating|floatformat:0 %}
+                                                {% if rating_int >= 1 %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                {% if rating_int >= 2 %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                {% if rating_int >= 3 %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                {% if rating_int >= 4 %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                                {% if rating_int >= 5 %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                            {% endwith %}
+                                            {{ tutor.average_rating|floatformat:1 }} ({{ tutor.total_reviews }} reviews)
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="summary-subjects">
+                                    <strong>Subjects:</strong>
+                                    <div class="subject-tags">
+                                        {% for tutor_subject in tutor_subjects %}
+                                        <span class="subject-tag">{{ tutor_subject.subject.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="price-estimate">
+                                <h5>Estimated Cost</h5>
+                                <p class="text-muted small">Cost will be calculated based on selected duration</p>
+                                <div class="price-breakdown" id="price-breakdown">
+                                    <div class="price-row">
+                                        <span>1 hour session:</span>
+                                        <strong>{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .booking-section {
+        background: #f8f9fa;
+    }
+    
+    .sticky-style {
+        position: sticky;
+        top: 100px;
+    }
+    
+    .booking-form-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .card-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 10px;
+    }
+    
+    .card-header h2 i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+    }
+    
+    .section-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--theme-color, #667eea);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #e9ecef;
+    }
+    
+    .btn-submit-booking {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+    
+    .btn-submit-booking:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #e0e0e0;
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-cancel:hover {
+        background: #e9ecef;
+        color: #495057;
+        text-decoration: none;
+    }
+    
+    .booking-summary-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .summary-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .summary-title i {
+        color: var(--theme-color, #667eea);
+    }
+    
+    .tutor-summary-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .summary-tutor-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #f0f0f0;
+    }
+    
+    .summary-tutor-placeholder {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        border: 3px solid #f0f0f0;
+    }
+    
+    .tutor-summary-info h4 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 5px;
+    }
+    
+    .summary-details {
+        margin-bottom: 20px;
+    }
+    
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+    
+    .price-highlight {
+        color: #667eea;
+        font-weight: 700;
+        font-size: 18px;
+    }
+    
+    .summary-subjects {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    .subject-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    
+    .subject-tag {
+        background: #f0f4ff;
+        color: #667eea;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .price-estimate {
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 2px solid #e9ecef;
+    }
+    
+    .price-estimate h5 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 10px;
+    }
+    
+    .price-breakdown {
+        margin-top: 15px;
+    }
+    
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+    
+    @media (max-width: 991px) {
+        .sticky-style {
+            position: relative;
+            top: 0;
+            margin-top: 30px;
+        }
+        
+        .booking-form-card {
+            padding: 25px;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn-submit-booking,
+        .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Calculate price based on duration
+    document.addEventListener('DOMContentLoaded', function() {
+        const durationSelect = document.getElementById('{{ form.duration_minutes.id_for_label }}');
+        const priceBreakdown = document.getElementById('price-breakdown');
+        const hourlyRate = {{ tutor.hourly_rate }};
+        const currency = '{{ tutor.currency }}';
+        
+        function updatePrice() {
+            const duration = parseInt(durationSelect.value) || 60;
+            const price = (hourlyRate * duration) / 60;
+            
+            priceBreakdown.innerHTML = `
+                <div class="price-row">
+                    <span>${duration} minute session:</span>
+                    <strong>${currency}${price.toFixed(2)}</strong>
+                </div>
+            `;
+        }
+        
+        if (durationSelect) {
+            durationSelect.addEventListener('change', updatePrice);
+            updatePrice();
+        }
+    });
+</script>
+{% endblock %}
+
+
+

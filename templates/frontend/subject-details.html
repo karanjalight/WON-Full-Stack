@@ -8,7 +8,9 @@
 {% block content %}
         <!--  Breadcrumb Section Start -->
         <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 100px 0 80px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('{% static 'img/breadcrumb-bg.jpg' %}') center/cover; opacity: 0.15;"></div>
+            {% if subject.icon %}
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('{{ subject.icon.url }}') center/cover; opacity: 0.15;"></div>
+            {% endif %}
             <div class="container-fluid" style="position: relative; z-index: 1;">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
@@ -44,7 +46,7 @@
                             <div class="subject-details-items">
                                 <!-- Subject Header -->
                                 <div class="subject-header mb-4">
-                                    <div class="d-flex align-items-start gap-4 mb-4">
+                                    <div class="d-flex  align-items-center gap-4 mb-4">
                                         {% if subject.icon %}
                                             <div class="subject-icon-large">
                                                 <img src="{{ subject.icon.url }}" alt="{{ subject.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
@@ -52,19 +54,22 @@
                                         {% endif %}
                                         <div class="flex-grow-1">
                                             <h2 class="mb-3">{{ subject.name }}</h2>
-                                            {% if subject.description %}
+                                            
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {% if subject.description %}
                                                 <div class="subject-description mb-4">
                                                     {{ subject.description|safe }}
                                                 </div>
                                             {% else %}
                                                 <p class="text-muted mb-4">Explore {{ subject.name }} Olympiad competitions, access expert tutors, and discover exciting destinations for academic excellence.</p>
                                             {% endif %}
-                                        </div>
                                     </div>
                                 </div>
 
                                 <!-- Statistics Cards -->
-                                <div class="subject-stats-cards mb-5">
+                                <!-- <div style="display: hidden;" class="subject-stats-cards  mb-5">
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <div class="stat-card text-center p-4 rounded" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
@@ -94,7 +99,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Olympiads Section -->
                                 {% if competitions %}
@@ -131,7 +136,7 @@
                                                 </div>
                                                 <div class="competition-footer d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <strong class="text-primary" style="font-size: 18px;">{{ competition.currency }}{{ competition.base_price|floatformat:0 }}</strong>
+                                                        <strong class="text-primary" style="font-size: 18px;">$ {{ competition.base_price|floatformat:2 }}</strong>
                                                         <span class="text-muted small">/ person</span>
                                                     </div>
                                                     <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn" style="padding: 6px 16px; font-size: 13px;">
@@ -262,7 +267,9 @@
                                             <i class="fas fa-trophy me-3" style="font-size: 20px;"></i>
                                             <div>
                                                 <strong style="display: block;">Total Competitions</strong>
-                                                <span style="font-size: 24px; font-weight: bold;">{{ subject.total_olympiads }}</span>
+                                                <span style="font-size: 24px; font-weight: bold;">
+                                                    {{ competitions|length }}
+                                                </span>
                                             </div>
                                         </li>
                                         <li class="mb-3 d-flex align-items-center">
@@ -289,23 +296,7 @@
                                     </ul>
                                 </div>
 
-                                <!-- Quick Actions -->
-                                <div class="sidebar-card p-4 border rounded mb-4">
-                                    <h5 class="mb-4">
-                                        <i class="fas fa-bolt me-2"></i> Quick Actions
-                                    </h5>
-                                    <div class="d-grid gap-2">
-                                        <a href="{% url 'olympiads' %}?subject={{ subject.slug }}" class="theme-btn text-center">
-                                            <span>Browse Competitions</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                        <a href="{% url 'team' %}?subject={{ subject.slug }}" class="theme-btn text-center">
-                                            <span>Find Tutors</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                        <a href="{% url 'contact' %}?subject=Inquiry about {{ subject.name }}" class="theme-btn text-center">
-                                            <span>Get Help</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                                 
 
                                 <!-- Related Subjects -->
                                 {% if related_subjects %}
@@ -466,6 +457,7 @@
     }
 </style>
 {% endblock %}
+
 
 
 
