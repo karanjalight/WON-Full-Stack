@@ -1,312 +1,132 @@
+{% extends 'frontend/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <!--<< Header Area >>-->
-     <head>
-        <!-- ========== Meta Tags ========== -->
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="author" content="modinatheme">
-        <meta name="description" content="Travil - Travel & Tour Booking Html Template">
-        <!-- ======== Page title ============ -->
-        <title>Travil - Travel & Tour Booking Html Template</title>
-        <!--<< Favicon >>-->
-        <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
-        <!--<< Bootstrap min.css >>-->
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <!--<< Font Awesome.css >>-->
-        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-        <!--<< Animate.css >>-->
-        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-        <!--<< Magnific Popup.css >>-->
-        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
-        <!--<< MeanMenu.css >>-->
-        <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
-        <!--<< Odometer.css >>-->
-        <link rel="stylesheet" href="{% static 'css/odometer.css' %}">
-        <!--<< Swiper Bundle.css >>-->
-        <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
-        <!--<< DatePicker.css >>-->
-        <link rel="stylesheet" href="{% static 'css/datepickerboot.css' %}">
-        <!--<< Nice Select.css >>-->
-        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
-        <!--<< Main.css >>-->
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <!--<< Style.css >>-->
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    </head>
 
-    <body>
+{% block title %}
+<title>FAQs — World Olympiad Network</title>
+{% endblock %}
 
-       <!-- Preloader Start -->
-        <div id="preloader" class="preloader">
-            <div class="animation-preloader">
-                <div class="spinner">                
-                </div>
-                <div class="txt-loading">
-                    <span data-text-preloader="T" class="letters-loading">
-                        T
-                    </span>
-                    <span data-text-preloader="R" class="letters-loading">
-                        R
-                    </span>
-                    <span data-text-preloader="A" class="letters-loading">
-                        A
-                    </span>
-                    <span data-text-preloader="V" class="letters-loading">
-                        V
-                    </span>
-                    <span data-text-preloader="I" class="letters-loading">
-                        I
-                    </span>
-                    <span data-text-preloader="L" class="letters-loading">
-                        L
-                    </span>
-                </div>
-                <p class="text-center">Loading</p>
-            </div>
-            <div class="loader">
-                <div class="row">
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% block meta_description %}Frequently asked questions about WON, Olympiad discovery, applications, preparation, and travel support.{% endblock %}
 
-        <!-- Back To Top start -->
-        <button id="back-top" class="back-to-top">
-            <i class="fas fa-long-arrow-up"></i>
-        </button>
-
-        <!-- Offcanvas Area Start -->
-        <div class="fix-area">
-            <div class="offcanvas__info">
-                <div class="offcanvas__wrapper">
-                    <div class="offcanvas__content">
-                        <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
-                            <div class="offcanvas__logo">
-                                <a href="index.html">
-                                    <img src="{% static 'img/logo/black-logo.svg' %}" alt="logo-img">
-                                </a>
-                            </div>
-                            <div class="offcanvas__close">
-                                <button>
-                                <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <h3 class="offcanvas-title">Hello There!</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, </p>
-                        <div class="mobile-menu fix mb-3"></div>
-                        <div class="offcanvas__contact">
-                            <h3>Get Appointment</h3>
-                            <form action="#" id="contact-form" method="POST" class="contact-form-items">
-                                <div class="row g-4">
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="name33" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="email33" placeholder="Email Address">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-clt">
-                                            <textarea name="message" id="message2" placeholder="Enter message..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="social-icon d-flex align-items-center">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="offcanvas__overlay"></div>
-
-        {% include 'partials/navbar.html' %}
-        
-        <!-- Search Section Start -->
-        <div class="header-search-bar d-flex align-items-center">
-            <button class="search-close">×</button>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="search-bar">
-                            <div class="contact-form-box contact-search-form-box">
-                                <form action="#">
-                                    <input type="email" placeholder="Search here...">
-                                    <button type="submit"><i class="far fa-search"></i></button>
-                                </form>
-                                <p>Type above and press Enter to search. Press Close to cancel.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+{% block content %}
+        <!-- Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% static 'img/index/study4.jpg' %}');">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                         <li>
-                            <a href="index.html">
-                            Home
+                            <a href="{% url 'index' %}">
+                                Home
                             </a>
                         </li>
                         <li>
                             <i class="far fa-slash"></i>
                         </li>
                         <li>
-                            FAQs Page
+                            FAQs
                         </li>
                     </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">FAQs Page</h1>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">FAQs about WON</h1>
                 </div>
             </div>
             <div class="plane-shape float-bob-x">
-                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="plane">
             </div>
         </div>
 
-        <!-- Faq-section Start -->
+        <!-- FAQ Section Start -->
         <section class="faq-section section-padding fix">
             <div class="container">
                 <div class="section-title text-center">
-                    <span class="wow fadeInUp">Frequently Ask Questions</span>
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Frequently Ask Questions About <br> Our Travil Agency</h2>
+                    <span class="wow fadeInUp">Frequently Asked Questions</span>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">WON — World Olympiad Network</h2>
+                    <p class="mt-3 wow fadeInUp" data-wow-delay=".5s">
+                        Learn how WON supports Olympiad discovery, preparation, applications, and travel for students and schools.
+                    </p>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-6">
                         <div class="faq-items">
                             <div class="faq-accordion">
-                                <div class="accordion" id="accordion">
+                                <div class="accordion" id="wonFaqLeft">
                                     <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".1s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
-                                                Can I pay for my trip in installments?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq1" aria-expanded="false" aria-controls="wonFaq1">
+                                                What is WON?
                                             </button>
                                         </h5>
-                                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq1" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                World Olympiad Network (WON) is a platform that helps students, parents, and schools discover Olympiads, prepare with tutors and resources, and navigate applications and travel support.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".2s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
-                                                Are meals included in the travel packages?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq2" aria-expanded="false" aria-controls="wonFaq2">
+                                                Who can use WON?
                                             </button>
                                         </h5>
-                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq2" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                Students, parents, schools, and tutors can all use WON to find competitions, plan preparation, and coordinate applications.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".3s">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq3" aria-expanded="false" aria-controls="wonFaq3">
+                                                What is an academic Olympiad?
+                                            </button>
+                                        </h5>
+                                        <div id="wonFaq3" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
+                                            <div class="accordion-body">
+                                                Academic Olympiads are subject-based competitions run by official organizers. For example, see the official sites for the International Mathematical Olympiad (IMO), International Physics Olympiad (IPhO), and International Olympiad in Informatics (IOI).
+                                                <div class="mt-2">
+                                                    <a href="https://www.imo-official.org/" target="_blank" rel="noopener noreferrer">IMO Official Site</a> |
+                                                    <a href="https://www.ipho-new.org/" target="_blank" rel="noopener noreferrer">IPhO Official Site</a> |
+                                                    <a href="https://ioinformatics.org/" target="_blank" rel="noopener noreferrer">IOI Official Site</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".4s">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq4" aria-expanded="false" aria-controls="wonFaq4">
+                                                Where do official dates, rules, and syllabi come from?
+                                            </button>
+                                        </h5>
+                                        <div id="wonFaq4" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
+                                            <div class="accordion-body">
+                                                The official organizer websites are the source of truth for dates, rules, and syllabi. WON links to these sources and helps you track updates.
+                                                <div class="mt-2">
+                                                    <a href="https://www.imo-official.org/" target="_blank" rel="noopener noreferrer">IMO Official Site</a> |
+                                                    <a href="https://www.ipho-new.org/" target="_blank" rel="noopener noreferrer">IPhO Official Site</a> |
+                                                    <a href="https://ioinformatics.org/" target="_blank" rel="noopener noreferrer">IOI Official Site</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".5s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
-                                                How can I contact support during my trip?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq5" aria-expanded="false" aria-controls="wonFaq5">
+                                                Does WON organize Olympiads?
                                             </button>
                                         </h5>
-                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq5" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                WON is a discovery and support platform. Olympiads are run by their official organizers, and we help students and schools navigate those opportunities.
                                             </div>
                                         </div>
                                     </div>
                                     <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
-                                                Do you offer tours for solo travelers?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq6" aria-expanded="false" aria-controls="wonFaq6">
+                                                How do applications work on WON?
                                             </button>
                                         </h5>
-                                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq6" class="accordion-collapse collapse" data-bs-parent="#wonFaqLeft">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
-                                                Can I book only accommodations through your site?
-                                            </button>
-                                        </h5>
-                                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
-                                                How far in advance should I book my trip?
-                                            </button>
-                                        </h5>
-                                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">
-                                                What happens if my trip is delayed or canceled?
-                                            </button>
-                                        </h5>
-                                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8" aria-expanded="false" aria-controls="faq8">
-                                                Are your packages suitable for children?
-                                            </button>
-                                        </h5>
-                                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9" aria-expanded="false" aria-controls="faq9">
-                                                What documents do I need for international travel?
-                                            </button>
-                                        </h5>
-                                        <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                You can explore competitions, review requirements, and get support with timelines, documents, and submission steps. Reach out if you need help for a specific Olympiad.
                                             </div>
                                         </div>
                                     </div>
@@ -317,100 +137,76 @@
                     <div class="col-lg-6">
                         <div class="faq-items">
                             <div class="faq-accordion">
-                                <div class="accordion" id="accordion2">
+                                <div class="accordion" id="wonFaqRight">
                                     <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".1s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11" aria-expanded="true" aria-controls="faq11">
-                                                How do I book a trip?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq7" aria-expanded="false" aria-controls="wonFaq7">
+                                                Do you provide tutors or preparation resources?
                                             </button>
                                         </h5>
-                                        <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq7" class="accordion-collapse collapse" data-bs-parent="#wonFaqRight">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                Yes. WON connects learners to tutors and preparation resources, including past papers and coaching support.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".2s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq22" aria-expanded="false" aria-controls="faq22">
-                                                What is the cancellation policy?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq8" aria-expanded="false" aria-controls="wonFaq8">
+                                                Can WON help with travel and logistics?
                                             </button>
                                         </h5>
-                                        <div id="faq22" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq8" class="accordion-collapse collapse" data-bs-parent="#wonFaqRight">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                We can guide families and schools through travel planning and logistics where needed. The exact support depends on the competition and destination.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".3s">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq9" aria-expanded="false" aria-controls="wonFaq9">
+                                                Are there fees to use WON?
+                                            </button>
+                                        </h5>
+                                        <div id="wonFaq9" class="accordion-collapse collapse" data-bs-parent="#wonFaqRight">
+                                            <div class="accordion-body">
+                                                Fees can vary by service and competition. Contact WON for the most accurate guidance based on your needs.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".4s">
+                                        <h5 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq10" aria-expanded="false" aria-controls="wonFaq10">
+                                                How do I stay updated on deadlines?
+                                            </button>
+                                        </h5>
+                                        <div id="wonFaq10" class="accordion-collapse collapse" data-bs-parent="#wonFaqRight">
+                                            <div class="accordion-body">
+                                                Subscribe to updates, follow the competitions page, and check official organizer sites for confirmed dates and regulations.
                                             </div>
                                         </div>
                                     </div>
                                     <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".5s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq33" aria-expanded="false" aria-controls="faq33">
-                                                Are flights included in the package price?
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq11" aria-expanded="false" aria-controls="wonFaq11">
+                                                How can schools partner with WON?
                                             </button>
                                         </h5>
-                                        <div id="faq33" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq11" class="accordion-collapse collapse" data-bs-parent="#wonFaqRight">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                Schools can collaborate with WON for student onboarding, preparation programs, and competition planning. Contact us to discuss partnerships.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
+                                    <div class="accordion-item wow fadeInUp" data-wow-delay=".6s">
                                         <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq44" aria-expanded="false" aria-controls="faq44">
-                                                Can I customize my itinerary?
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#wonFaq12" aria-expanded="true" aria-controls="wonFaq12">
+                                                How do I contact WON?
                                             </button>
                                         </h5>
-                                        <div id="faq44" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                                        <div id="wonFaq12" class="accordion-collapse collapse show" data-bs-parent="#wonFaqRight">
                                             <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq55" aria-expanded="false" aria-controls="faq55">
-                                                Do you offer group discounts?
-                                            </button>
-                                        </h5>
-                                        <div id="faq55" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq66" aria-expanded="false" aria-controls="faq66">
-                                                Is travel insurance included in the package?
-                                            </button>
-                                        </h5>
-                                        <div id="faq66" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item mb-3 wow fadeInUp" data-wow-delay=".6s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq77" aria-expanded="false" aria-controls="faq77">
-                                                How do I make changes to my booking?
-                                            </button>
-                                        </h5>
-                                        <div id="faq77" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item wow fadeInUp" data-wow-delay=".3s">
-                                        <h5 class="accordion-header">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq88" aria-expanded="false" aria-controls="faq88">
-                                                What’s included in my travel package?
-                                            </button>
-                                        </h5>
-                                        <div id="faq88" class="accordion-collapse show" data-bs-parent="#accordion">
-                                            <div class="accordion-body">
-                                                Our packages typically include accommodations, guided tours, airport transfers, and select meals. Please review the package details for specifics.
+                                                Use the contact form below or email us at <a href="mailto:info@won.org">info@won.org</a>. We respond as quickly as possible.
                                             </div>
                                         </div>
                                     </div>
@@ -420,371 +216,89 @@
                     </div>
                 </div>
             </div>
-       </section>
-       
-        <!-- Contact-section Start -->
-       <section class="contact-section section-padding pt-0 fix">
-        <div class="container">
-            <div class="contact-wrapper">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <div class="contact-content">
-                            <h3>Send Your Message!</h3>
-                            <p>
-                                We offer carefully curated destinations and tours that capture the true essence of location, ensuring you experience.
-                            </p>
-                            <form action="#" id="contact-form1" method="POST" class="contact-form-items">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 wow fadeInUp" data-wow-delay=".3s">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="email11" placeholder="Enter email">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 wow fadeInUp" data-wow-delay=".7s">
-                                        <div class="form-clt">
-                                            <input type="text" name="name" id="name22" placeholder="Phone Number">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 wow fadeInUp" data-wow-delay=".5s">
-                                        <div class="form-clt">
-                                            <input type="text" name="email" id="name333" placeholder="Enter name">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 wow fadeInUp" data-wow-delay=".9s">
-                                        <div class="form-clt">
-                                            <textarea name="message" id="message4" placeholder="Enter message..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6">
-                        <div class="contact-info-content">
-                            <div class="section-title mb-4">
-                                <span>Contact Us</span>
-                                <h2>Contact with Us for <br>
-                                 Your Any Help</h2>
-                            </div>
-                            <p>
-                                We offer carefully curated destinations and tours that capture the true essence of location, ensuring you experience. Our attraction pass save you more than buying individual tickets.
-                            </p>
-                         <div class="contact-info">
-                             <div class="contact-items">
-                                 <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
-                                        <g clip-path="url(#clip0_487_10)">
-                                          <path d="M26.168 33C24.8596 32.6455 23.5254 32.3619 22.2363 31.9301C17.9953 30.5057 14.2119 28.2627 10.8604 25.3043C7.03828 21.9334 4.07344 17.9309 2.02383 13.2516C1.18594 11.3309 0.534961 9.35215 0.0966797 7.29609C0.0644531 7.14141 0.0322266 6.98027 0 6.82559C0 6.43887 0 6.05215 0 5.66543C0.0193359 5.59453 0.0515625 5.52363 0.0644531 5.45273C0.328711 3.77051 1.14727 2.41055 2.58457 1.48242C3.57715 0.844336 4.62773 0.277148 5.80078 0C6.05859 0 6.31641 0 6.57422 0C6.94805 0.128906 7.33477 0.225586 7.68281 0.393164C8.26934 0.670313 8.68828 1.14727 9.02344 1.70156C9.94512 3.23555 10.8732 4.76953 11.7885 6.30996C12.7939 7.99219 12.317 9.88711 10.6412 10.9055C10.2867 11.1246 9.92578 11.3373 9.56484 11.55C8.99766 11.8916 8.92676 12.1107 9.17812 12.7166C10.6154 16.0875 12.8197 18.8654 15.6943 21.1213C17.1252 22.2492 18.685 23.1645 20.3736 23.8605C20.8635 24.0604 21.1148 23.983 21.3984 23.5254C21.682 23.0613 21.9527 22.5779 22.2557 22.1268C23.1258 20.8119 24.9176 20.2641 26.2904 21.0182C28.108 22.0236 29.874 23.1258 31.6465 24.2215C32.3812 24.6791 32.7744 25.4074 32.942 26.2518C32.9549 26.3098 32.9871 26.3678 33.0064 26.4258C33.0064 26.6836 33.0064 26.9414 33.0064 27.1992C32.9355 27.457 32.8904 27.7277 32.7809 27.9662C32.4715 28.6365 32.1557 29.3068 31.8076 29.9578C31.1502 31.1953 30.1512 32.0848 28.8428 32.5875C28.3594 32.7744 27.8373 32.8646 27.3346 33C26.9414 33 26.5547 33 26.168 33ZM9.56484 10.0418C9.73887 9.93867 9.88066 9.86133 10.016 9.77754C11.0344 9.13945 11.318 8.05664 10.7057 7.01895C9.77109 5.42695 8.81719 3.84785 7.85684 2.26875C7.2832 1.33418 6.27773 1.04414 5.28516 1.5082C4.72441 1.77246 4.16367 2.04961 3.62227 2.34609C1.88203 3.30645 0.973242 5.29805 1.39863 7.23809C1.88848 9.48106 2.62969 11.6402 3.65449 13.6898C8.08242 22.5393 14.9918 28.4754 24.518 31.2855C25.4654 31.5627 26.4193 31.8205 27.4312 31.64C28.7848 31.3951 29.816 30.6926 30.5701 29.5066C27.7922 27.8438 25.04 26.1873 22.2814 24.5309C21.5145 25.343 20.6637 25.3945 19.684 24.9691C17.093 23.8412 14.8113 22.2621 12.8133 20.277C10.7121 18.1887 9.04922 15.7975 7.92129 13.0453C7.57324 12.1945 7.72148 11.4533 8.37246 10.8023C8.39824 10.7766 8.42402 10.7379 8.45625 10.6992C8.39824 10.6025 8.34668 10.5059 8.28867 10.4156C7.425 8.97188 6.55488 7.52813 5.69121 6.08437C5.62676 5.9748 5.55586 5.86523 5.51074 5.74277C5.39473 5.4334 5.5043 5.11758 5.775 4.96289C6.03926 4.8082 6.37441 4.86621 6.58711 5.11758C6.66445 5.20781 6.72246 5.31094 6.78691 5.40762C7.34121 6.3293 7.89551 7.24453 8.44336 8.16621C8.81074 8.78496 9.17812 9.40371 9.56484 10.0418ZM31.1695 28.3594C31.2662 28.1725 31.35 28.0113 31.4338 27.8502C31.9945 26.7223 31.698 25.7168 30.6217 25.0723C29.107 24.1635 27.5924 23.2482 26.0713 22.3459C25.8715 22.2234 25.6523 22.1139 25.4332 22.0559C24.402 21.7787 23.4609 22.3201 22.9904 23.4545C25.6975 25.0787 28.4174 26.7158 31.1695 28.3594Z" fill="#4D40CA"/>
-                                          <path d="M5.30625 3.37093C5.2998 3.72542 5.01621 4.00257 4.66816 3.99613C4.32012 3.98968 4.04297 3.69964 4.04297 3.35159C4.04941 3.00355 4.3459 2.71351 4.68105 2.71995C5.02266 2.7264 5.30625 3.02288 5.30625 3.37093Z" fill="#4D40CA"/>
-                                        </g>
-                                        <defs>
-                                          <clipPath id="clip0_487_10">
-                                            <rect width="33" height="33" fill="white"/>
-                                          </clipPath>
-                                        </defs>
-                                      </svg>
-                                 </div>
-                                 <div class="content">
-                                    <span>Our Location</span>
-                                     <h3>
-                                        Downtown Dubai, Dubai 00000, UAE
-                                     </h3>
-                                 </div>
-                             </div>
-                             <div class="contact-items">
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
-                                        <path d="M15.1497 32.9995C14.5138 32.9308 13.8693 32.8878 13.2333 32.8019C11.274 32.5527 9.34897 32.1659 7.61303 31.1776C7.06303 30.8683 6.54741 30.4472 6.12631 29.9745C5.32709 29.0722 5.35288 27.955 6.10053 27.0097C6.74506 26.2105 7.61303 25.7292 8.54116 25.3339C9.80444 24.8011 11.1279 24.5003 12.5372 24.2769C12.4341 24.1394 12.3568 24.0362 12.2794 23.9245C10.8443 22.0339 9.38334 20.1776 7.99116 18.2526C6.84819 16.6714 6.04897 14.9183 5.69663 12.9761C4.631 7.14952 8.54116 1.4089 14.3505 0.274524C20.306 -0.885632 26.0896 2.95577 27.2498 8.86827C27.7912 11.6526 27.3099 14.2737 25.9349 16.7487C24.9896 18.4589 23.7951 20.0058 22.5919 21.5441C21.8958 22.4378 21.1912 23.3316 20.4693 24.2597C21.0107 24.3628 21.5091 24.4573 21.999 24.5691C23.2193 24.8441 24.4138 25.1964 25.4794 25.8581C25.9607 26.1503 26.4247 26.5112 26.8029 26.9237C27.6966 27.8948 27.6708 29.0894 26.8029 30.0862C26.2357 30.7394 25.5138 31.1691 24.7318 31.5214C23.1505 32.2347 21.4748 32.587 19.7646 32.8019C19.1287 32.8792 18.4841 32.9308 17.8482 32.9995C16.9544 32.9995 16.0521 32.9995 15.1497 32.9995ZM16.499 27.3706C16.5591 27.2933 16.6021 27.2503 16.6365 27.1987C18.1576 25.205 19.7044 23.2284 21.2083 21.2175C22.3427 19.6964 23.4943 18.1839 24.5169 16.5855C25.8919 14.4284 26.4333 12.0566 26.0466 9.48702C25.2302 4.08156 19.8333 0.377649 14.4708 1.56359C9.1685 2.73234 5.8685 7.94015 7.06303 13.2253C7.45834 14.987 8.29194 16.5425 9.34897 17.9691C10.8615 20.0144 12.4341 22.0081 13.981 24.0276C14.8232 25.1191 15.6482 26.2276 16.499 27.3706ZM16.4904 31.7276C17.0833 31.6933 18.0974 31.6675 19.1029 31.573C20.6755 31.4269 22.2224 31.1261 23.7091 30.5589C24.4396 30.2753 25.1529 29.9487 25.7201 29.3816C26.313 28.7886 26.3302 28.1956 25.7115 27.6284C25.3763 27.3191 24.9896 27.0526 24.5857 26.8378C23.0732 26.0386 21.4232 25.712 19.7474 25.4886C19.6357 25.4714 19.4724 25.5831 19.3951 25.6776C18.6388 26.6831 17.8998 27.6886 17.1521 28.7026C16.7138 29.2956 16.2927 29.2956 15.8544 28.6941C15.1154 27.68 14.3591 26.6745 13.6287 25.6605C13.5083 25.4972 13.388 25.4456 13.199 25.48C12.2021 25.6948 11.1966 25.8581 10.2169 26.1245C9.20288 26.3995 8.22319 26.7948 7.41538 27.5081C6.64194 28.1956 6.63334 28.8573 7.44116 29.4933C7.94819 29.8886 8.53256 30.2237 9.12553 30.473C11.3427 31.3839 13.6974 31.6417 16.4904 31.7276Z" fill="#4D40CA"/>
-                                        <path d="M21.0098 11.0162C21.0012 13.4912 18.9731 15.5021 16.4895 15.5021C13.9973 15.5021 11.9778 13.4654 11.9864 10.9646C11.9949 8.48963 14.0317 6.48728 16.5239 6.49588C18.9989 6.50447 21.0184 8.5326 21.0098 11.0162ZM16.4981 14.2131C18.2684 14.2131 19.7207 12.7693 19.7207 11.0076C19.7207 9.23728 18.277 7.79353 16.5153 7.78494C14.7364 7.77635 13.2754 9.22869 13.2754 11.0076C13.284 12.7779 14.7278 14.2131 16.4981 14.2131Z" fill="#4D40CA"/>
-                                        <path d="M24.8786 10.7412C24.8786 10.8357 24.8786 10.9045 24.8786 10.9818C24.87 11.4115 24.6036 11.7123 24.2255 11.7037C23.8645 11.6951 23.5981 11.4115 23.5895 10.999C23.5809 10.174 23.452 9.3748 23.1684 8.60995C22.4122 6.59042 21.02 5.18964 19.0176 4.39042C18.6137 4.22714 18.4247 3.98652 18.459 3.66855C18.5192 3.22167 18.9403 2.98964 19.4044 3.17011C20.9942 3.76308 22.3005 4.74277 23.2887 6.11777C24.2942 7.49277 24.8098 9.04823 24.8786 10.7412Z" fill="#4D40CA"/>
-                                        <path d="M17.2045 3.27334C17.2131 3.6085 16.9295 3.90928 16.5857 3.92647C16.2248 3.94365 15.924 3.65147 15.924 3.29912C15.9154 2.93818 16.2076 2.646 16.5685 2.646C16.9037 2.646 17.1959 2.92959 17.2045 3.27334Z" fill="#4D40CA"/>
-                                      </svg>
-                                </div>
-                                <div class="content">
-                                    <span>Phone Number</span>
-                                 <h3>
-                                     <a href="tel:+4940059654444">+494 005 965 4444</a>
-                                 </h3>
-                                </div>
-                            </div>
-                            <div class="contact-items mb-0">
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
-                                        <g clip-path="url(#clip0_487_20)">
-                                          <path d="M33.0008 10.8027C33.0008 17.7464 33.0008 24.6988 33.0008 31.6425C32.8031 32.3472 32.3562 32.7941 31.643 32.9917C21.5453 32.9917 11.4477 32.9917 1.35 32.9917C0.645312 32.7941 0.189844 32.3472 -0.0078125 31.6425C-0.0078125 24.6988 -0.0078125 17.7464 -0.0078125 10.8027C0.0953125 10.7168 0.189844 10.6136 0.301562 10.5363C1.77969 9.49644 3.24922 8.4566 4.72734 7.41675C4.89922 7.29644 4.96797 7.18472 4.95937 6.96988C4.95078 6.01597 4.95078 5.06206 4.95078 4.10816C4.95078 3.223 5.37187 2.8105 6.24844 2.8105C7.80391 2.8105 9.35937 2.8105 10.9234 2.80191C11.0953 2.80191 11.293 2.75894 11.4305 2.66441C12.2641 2.09722 13.0891 1.51285 13.8969 0.919877C15.4352 -0.205904 17.5234 -0.223092 19.0703 0.894096C19.8781 1.47847 20.6859 2.06285 21.5109 2.62144C21.6656 2.72456 21.8805 2.80191 22.0695 2.80191C23.6508 2.8191 25.2234 2.8105 26.8047 2.8105C27.5953 2.8105 28.0336 3.24878 28.0422 4.048C28.0422 5.0105 28.0508 5.9816 28.0422 6.9441C28.0422 7.15035 28.0937 7.28785 28.2742 7.42534C29.6922 8.41363 31.1016 9.4105 32.5023 10.416C32.6828 10.5277 32.8375 10.6738 33.0008 10.8027ZM6.06797 3.9191C6.05937 3.99644 6.05078 4.048 6.05078 4.09956C6.05078 7.623 6.05078 11.155 6.05937 14.6785C6.05937 14.7988 6.13672 14.9449 6.23125 15.0222C8.93828 17.2738 11.6367 19.5253 14.3523 21.7683C15.6414 22.8339 17.3086 22.8339 18.6148 21.7941C18.9586 21.5191 19.2937 21.2355 19.6289 20.9519C21.9836 19.0011 24.3383 17.0417 26.693 15.0996C26.8734 14.9449 26.9508 14.7988 26.9508 14.5582C26.9422 11.1293 26.9422 7.70035 26.9422 4.26285C26.9422 4.15113 26.9422 4.03941 26.9422 3.9105C19.9727 3.9191 13.0375 3.9191 6.06797 3.9191ZM30.9211 31.8918C27.0883 28.7121 23.3242 25.5925 19.5687 22.473C17.5062 24.08 15.4695 24.0628 13.4414 22.473C9.66016 25.6097 5.90469 28.7292 2.08047 31.8918C11.7312 31.8918 21.2703 31.8918 30.9211 31.8918ZM12.5992 21.7511C8.75781 18.5628 4.95078 15.4089 1.11797 12.2293C1.11797 18.5972 1.11797 24.905 1.11797 31.273C4.95937 28.0847 8.76641 24.9308 12.5992 21.7511ZM20.4023 21.7511C24.2437 24.9394 28.0508 28.0933 31.875 31.2644C31.875 24.8964 31.875 18.5886 31.875 12.2293C28.0422 15.4175 24.2352 18.5714 20.4023 21.7511ZM31.5484 11.0777C30.3797 10.2527 29.2367 9.44488 28.068 8.61988C28.068 10.4246 28.068 12.1691 28.068 13.9652C29.2453 12.9855 30.3797 12.0402 31.5484 11.0777ZM1.45312 11.0777C2.62187 12.0488 3.75625 12.9855 4.93359 13.9652C4.93359 12.1605 4.93359 10.416 4.93359 8.61988C3.75625 9.44488 2.62187 10.2441 1.45312 11.0777ZM19.732 2.79331C19.7406 2.76753 19.7492 2.75035 19.7578 2.72456C19.2078 2.33785 18.675 1.92535 18.0992 1.5816C17.3086 1.11753 16.4406 1.04019 15.5555 1.3066C14.6703 1.573 14.0258 2.22613 13.2867 2.73316C13.2781 2.74175 13.2953 2.76753 13.2953 2.79331C15.4352 2.79331 17.5836 2.79331 19.732 2.79331Z" fill="#4D40CA"/>
-                                          <path d="M17.6365 14.9197C17.0693 15.4267 16.4334 15.7447 15.6857 15.8478C14.1732 16.0541 12.9014 15.0486 12.7725 13.5361C12.6178 11.783 13.6748 9.90094 15.2389 9.09313C16.21 8.59469 17.4303 8.79235 18.2123 9.56579C18.2897 9.64313 18.3584 9.72048 18.4615 9.83219C18.5045 9.65173 18.5303 9.50563 18.5647 9.36813C18.6506 9.02438 18.917 8.83532 19.2264 8.91266C19.5357 8.98141 19.7162 9.25641 19.6389 9.60016C19.3209 11.1127 19.0029 12.6166 18.685 14.1205C18.599 14.533 18.7107 14.7049 19.1232 14.7392C19.7506 14.7908 20.2576 14.5588 20.6443 14.0689C21.6584 12.7799 21.8217 11.3447 21.2373 9.85798C20.6357 8.32829 19.467 7.44313 17.8256 7.21969C14.9037 6.80719 11.7412 8.93844 11.0193 11.8002C10.435 14.1119 11.7584 16.4666 14.0443 17.1455C15.7631 17.6525 17.499 17.8158 19.2522 17.3689C20.3607 17.0853 21.3232 16.5439 22.0623 15.6588C22.26 15.4267 22.492 15.3322 22.7756 15.4611C23.0334 15.5814 23.1279 15.8049 23.0678 16.0713C23.042 16.1916 22.9561 16.3033 22.8787 16.3978C21.8647 17.5924 20.5412 18.2541 19.0201 18.5463C17.0607 18.9158 15.1357 18.7353 13.2881 18.0392C10.2029 16.8705 8.88809 13.2697 10.4693 10.2619C11.6553 8.00173 13.5029 6.5236 16.0897 6.14548C18.8311 5.75016 21.0912 6.85016 22.1397 9.15329C23.0506 11.147 22.8615 13.0806 21.4607 14.8252C20.9623 15.4525 20.292 15.7877 19.4928 15.8478C18.685 15.8994 18.0318 15.6845 17.6365 14.9197ZM16.3131 9.90954C16.1928 9.94391 15.9865 9.96969 15.8061 10.047C14.6201 10.5541 13.692 12.2298 13.8725 13.5103C13.9842 14.2923 14.5342 14.7908 15.3162 14.7822C15.8662 14.7736 16.3818 14.6017 16.7772 14.2064C17.0951 13.8884 17.4045 13.5533 17.6623 13.1924C18.2811 12.3244 18.2209 11.2674 17.5334 10.4509C17.224 10.09 16.8459 9.94391 16.3131 9.90954Z" fill="#4D40CA"/>
-                                        </g>
-                                        <defs>
-                                          <clipPath id="clip0_487_20">
-                                            <rect width="33" height="33" fill="white"/>
-                                          </clipPath>
-                                        </defs>
-                                      </svg>
-                                </div>
-                                <div class="content">
-                                    <span>Send Email</span>
-                                 <h3>
-                                     <a href="mailto:hellosuporttravil@gmail.com">hellosuporttravil@gmail.com</a>
-                                 </h3>
-                              </div>
-                            </div>
-                         </div>
-                        </div>
-                     </div>
-                </div>
-            </div>
-        </div>
        </section>
 
-        <!-- Footer Section Start -->
-        <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
+        <!-- Contact Section Start -->
+        <section class="contact-section section-padding pt-0 fix">
             <div class="container">
-                <div class="footer-newsletter-items">
-                    <h2>Get Updated the Our Latest Newsletter</h2>
-                    <div class="footer-input">
-                        <input type="email" id="email2" placeholder="Enter your email">
-                        <button class="newsletter-btn" type="submit">
-                        Subscribe <i class="far fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="footer-wrapper">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-12">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <a href="index.html" class="footer-logo">
-                                        <img src="{% static 'img/logo/black-logo.svg' %}" alt="img">
+                <div class="contact-wrapper">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <div class="contact-content">
+                                <h3>Send Your Message</h3>
+                                <p>
+                                    Tell us about your student, school, or competition goals and we will guide you through the next steps.
+                                </p>
+                                <form action="{% url 'contact' %}" id="contact-form1" method="POST" class="contact-form-items">
+                                    {% csrf_token %}
+                                    <div class="row g-4">
+                                        <div class="col-lg-6 wow fadeInUp" data-wow-delay=".3s">
+                                            <div class="form-clt">
+                                                <input type="text" name="name" id="faq-name" placeholder="Your name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 wow fadeInUp" data-wow-delay=".7s">
+                                            <div class="form-clt">
+                                                <input type="email" name="email" id="faq-email" placeholder="Email address" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 wow fadeInUp" data-wow-delay=".5s">
+                                            <div class="form-clt">
+                                                <input type="text" name="subject" id="faq-subject" placeholder="Subject (optional)">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 wow fadeInUp" data-wow-delay=".9s">
+                                            <div class="form-clt">
+                                                <textarea name="message" id="faq-message" placeholder="Enter message..." required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 wow fadeInUp" data-wow-delay=".3s">
+                                            <button type="submit" class="theme-btn">
+                                                <span>Send Message</span> <i class="far fa-long-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="contact-info-content">
+                                <div class="section-title mb-4">
+                                    <span>Contact WON</span>
+                                    <h2>Guidance for your Olympiad journey</h2>
+                                </div>
+                                <p>
+                                    Reach out for timeline guidance, application support, tutoring, and travel planning.
+                                </p>
+                                <div class="contact-info">
+                                    <div class="contact-items">
+                                        <div class="icon">
+                                            <img src="{% static 'img/mail.png' %}" alt="mail">
+                                        </div>
+                                        <div class="content">
+                                            <span>Email</span>
+                                            <h3><a href="mailto:info@won.org">info@won.org</a></h3>
+                                        </div>
+                                    </div>
+                                    <div class="contact-items mb-0">
+                                        <div class="icon">
+                                            <img src="{% static 'img/call.png' %}" alt="phone">
+                                        </div>
+                                        <div class="content">
+                                            <span>Location</span>
+                                            <h3>Nairobi, Kenya</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="{% url 'contact' %}" class="theme-btn">
+                                        <span>Contact Page</span> <i class="far fa-long-arrow-right"></i>
                                     </a>
                                 </div>
-                                <div class="footer-content">
-                                    <div class="contact-info-items">
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/call.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Call Us</span>
-                                                <h6><a href="tel:+8809533309">+88 (09) 53 33 09</a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/mail.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <span>Mail Us</span>
-                                                <h6><a href="mailto:info@example.com">info@example.com</a></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="app-text">Your all-in-one travel app</h6>
-                                    <div class="apps-items">
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
-                                        </a>
-                                        <a href="contact.html">
-                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
-                                        </a>
-                                    </div>
-                                    <div class="social-icon">
-                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="#"><i class="fab fa-instagram"></i></a>
-                                        <a href="#"><i class="fab fa-twitter"></i></a>
-                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-5 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Useful Links</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="destination.html">All Destination</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">24/7 Support</a>
-                                    </li>
-                                    <li>
-                                        <a href="team.html">Our Team</a>
-                                    </li>
-                                    <li>
-                                        <a href="tour.html">Tour Places</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Reviews</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>About Travil</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="about.html">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Legal Notice</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Terms & Condition</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Contact Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Apple Store</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-4 col-md-4">
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Gallery</h3>
-                                </div>
-                                <div class="footer-gallery">
-                                    <div class="gallery-wrap">
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-1.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-1.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-2.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-2.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-3.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-3.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-4.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-4.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-5.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-5.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-6.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-6.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="gallery-item">
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-7.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-7.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-8.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-8.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a href="{% static 'img/footer/gallery-9.jpg' %}" class="img-popup">
-                                                    <img src="{% static 'img/footer/gallery-9.jpg' %}" alt="gallery-img">
-                                                    <div class="icon">
-                                                        <i class="far fa-plus"></i>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom-1">
-                <div class="container">
-                    <div class="footer-bottom-wrapper">
-                        <p class="wow fadeInUp" data-wow-delay=".3s">
-                            © 2025 Travil LLC All rights reserved.
-                        </p>
-                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
-                            <li>
-                                <a href="contact.html">
-                                    Privacy 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Terms 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    Site Map
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <!--<< All JS Plugins >>-->
-        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-        <!--<< Bootstrap Js >>-->
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <!--<< Nice Select Js >>-->
-        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-        <!--<< Odometer Js >>-->
-        <script src="{% static 'js/odometer.min.js' %}"></script>
-        <!--<< Appear Js >>-->
-        <script src="{% static 'js/jquery.appear.min.js' %}"></script>
-        <!--<< Datepicker Js >>-->
-        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
-        <!--<< Swiper Slider Js >>-->
-        <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
-        <!--<< MeanMenu Js >>-->
-        <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
-        <!--<< Magnific Popup Js >>-->
-        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <!--<< Wow Animation Js >>-->
-        <script src="{% static 'js/wow.min.js' %}"></script>
-        <!--<< Main.js >>-->
-        <script src="{% static 'js/main.js' %}"></script>
-    </body>
-</html>
+       </section>
+{% endblock %}

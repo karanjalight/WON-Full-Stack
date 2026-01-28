@@ -18,7 +18,8 @@ from io import BytesIO
 from backend.models import (
     Competition, Subject, Destination, TutorProfile, User, 
     StudentProfile, OlympiadApplication, TravelQuote, ApplicationDocument,
-    TravelQuoteItem, SubscriptionPlan, TutorSession, ParentProfile, SchoolProfile
+    TravelQuoteItem, SubscriptionPlan, TutorSession, ParentProfile, SchoolProfile,
+    ContactMessage
 )
 from core.forms import (
     ApplicationStep1Form, TravelQuoteForm, StudentRegistrationForm,
@@ -180,6 +181,28 @@ def about(request):
 
 def contact(request):
     """Contact page view"""
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        message = request.POST.get('message', '').strip()
+
+        if not name or not email or not message:
+            messages.error(request, "Please provide your name, email, and message.")
+            return render(request, 'frontend/contact.html')
+
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            phone=phone or None,
+            subject=subject or None,
+            message=message,
+            user=request.user if request.user.is_authenticated else None,
+        )
+        messages.success(request, "Thanks for contacting WON! We'll get back to you shortly.")
+        return redirect('contact')
+
     return render(request, 'frontend/contact.html')
 
 def destination(request):
