@@ -1,0 +1,173 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Edit Child{% endblock %}
+{% block page_title %}Edit {{ child.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{% url 'dashboard_children' %}" class="text-gray-600 hover:text-gray-800 font-medium">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Children
+        </a>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-8">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-exclamation-circle text-red-600 mt-0.5 mr-3"></i>
+                    <div class="text-sm text-red-800">
+                        {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Basic Information -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-user text-primary-600 mr-2"></i> Basic Information
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.date_of_birth.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grade Level</label>
+                        {{ form.grade_level }}
+                        {% if form.grade_level.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.grade_level.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-envelope text-primary-600 mr-2"></i> Contact Information
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.phone.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-id-card text-primary-600 mr-2"></i> Profile
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        {{ form.country }}
+                        {% if form.country.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.country.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.city.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
+                    {{ form.profile_picture }}
+                    {% if child.profile_picture %}
+                    <div class="mt-2">
+                        <img src="{{ child.profile_picture.url }}" alt="{{ child.get_full_name }}" class="w-20 h-20 rounded-full object-cover">
+                    </div>
+                    {% endif %}
+                    {% if form.profile_picture.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.profile_picture.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                    {{ form.bio }}
+                    {% if form.bio.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.bio.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Interests -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-star text-primary-600 mr-2"></i> Academic Interests
+                </h3>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Subjects & Interests</label>
+                    {{ form.interests }}
+                    <p class="mt-1 text-xs text-gray-500">Enter subjects separated by commas</p>
+                    {% if form.interests.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.interests.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-300">
+                <a href="{% url 'dashboard_children' %}" class="text-gray-600 hover:text-gray-800 font-medium">
+                    <i class="fas fa-times mr-2"></i> Cancel
+                </a>
+                <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 rounded-lg transition-colors">
+                    <i class="fas fa-save mr-2"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

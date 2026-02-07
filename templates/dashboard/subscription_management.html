@@ -1,0 +1,752 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Subscription Management{% endblock %}
+{% block page_title %}My Subscription{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- ============================================================ -->
+    <!-- PENDING PAYMENTS ALERT BANNER                                -->
+    <!-- ============================================================ -->
+    {% if pending_transactions %}
+    <div class="bg-amber-50 border border-amber-300 rounded-xl p-5">
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 bg-amber-100 rounded-full w-10 h-10 flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-amber-600"></i>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-amber-800 mb-1">You have pending payment{{ pending_transactions|length|pluralize }}</h3>
+                <p class="text-sm text-amber-700 mb-4">Complete your payment to activate your subscription and unlock all features.</p>
+                <div class="space-y-3">
+                    {% for tx in pending_transactions %}
+                    <div class="bg-white rounded-lg border border-amber-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-amber-100 rounded-lg p-2">
+                                <i class="fas fa-clock text-amber-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">{{ tx.subscription.plan.name }}</p>
+                                <p class="text-sm text-gray-500">
+                                    {{ tx.subscription.plan.get_duration_display }} &middot;
+                                    {{ tx.currency }} {{ tx.amount }} &middot;
+                                    Started {{ tx.created_at|timesince }} ago
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'initiate-paystack-payment' tx.id %}"
+                               class="inline-flex items-center px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm whitespace-nowrap">
+                                <i class="fas fa-credit-card mr-2"></i> Complete Payment
+                            </a>
+                            <button type="button"
+                                onclick="openDeleteModal('{{ tx.subscription.id }}', '{{ tx.subscription.plan.name }}')"
+                                class="inline-flex items-center px-3 py-2.5 bg-white border border-red-300 hover:bg-red-50 text-red-600 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+                                title="Remove this pending subscription">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ============================================================ -->
+    <!-- ACTIVE SUBSCRIPTION CARD                                     -->
+    <!-- ============================================================ -->
+    {% if active_subscription %}
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden">
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        
+        <div class="relative">
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-6 gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-crown text-yellow-300"></i>
+                        <p class="text-sm text-white/80 uppercase tracking-wider font-medium">Current Plan</p>
+                    </div>
+                    <h2 class="text-3xl font-bold">{{ active_subscription.plan.name }}</h2>
+                    <p class="text-white/80 mt-1">{{ active_subscription.plan.get_duration_display }} Subscription</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-4 py-2 bg-green-400/20 border border-green-300/30 rounded-full text-green-100 text-sm font-medium">
+                        <span class="w-2 h-2 bg-green-300 rounded-full mr-2 animate-pulse"></span>
+                        Active
+                    </span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-white/70 mb-1 uppercase tracking-wide">Start Date</p>
+                    <p class="text-lg font-bold">{{ active_subscription.start_date|date:"M d, Y" }}</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-white/70 mb-1 uppercase tracking-wide">End Date</p>
+                    <p class="text-lg font-bold">{{ active_subscription.end_date|date:"M d, Y" }}</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-white/70 mb-1 uppercase tracking-wide">Price</p>
+                    <p class="text-lg font-bold">{{ active_subscription.plan.currency }} {{ active_subscription.plan.price }}</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-white/70 mb-1 uppercase tracking-wide">Auto Renew</p>
+                    <p class="text-lg font-bold">
+                        {% if active_subscription.auto_renew %}
+                        <i class="fas fa-check-circle text-green-300 mr-1"></i> On
+                        {% else %}
+                        <i class="fas fa-times-circle text-red-300 mr-1"></i> Off
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            {% if active_subscription.plan.features %}
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 mb-6">
+                <p class="text-xs text-white/70 mb-3 uppercase tracking-wide">Plan Features</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {% for feature in active_subscription.plan.features %}
+                    <div class="flex items-center gap-2 text-sm">
+                        <i class="fas fa-check text-green-300 text-xs"></i>
+                        <span class="text-white/90">{{ feature }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <!-- No Active Subscription -->
+    <div class="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-12 text-center">
+        <div class="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-5">
+            <i class="fas fa-crown text-gray-400 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">No Active Subscription</h2>
+        <p class="text-gray-500 max-w-md mx-auto mb-6">Subscribe to a plan below to unlock all features and start your journey with World Olympiad Network.</p>
+        <a href="#available-plans" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm">
+            <i class="fas fa-arrow-down mr-2"></i> View Available Plans
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- ============================================================ -->
+    <!-- AVAILABLE PLANS SECTION                                      -->
+    <!-- ============================================================ -->
+    <div id="available-plans" class="scroll-mt-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+                <h3 class="text-2xl font-bold text-gray-900">Available Plans</h3>
+                <p class="text-gray-500 mt-1">Choose the plan that best fits your needs</p>
+            </div>
+            <!-- Duration Tabs -->
+            <div class="inline-flex bg-gray-100 rounded-xl p-1" id="duration-tabs">
+                <button type="button" data-duration="monthly"
+                    class="duration-tab px-5 py-2 rounded-lg text-sm font-medium transition-all
+                    {% if selected_duration == 'monthly' %}bg-white shadow-sm text-primary-700{% else %}text-gray-600 hover:text-gray-900{% endif %}">
+                    Monthly
+                </button>
+                <button type="button" data-duration="quarterly"
+                    class="duration-tab px-5 py-2 rounded-lg text-sm font-medium transition-all
+                    {% if selected_duration == 'quarterly' %}bg-white shadow-sm text-primary-700{% else %}text-gray-600 hover:text-gray-900{% endif %}">
+                    Quarterly
+                </button>
+                <button type="button" data-duration="annually"
+                    class="duration-tab px-5 py-2 rounded-lg text-sm font-medium transition-all relative
+                    {% if selected_duration == 'annually' %}bg-white shadow-sm text-primary-700{% else %}text-gray-600 hover:text-gray-900{% endif %}">
+                    Annually
+                    <span class="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">Save</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Monthly Plans -->
+        <div id="plans-monthly" class="plans-grid {% if selected_duration != 'monthly' %}hidden{% endif %}">
+            {% if monthly_plans %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for plan in monthly_plans %}
+                <div class="bg-white rounded-2xl border {% if plan.is_featured %}border-primary-400 ring-2 ring-primary-100{% else %}border-gray-300{% endif %} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative overflow-hidden">
+                    {% if plan.is_featured %}
+                    <div class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider text-center py-1.5">
+                        Most Popular
+                    </div>
+                    {% endif %}
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h4 class="text-xl font-bold text-gray-900">{{ plan.name }}</h4>
+                            {% if plan.description %}
+                            <p class="text-sm text-gray-500 mt-1">{{ plan.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="mb-6">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-sm text-gray-500">{{ plan.currency }}</span>
+                                <span class="text-4xl font-extrabold text-gray-900">{{ plan.price }}</span>
+                                <span class="text-gray-500 text-sm">/month</span>
+                            </div>
+                        </div>
+                        <!-- Features -->
+                        <div class="flex-1 space-y-3 mb-6">
+                            {% if plan.features %}
+                                {% for feature in plan.features %}
+                                <div class="flex items-start gap-2.5">
+                                    <div class="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                                        <i class="fas fa-check text-green-600 text-[10px]"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-600">{{ feature }}</span>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if plan.max_students %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-users text-blue-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_students }} student{{ plan.max_students|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                            {% if plan.max_applications %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-file-alt text-purple-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_applications }} application{{ plan.max_applications|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- CTA -->
+                        {% if active_subscription and active_subscription.plan.id == plan.id %}
+                        <button disabled class="w-full py-3 px-4 bg-gray-100 text-gray-500 rounded-xl font-medium text-sm cursor-not-allowed">
+                            <i class="fas fa-check-circle mr-1"></i> Current Plan
+                        </button>
+                        {% else %}
+                        <a href="{% url 'subscription-checkout' plan.id %}"
+                           class="w-full py-3 px-4 {% if plan.is_featured %}bg-primary-600 hover:bg-primary-700 text-white{% else %}bg-gray-900 hover:bg-gray-800 text-white{% endif %} rounded-xl font-medium text-sm text-center transition-colors shadow-sm">
+                            Get Started <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-gray-50 rounded-xl p-12 text-center">
+                <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
+                <p class="text-gray-500">No monthly plans available at the moment.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Quarterly Plans -->
+        <div id="plans-quarterly" class="plans-grid {% if selected_duration != 'quarterly' %}hidden{% endif %}">
+            {% if quarterly_plans %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for plan in quarterly_plans %}
+                <div class="bg-white rounded-2xl border {% if plan.is_featured %}border-primary-400 ring-2 ring-primary-100{% else %}border-gray-300{% endif %} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative overflow-hidden">
+                    {% if plan.is_featured %}
+                    <div class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider text-center py-1.5">
+                        Most Popular
+                    </div>
+                    {% endif %}
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h4 class="text-xl font-bold text-gray-900">{{ plan.name }}</h4>
+                            {% if plan.description %}
+                            <p class="text-sm text-gray-500 mt-1">{{ plan.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="mb-6">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-sm text-gray-500">{{ plan.currency }}</span>
+                                <span class="text-4xl font-extrabold text-gray-900">{{ plan.price }}</span>
+                                <span class="text-gray-500 text-sm">/quarter</span>
+                            </div>
+                        </div>
+                        <!-- Features -->
+                        <div class="flex-1 space-y-3 mb-6">
+                            {% if plan.features %}
+                                {% for feature in plan.features %}
+                                <div class="flex items-start gap-2.5">
+                                    <div class="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                                        <i class="fas fa-check text-green-600 text-[10px]"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-600">{{ feature }}</span>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if plan.max_students %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-users text-blue-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_students }} student{{ plan.max_students|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                            {% if plan.max_applications %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-file-alt text-purple-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_applications }} application{{ plan.max_applications|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- CTA -->
+                        {% if active_subscription and active_subscription.plan.id == plan.id %}
+                        <button disabled class="w-full py-3 px-4 bg-gray-100 text-gray-500 rounded-xl font-medium text-sm cursor-not-allowed">
+                            <i class="fas fa-check-circle mr-1"></i> Current Plan
+                        </button>
+                        {% else %}
+                        <a href="{% url 'subscription-checkout' plan.id %}"
+                           class="w-full py-3 px-4 {% if plan.is_featured %}bg-primary-600 hover:bg-primary-700 text-white{% else %}bg-gray-900 hover:bg-gray-800 text-white{% endif %} rounded-xl font-medium text-sm text-center transition-colors shadow-sm">
+                            Get Started <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-gray-50 rounded-xl p-12 text-center">
+                <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
+                <p class="text-gray-500">No quarterly plans available at the moment.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Annually Plans -->
+        <div id="plans-annually" class="plans-grid {% if selected_duration != 'annually' %}hidden{% endif %}">
+            {% if annually_plans %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for plan in annually_plans %}
+                <div class="bg-white rounded-2xl border {% if plan.is_featured %}border-primary-400 ring-2 ring-primary-100{% else %}border-gray-300{% endif %} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative overflow-hidden">
+                    {% if plan.is_featured %}
+                    <div class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider text-center py-1.5">
+                        Best Value
+                    </div>
+                    {% endif %}
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h4 class="text-xl font-bold text-gray-900">{{ plan.name }}</h4>
+                            {% if plan.description %}
+                            <p class="text-sm text-gray-500 mt-1">{{ plan.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="mb-6">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-sm text-gray-500">{{ plan.currency }}</span>
+                                <span class="text-4xl font-extrabold text-gray-900">{{ plan.price }}</span>
+                                <span class="text-gray-500 text-sm">/year</span>
+                            </div>
+                        </div>
+                        <!-- Features -->
+                        <div class="flex-1 space-y-3 mb-6">
+                            {% if plan.features %}
+                                {% for feature in plan.features %}
+                                <div class="flex items-start gap-2.5">
+                                    <div class="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                                        <i class="fas fa-check text-green-600 text-[10px]"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-600">{{ feature }}</span>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if plan.max_students %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-users text-blue-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_students }} student{{ plan.max_students|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                            {% if plan.max_applications %}
+                            <div class="flex items-start gap-2.5">
+                                <div class="flex-shrink-0 w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center mt-0.5">
+                                    <i class="fas fa-file-alt text-purple-600 text-[10px]"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">Up to {{ plan.max_applications }} application{{ plan.max_applications|pluralize }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- CTA -->
+                        {% if active_subscription and active_subscription.plan.id == plan.id %}
+                        <button disabled class="w-full py-3 px-4 bg-gray-100 text-gray-500 rounded-xl font-medium text-sm cursor-not-allowed">
+                            <i class="fas fa-check-circle mr-1"></i> Current Plan
+                        </button>
+                        {% else %}
+                        <a href="{% url 'subscription-checkout' plan.id %}"
+                           class="w-full py-3 px-4 {% if plan.is_featured %}bg-primary-600 hover:bg-primary-700 text-white{% else %}bg-gray-900 hover:bg-gray-800 text-white{% endif %} rounded-xl font-medium text-sm text-center transition-colors shadow-sm">
+                            Get Started <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-gray-50 rounded-xl p-12 text-center">
+                <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
+                <p class="text-gray-500">No annual plans available at the moment.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- No plans at all -->
+        {% if not available_plans %}
+        <div class="bg-gray-50 rounded-xl p-12 text-center">
+            <i class="fas fa-box-open text-gray-300 text-5xl mb-4"></i>
+            <h4 class="text-lg font-semibold text-gray-700 mb-2">No Plans Available</h4>
+            <p class="text-gray-500">There are no subscription plans available for your account type at the moment. Please check back later.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SUBSCRIPTION HISTORY                                         -->
+    <!-- ============================================================ -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary-50 rounded-lg p-2">
+                    <i class="fas fa-history text-primary-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Subscription History</h3>
+            </div>
+            {% if subscriptions %}
+            <span class="text-sm text-gray-500">{{ subscriptions|length }} record{{ subscriptions|length|pluralize }}</span>
+            {% endif %}
+        </div>
+        <div class="p-6">
+            {% if subscriptions %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Plan</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Duration</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Period</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for subscription in subscriptions %}
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-4 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center 
+                                        {% if subscription.status == 'active' %}bg-green-100
+                                        {% elif subscription.status == 'pending' %}bg-amber-100
+                                        {% elif subscription.status == 'expired' %}bg-gray-100
+                                        {% else %}bg-red-100{% endif %}">
+                                        <i class="fas fa-crown text-xs
+                                            {% if subscription.status == 'active' %}text-green-600
+                                            {% elif subscription.status == 'pending' %}text-amber-600
+                                            {% elif subscription.status == 'expired' %}text-gray-500
+                                            {% else %}text-red-600{% endif %}"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-900 text-sm">{{ subscription.plan.name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-sm text-gray-600">{{ subscription.plan.get_duration_display }}</td>
+                            <td class="px-4 py-4 text-sm font-medium text-gray-900">{{ subscription.plan.currency }} {{ subscription.plan.price }}</td>
+                            <td class="px-4 py-4">
+                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full 
+                                    {% if subscription.status == 'active' %}bg-green-50 text-green-700 ring-1 ring-green-200
+                                    {% elif subscription.status == 'expired' %}bg-gray-50 text-gray-600 ring-1 ring-gray-200
+                                    {% elif subscription.status == 'cancelled' %}bg-red-50 text-red-700 ring-1 ring-red-200
+                                    {% elif subscription.status == 'pending' %}bg-amber-50 text-amber-700 ring-1 ring-amber-200
+                                    {% else %}bg-gray-50 text-gray-600 ring-1 ring-gray-200{% endif %}">
+                                    {% if subscription.status == 'active' %}<span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                                    {% elif subscription.status == 'pending' %}<span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span>
+                                    {% elif subscription.status == 'cancelled' %}<span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span>
+                                    {% else %}<span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-1.5"></span>{% endif %}
+                                    {{ subscription.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-4 text-sm text-gray-500">
+                                {{ subscription.start_date|date:"M d, Y" }} &mdash; {{ subscription.end_date|date:"M d, Y" }}
+                            </td>
+                            <td class="px-4 py-4">
+                                {% if subscription.status == 'pending' %}
+                                <div class="flex items-center gap-2">
+                                    {% for tx in pending_transactions %}
+                                        {% if tx.subscription.id == subscription.id %}
+                                        <a href="{% url 'initiate-paystack-payment' tx.id %}"
+                                           class="inline-flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                            <i class="fas fa-credit-card mr-1.5"></i> Pay Now
+                                        </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <button type="button"
+                                        onclick="openDeleteModal('{{ subscription.id }}', '{{ subscription.plan.name }}')"
+                                        class="inline-flex items-center px-2.5 py-1.5 bg-white border border-red-300 hover:bg-red-50 text-red-500 text-xs font-medium rounded-lg transition-colors"
+                                        title="Remove pending subscription">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                                {% elif subscription.status == 'expired' %}
+                                <a href="{% url 'subscription-checkout' subscription.plan.id %}"
+                                   class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <i class="fas fa-redo mr-1.5"></i> Renew
+                                </a>
+                                {% elif subscription.status == 'active' %}
+                                <span class="text-xs text-gray-400">Current</span>
+                                {% else %}
+                                <span class="text-xs text-gray-400">&mdash;</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-history text-gray-400 text-2xl"></i>
+                </div>
+                <p class="text-gray-500 font-medium">No subscription history yet</p>
+                <p class="text-gray-400 text-sm mt-1">Your subscription records will appear here</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAYMENT TRANSACTIONS                                         -->
+    <!-- ============================================================ -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-green-50 rounded-lg p-2">
+                    <i class="fas fa-receipt text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Payment History</h3>
+            </div>
+            {% if transactions %}
+            <span class="text-sm text-gray-500">Last {{ transactions|length }} transaction{{ transactions|length|pluralize }}</span>
+            {% endif %}
+        </div>
+        <div class="p-6">
+            {% if transactions %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Gateway</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for transaction in transactions %}
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">{{ transaction.created_at|date:"M d, Y" }}</td>
+                            <td class="px-4 py-4 text-sm text-gray-900">{{ transaction.description|default:"Subscription Payment" }}</td>
+                            <td class="px-4 py-4 text-sm text-gray-600 capitalize">
+                                <span class="inline-flex items-center gap-1.5">
+                                    <i class="fas fa-university text-gray-400 text-xs"></i>
+                                    {{ transaction.payment_gateway|default:"Paystack" }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-4 text-sm font-semibold text-gray-900 whitespace-nowrap">{{ transaction.currency }} {{ transaction.amount }}</td>
+                            <td class="px-4 py-4">
+                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full 
+                                    {% if transaction.status == 'completed' %}bg-green-50 text-green-700 ring-1 ring-green-200
+                                    {% elif transaction.status == 'failed' %}bg-red-50 text-red-700 ring-1 ring-red-200
+                                    {% elif transaction.status == 'pending' %}bg-amber-50 text-amber-700 ring-1 ring-amber-200
+                                    {% elif transaction.status == 'processing' %}bg-blue-50 text-blue-700 ring-1 ring-blue-200
+                                    {% else %}bg-gray-50 text-gray-600 ring-1 ring-gray-200{% endif %}">
+                                    {% if transaction.status == 'completed' %}<span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                                    {% elif transaction.status == 'pending' %}<span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span>
+                                    {% elif transaction.status == 'failed' %}<span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span>
+                                    {% else %}<span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-1.5"></span>{% endif %}
+                                    {{ transaction.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-4">
+                                {% if transaction.status == 'pending' %}
+                                <a href="{% url 'initiate-paystack-payment' transaction.id %}"
+                                   class="inline-flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                    <i class="fas fa-credit-card mr-1.5"></i> Pay Now
+                                </a>
+                                {% elif transaction.status == 'completed' and transaction.paid_at %}
+                                <span class="text-xs text-gray-400">Paid {{ transaction.paid_at|date:"M d, Y" }}</span>
+                                {% else %}
+                                <span class="text-xs text-gray-400">&mdash;</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-receipt text-gray-400 text-2xl"></i>
+                </div>
+                <p class="text-gray-500 font-medium">No payment history yet</p>
+                <p class="text-gray-400 text-sm mt-1">Your payment records will appear here once you subscribe</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FAQ / HELP SECTION                                           -->
+    <!-- ============================================================ -->
+    <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-300 p-8">
+        <div class="text-center mb-8">
+            <h3 class="text-xl font-bold text-gray-900">Frequently Asked Questions</h3>
+            <p class="text-gray-500 mt-1">Everything you need to know about our subscriptions</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-sync-alt text-primary-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 text-sm mb-1">Can I change my plan?</h4>
+                        <p class="text-sm text-gray-500">Yes, you can upgrade or change your plan at any time. Your new plan will take effect immediately.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-green-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 text-sm mb-1">Is my payment secure?</h4>
+                        <p class="text-sm text-gray-500">All payments are processed securely through Paystack with bank-grade encryption.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-undo text-amber-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 text-sm mb-1">Can I get a refund?</h4>
+                        <p class="text-sm text-gray-500">We offer refunds within the first 7 days of your subscription. Contact support for assistance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-question-circle text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 text-sm mb-1">Need more help?</h4>
+                        <p class="text-sm text-gray-500">Our support team is available to help. <a href="{% url 'contact' %}" class="text-primary-600 hover:text-primary-700 font-medium">Contact us</a> anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+    <!-- Modal -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative transform transition-all">
+            <div class="text-center">
+                <div class="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-trash-alt text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Remove Pending Subscription?</h3>
+                <p class="text-sm text-gray-500 mb-1">You are about to remove the pending subscription for:</p>
+                <p class="text-base font-semibold text-gray-800 mb-4" id="deletePlanName"></p>
+                <p class="text-sm text-gray-500 mb-6">This will also delete any unpaid transaction associated with it. This action cannot be undone.</p>
+            </div>
+            <form id="deleteForm" method="post">
+                {% csrf_token %}
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-sm transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl text-sm transition-colors">
+                        <i class="fas fa-trash-alt mr-1.5"></i> Remove
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Duration Tab Switcher
+    const tabs = document.querySelectorAll('.duration-tab');
+    const grids = document.querySelectorAll('.plans-grid');
+    
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            const duration = this.getAttribute('data-duration');
+            
+            // Update tab styles
+            tabs.forEach(function(t) {
+                t.classList.remove('bg-white', 'shadow-sm', 'text-primary-700');
+                t.classList.add('text-gray-600');
+            });
+            this.classList.add('bg-white', 'shadow-sm', 'text-primary-700');
+            this.classList.remove('text-gray-600');
+            
+            // Show/hide plan grids
+            grids.forEach(function(grid) {
+                grid.classList.add('hidden');
+            });
+            var targetGrid = document.getElementById('plans-' + duration);
+            if (targetGrid) {
+                targetGrid.classList.remove('hidden');
+            }
+        });
+    });
+});
+
+// Delete modal functions
+function openDeleteModal(subscriptionId, planName) {
+    var modal = document.getElementById('deleteModal');
+    var form = document.getElementById('deleteForm');
+    var nameEl = document.getElementById('deletePlanName');
+    
+    form.action = '/dashboard/subscription/' + subscriptionId + '/cancel/';
+    nameEl.textContent = planName;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+    var modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+</script>
+{% endblock %}

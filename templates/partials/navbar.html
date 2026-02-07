@@ -134,7 +134,7 @@
                                             </a>
                                             <ul class="submenu">
                                                 <li>
-                                                    <a href="{% url 'news' %}">Past Papers</a>                                                       
+                                                    <a href="{% url 'past_papers' %}">Past Papers</a>                                                       
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'team' %}">Tutors</a>                                                       
@@ -152,26 +152,27 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="header-search">
+                        <!-- <div class="header-search">
                             <button class="d-flex align-items-center search-toggle"><i class="far fa-search"></i></button>
-                        </div>
+                        </div> -->
                         {% if user.is_authenticated %}
-                            <div class="dropdown">
+                            <div class="dropdown nav-user-dropdown">
                                 <a href="#" class="theme-btn dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span>{{ user.get_full_name|default:user.username|truncatechars:15 }}</span> <i class="far fa-user"></i>
+                                    <span>{{ user.get_full_name|default:user.username|truncatechars:15 }}  <i class="far fa-user"></i></span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                    <li><a class="dropdown-item" href="{% url 'account' %}"><i class="far fa-user-circle"></i> My Account</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end nav-user-menu" aria-labelledby="userMenu">
+                                    <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="far fa-tachometer-alt me-2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'account' %}"><i class="far fa-user-circle me-2"></i> My Account</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="far fa-sign-out-alt"></i> Logout</a></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="far fa-sign-out-alt me-2"></i> Logout</a></li>
                                 </ul>
                             </div>
                         {% else %}
-                            <a href="{% url 'login' %}" class="theme-btn ">
-                                <span>Login</span> <i class="far fa-sign-in-alt"></i>
+                            <a href="{% url 'login' %}" class="theme-btn">
+                                <span>Login  <i class="far fa-sign-in-alt"></i></span>
                             </a>
                             <a href="{% url 'signup' %}" class="theme-btn">
-                                <span>Sign Up</span> <i class="far fa-user-plus"></i>
+                                <span>Sign Up  <i class="far fa-user-plus"></i></span>
                             </a>
                         {% endif %}
                         <div class="header__hamburger d-xl-none my-auto">

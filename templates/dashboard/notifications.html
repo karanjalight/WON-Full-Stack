@@ -1,0 +1,36 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Notifications{% endblock %}
+{% block page_title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300">
+        {% if notifications %}
+        <div class="divide-y divide-gray-200">
+            {% for notification in notifications %}
+            <div class="p-6 hover:bg-gray-50 transition-colors">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 rounded-full bg-{% if notification.notification_type == 'success' %}green{% elif notification.notification_type == 'error' %}red{% elif notification.notification_type == 'warning' %}yellow{% else %}blue{% endif %}-100 flex items-center justify-center">
+                            <i class="fas fa-{% if notification.notification_type == 'success' %}check{% elif notification.notification_type == 'error' %}exclamation{% elif notification.notification_type == 'warning' %}exclamation-triangle{% else %}info{% endif %}-circle text-{% if notification.notification_type == 'success' %}green{% elif notification.notification_type == 'error' %}red{% elif notification.notification_type == 'warning' %}yellow{% else %}blue{% endif %}-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900">{{ notification.title }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ notification.message }}</p>
+                        <p class="text-xs text-gray-500 mt-2">{{ notification.created_at|timesince }} ago</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="p-12 text-center">
+            <i class="fas fa-bell-slash text-gray-300 text-5xl mb-4"></i>
+            <p class="text-gray-500">No notifications yet</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

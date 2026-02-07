@@ -1,0 +1,318 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}
+{% if user.user_type == 'student' %}My Applications{% elif user.user_type == 'parent' %}Children's Applications{% else %}Students' Applications{% endif %}
+{% endblock %}
+
+{% block page_title %}
+{% if user.user_type == 'student' %}My Applications{% elif user.user_type == 'parent' %}Children's Applications{% else %}Students' Applications{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="stat-card bg-gradient-to-br from-amber-50 to-orange-100">
+            <div class="flex items-start justify-between mb-5">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt text-amber-600"></i>
+                </div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-trend-up text-amber-600 text-sm"></i>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-1">Total Applications</p>
+            <p class="text-3xl font-bold text-gray-900">{{ total_applications }}</p>
+        </div>
+        
+        <div class="stat-card bg-gradient-to-br from-emerald-50 to-teal-100">
+            <div class="flex items-start justify-between mb-5">
+                <div class="stat-icon">
+                    <i class="fas fa-clock text-emerald-600"></i>
+                </div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-trend-up text-emerald-600 text-sm"></i>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-1">Under Review</p>
+            <p class="text-3xl font-bold text-gray-900">{{ status_stats.under_review }}</p>
+        </div>
+        
+        <div class="stat-card bg-gradient-to-br from-rose-50 to-pink-100">
+            <div class="flex items-start justify-between mb-5">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle text-rose-500"></i>
+                </div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-trend-up text-rose-500 text-sm"></i>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-1">Accepted</p>
+            <p class="text-3xl font-bold text-gray-900">{{ status_stats.accepted }}</p>
+        </div>
+        
+        <div class="stat-card bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div class="flex items-start justify-between mb-5">
+                <div class="stat-icon">
+                    <i class="fas fa-times-circle text-blue-600"></i>
+                </div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-trend-up text-blue-600 text-sm"></i>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-1">Rejected</p>
+            <p class="text-3xl font-bold text-gray-900">{{ status_stats.rejected }}</p>
+        </div>
+    </div>
+    
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300">
+        <div class="p-6 border-b border-gray-300">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-800">All Applications</h2>
+                {% if user.user_type == 'student' and can_apply %}
+                <a href="{% url 'olympiads' %}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors inline-flex items-center">
+                    <i class="fas fa-plus mr-2"></i> New Application
+                </a>
+                {% endif %}
+            </div>
+            
+            <!-- Search and Filter Form -->
+            <form method="get" action="" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Search -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-search text-gray-400 mr-1"></i> Search
+                        </label>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ search_query }}"
+                            placeholder="Application #, student name, competition..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        >
+                    </div>
+                    
+                    <!-- Status Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-filter text-gray-400 mr-1"></i> Status
+                        </label>
+                        <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">All Statuses</option>
+                            {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Competition Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-trophy text-gray-400 mr-1"></i> Competition
+                        </label>
+                        <select name="competition" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">All Competitions</option>
+                            {% for comp in competitions_list %}
+                            <option value="{{ comp.id }}" {% if competition_filter == comp.id %}selected{% endif %}>{{ comp.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    {% if user.user_type != 'student' %}
+                    <!-- Student Filter (for parents/schools) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user-graduate text-gray-400 mr-1"></i> Student
+                        </label>
+                        <select name="student" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">All Students</option>
+                            {% for student in students_list %}
+                            <option value="{{ student.id }}" {% if student_filter == student.id %}selected{% endif %}>{{ student.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Date From -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-calendar text-gray-400 mr-1"></i> From Date
+                        </label>
+                        <input 
+                            type="date" 
+                            name="date_from" 
+                            value="{{ date_from }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        >
+                    </div>
+                    
+                    <!-- Date To -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-calendar text-gray-400 mr-1"></i> To Date
+                        </label>
+                        <input 
+                            type="date" 
+                            name="date_to" 
+                            value="{{ date_to }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        >
+                    </div>
+                    
+                    <!-- Sort By -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-sort text-gray-400 mr-1"></i> Sort By
+                        </label>
+                        <select name="sort" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>Newest First</option>
+                            <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Oldest First</option>
+                            <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status (A-Z)</option>
+                            <option value="-status" {% if sort_by == '-status' %}selected{% endif %}>Status (Z-A)</option>
+                            <option value="competition__name" {% if sort_by == 'competition__name' %}selected{% endif %}>Competition (A-Z)</option>
+                            <option value="-competition__name" {% if sort_by == '-competition__name' %}selected{% endif %}>Competition (Z-A)</option>
+                            <option value="competition__start_date" {% if sort_by == 'competition__start_date' %}selected{% endif %}>Start Date (Early)</option>
+                            <option value="-competition__start_date" {% if sort_by == '-competition__start_date' %}selected{% endif %}>Start Date (Late)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex items-center gap-3">
+                    <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors inline-flex items-center">
+                        <i class="fas fa-search mr-2"></i> Apply Filters
+                    </button>
+                    <a href="{% url 'dashboard_applications' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg transition-colors inline-flex items-center">
+                        <i class="fas fa-redo mr-2"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Applications List -->
+        <div class="divide-y divide-gray-200">
+            {% if applications %}
+                {% for application in applications %}
+                <a href="{% url 'application_detail' application.id %}" class="block hover:bg-gray-50 transition-colors">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">{{ application.competition.name }}</h3>
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                        {% if application.status == 'accepted' %}bg-green-100 text-green-800
+                                        {% elif application.status == 'rejected' %}bg-red-100 text-red-800
+                                        {% elif application.status == 'under_review' %}bg-orange-100 text-orange-800
+                                        {% elif application.status == 'submitted' %}bg-blue-100 text-blue-800
+                                        {% elif application.status == 'documents_pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ application.get_status_display }}
+                                    </span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-hashtag text-gray-400 mr-2"></i>
+                                        <span class="font-medium">{{ application.application_number }}</span>
+                                    </div>
+                                    
+                                    {% if user.user_type != 'student' %}
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-user-graduate text-gray-400 mr-2"></i>
+                                        <span>{{ application.student.get_full_name }}</span>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                                        <span>{{ application.competition.destination.name }}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-calendar text-gray-400 mr-2"></i>
+                                        <span>{{ application.competition.start_date|date:"M d, Y" }}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-clock text-gray-400 mr-2"></i>
+                                        <span>Submitted {{ application.created_at|date:"M d, Y" }}</span>
+                                    </div>
+                                    
+                                    {% if application.total_cost %}
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-dollar-sign text-gray-400 mr-2"></i>
+                                        <span class="font-medium">${{ application.total_cost }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 mb-4">
+                        {% if search_query or status_filter or competition_filter or student_filter or date_from or date_to %}
+                            No applications match your filters
+                        {% else %}
+                            No applications found
+                        {% endif %}
+                    </p>
+                    {% if user.user_type == 'student' %}
+                    <a href="{% url 'olympiads' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+                        <i class="fas fa-plus mr-2"></i> Start Application
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="p-6 border-t border-gray-300">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">
+                    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} applications
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if competition_filter %}&competition={{ competition_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" 
+                       class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                    </a>
+                    {% else %}
+                    <span class="px-4 py-2 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                    </span>
+                    {% endif %}
+                    
+                    <span class="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                    
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if competition_filter %}&competition={{ competition_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" 
+                       class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        Next <i class="fas fa-chevron-right ml-1"></i>
+                    </a>
+                    {% else %}
+                    <span class="px-4 py-2 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                        Next <i class="fas fa-chevron-right ml-1"></i>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

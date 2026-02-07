@@ -1,0 +1,595 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} | World Olympiad Network</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        navy: {
+                            700: '#1e2a4a',
+                            800: '#172040',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Sidebar nav link */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.15s ease;
+        }
+        .sidebar-link:hover { background: #f3f4f6; }
+        .sidebar-link.active {
+            background: #1e2a4a;
+            color: #fff;
+        }
+        .sidebar-link .sidebar-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .sidebar-link.active .sidebar-icon { color: #fff; }
+        
+        .sidebar-section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 16px;
+            margin-bottom: 8px;
+        }
+        
+        /* Mobile menu animation */
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        .mobile-menu-enter { animation: slideIn 0.3s ease-out; }
+
+        /* User dropdown */
+        .user-dropdown { display: none; }
+        .user-dropdown.open { display: block; }
+
+        /* Accessible form inputs (global) */
+        input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not(.sr-only),
+        select,
+        textarea {
+            border: 1px solid #9ca3af !important; /* gray-400 */
+            border-radius: 0.5rem;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #0ea5e9 !important;
+            box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+            outline: none;
+        }
+
+        /* Stat card */
+        .stat-card {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card .stat-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.7);
+        }
+        .stat-card .stat-trend {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.5);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- ===================== DESKTOP SIDEBAR ===================== -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r border-gray-300">
+                
+                <!-- Logo -->
+                <div class="flex items-center justify-between h-20 px-5 border-b border-gray-300">
+                    <a href="/" class="flex items-center">
+                        <img style="height: 50px;" src="{% static 'img/brand/logowon.png' %}" alt="WON logo">
+                    </a>
+                    <button onclick="toggleDesktopSidebar()" class="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-400 hover:text-gray-600 hover:border-gray-300">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-5 overflow-y-auto space-y-6">
+                    
+                    <!-- Main Menu -->
+                    <div>
+                        <p class="sidebar-section-label">Main Menu</p>
+                        <div class="space-y-1">
+                            <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                                <i class="fas fa-th-large sidebar-icon"></i>
+                                Dashboard
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Workspace -->
+                    <div>
+                        <p class="sidebar-section-label">Workspace</p>
+                        <div class="space-y-1">
+                            
+                            <a href="{% url 'dashboard_subscription' %}" class="sidebar-link {% if 'subscription' in request.path %}active{% endif %}">
+                                <i class="fas fa-crown sidebar-icon"></i>
+                                My Subscription
+                            </a>
+                            
+                            {% if user.user_type == 'student' %}
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                My Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'parent' %}
+                            <a href="{% url 'dashboard_children' %}" class="sidebar-link {% if 'children' in request.path %}active{% endif %}">
+                                <i class="fas fa-users sidebar-icon"></i>
+                                My Children
+                            </a>
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                Children Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'school' %}
+                            <a href="{% url 'dashboard_students' %}" class="sidebar-link {% if 'students' in request.path %}active{% endif %}">
+                                <i class="fas fa-user-graduate sidebar-icon"></i>
+                                Students
+                            </a>
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                Student Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'tutor' %}
+                            <a href="{% url 'tutor_calendar' %}" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                                <i class="fas fa-calendar-alt sidebar-icon"></i>
+                                My Calendar
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'parent' or user.user_type == 'school' or user.user_type == 'admin' or user.is_staff or user.user_type == 'tutor' %}
+                            <a href="{% url 'dashboard_tutor_sessions' %}" class="sidebar-link {% if 'tutor-sessions' in request.path %}active{% endif %}">
+                                <i class="fas fa-video sidebar-icon"></i>
+                                Tutor Sessions
+                            </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'dashboard_notifications' %}" class="sidebar-link {% if 'notifications' in request.path %}active{% endif %}">
+                                <i class="fas fa-bell sidebar-icon"></i>
+                                Notifications
+                                {% if unread_count %}
+                                <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_count }}</span>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- General -->
+                    <div>
+                        <p class="sidebar-section-label">General</p>
+                        <div class="space-y-1">
+                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path %}active{% endif %}">
+                                <i class="fas fa-user sidebar-icon"></i>
+                                Profile
+                            </a>
+                            <a href="{% url 'dashboard_settings' %}" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
+                                <i class="fas fa-cog sidebar-icon"></i>
+                                Settings
+                            </a>
+                        </div>
+                    </div>
+                    
+                </nav>
+                
+                <!-- Help Card -->
+                <div class="p-4">
+                    <div class="bg-gray-50 rounded-2xl p-5 text-center">
+                        <div class="w-10 h-10 mx-auto mb-3 rounded-full bg-navy-800 flex items-center justify-center">
+                            <i class="fas fa-question text-white text-sm"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">Need Help with <span class="font-bold">WON</span>?</p>
+                        <a href="{% url 'contact' %}" class="inline-block w-full px-4 py-2.5 text-sm font-medium text-navy-800 bg-white border border-gray-300 rounded-full hover:bg-gray-100 transition">
+                            Go To Help Centre
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </aside>
+        
+        <!-- ===================== MOBILE SIDEBAR OVERLAY ===================== -->
+        <div id="mobile-sidebar-overlay" class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden hidden" onclick="toggleMobileSidebar()"></div>
+        
+        <!-- ===================== MOBILE SIDEBAR ===================== -->
+        <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white transform -translate-x-full lg:hidden">
+            <div class="flex flex-col h-full">
+                
+                <!-- Logo -->
+                <div class="flex items-center justify-between h-20 px-5 border-b border-gray-300">
+                    <a href="/" class="flex items-center">
+                        <img style="height: 50px;" src="{% static 'img/brand/logowon.png' %}" alt="WON logo">
+                    </a>
+                    <button onclick="toggleMobileSidebar()" class="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <nav class="flex-1 px-4 py-5 overflow-y-auto space-y-6">
+                    
+                    <!-- Main Menu -->
+                    <div>
+                        <p class="sidebar-section-label">Main Menu</p>
+                        <div class="space-y-1">
+                            <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                                <i class="fas fa-th-large sidebar-icon"></i>
+                                Dashboard
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Workspace -->
+                    <div>
+                        <p class="sidebar-section-label">Workspace</p>
+                        <div class="space-y-1">
+                            
+                            <a href="{% url 'dashboard_subscription' %}" class="sidebar-link {% if 'subscription' in request.path %}active{% endif %}">
+                                <i class="fas fa-crown sidebar-icon"></i>
+                                My Subscription
+                            </a>
+                            
+                            {% if user.user_type == 'student' %}
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                My Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'parent' %}
+                            <a href="{% url 'dashboard_children' %}" class="sidebar-link {% if 'children' in request.path %}active{% endif %}">
+                                <i class="fas fa-users sidebar-icon"></i>
+                                My Children
+                            </a>
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                Children Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'school' %}
+                            <a href="{% url 'dashboard_students' %}" class="sidebar-link {% if 'students' in request.path %}active{% endif %}">
+                                <i class="fas fa-user-graduate sidebar-icon"></i>
+                                Students
+                            </a>
+                            <a href="{% url 'dashboard_applications' %}" class="sidebar-link {% if 'applications' in request.path %}active{% endif %}">
+                                <i class="fas fa-file-alt sidebar-icon"></i>
+                                Student Applications
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'tutor' %}
+                            <a href="{% url 'tutor_calendar' %}" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                                <i class="fas fa-calendar-alt sidebar-icon"></i>
+                                My Calendar
+                            </a>
+                            {% endif %}
+                            
+                            {% if user.user_type == 'parent' or user.user_type == 'school' or user.user_type == 'admin' or user.is_staff or user.user_type == 'tutor' %}
+                            <a href="{% url 'dashboard_tutor_sessions' %}" class="sidebar-link {% if 'tutor-sessions' in request.path %}active{% endif %}">
+                                <i class="fas fa-video sidebar-icon"></i>
+                                Tutor Sessions
+                            </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'dashboard_notifications' %}" class="sidebar-link {% if 'notifications' in request.path %}active{% endif %}">
+                                <i class="fas fa-bell sidebar-icon"></i>
+                                Notifications
+                                {% if unread_count %}
+                                <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_count }}</span>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- General -->
+                    <div>
+                        <p class="sidebar-section-label">General</p>
+                        <div class="space-y-1">
+                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path %}active{% endif %}">
+                                <i class="fas fa-user sidebar-icon"></i>
+                                Profile
+                            </a>
+                            <a href="{% url 'dashboard_settings' %}" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
+                                <i class="fas fa-cog sidebar-icon"></i>
+                                Settings
+                            </a>
+                        </div>
+                    </div>
+                    
+                </nav>
+                
+                <!-- Help Card -->
+                <div class="p-4">
+                    <div class="bg-gray-50 rounded-2xl p-5 text-center">
+                        <div class="w-10 h-10 mx-auto mb-3 rounded-full bg-navy-800 flex items-center justify-center">
+                            <i class="fas fa-question text-white text-sm"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">Need Help with <span class="font-bold">WON</span>?</p>
+                        <a href="{% url 'contact' %}" class="inline-block w-full px-4 py-2.5 text-sm font-medium text-navy-800 bg-white border border-gray-300 rounded-full hover:bg-gray-100 transition">
+                            Go To Help Centre
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </aside>
+        
+        <!-- ===================== MAIN CONTENT AREA ===================== -->
+        <div class="flex flex-col flex-1 w-0 overflow-hidden">
+            
+            <!-- ===================== TOP NAVIGATION BAR ===================== -->
+            <header class="bg-white shadow-sm z-10 border-b border-gray-300">
+                <div class="flex items-center gap-4 h-16 px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleMobileSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    
+                    <!-- User Role Display -->
+                    <div class="flex items-center gap-3">
+                        <span class="hidden sm:block text-sm text-gray-500">User Role</span>
+                        <span class="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 bg-white">
+                            <span class="inline-flex h-6 w-6 items-center justify-center rounded bg-primary-100 text-primary-600">
+                                {% if user.user_type == 'student' %}
+                                <i class="fas fa-graduation-cap text-xs"></i>
+                                {% elif user.user_type == 'parent' %}
+                                <i class="fas fa-user-friends text-xs"></i>
+                                {% elif user.user_type == 'school' %}
+                                <i class="fas fa-school text-xs"></i>
+                                {% elif user.user_type == 'tutor' %}
+                                <i class="fas fa-chalkboard-teacher text-xs"></i>
+                                {% else %}
+                                <i class="fas fa-briefcase text-xs"></i>
+                                {% endif %}
+                            </span>
+                            <span class="whitespace-nowrap">{{ user.get_user_type_display|default:"Member" }}</span>
+                        </span>
+                    </div>
+                    
+                    <div class="flex-1"></div>
+                    
+                    <!-- Right Side Actions -->
+                    <div class="flex items-center gap-3">
+                        
+                        <!-- Notifications -->
+                        <a href="{% url 'dashboard_notifications' %}" class="relative w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-gray-600 bg-white hover:text-gray-800 hover:border-gray-300">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_count %}
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{ unread_count }}</span>
+                            {% endif %}
+                        </a>
+                        
+                        <!-- User Profile Dropdown -->
+                        <div class="relative" id="user-dropdown-wrapper">
+                            <button onclick="toggleUserDropdown()" class="flex items-center gap-2 pl-1 pr-3 py-1.5 border border-gray-300 rounded-full bg-white hover:border-gray-300">
+                                {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="w-8 h-8 rounded-full object-cover">
+                                {% else %}
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+                                    <span class="text-white font-bold text-xs">{{ user.first_name.0|upper }}{{ user.last_name.0|upper }}</span>
+                                </div>
+                                {% endif %}
+                                <span class="hidden sm:block text-sm font-medium text-gray-700">{{ user.get_full_name|default:user.username }}</span>
+                                <i class="fas fa-chevron-down text-xs text-gray-400 hidden sm:block"></i>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div id="user-dropdown-menu" class="user-dropdown absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-300 py-2 z-50">
+                                <div class="px-4 py-3 border-b border-gray-300">
+                                    <p class="text-sm font-semibold text-gray-800">{{ user.get_full_name|default:user.username }}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">{{ user.email }}</p>
+                                </div>
+                                <a href="{% url 'dashboard_profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                                    <i class="fas fa-user-circle w-4 text-gray-400"></i>
+                                    My Profile
+                                </a>
+                                <a href="{% url 'dashboard_settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                                    <i class="fas fa-cog w-4 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a href="/" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                                    <i class="fas fa-arrow-left w-4 text-gray-400"></i>
+                                    Back to Site
+                                </a>
+                                <div class="border-t border-gray-300 mt-1 pt-1">
+                                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">
+                                        <i class="fas fa-sign-out-alt w-4"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </header>
+            
+            <!-- ===================== PAGE CONTENT ===================== -->
+            <main class="flex-1 overflow-y-auto bg-gray-50">
+                <div class="px-4 py-6 sm:px-6 lg:px-8">
+                    <!-- Messages/Alerts -->
+                    {% if messages %}
+                    <div class="mb-6 space-y-3">
+                        {% for message in messages %}
+                        <div class="rounded-lg p-4 {% if message.tags == 'error' %}bg-red-50 border border-red-200{% elif message.tags == 'success' %}bg-green-50 border border-green-200{% elif message.tags == 'warning' %}bg-yellow-50 border border-yellow-200{% else %}bg-blue-50 border border-blue-200{% endif %}">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    {% if message.tags == 'error' %}
+                                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                                    {% elif message.tags == 'success' %}
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    {% elif message.tags == 'warning' %}
+                                    <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+                                    {% else %}
+                                    <i class="fas fa-info-circle text-blue-500"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm {% if message.tags == 'error' %}text-red-800{% elif message.tags == 'success' %}text-green-800{% elif message.tags == 'warning' %}text-yellow-800{% else %}text-blue-800{% endif %}">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                                <button onclick="this.parentElement.parentElement.remove()" class="ml-3 flex-shrink-0 {% if message.tags == 'error' %}text-red-500{% elif message.tags == 'success' %}text-green-500{% elif message.tags == 'warning' %}text-yellow-500{% else %}text-blue-500{% endif %}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Page Content Block -->
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+            
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-300 px-4 py-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-500">
+                    <p>&copy; 2026 World Olympiad Network. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-2 sm:mt-0">
+                        <a href="/privacy" class="hover:text-gray-700">Privacy</a>
+                        <a href="/terms" class="hover:text-gray-700">Terms</a>
+                        <a href="/contact" class="hover:text-gray-700">Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        /* ---- Mobile Sidebar Toggle ---- */
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('mobile-menu-enter');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        /* ---- Desktop Sidebar Toggle (collapse) ---- */
+        function toggleDesktopSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const inner = sidebar.querySelector('div');
+            if (inner.classList.contains('w-64')) {
+                inner.classList.remove('w-64');
+                inner.classList.add('w-20');
+                inner.querySelectorAll('.sidebar-section-label, .sidebar-link span, a span, p').forEach(el => el.classList.add('hidden'));
+                inner.querySelector('.fa-chevron-left')?.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                inner.classList.remove('w-20');
+                inner.classList.add('w-64');
+                inner.querySelectorAll('.sidebar-section-label, .sidebar-link span, a span, p').forEach(el => el.classList.remove('hidden'));
+                inner.querySelector('.fa-chevron-right')?.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
+        }
+
+        /* ---- User Profile Dropdown ---- */
+        function toggleUserDropdown() {
+            document.getElementById('user-dropdown-menu').classList.toggle('open');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('user-dropdown-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                document.getElementById('user-dropdown-menu').classList.remove('open');
+            }
+        });
+
+        // Close mobile sidebar on outside click
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            const menuButton = event.target.closest('button[onclick="toggleMobileSidebar()"]');
+            if (!menuButton && !sidebar.contains(event.target) && !sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

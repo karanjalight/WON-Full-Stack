@@ -1,0 +1,51 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Payment{% endblock %}
+{% block page_title %}Complete Your Payment{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-8">
+        <div class="text-center mb-8">
+            <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-credit-card text-primary-600 text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Pay with Paystack</h2>
+            <p class="text-gray-600">Amount to pay: <span class="font-bold text-2xl text-gray-900">{{ transaction.currency }} {{ transaction.amount }}</span></p>
+        </div>
+        
+        <div class="mb-6">
+            <button id="paystack-button" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-4 px-6 rounded-lg transition-colors text-lg">
+                <i class="fas fa-lock mr-2"></i> Pay Securely with Paystack
+            </button>
+        </div>
+        
+        <div class="text-center text-sm text-gray-500">
+            <i class="fas fa-shield-alt mr-1"></i> Your payment is secure and encrypted
+        </div>
+    </div>
+</div>
+
+<!-- Paystack Inline JS -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+    document.getElementById('paystack-button').addEventListener('click', function() {
+        var handler = PaystackPop.setup({
+            key: '{{ paystack_public_key }}',
+            email: '{{ email }}',
+            amount: {{ amount }}, // Amount in kobo (or smallest currency unit)
+            currency: '{{ currency }}',
+            ref: '{{ reference }}',
+            callback: function(response) {
+                // Payment successful - redirect to success handler
+                window.location.href = '{% url "verify-paystack-payment" transaction.id %}?reference=' + response.reference + '&status=success';
+            },
+            onClose: function() {
+                alert('Payment cancelled. You can try again anytime.');
+                window.location.href = '{% url "dashboard" %}';
+            }
+        });
+        handler.openIframe();
+    });
+</script>
+{% endblock %}

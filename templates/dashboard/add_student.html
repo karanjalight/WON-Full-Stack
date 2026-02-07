@@ -1,0 +1,191 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Add Student{% endblock %}
+{% block page_title %}Add a Student Account{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header Info -->
+    <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-6 mb-6 border border-primary-200">
+        <div class="flex items-start space-x-4">
+            <div class="bg-primary-500 rounded-full p-3">
+                <i class="fas fa-user-plus text-white text-2xl"></i>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Create a Student Account</h3>
+                <p class="text-gray-700 text-sm">Add student information below to create their account. Login credentials will be auto-generated and can be emailed to the student.</p>
+                
+                {% if active_subscription.plan.max_students %}
+                <div class="mt-3 inline-flex items-center px-3 py-1 bg-white rounded-lg text-sm">
+                    <i class="fas fa-info-circle text-primary-600 mr-2"></i>
+                    <span class="text-gray-700">You can add up to <strong>{{ active_subscription.plan.max_students }}</strong> students</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-8">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-exclamation-circle text-red-600 mt-0.5 mr-3"></i>
+                    <div class="text-sm text-red-800">
+                        {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Basic Information -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-user text-primary-600 mr-2"></i> Basic Information
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                        {{ form.email }}
+                        <p class="mt-1 text-xs text-gray-500">Used for login and notifications</p>
+                        {% if form.email.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.phone.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.date_of_birth.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grade Level</label>
+                        {{ form.grade_level }}
+                        <p class="mt-1 text-xs text-gray-500">e.g., Grade 10, Form 4</p>
+                        {% if form.grade_level.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.grade_level.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Student ID</label>
+                        {{ form.student_id }}
+                        <p class="mt-1 text-xs text-gray-500">Your school's internal student ID</p>
+                        {% if form.student_id.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.student_id.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Details -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+                    <i class="fas fa-key text-primary-600 mr-2"></i> Account Details
+                </h3>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-600 mt-0.5 mr-3"></i>
+                        <div class="text-sm text-blue-800">
+                            <p class="font-medium mb-1">Auto-Generation Available</p>
+                            <p>Leave username and password fields empty to automatically generate secure credentials. They will be emailed to the student.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        {{ form.username }}
+                        <p class="mt-1 text-xs text-gray-500">Leave empty to auto-generate (e.g., john.doe)</p>
+                        {% if form.username.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        {{ form.password }}
+                        <p class="mt-1 text-xs text-gray-500">Leave empty to auto-generate secure password</p>
+                        {% if form.password.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        {{ form.confirm_password }}
+                        <p class="mt-1 text-xs text-gray-500">Only if you entered a password above</p>
+                        {% if form.confirm_password.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.confirm_password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Notification -->
+            <div class="mb-8">
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-300">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            {{ form.send_credentials_email }}
+                        </div>
+                        <div class="ml-3">
+                            <label for="{{ form.send_credentials_email.id_for_label }}" class="font-medium text-gray-700">
+                                {{ form.send_credentials_email.label }}
+                            </label>
+                            <p class="text-sm text-gray-600 mt-1">
+                                We'll send an email with their username and password to the student's email address
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-300">
+                <a href="{% url 'dashboard_students' %}" class="text-gray-600 hover:text-gray-800 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i> Cancel
+                </a>
+                <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i> Create Student Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

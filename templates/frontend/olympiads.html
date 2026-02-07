@@ -30,6 +30,35 @@
             </div>
         </div>
 
+        <style>
+            .active-filters .badge {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+            .active-filters .badge a {
+                font-weight: 700;
+                font-size: 1.1rem;
+                margin-left: 0.5rem;
+            }
+            .active-filters .badge a:hover {
+                opacity: 0.8;
+            }
+            .btn-outline {
+                background: transparent;
+                border: 2px solid #666;
+                color: #666;
+            }
+            .btn-outline:hover {
+                background: #666;
+                color: white;
+            }
+            .results-header p {
+                margin: 0;
+                font-size: 0.9rem;
+            }
+        </style>
+
         <!-- Olympiad Competitions Section Start -->
         <section class="amazing-tour-section section-padding">
             <div class="container">
@@ -38,7 +67,7 @@
                         <div class="col-xl-3 col-lg-4">
                             <div class="tour-sidebar-area sticky-style">
                                 <div class="tour-destination-sidebar">
-                                    <form method="get" action="{% url 'olympiads' %}">
+                                    <form method="get" action="{% url 'olympiads' %}" id="filterForm">
                                     <div class="booking-list-area">
                                         <div class="booking-list">
                                             <div class="icon">
@@ -48,8 +77,8 @@
                                                 <h5>Location</h5>
                                                 <div class="form-clt">
                                                     <div class="form">
-                                                        <select class="single-select w-100" name="location" onchange="this.form.submit()">
-                                                            <option value="">Select Competition Location</option>
+                                                        <select class="single-select w-100" name="location" id="locationFilter">
+                                                            <option value="">All Locations</option>
                                                             {% for destination in destinations %}
                                                             <option value="{{ destination.city }}" {% if current_location == destination.city %}selected{% endif %}>
                                                                 {{ destination.city }}, {{ destination.country }}
@@ -68,8 +97,8 @@
                                                 <h5>Olympiad Category</h5>
                                                 <div class="form-clt">
                                                     <div class="form">
-                                                        <select class="single-select w-100" name="subject" onchange="this.form.submit()">
-                                                            <option value="">Choose Category</option>
+                                                        <select class="single-select w-100" name="subject" id="subjectFilter">
+                                                            <option value="">All Categories</option>
                                                             {% for subject in subjects %}
                                                             <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>
                                                                 {{ subject.name }}
@@ -80,221 +109,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="booking-list">
-                                            <div class="icon">
-                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <h5>Competition Date</h5>
-                                                <div class="form-clt">
-                                                    <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
-                                                        <input class="form-control" type="text" placeholder="Select Date" readonly="">
-                                                        <span class="input-group-addon"><i class="far fa-calendar"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="search-widget mt-3">
+                                            <button type="submit" class="theme-btn w-100"><span>Apply Filters</span><i class="fal fa-search"></i></button>
                                         </div>
-                                        <div class="booking-list style-2">
-                                            <div class="icon">
-                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <h5>Grade Level</h5>
-                                                <div class="form-clt">
-                                                    <div class="form">
-                                                        <select class="single-select w-100">
-                                                            <option>Select Grade Level</option>
-                                                            <option>Elementary (Grades 1-5)</option>
-                                                            <option>Middle School (Grades 6-8)</option>
-                                                            <option>High School (Grades 9-12)</option>
-                                                            <option>University Level</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        {% if current_location or current_subject %}
+                                        <div class="search-widget mt-2">
+                                            <a href="{% url 'olympiads' %}" class="theme-btn w-100 btn-outline"><span>Clear All Filters</span><i class="fal fa-times"></i></a>
                                         </div>
-                                        <div class="tour-sidebar-widget">
-                                            <div class="wid-title">
-                                                <h3>Filter by Registration Fee</h3>
-                                            </div>
-                                            <div class="price-range-wrapper">
-                                                <div class="slider-container">
-                                                    <!-- Range sliders -->
-                                                    <input type="range" id="min-slider" class="slider" min="130" max="500"
-                                                        value="130">
-                                                    <input type="range" id="max-slider" class="slider" min="130" max="500"
-                                                        value="250">
-                                                </div>
-                                                <div class="price-text pt-4 d-flex gap-3">
-                                                    <label for="amount">Fee Range:</label>
-                                                    <input type="text" id="amount" readonly style="border:0;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tour-sidebar-widget">
-                                            <div class="wid-title">
-                                                <h3>Competition Format</h3>
-                                            </div>
-                                            <ul class="languages-list">
-                                                <li>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                Individual
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                Team
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                Virtual
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                In-Person
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                Hybrid
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                    <label class="checkbox-single">
-                                                        <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                            <span class="checkbox-area d-center">
-                                                                <input type="checkbox">
-                                                                <span class="checkmark d-center"></span>
-                                                            </span>
-                                                            <span class="text-color">
-                                                                Multi-Stage
-                                                            </span>
-                                                        </span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="tour-sidebar-widget">
-                                            <div class="wid-title">
-                                                <h3>Benefits & Features</h3>
-                                            </div>
-                                            <div class="checkbox-items">
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Certificate Provided
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Medal Awards
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Cash Prizes
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Study Materials
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Practice Tests
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            Mentorship Program
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                                <label class="checkbox-single mb-0">
-                                                    <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                        <span class="checkbox-area d-center">
-                                                            <input type="checkbox">
-                                                            <span class="checkmark d-center"></span>
-                                                        </span>
-                                                        <span class="text-color">
-                                                            University Recognition
-                                                        </span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="search-widget">
-                                            <button type="submit" class="theme-btn"><span>Search Olympiads</span><i class="fal fa-search"></i></button>
-                                        </div>
+                                        {% endif %}
                                     </div>
                                     </form>
                                     <div class="popular-posts">
@@ -352,6 +174,37 @@
                             </div>
                         </div>
                         <div class="col-xl-9 col-lg-8">
+                            <!-- Active Filters Display -->
+                            {% if current_location or current_subject %}
+                            <div class="active-filters mb-4 p-3 bg-light rounded">
+                                <div class="d-flex flex-wrap align-items-center gap-2">
+                                    <strong>Active Filters:</strong>
+                                    {% if current_subject_name %}
+                                    <span class="badge bg-primary">
+                                        Category: {{ current_subject_name }}
+                                        <a href="?{% if current_location %}location={{ current_location }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                    </span>
+                                    {% endif %}
+                                    {% if current_location %}
+                                    <span class="badge bg-primary">
+                                        Location: {{ current_location }}
+                                        <a href="?{% if current_subject %}subject={{ current_subject }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                    </span>
+                                    {% endif %}
+                                    <a href="{% url 'olympiads' %}" class="btn btn-sm btn-outline-secondary ms-2">Clear All</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Results Count -->
+                            <div class="results-header mb-3">
+                                <p class="text-muted">
+                                    {% if competitions %}
+                                        Showing {{ competitions.start_index }} - {{ competitions.end_index }} of {{ competitions.paginator.count }} competition{{ competitions.paginator.count|pluralize }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
                             <div class="row g-4">
                                 {% if competitions %}
                                     {% for competition in competitions %}

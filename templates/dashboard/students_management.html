@@ -1,0 +1,118 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Students{% endblock %}
+{% block page_title %}Manage Students{% endblock %}
+
+{% block content %}
+<!-- Subscription Status Banner -->
+{% if active_subscription %}
+<div class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl p-6 mb-6 text-white shadow-lg">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="bg-white/20 rounded-full p-3">
+                <i class="fas fa-crown text-white text-2xl"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold">Active Subscription</h3>
+                <p class="text-white/90 text-sm">
+                    {% if active_subscription.plan.max_students %}
+                        {{ students.count }} of {{ active_subscription.plan.max_students }} students added
+                    {% else %}
+                        {{ students.count }} students added • Unlimited
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <a href="{% url 'add_school_student' %}" class="bg-white text-primary-600 hover:bg-gray-50 font-medium py-3 px-6 rounded-lg transition-colors">
+            <i class="fas fa-plus mr-2"></i> Add Student
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-300">
+    <div class="p-6 border-b border-gray-300">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">Students</h2>
+                <p class="text-sm text-gray-600 mt-1">Manage your students' accounts and monitor their competition applications</p>
+            </div>
+            <a href="{% url 'add_school_student' %}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors">
+                <i class="fas fa-plus mr-2"></i> Add Student
+            </a>
+        </div>
+    </div>
+    
+    <div class="p-6">
+        {% if students %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for student in students %}
+            <div class="bg-white border-2 border-gray-300 rounded-xl p-6 hover:border-primary-300 hover:shadow-md transition-all">
+                <div class="flex items-center justify-between mb-4">
+                    {% if student.profile_picture %}
+                    <img src="{{ student.profile_picture.url }}" alt="{{ student.get_full_name }}" class="w-16 h-16 rounded-full object-cover">
+                    {% else %}
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">{{ student.first_name.0 }}{{ student.last_name.0 }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                        Active
+                    </span>
+                </div>
+                
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ student.get_full_name }}</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    {% if student.student_profile.grade_level %}
+                        {{ student.student_profile.grade_level }}
+                    {% else %}
+                        Student
+                    {% endif %}
+                </p>
+                
+                {% if student.student_profile.interests %}
+                <div class="mb-4">
+                    <p class="text-xs text-gray-500 mb-2">Interests:</p>
+                    <div class="flex flex-wrap gap-1">
+                        {% for interest in student.student_profile.interests|slice:":3" %}
+                        <span class="px-2 py-1 bg-primary-50 text-primary-700 text-xs rounded-full">{{ interest }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="flex items-center justify-between pt-4 border-t border-gray-300">
+                    <a href="{% url 'student_dashboard_view' student.id %}" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                        <i class="fas fa-eye mr-1"></i> View
+                    </a>
+                    <a href="{% url 'dashboard_applications' %}?student={{ student.id }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                        <i class="fas fa-file-alt mr-1"></i> Applications
+                    </a>
+                    <a href="{% url 'edit_student' student.id %}" class="text-gray-600 hover:text-gray-800 text-sm font-medium">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                    <a href="{% url 'delete_student' student.id %}" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                        <i class="fas fa-trash mr-1"></i> Delete
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <div class="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-user-graduate text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No Students Registered Yet</h3>
+            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                Add students to manage their competition applications and track their progress
+            </p>
+            <a href="{% url 'add_school_student' %}" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i> Add Your First Student
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
