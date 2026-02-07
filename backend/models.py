@@ -62,6 +62,12 @@ class User(AbstractUser):
     school_email = models.EmailField(blank=True, null=True, validators=[EmailValidator()])
     verified_at = models.DateTimeField(blank=True, null=True)
     
+    # Onboarding tracking
+    has_completed_onboarding = models.BooleanField(default=False)
+    onboarding_step = models.CharField(max_length=50, blank=True, null=True,
+                                      help_text="Current onboarding step")
+    onboarded_at = models.DateTimeField(blank=True, null=True)
+    
     # Relationships
     created_by = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, 
                                    related_name='created_users', help_text="School/Parent who created this user")
@@ -94,6 +100,133 @@ class User(AbstractUser):
     
     def __str__(self):
         return f"{self.get_full_name() or self.username} ({self.get_user_type_display()})"
+    
+    def get_active_subscription(self):
+        """
+        Get the active subscription for this user.
+        For students, check parent or school subscription if they don't have their own.
+        """
+        # First check user's own subscription
+        own_subscription = self.subscriptions.filter(status='active').first()
+        if own_subscription and own_subscription.is_valid():
+            return own_subscription
+        
+        # If student, check parent or school subscription
+        if self.user_type == 'student':
+            if self.parent:
+                parent_subscription = self.parent.subscriptions.filter(status='active').first()
+                if parent_subscription and parent_subscription.is_valid():
+                    return parent_subscription
+            
+            if self.school:
+                school_subscription = self.school.subscriptions.filter(status='active').first()
+                if school_subscription and school_subscription.is_valid():
+                    return school_subscription
+            
+            # Check if created by a parent or school with subscription
+            if self.created_by:
+                creator_subscription = self.created_by.subscriptions.filter(status='active').first()
+                if creator_subscription and creator_subscription.is_valid():
+                    return creator_subscription
+        
+        return None
+    
+    def has_active_subscription(self):
+        """Check if user has an active subscription (including inherited for students)"""
+        return self.get_active_subscription() is not None
+    
+    def can_submit_application(self):
+        """
+        Check if user can submit applications.
+        Students need an active subscription (own or inherited from parent/school).
+        """
+        if self.user_type != 'student':
+            return False
+        
+        subscription = self.get_active_subscription()
+        if not subscription:
+            return False
+        
+        # Check application limits if any
+        if subscription.plan.max_applications:
+            from .models import OlympiadApplication  # Avoid circular import
+            current_applications = OlympiadApplication.objects.filter(
+                student=self
+            ).exclude(status__in=['withdrawn', 'rejected']).count()
+            
+            if current_applications >= subscription.plan.max_applications:
+                return False
+        
+        return True
+    
+    def has_dashboard_access(self):
+        """
+        Check if user can access the dashboard.
+        Students created by subscribed parents/schools get access even without personal subscription.
+        """
+        # Tutors can access dashboard without subscription
+        if self.user_type == 'tutor':
+            return True
+
+        # Admin always has access
+        if self.is_staff or self.is_superuser:
+            return True
+        
+        # Check for active subscription
+        if self.has_active_subscription():
+            return True
+        
+        # Students created by subscribed accounts get access
+        if self.user_type == 'student' and self.created_by:
+            return self.created_by.has_active_subscription()
+        
+        return False
+    
+    def get_subscription_source(self):
+        """
+        Get the source of subscription (own, parent, school, or created_by).
+        Returns tuple: (subscription, source_type, source_user)
+        """
+        # Check own subscription
+        own_subscription = self.subscriptions.filter(status='active').first()
+        if own_subscription and own_subscription.is_valid():
+            return (own_subscription, 'own', self)
+        
+        # For students, check parent subscription
+        if self.user_type == 'student' and self.parent:
+            parent_subscription = self.parent.subscriptions.filter(status='active').first()
+            if parent_subscription and parent_subscription.is_valid():
+                return (parent_subscription, 'parent', self.parent)
+        
+        # Check school subscription
+        if self.user_type == 'student' and self.school:
+            school_subscription = self.school.subscriptions.filter(status='active').first()
+            if school_subscription and school_subscription.is_valid():
+                return (school_subscription, 'school', self.school)
+        
+        # Check created_by subscription
+        if self.user_type == 'student' and self.created_by:
+            creator_subscription = self.created_by.subscriptions.filter(status='active').first()
+            if creator_subscription and creator_subscription.is_valid():
+                creator_type = 'parent' if self.created_by.user_type == 'parent' else 'school'
+                return (creator_subscription, creator_type, self.created_by)
+        
+        return (None, None, None)
+    
+    @property
+    def has_inherited_admin_access(self):
+        """
+        Check if student has admin access through parent/school subscription.
+        Students created by subscribed accounts get enhanced access.
+        """
+        if self.user_type != 'student':
+            return False
+        
+        # Check if created by a subscribed parent or school
+        if self.created_by and self.created_by.has_active_subscription():
+            return True
+        
+        return False
 
 
 class ParentProfile(models.Model):

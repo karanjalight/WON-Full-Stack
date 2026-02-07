@@ -1,0 +1,150 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Tutor Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+    <p class="text-gray-500 mt-1">Welcome back, {{ user.get_full_name }} — Your complete overview</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    
+    <!-- Total Sessions -->
+    <div class="stat-card bg-gradient-to-br from-amber-50 to-orange-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-video text-amber-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-amber-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Total Sessions</p>
+        <p class="text-3xl font-bold text-gray-900">{{ total_sessions }}</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">All time sessions</p>
+    </div>
+    
+    <!-- Completed -->
+    <div class="stat-card bg-gradient-to-br from-emerald-50 to-teal-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle text-emerald-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-emerald-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Completed</p>
+        <p class="text-3xl font-bold text-gray-900">{{ completed_sessions }}</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">Sessions completed</p>
+    </div>
+    
+    <!-- Students -->
+    <div class="stat-card bg-gradient-to-br from-rose-50 to-pink-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-users text-rose-500"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-rose-500 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Students</p>
+        <p class="text-3xl font-bold text-gray-900">{{ total_students }}</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">Unique students</p>
+    </div>
+    
+    <!-- Rating -->
+    <div class="stat-card bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-star text-blue-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-clock text-blue-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Rating</p>
+        <p class="text-3xl font-bold text-gray-900">{{ tutor_profile.average_rating|default:"0.0" }}</p>
+        <a href="{% url 'tutor_calendar' %}" class="inline-block mt-3 px-5 py-2 bg-navy-800 text-white text-xs font-medium rounded-full hover:bg-navy-900 transition">
+            View Calendar
+        </a>
+    </div>
+    
+</div>
+
+<!-- Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Upcoming Sessions -->
+        <div class="bg-white rounded-xl border border-gray-300">
+            <div class="p-6 border-b border-gray-300">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">Upcoming Sessions</h2>
+                    <a href="{% url 'dashboard_tutor_sessions' %}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">View all</a>
+                </div>
+            </div>
+            <div class="p-6">
+                {% if upcoming_sessions %}
+                <div class="space-y-4">
+                    {% for session in upcoming_sessions %}
+                    <a href="{% url 'dashboard_tutor_session_detail' session.id %}" class="block p-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ session.subject.name }}</p>
+                                <p class="text-sm text-gray-600">{{ session.student.get_full_name }}</p>
+                                <p class="text-xs text-gray-500 mt-1">{{ session.scheduled_at|date:"M d, Y H:i" }}</p>
+                            </div>
+                            <span class="px-2.5 py-1 text-xs rounded-full bg-blue-100 text-blue-800 font-medium">{{ session.get_status_display }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-video text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500">No upcoming sessions</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl border border-gray-300 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="space-y-3">
+                <a href="{% url 'dashboard_tutor_sessions' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-blue-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-video text-blue-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Manage Sessions</span>
+                </a>
+                <a href="{% url 'tutor_calendar' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-green-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-calendar-alt text-green-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">View Calendar</span>
+                </a>
+                <a href="{% url 'dashboard_profile' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-primary-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-user-edit text-primary-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Edit Profile</span>
+                </a>
+                <a href="{% url 'subjects' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-purple-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-book text-purple-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">View Subjects</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

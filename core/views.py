@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db import transaction, models
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, A4
@@ -19,12 +20,14 @@ from backend.models import (
     Competition, Subject, Destination, TutorProfile, User, 
     StudentProfile, OlympiadApplication, TravelQuote, ApplicationDocument,
     TravelQuoteItem, SubscriptionPlan, TutorSession, ParentProfile, SchoolProfile,
-    ContactMessage
+    ContactMessage, UserSubscription, PaymentTransaction, Notification
 )
 from core.forms import (
     ApplicationStep1Form, TravelQuoteForm, StudentRegistrationForm,
     StudentProfileForm, DocumentUploadForm, ApplicationReviewForm,
-    TravelQuoteRequestForm, TutorSessionBookingForm, LoginForm, SignupForm
+    TravelQuoteRequestForm, TutorSessionBookingForm, LoginForm, SignupForm,
+    SubscriptionCheckoutForm, PaymentConfirmationForm, AddChildForm,
+    AddSchoolStudentForm, EditChildForm
 )
 
 # Create your views here.
@@ -36,7 +39,7 @@ from core.forms import (
 def login_view(request):
     """User login view"""
     if request.user.is_authenticated:
-        return redirect('account')
+        return redirect('dashboard')
     
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
@@ -48,7 +51,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.get_full_name() or user.username}!")
-                next_url = request.GET.get('next', 'account')
+                next_url = request.GET.get('next', 'dashboard')
                 return redirect(next_url)
             else:
                 messages.error(request, "Invalid username or password.")
@@ -63,7 +66,7 @@ def login_view(request):
 def signup_view(request):
     """User signup view with user type selection"""
     if request.user.is_authenticated:
-        return redirect('account')
+        return redirect('dashboard')
     
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -71,7 +74,8 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, f"Account created successfully! Welcome, {user.get_full_name() or user.username}!")
-            return redirect('account')
+            # Redirect to subscription onboarding for new users
+            return redirect('onboarding-subscription')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -423,6 +427,22 @@ def faq(request):
     """FAQ page view"""
     return render(request, 'frontend/faq.html')
 
+def past_papers(request):
+    """Past papers e-commerce listing page view"""
+    return render(request, 'frontend/past-papers.html')
+
+def past_paper_detail(request, slug):
+    """Past paper product detail page view"""
+    return render(request, 'frontend/past-paper-detail.html')
+
+def past_papers_cart(request):
+    """Past papers shopping cart page view"""
+    return render(request, 'frontend/past-papers-cart.html')
+
+def past_papers_checkout(request):
+    """Past papers checkout page view"""
+    return render(request, 'frontend/past-papers-checkout.html')
+
 def news(request):
     """News listing page view"""
     return render(request, 'frontend/news.html')
@@ -544,6 +564,7 @@ def team_details(request, pk):
     
     return render(request, 'frontend/team-details.html', context)
 
+@login_required
 def book_tutor_session(request, pk):
     """Book a tutor session"""
     tutor = get_object_or_404(
@@ -557,6 +578,22 @@ def book_tutor_session(request, pk):
     tutor_subjects = tutor.subjects.all().select_related('subject')
     subject_ids = [ts.subject.id for ts in tutor_subjects]
     
+    # Require student account linked to parent/school/admin
+    if request.user.user_type != 'student':
+        messages.error(request, "Please log in as a student to book a session.")
+        return redirect('dashboard')
+    
+    has_parent_or_school = bool(request.user.parent or request.user.school)
+    has_creator = bool(
+        request.user.created_by and (
+            request.user.created_by.user_type in ['parent', 'school', 'admin'] or
+            request.user.created_by.is_staff or request.user.created_by.is_superuser
+        )
+    )
+    if not (has_parent_or_school or has_creator):
+        messages.error(request, "A parent, school, or admin must create your student account to book sessions.")
+        return redirect('dashboard')
+    
     if request.method == 'POST':
         form = TutorSessionBookingForm(request.POST)
         # Limit subject choices to tutor's subjects
@@ -564,16 +601,7 @@ def book_tutor_session(request, pk):
         form.fields['tutor'].initial = tutor
         
         if form.is_valid():
-            # Get or create student user
-            student = None
-            if request.user.is_authenticated and request.user.user_type == 'student':
-                student = request.user
-            else:
-                # For non-authenticated users, we'll need to create a guest booking
-                # or prompt them to register. For now, we'll use a placeholder
-                # In production, you might want to create a guest user or require registration
-                messages.warning(request, "Please log in as a student to book a session.")
-                return redirect('book-tutor-session', pk=pk)
+            student = request.user
             
             # Calculate amount
             duration_minutes = int(form.cleaned_data['duration_minutes'])
@@ -636,6 +664,210 @@ def tutor_session_confirmation(request, session_id):
     }
     
     return render(request, 'frontend/tutor-session-confirmation.html', context)
+
+
+@login_required
+def dashboard_tutor_sessions(request):
+    """Parent/School/Admin view of tutor sessions"""
+    user = request.user
+    
+    if user.user_type == 'tutor':
+        try:
+            tutor_profile = user.tutor_profile
+        except:
+            messages.error(request, "Tutor profile not found. Please contact admin.")
+            return redirect('dashboard')
+        sessions = TutorSession.objects.filter(tutor=tutor_profile)
+        students = User.objects.filter(id__in=sessions.values_list('student_id', flat=True))
+    elif user.user_type == 'parent':
+        students = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(parent=user) | models.Q(created_by=user)
+        ).distinct()
+        sessions = TutorSession.objects.filter(student__in=students)
+    elif user.user_type == 'school':
+        students = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(school=user) | models.Q(created_by=user)
+        ).distinct()
+        sessions = TutorSession.objects.filter(student__in=students)
+    elif user.user_type == 'admin' or user.is_staff or user.is_superuser:
+        sessions = TutorSession.objects.all()
+        students = User.objects.filter(user_type='student')
+    else:
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    sessions = sessions.select_related('tutor__user', 'student', 'subject').order_by('-scheduled_at')
+    
+    # Filters
+    search_query = request.GET.get('search', '').strip()
+    status_filter = request.GET.get('status', '')
+    student_filter = request.GET.get('student', '')
+    subject_filter = request.GET.get('subject', '')
+    date_from = request.GET.get('date_from', '')
+    date_to = request.GET.get('date_to', '')
+    sort_by = request.GET.get('sort', '-scheduled_at')
+    
+    if search_query:
+        sessions = sessions.filter(
+            models.Q(session_number__icontains=search_query) |
+            models.Q(student__first_name__icontains=search_query) |
+            models.Q(student__last_name__icontains=search_query) |
+            models.Q(tutor__user__first_name__icontains=search_query) |
+            models.Q(tutor__user__last_name__icontains=search_query) |
+            models.Q(subject__name__icontains=search_query)
+        )
+    if status_filter:
+        sessions = sessions.filter(status=status_filter)
+    if student_filter:
+        sessions = sessions.filter(student_id=student_filter)
+    if subject_filter:
+        sessions = sessions.filter(subject_id=subject_filter)
+    if date_from:
+        try:
+            from_date = datetime.strptime(date_from, '%Y-%m-%d').date()
+            sessions = sessions.filter(scheduled_at__date__gte=from_date)
+        except ValueError:
+            pass
+    if date_to:
+        try:
+            to_date = datetime.strptime(date_to, '%Y-%m-%d').date()
+            sessions = sessions.filter(scheduled_at__date__lte=to_date)
+        except ValueError:
+            pass
+    
+    valid_sorts = ['-scheduled_at', 'scheduled_at', '-created_at', 'created_at', 'status', '-status']
+    if sort_by in valid_sorts:
+        sessions = sessions.order_by(sort_by)
+    else:
+        sessions = sessions.order_by('-scheduled_at')
+    
+    # Pagination
+    paginator = Paginator(sessions, 10)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    status_choices = TutorSession._meta.get_field('status').choices
+    students_list = students.values_list('id', 'first_name', 'last_name').distinct()
+    students_list = [{'id': str(s[0]), 'name': f"{s[1]} {s[2]}"} for s in students_list]
+    subjects_list = sessions.values_list('subject__id', 'subject__name').distinct()
+    subjects_list = [{'id': str(s[0]), 'name': s[1]} for s in subjects_list]
+    
+    context = {
+        'user': user,
+        'sessions': page_obj,
+        'page_obj': page_obj,
+        'status_choices': status_choices,
+        'students_list': students_list,
+        'subjects_list': subjects_list,
+        'search_query': search_query,
+        'status_filter': status_filter,
+        'student_filter': student_filter,
+        'subject_filter': subject_filter,
+        'date_from': date_from,
+        'date_to': date_to,
+        'sort_by': sort_by,
+    }
+    
+    return render(request, 'dashboard/tutor_sessions.html', context)
+
+
+@login_required
+def dashboard_tutor_session_detail(request, session_id):
+    """Tutor session detail view for parent/school/admin"""
+    user = request.user
+    session = get_object_or_404(
+        TutorSession.objects.select_related('tutor__user', 'student', 'subject'),
+        id=session_id
+    )
+    
+    has_access = False
+    if user.user_type == 'tutor':
+        has_access = session.tutor.user == user
+    elif user.user_type == 'parent':
+        has_access = session.student.parent == user or session.student.created_by == user
+    elif user.user_type == 'school':
+        has_access = session.student.school == user or session.student.created_by == user
+    elif user.user_type == 'admin' or user.is_staff or user.is_superuser:
+        has_access = True
+    
+    if not has_access:
+        messages.error(request, "You don't have permission to view this session.")
+        return redirect('dashboard_tutor_sessions')
+    
+    context = {
+        'user': user,
+        'session': session,
+    }
+    
+    return render(request, 'dashboard/tutor_session_detail.html', context)
+
+
+@login_required
+def tutor_calendar(request):
+    """Tutor calendar view for scheduled sessions"""
+    user = request.user
+    if user.user_type != 'tutor':
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    try:
+        tutor_profile = user.tutor_profile
+    except:
+        messages.error(request, "Tutor profile not found. Please contact admin.")
+        return redirect('dashboard_profile')
+    
+    import calendar
+    year = int(request.GET.get('year', timezone.now().year))
+    month = int(request.GET.get('month', timezone.now().month))
+    
+    _, days_in_month = calendar.monthrange(year, month)
+    first_day = datetime(year, month, 1).date()
+    last_day = datetime(year, month, days_in_month).date()
+    
+    sessions = TutorSession.objects.filter(
+        tutor=tutor_profile,
+        scheduled_at__date__gte=first_day,
+        scheduled_at__date__lte=last_day
+    ).select_related('student', 'subject').order_by('scheduled_at')
+    
+    sessions_by_day = {}
+    for session in sessions:
+        day = session.scheduled_at.date().day
+        sessions_by_day.setdefault(day, []).append(session)
+    
+    cal = calendar.Calendar(firstweekday=0)
+    weeks = []
+    for week in cal.monthdayscalendar(year, month):
+        week_data = []
+        for day in week:
+            if day == 0:
+                week_data.append({'day': None, 'sessions': []})
+            else:
+                week_data.append({'day': day, 'sessions': sessions_by_day.get(day, [])})
+        weeks.append(week_data)
+    
+    prev_month = month - 1 if month > 1 else 12
+    prev_year = year - 1 if month == 1 else year
+    next_month = month + 1 if month < 12 else 1
+    next_year = year + 1 if month == 12 else year
+    
+    context = {
+        'user': user,
+        'year': year,
+        'month': month,
+        'month_name': calendar.month_name[month],
+        'weeks': weeks,
+        'prev_month': prev_month,
+        'prev_year': prev_year,
+        'next_month': next_month,
+        'next_year': next_year,
+    }
+    
+    return render(request, 'dashboard/tutor_calendar.html', context)
 
 def tour(request):
     """Tours listing page view (Competitions)"""
@@ -719,11 +951,20 @@ def olympiads(request):
     subjects = Subject.objects.filter(is_active=True).order_by('name')
     destinations = Destination.objects.filter(is_active=True).order_by('country', 'city')
     
+    # Get current subject name for display
+    current_subject_name = None
+    if subject_slug:
+        try:
+            current_subject_name = Subject.objects.get(slug=subject_slug, is_active=True).name
+        except Subject.DoesNotExist:
+            pass
+    
     context = {
         'competitions': page_obj,
         'subjects': subjects,
         'destinations': destinations,
         'current_subject': subject_slug,
+        'current_subject_name': current_subject_name,
         'current_location': location,
         'search_query': search_query,
     }
@@ -747,6 +988,18 @@ def start_application(request, slug):
     if not competition.is_application_open():
         messages.error(request, "Applications for this competition are currently closed.")
         return redirect('olympiad-details', slug=slug)
+    
+    # Check if user is authenticated and can submit applications
+    if request.user.is_authenticated:
+        if not request.user.can_submit_application():
+            subscription, source_type, source_user = request.user.get_subscription_source()
+            if not subscription:
+                messages.error(request, "You need an active subscription to submit applications. Please subscribe or contact your parent/school.")
+                return redirect('onboarding-subscription')
+            else:
+                # Has subscription but reached limit
+                messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
+                return redirect('dashboard')
     
     # Initialize session data
     request.session['application_data'] = {
@@ -995,6 +1248,16 @@ def submit_application(request):
         messages.error(request, "Please complete all steps.")
         return redirect('olympiads')
     
+    # Check if user can submit applications (subscription check)
+    if not request.user.can_submit_application():
+        subscription, source_type, source_user = request.user.get_subscription_source()
+        if not subscription:
+            messages.error(request, "You need an active subscription to submit applications. Please subscribe or contact your parent/school.")
+            return redirect('onboarding-subscription')
+        else:
+            messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
+            return redirect('dashboard')
+    
     competition = get_object_or_404(Competition, id=app_data['competition_id'])
     
     try:
@@ -1041,6 +1304,15 @@ def submit_application(request):
         application.status = 'submitted'
         application.submitted_at = timezone.now()
         application.save()
+        
+        # Create notification for parent/school if student was created by them
+        if request.user.created_by:
+            Notification.objects.create(
+                user=request.user.created_by,
+                title="New Application Submitted",
+                message=f"{request.user.get_full_name()} has submitted an application for {competition.name}",
+                notification_type="application"
+            )
         
         # Clear session data
         del request.session['application_data']
@@ -1865,3 +2137,1186 @@ def subscription_students(request):
     
     return render(request, 'frontend/subscription-details.html', context)
 
+
+# ============================================================================
+# SUBSCRIPTION CHECKOUT & PAYMENT VIEWS
+# ============================================================================
+
+@login_required
+def subscription_checkout(request, plan_id):
+    """Checkout page for subscription purchase"""
+    plan = get_object_or_404(SubscriptionPlan, id=plan_id, is_active=True)
+    
+    # Verify user type matches plan type
+    if plan.plan_type != request.user.user_type:
+        messages.error(request, f"This plan is for {plan.get_plan_type_display()}s only.")
+        return redirect('subscription-' + plan.plan_type + 's')
+    
+    # Check if user already has an active subscription
+    active_subscription = UserSubscription.objects.filter(
+        user=request.user,
+        status='active'
+    ).first()
+    
+    if active_subscription and active_subscription.is_valid():
+        messages.info(request, "You already have an active subscription.")
+        return redirect('dashboard_subscription')
+    
+    if request.method == 'POST':
+        form = SubscriptionCheckoutForm(request.POST, user=request.user)
+        if form.is_valid():
+            # Create pending subscription
+            from datetime import timedelta
+            from dateutil.relativedelta import relativedelta
+            
+            # Calculate subscription end date based on duration
+            start_date = timezone.now()
+            if plan.duration == 'monthly':
+                end_date = start_date + relativedelta(months=1)
+            elif plan.duration == 'quarterly':
+                end_date = start_date + relativedelta(months=3)
+            elif plan.duration == 'annually':
+                end_date = start_date + relativedelta(years=1)
+            else:
+                end_date = start_date + relativedelta(months=1)
+            
+            # Create subscription record (pending payment)
+            subscription = UserSubscription.objects.create(
+                user=request.user,
+                plan=plan,
+                start_date=start_date,
+                end_date=end_date,
+                status='pending',
+                payment_method=form.cleaned_data['payment_method']
+            )
+            
+            # Create payment transaction
+            transaction = PaymentTransaction.objects.create(
+                user=request.user,
+                transaction_type='subscription',
+                amount=plan.price,
+                currency=plan.currency,
+                payment_gateway=form.cleaned_data['payment_method'],
+                status='pending',
+                subscription=subscription,
+                description=f"Subscription: {plan.name} - {plan.get_duration_display()}"
+            )
+            
+            # Redirect to payment gateway
+            if form.cleaned_data['payment_method'] == 'paystack':
+                return redirect('initiate-paystack-payment', transaction_id=transaction.id)
+            else:
+                messages.info(request, "This payment method is coming soon. Please use Paystack.")
+                return redirect('subscription-checkout', plan_id=plan.id)
+    else:
+        form = SubscriptionCheckoutForm(initial={'plan': plan}, user=request.user)
+    
+    context = {
+        'plan': plan,
+        'form': form,
+    }
+    
+    return render(request, 'dashboard/subscription_checkout.html', context)
+
+
+@login_required
+def initiate_paystack_payment(request, transaction_id):
+    """Initiate Paystack payment"""
+    from django.conf import settings
+    
+    transaction = get_object_or_404(
+        PaymentTransaction, 
+        id=transaction_id, 
+        user=request.user,
+        status='pending'
+    )
+    
+    context = {
+        'transaction': transaction,
+        'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY,
+        'amount': float(transaction.amount) * 100,  # Paystack expects amount in kobo/cents
+        'currency': transaction.currency,
+        'email': request.user.email,
+        'reference': str(transaction.id),
+    }
+    
+    return render(request, 'dashboard/paystack_payment.html', context)
+
+
+@csrf_exempt
+def paystack_webhook(request):
+    """Handle Paystack payment webhook"""
+    import json
+    import hmac
+    import hashlib
+    
+    # Verify webhook signature (in production)
+    # secret_key = settings.PAYSTACK_SECRET_KEY
+    # signature = request.headers.get('x-paystack-signature')
+    
+    if request.method == 'POST':
+        try:
+            payload = json.loads(request.body)
+            event = payload.get('event')
+            data = payload.get('data', {})
+            
+            if event == 'charge.success':
+                reference = data.get('reference')
+                
+                # Find transaction by reference
+                try:
+                    transaction = PaymentTransaction.objects.get(id=reference)
+                    
+                    # Update transaction status
+                    transaction.status = 'completed'
+                    transaction.gateway_reference = data.get('reference')
+                    transaction.gateway_response = data
+                    transaction.paid_at = timezone.now()
+                    transaction.save()
+                    
+                    # Activate subscription
+                    if transaction.subscription:
+                        subscription = transaction.subscription
+                        subscription.status = 'active'
+                        subscription.save()
+                        
+                        # Update user onboarding status
+                        user = transaction.user
+                        user.has_completed_onboarding = True
+                        user.onboarding_step = 'completed'
+                        user.onboarded_at = timezone.now()
+                        user.save()
+                    
+                    return JsonResponse({'status': 'success'})
+                    
+                except PaymentTransaction.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Transaction not found'}, status=404)
+            
+            return JsonResponse({'status': 'received'})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    
+    return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+
+@login_required
+def verify_paystack_payment(request, transaction_id):
+    """Verify Paystack payment and activate subscription"""
+    transaction = get_object_or_404(
+        PaymentTransaction,
+        id=transaction_id,
+        user=request.user
+    )
+    
+    # Get the payment reference from query params
+    payment_reference = request.GET.get('reference')
+    payment_status = request.GET.get('status')
+    
+    # If payment was successful (according to Paystack callback)
+    if payment_status == 'success' and payment_reference:
+        # Update transaction status
+        transaction.status = 'completed'
+        transaction.gateway_reference = payment_reference
+        transaction.paid_at = timezone.now()
+        transaction.save()
+        
+        # Activate subscription
+        if transaction.subscription:
+            subscription = transaction.subscription
+            subscription.status = 'active'
+            subscription.save()
+            
+            # Update user onboarding status
+            user = transaction.user
+            user.has_completed_onboarding = True
+            user.onboarding_step = 'completed'
+            user.onboarded_at = timezone.now()
+            user.save()
+        
+        messages.success(request, f"🎉 Payment successful! Your subscription is now active. Welcome to World Olympiad Network!")
+        return redirect('dashboard')
+    
+    # If transaction is already completed
+    elif transaction.status == 'completed':
+        messages.info(request, "Your subscription is already active.")
+        return redirect('dashboard')
+    
+    # If payment failed
+    elif transaction.status == 'failed':
+        messages.error(request, "Payment failed. Please try again.")
+        return redirect('subscription-checkout', plan_id=transaction.subscription.plan.id)
+    
+    # Payment still pending
+    else:
+        messages.warning(request, "Payment verification is pending. Please wait a moment...")
+        return redirect('dashboard')
+
+
+# ============================================================================
+# DASHBOARD VIEWS
+# ============================================================================
+
+@login_required
+def dashboard(request):
+    """Main dashboard - routes to role-specific dashboard"""
+    user = request.user
+    
+    # Check if user has dashboard access (subscription or created by subscribed account)
+    if not user.has_dashboard_access():
+        # Check if user has completed onboarding
+        if not user.has_completed_onboarding:
+            return redirect('onboarding-subscription')
+        
+        # No subscription access
+        messages.warning(request, "You need an active subscription to access the dashboard.")
+        return redirect('onboarding-subscription')
+    
+    # Route to role-specific dashboard
+    if user.user_type == 'parent':
+        return parent_dashboard(request)
+    elif user.user_type == 'school':
+        return school_dashboard(request)
+    elif user.user_type == 'student':
+        return student_dashboard(request)
+    elif user.user_type == 'tutor':
+        return tutor_dashboard(request)
+    else:
+        # Admin or other types
+        return render(request, 'dashboard/dashboard.html', {'user': user})
+
+
+@login_required
+def parent_dashboard(request):
+    """Parent-specific dashboard"""
+    user = request.user
+    
+    # Get parent profile
+    try:
+        parent_profile = user.parent_profile
+    except:
+        parent_profile = ParentProfile.objects.create(user=user)
+    
+    # Get children (both via parent FK and created_by FK)
+    children = User.objects.filter(
+        user_type='student'
+    ).filter(
+        models.Q(parent=user) | models.Q(created_by=user)
+    ).distinct()
+    
+    # Get active subscription using helper method
+    subscription, source_type, source_user = user.get_subscription_source()
+    
+    # Get recent applications from children
+    recent_applications = OlympiadApplication.objects.filter(
+        student__in=children
+    ).select_related('student', 'competition').order_by('-created_at')[:5]
+    
+    # Stats
+    total_children = children.count()
+    total_applications = OlympiadApplication.objects.filter(student__in=children).count()
+    accepted_applications = OlympiadApplication.objects.filter(
+        student__in=children,
+        status='accepted'
+    ).count()
+    
+    context = {
+        'user': user,
+        'parent_profile': parent_profile,
+        'children': children,
+        'active_subscription': subscription,
+        'subscription_source': source_type,
+        'recent_applications': recent_applications,
+        'total_children': total_children,
+        'total_applications': total_applications,
+        'accepted_applications': accepted_applications,
+    }
+    
+    return render(request, 'dashboard/parent_dashboard.html', context)
+
+
+@login_required
+def school_dashboard(request):
+    """School-specific dashboard"""
+    user = request.user
+    
+    # Get school profile
+    try:
+        school_profile = user.school_profile
+    except:
+        school_profile = SchoolProfile.objects.create(
+            user=user,
+            school_name=user.get_full_name() or user.username
+        )
+    
+    # Get students (both via school FK and created_by FK)
+    students = User.objects.filter(
+        user_type='student'
+    ).filter(
+        models.Q(school=user) | models.Q(created_by=user)
+    ).distinct()
+    
+    # Get active subscription using helper method
+    subscription, source_type, source_user = user.get_subscription_source()
+    
+    # Get recent applications from students
+    recent_applications = OlympiadApplication.objects.filter(
+        student__in=students
+    ).select_related('student', 'competition').order_by('-created_at')[:5]
+    
+    # Stats
+    total_students = students.count()
+    total_applications = OlympiadApplication.objects.filter(student__in=students).count()
+    accepted_applications = OlympiadApplication.objects.filter(
+        student__in=students,
+        status='accepted'
+    ).count()
+    active_students = students.filter(
+        applications__status__in=['submitted', 'under_review', 'accepted']
+    ).distinct().count()
+    
+    context = {
+        'user': user,
+        'school_profile': school_profile,
+        'students': students[:10],  # Show first 10
+        'active_subscription': subscription,
+        'subscription_source': source_type,
+        'recent_applications': recent_applications,
+        'total_students': total_students,
+        'total_applications': total_applications,
+        'accepted_applications': accepted_applications,
+        'active_students': active_students,
+    }
+    
+    return render(request, 'dashboard/school_dashboard.html', context)
+
+
+@login_required
+def student_dashboard(request):
+    """Student-specific dashboard"""
+    user = request.user
+    
+    # Get student profile
+    try:
+        student_profile = user.student_profile
+    except:
+        student_profile = StudentProfile.objects.create(user=user)
+    
+    # Get active subscription using helper method (includes inherited subscriptions)
+    subscription, source_type, source_user = user.get_subscription_source()
+    
+    # Get applications
+    applications = OlympiadApplication.objects.filter(student=user).order_by('-created_at')
+    recent_applications = applications[:5]
+    
+    # Get upcoming competitions
+    upcoming_competitions = Competition.objects.filter(
+        is_active=True,
+        application_deadline__gte=timezone.now().date()
+    ).order_by('application_deadline')[:5]
+    
+    # Stats
+    total_applications = applications.count()
+    accepted_applications = applications.filter(status='accepted').count()
+    pending_applications = applications.filter(status__in=['submitted', 'under_review']).count()
+    
+    # Check if can submit applications
+    can_apply = user.can_submit_application()
+    
+    context = {
+        'user': user,
+        'student_profile': student_profile,
+        'active_subscription': subscription,
+        'subscription_source': source_type,
+        'subscription_owner': source_user,
+        'recent_applications': recent_applications,
+        'upcoming_competitions': upcoming_competitions,
+        'total_applications': total_applications,
+        'accepted_applications': accepted_applications,
+        'pending_applications': pending_applications,
+        'can_apply': can_apply,
+    }
+    
+    return render(request, 'dashboard/student_dashboard.html', context)
+
+
+@login_required
+def tutor_dashboard(request):
+    """Tutor-specific dashboard"""
+    user = request.user
+    
+    # Get tutor profile
+    try:
+        tutor_profile = user.tutor_profile
+    except:
+        messages.error(request, "Tutor profile not found. Please contact admin.")
+        return redirect('dashboard')
+    
+    sessions = TutorSession.objects.filter(
+        tutor=tutor_profile
+    ).select_related('student', 'subject').order_by('-scheduled_at')
+    upcoming_sessions = sessions.filter(
+        status__in=['scheduled', 'confirmed'],
+        scheduled_at__gte=timezone.now()
+    )[:5]
+    
+    total_sessions = sessions.count()
+    completed_sessions = sessions.filter(status='completed').count()
+    total_students = sessions.values_list('student_id', flat=True).distinct().count()
+    
+    context = {
+        'user': user,
+        'tutor_profile': tutor_profile,
+        'upcoming_sessions': upcoming_sessions,
+        'total_sessions': total_sessions,
+        'completed_sessions': completed_sessions,
+        'total_students': total_students,
+    }
+    
+    return render(request, 'dashboard/tutor_dashboard.html', context)
+
+
+@login_required
+def onboarding_subscription(request):
+    """Subscription onboarding page after signup"""
+    user = request.user
+    
+    # Get plans for user type
+    plans = SubscriptionPlan.objects.filter(
+        plan_type=user.user_type,
+        is_active=True
+    ).order_by('price')
+    
+    # Group by duration
+    monthly_plans = plans.filter(duration='monthly')
+    quarterly_plans = plans.filter(duration='quarterly')
+    annually_plans = plans.filter(duration='annually')
+    
+    context = {
+        'user': user,
+        'plans': plans,
+        'monthly_plans': monthly_plans,
+        'quarterly_plans': quarterly_plans,
+        'annually_plans': annually_plans,
+        'is_onboarding': True,
+    }
+    
+    return render(request, 'dashboard/onboarding_subscription.html', context)
+
+
+# Additional dashboard helper views
+
+@login_required
+def dashboard_subscription(request):
+    """Subscription management page"""
+    user = request.user
+    
+    # Get all subscriptions
+    subscriptions = UserSubscription.objects.filter(user=user).order_by('-created_at')
+    active_subscription = subscriptions.filter(status='active').first()
+    
+    # Get pending subscriptions with their transactions
+    pending_subscriptions = subscriptions.filter(status='pending').select_related('plan')
+    pending_transactions = PaymentTransaction.objects.filter(
+        user=user,
+        transaction_type='subscription',
+        status='pending',
+        subscription__status='pending',
+    ).select_related('subscription', 'subscription__plan').order_by('-created_at')
+    
+    # Get payment transactions (history)
+    transactions = PaymentTransaction.objects.filter(
+        user=user,
+        transaction_type='subscription'
+    ).order_by('-created_at')[:10]
+    
+    # Get available plans for this user's type
+    available_plans = SubscriptionPlan.objects.filter(
+        plan_type=user.user_type,
+        is_active=True
+    ).order_by('price')
+    
+    # Group plans by duration for tab display
+    monthly_plans = available_plans.filter(duration='monthly')
+    quarterly_plans = available_plans.filter(duration='quarterly')
+    annually_plans = available_plans.filter(duration='annually')
+    
+    # Selected duration tab (default to monthly)
+    selected_duration = request.GET.get('duration', 'monthly')
+    
+    context = {
+        'user': user,
+        'active_subscription': active_subscription,
+        'subscriptions': subscriptions,
+        'transactions': transactions,
+        'pending_subscriptions': pending_subscriptions,
+        'pending_transactions': pending_transactions,
+        'available_plans': available_plans,
+        'monthly_plans': monthly_plans,
+        'quarterly_plans': quarterly_plans,
+        'annually_plans': annually_plans,
+        'selected_duration': selected_duration,
+    }
+    
+    return render(request, 'dashboard/subscription_management.html', context)
+
+
+@login_required
+def cancel_pending_subscription(request, subscription_id):
+    """Delete/cancel a pending (unpaid) subscription and its pending transaction"""
+    if request.method != 'POST':
+        return redirect('dashboard_subscription')
+    
+    subscription = get_object_or_404(
+        UserSubscription,
+        id=subscription_id,
+        user=request.user,
+        status='pending'
+    )
+    
+    # Delete associated pending transactions
+    PaymentTransaction.objects.filter(
+        subscription=subscription,
+        status='pending'
+    ).delete()
+    
+    # Delete the pending subscription itself
+    plan_name = subscription.plan.name
+    subscription.delete()
+    
+    messages.success(request, f'Pending subscription for "{plan_name}" has been removed.')
+    return redirect('dashboard_subscription')
+
+
+@login_required
+def dashboard_profile(request):
+    """Profile management page"""
+    user = request.user
+    
+    context = {
+        'user': user,
+    }
+    
+    return render(request, 'dashboard/profile.html', context)
+
+
+@login_required
+def dashboard_children(request):
+    """Parent's children management page"""
+    if request.user.user_type != 'parent':
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    # Get children (both via parent FK and created_by FK)
+    children = User.objects.filter(
+        user_type='student'
+    ).filter(
+        models.Q(parent=request.user) | models.Q(created_by=request.user)
+    ).distinct()
+    
+    # Get active subscription
+    subscription, source_type, source_user = request.user.get_subscription_source()
+    
+    context = {
+        'user': request.user,
+        'children': children,
+        'active_subscription': subscription,
+    }
+    
+    return render(request, 'dashboard/children_management.html', context)
+
+
+@login_required
+def dashboard_students(request):
+    """School's students management page"""
+    if request.user.user_type != 'school':
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    # Get students (both via school FK and created_by FK)
+    students = User.objects.filter(
+        user_type='student'
+    ).filter(
+        models.Q(school=request.user) | models.Q(created_by=request.user)
+    ).distinct()
+    
+    # Get active subscription
+    subscription, source_type, source_user = request.user.get_subscription_source()
+    
+    context = {
+        'user': request.user,
+        'students': students,
+        'active_subscription': subscription,
+    }
+    
+    return render(request, 'dashboard/students_management.html', context)
+
+
+@login_required
+def dashboard_applications(request):
+    """Applications page with filters and search for all user types"""
+    user = request.user
+    
+    # Build base queryset based on user type
+    if user.user_type == 'parent':
+        # Get all children's applications
+        children = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(parent=user) | models.Q(created_by=user)
+        ).distinct()
+        applications = OlympiadApplication.objects.filter(
+            student__in=children
+        ).select_related('student', 'competition', 'competition__destination')
+        
+    elif user.user_type == 'school':
+        # Get all students' applications
+        students = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(school=user) | models.Q(created_by=user)
+        ).distinct()
+        applications = OlympiadApplication.objects.filter(
+            student__in=students
+        ).select_related('student', 'competition', 'competition__destination')
+        
+    elif user.user_type == 'student':
+        # Get only own applications
+        applications = OlympiadApplication.objects.filter(
+            student=user
+        ).select_related('competition', 'competition__destination')
+        
+    else:
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    # Get filter parameters
+    search_query = request.GET.get('search', '').strip()
+    status_filter = request.GET.get('status', '')
+    competition_filter = request.GET.get('competition', '')
+    student_filter = request.GET.get('student', '')  # For parents/schools
+    date_from = request.GET.get('date_from', '')
+    date_to = request.GET.get('date_to', '')
+    sort_by = request.GET.get('sort', '-created_at')
+    
+    # Apply search
+    if search_query:
+        applications = applications.filter(
+            models.Q(application_number__icontains=search_query) |
+            models.Q(student__first_name__icontains=search_query) |
+            models.Q(student__last_name__icontains=search_query) |
+            models.Q(competition__name__icontains=search_query)
+        )
+    
+    # Apply status filter
+    if status_filter:
+        applications = applications.filter(status=status_filter)
+    
+    # Apply competition filter
+    if competition_filter:
+        applications = applications.filter(competition_id=competition_filter)
+    
+    # Apply student filter (for parents/schools)
+    if student_filter and user.user_type in ['parent', 'school']:
+        applications = applications.filter(student_id=student_filter)
+    
+    # Apply date filters
+    if date_from:
+        try:
+            from_date = datetime.strptime(date_from, '%Y-%m-%d').date()
+            applications = applications.filter(created_at__date__gte=from_date)
+        except ValueError:
+            pass
+    
+    if date_to:
+        try:
+            to_date = datetime.strptime(date_to, '%Y-%m-%d').date()
+            applications = applications.filter(created_at__date__lte=to_date)
+        except ValueError:
+            pass
+    
+    # Apply sorting
+    valid_sorts = ['-created_at', 'created_at', 'status', '-status', 
+                   'competition__name', '-competition__name', 
+                   'competition__start_date', '-competition__start_date']
+    if sort_by in valid_sorts:
+        applications = applications.order_by(sort_by)
+    else:
+        applications = applications.order_by('-created_at')
+    
+    # Get filter options for dropdowns
+    if user.user_type in ['parent', 'school']:
+        available_students = applications.values_list('student__id', 'student__first_name', 'student__last_name').distinct()
+        students_list = [{'id': str(s[0]), 'name': f"{s[1]} {s[2]}"} for s in available_students]
+    else:
+        students_list = []
+    
+    available_competitions = applications.values_list('competition__id', 'competition__name').distinct()
+    competitions_list = [{'id': str(c[0]), 'name': c[1]} for c in available_competitions]
+    
+    # Status choices
+    status_choices = OlympiadApplication._meta.get_field('status').choices
+    
+    # Pagination
+    from django.core.paginator import Paginator
+    paginator = Paginator(applications, 10)  # 10 per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    # Statistics
+    total_applications = applications.count()
+    status_stats = {
+        'submitted': applications.filter(status='submitted').count(),
+        'under_review': applications.filter(status='under_review').count(),
+        'accepted': applications.filter(status='accepted').count(),
+        'rejected': applications.filter(status='rejected').count(),
+    }
+    
+    # Get subscription info
+    subscription, source_type, source_user = user.get_subscription_source()
+    can_apply = user.can_submit_application() if user.user_type == 'student' else False
+    
+    context = {
+        'user': user,
+        'applications': page_obj,
+        'page_obj': page_obj,
+        'total_applications': total_applications,
+        'status_stats': status_stats,
+        'active_subscription': subscription,
+        'subscription_source': source_type,
+        'can_apply': can_apply,
+        # Filters
+        'search_query': search_query,
+        'status_filter': status_filter,
+        'competition_filter': competition_filter,
+        'student_filter': student_filter,
+        'date_from': date_from,
+        'date_to': date_to,
+        'sort_by': sort_by,
+        # Filter options
+        'status_choices': status_choices,
+        'competitions_list': competitions_list,
+        'students_list': students_list,
+    }
+    
+    return render(request, 'dashboard/applications.html', context)
+
+
+@login_required
+def application_detail(request, application_id):
+    """View application details with navigation to next/previous"""
+    user = request.user
+    
+    # Get the application and verify access
+    application = get_object_or_404(
+        OlympiadApplication.objects.select_related(
+            'student', 'competition', 'competition__destination', 'round'
+        ).prefetch_related('documents'),
+        id=application_id
+    )
+    
+    # Permission check
+    has_access = False
+    if user.user_type == 'student' and application.student == user:
+        has_access = True
+    elif user.user_type == 'parent':
+        if application.student.parent == user or application.student.created_by == user:
+            has_access = True
+    elif user.user_type == 'school':
+        if application.student.school == user or application.student.created_by == user:
+            has_access = True
+    elif user.is_staff or user.is_superuser:
+        has_access = True
+    
+    if not has_access:
+        messages.error(request, "You don't have permission to view this application.")
+        return redirect('dashboard_applications')
+    
+    # Get all applications for navigation (same filtered set as list view)
+    if user.user_type == 'parent':
+        children = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(parent=user) | models.Q(created_by=user)
+        ).distinct()
+        all_applications = OlympiadApplication.objects.filter(
+            student__in=children
+        ).order_by('-created_at').values_list('id', flat=True)
+        
+    elif user.user_type == 'school':
+        students = User.objects.filter(
+            user_type='student'
+        ).filter(
+            models.Q(school=user) | models.Q(created_by=user)
+        ).distinct()
+        all_applications = OlympiadApplication.objects.filter(
+            student__in=students
+        ).order_by('-created_at').values_list('id', flat=True)
+        
+    elif user.user_type == 'student':
+        all_applications = OlympiadApplication.objects.filter(
+            student=user
+        ).order_by('-created_at').values_list('id', flat=True)
+    else:
+        all_applications = []
+    
+    # Convert to list for indexing
+    all_app_ids = list(all_applications)
+    
+    # Find current position and get next/previous
+    try:
+        current_index = all_app_ids.index(application.id)
+        next_app_id = all_app_ids[current_index + 1] if current_index + 1 < len(all_app_ids) else None
+        prev_app_id = all_app_ids[current_index - 1] if current_index > 0 else None
+    except (ValueError, IndexError):
+        next_app_id = None
+        prev_app_id = None
+    
+    # Get documents
+    documents = application.documents.all().order_by('document_type')
+    
+    # Get travel quote if exists
+    travel_quote = TravelQuote.objects.filter(application=application).first()
+    
+    context = {
+        'user': user,
+        'application': application,
+        'documents': documents,
+        'travel_quote': travel_quote,
+        'next_app_id': next_app_id,
+        'prev_app_id': prev_app_id,
+        'current_position': current_index + 1 if current_index >= 0 else None,
+        'total_applications': len(all_app_ids),
+    }
+    
+    return render(request, 'dashboard/application_detail.html', context)
+
+
+@login_required
+def dashboard_notifications(request):
+    """Notifications page"""
+    # Get the base queryset
+    notifications_qs = Notification.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Mark unread notifications as read (before slicing)
+    notifications_qs.filter(is_read=False).update(is_read=True, read_at=timezone.now())
+    
+    # Get the sliced notifications for display
+    notifications = notifications_qs[:20]
+    
+    context = {
+        'user': request.user,
+        'notifications': notifications,
+    }
+    
+    return render(request, 'dashboard/notifications.html', context)
+
+
+@login_required
+def dashboard_settings(request):
+    """Settings page"""
+    context = {
+        'user': request.user,
+    }
+    
+    return render(request, 'dashboard/settings.html', context)
+
+
+# ============================================================================
+# CHILD/STUDENT ACCOUNT MANAGEMENT VIEWS
+# ============================================================================
+
+@login_required
+def add_child(request):
+    """Parent adds a child account"""
+    if request.user.user_type != 'parent':
+        messages.error(request, "Only parents can add child accounts.")
+        return redirect('dashboard')
+    
+    # Check subscription limits
+    active_subscription = UserSubscription.objects.filter(
+        user=request.user,
+        status='active'
+    ).first()
+    
+    if not active_subscription or not active_subscription.is_valid():
+        messages.warning(request, "You need an active subscription to add children accounts.")
+        return redirect('subscription-parents')
+    
+    # Check if limit reached (if plan has max_students limit)
+    if active_subscription.plan.max_students:
+        current_children_count = User.objects.filter(parent=request.user).count()
+        if current_children_count >= active_subscription.plan.max_students:
+            messages.error(request, f"You have reached the maximum number of children ({active_subscription.plan.max_students}) for your plan.")
+            return redirect('dashboard_children')
+    
+    if request.method == 'POST':
+        form = AddChildForm(request.POST, parent=request.user)
+        if form.is_valid():
+            child = form.save()
+            
+            # Update parent profile
+            if hasattr(request.user, 'parent_profile'):
+                profile = request.user.parent_profile
+                profile.number_of_children = User.objects.filter(parent=request.user).count()
+                profile.save()
+            
+            # Send welcome email if requested
+            if form.cleaned_data.get('send_welcome_email') and child.email:
+                try:
+                    from django.core.mail import send_mail
+                    from django.template.loader import render_to_string
+                    from django.conf import settings
+                    
+                    subject = f"Welcome to World Olympiad Network, {child.first_name}!"
+                    message = render_to_string('emails/child_welcome.txt', {
+                        'child': child,
+                        'parent': request.user,
+                        'username': child.username,
+                        'password': form.cleaned_data['password'],
+                    })
+                    
+                    send_mail(
+                        subject,
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [child.email],
+                        fail_silently=True,
+                    )
+                except Exception as e:
+                    messages.warning(request, f"Child account created but email failed to send: {str(e)}")
+            
+            messages.success(request, f"Successfully added {child.get_full_name()}'s account!")
+            return redirect('dashboard_children')
+    else:
+        form = AddChildForm(parent=request.user)
+    
+    context = {
+        'form': form,
+        'user': request.user,
+        'active_subscription': active_subscription,
+    }
+    
+    return render(request, 'dashboard/add_child.html', context)
+
+
+@login_required
+def add_school_student(request):
+    """School adds a student account"""
+    if request.user.user_type != 'school':
+        messages.error(request, "Only schools can add student accounts.")
+        return redirect('dashboard')
+    
+    # Check subscription limits
+    active_subscription = UserSubscription.objects.filter(
+        user=request.user,
+        status='active'
+    ).first()
+    
+    if not active_subscription or not active_subscription.is_valid():
+        messages.warning(request, "You need an active subscription to add student accounts.")
+        return redirect('subscription-schools')
+    
+    # Check if limit reached
+    if active_subscription.plan.max_students:
+        current_students_count = User.objects.filter(school=request.user).count()
+        if current_students_count >= active_subscription.plan.max_students:
+            messages.error(request, f"You have reached the maximum number of students ({active_subscription.plan.max_students}) for your plan.")
+            return redirect('dashboard_students')
+    
+    if request.method == 'POST':
+        form = AddSchoolStudentForm(request.POST, school=request.user)
+        if form.is_valid():
+            student = form.save()
+            
+            # Send credentials email if requested
+            if form.cleaned_data.get('send_credentials_email') and student.email:
+                try:
+                    from django.core.mail import send_mail
+                    from django.template.loader import render_to_string
+                    from django.conf import settings
+                    
+                    password = form.generated_password or form.cleaned_data['password']
+                    
+                    subject = f"Your World Olympiad Network Account - {request.user.get_full_name()}"
+                    message = render_to_string('emails/student_credentials.txt', {
+                        'student': student,
+                        'school': request.user,
+                        'username': student.username,
+                        'password': password,
+                    })
+                    
+                    send_mail(
+                        subject,
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [student.email],
+                        fail_silently=True,
+                    )
+                    
+                    if form.generated_password:
+                        messages.success(request, f"Student account created! Auto-generated password sent to {student.email}")
+                    else:
+                        messages.success(request, f"Student account created! Login credentials sent to {student.email}")
+                except Exception as e:
+                    messages.warning(request, f"Student account created but email failed to send: {str(e)}")
+            else:
+                messages.success(request, f"Successfully added {student.get_full_name()}'s account!")
+            
+            return redirect('dashboard_students')
+    else:
+        form = AddSchoolStudentForm(school=request.user)
+    
+    context = {
+        'form': form,
+        'user': request.user,
+        'active_subscription': active_subscription,
+    }
+    
+    return render(request, 'dashboard/add_student.html', context)
+
+
+@login_required
+def edit_child(request, child_id):
+    """Edit child/student information"""
+    child = get_object_or_404(User, id=child_id)
+    
+    # Verify permission (check both relationship fields and created_by)
+    if request.user.user_type == 'parent':
+        if child.parent != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to edit this child.")
+            return redirect('dashboard_children')
+    elif request.user.user_type == 'school':
+        if child.school != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to edit this student.")
+            return redirect('dashboard_students')
+    elif request.user.is_staff or request.user.is_superuser:
+        pass
+    else:
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = EditChildForm(request.POST, request.FILES, instance=child)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Successfully updated {child.get_full_name()}'s information!")
+            
+            if request.user.user_type == 'parent':
+                return redirect('dashboard_children')
+            else:
+                return redirect('dashboard_students')
+    else:
+        form = EditChildForm(instance=child)
+    
+    context = {
+        'form': form,
+        'child': child,
+        'user': request.user,
+    }
+    
+    if request.user.user_type == 'parent':
+        template = 'dashboard/edit_child.html'
+    elif request.user.user_type == 'school':
+        template = 'dashboard/edit_student.html'
+    else:
+        template = 'dashboard/edit_child.html'
+    return render(request, template, context)
+
+
+@login_required
+def delete_child(request, child_id):
+    """Delete child/student account"""
+    child = get_object_or_404(User, id=child_id)
+    
+    # Verify permission (check both relationship fields and created_by)
+    if request.user.user_type == 'parent':
+        if child.parent != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to delete this child.")
+            return redirect('dashboard_children')
+        redirect_url = 'dashboard_children'
+    elif request.user.user_type == 'school':
+        if child.school != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to delete this student.")
+            return redirect('dashboard_students')
+        redirect_url = 'dashboard_students'
+    elif request.user.is_staff or request.user.is_superuser:
+        redirect_url = 'dashboard'
+    else:
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        child_name = child.get_full_name()
+        child.delete()
+        
+        # Update parent profile count if parent
+        if request.user.user_type == 'parent' and hasattr(request.user, 'parent_profile'):
+            profile = request.user.parent_profile
+            profile.number_of_children = User.objects.filter(parent=request.user).count()
+            profile.save()
+        
+        messages.success(request, f"Successfully deleted {child_name}'s account.")
+        return redirect(redirect_url)
+    
+    context = {
+        'child': child,
+        'user': request.user,
+    }
+    
+    return render(request, 'dashboard/confirm_delete_child.html', context)
+
+
+@login_required
+def child_dashboard_view(request, child_id):
+    """View child/student dashboard (for parents/schools)"""
+    child = get_object_or_404(User, id=child_id, user_type='student')
+    
+    # Verify permission (check both relationship fields and created_by)
+    if request.user.user_type == 'parent':
+        if child.parent != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to view this child's dashboard.")
+            return redirect('dashboard_children')
+    elif request.user.user_type == 'school':
+        if child.school != request.user and child.created_by != request.user:
+            messages.error(request, "You don't have permission to view this student's dashboard.")
+            return redirect('dashboard_students')
+    elif request.user.is_staff or request.user.is_superuser:
+        pass
+    else:
+        messages.error(request, "Access denied.")
+        return redirect('dashboard')
+    
+    # Get child's data
+    try:
+        child.student_profile
+    except Exception:
+        StudentProfile.objects.create(user=child)
+
+    applications_qs = OlympiadApplication.objects.filter(
+        student=child
+    ).select_related('competition', 'competition__destination').order_by('-created_at')
+    applications = applications_qs[:10]
+    
+    upcoming_competitions = Competition.objects.filter(
+        is_active=True,
+        application_deadline__gte=timezone.now().date()
+    ).order_by('application_deadline')[:5]
+    
+    # Get child's subscription info
+    subscription, source_type, source_user = child.get_subscription_source()
+    
+    context = {
+        'child': child,
+        'user': request.user,
+        'applications': applications,
+        'upcoming_competitions': upcoming_competitions,
+        'total_applications': applications_qs.count(),
+        'accepted_applications': applications_qs.filter(status='accepted').count(),
+        'pending_applications': applications_qs.filter(status='under_review').count(),
+        'active_subscription': subscription,
+        'subscription_source': source_type,
+        'can_manage': request.user.is_staff or request.user.is_superuser or request.user.user_type in ['parent', 'school'],
+    }
+    
+    return render(request, 'dashboard/child_dashboard_view.html', context)

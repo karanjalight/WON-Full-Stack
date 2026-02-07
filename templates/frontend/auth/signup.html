@@ -1,320 +1,692 @@
-{% extends 'frontend/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up - WON — World Olympiad Network</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+    <style>
+        :root {
+            --theme-color: #4D40CA;
+            --theme-color-2: #FB5B32;
+        }
 
-{% block title %}
-<title>Sign Up - WON — World Olympiad Network</title>
-{% endblock %}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-{% block extra_css %}
-<style>
-    .user-type-options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-top: 10px;
-    }
-    .user-type-option {
-        flex: 1;
-        min-width: 150px;
-        position: relative;
-    }
-    .user-type-option input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-    }
-    .user-type-option label {
-        display: block;
-        padding: 20px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: #fff;
-    }
-    .user-type-option label:hover {
-        border-color: #007bff;
-        background: #f8f9fa;
-    }
-    .user-type-option input[type="radio"]:checked + label {
-        border-color: #007bff;
-        background: #e7f3ff;
-        color: #007bff;
-        font-weight: 600;
-    }
-    .user-type-option label i {
-        display: block;
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
-    .form-clt label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #333;
-    }
-    .form-clt input,
-    .form-clt select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-        color: #000;
-    }
-    .form-clt input:focus,
-    .form-clt select:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    }
-    .password-wrapper {
-        position: relative;
-    }
-    .toggle-password {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #999;
-        z-index: 2;
-    }
-    .toggle-password:hover {
-        color: #333;
-    }
-</style>
-{% endblock %}
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
-{% block content %}
+        /* ── Full-viewport split ── */
+        .auth-page {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
 
-<!-- Signup Section Start -->
-<section class="contact-section fix section-padding">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-                <div class="contact-form-box">
-                    <div class="section-title text-center mb-4">
-                        <h2>Join WON Today</h2>
-                        <p>Create your account and start your journey to global academic excellence</p>
+        /* ── Left branded panel ── */
+        .auth-visual {
+            flex: 0 0 48%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 50px;
+            overflow: hidden;
+        }
+        .auth-visual .bg-img {
+            position: absolute;
+            inset: 0;
+            background: url("{% static 'img/index/study1.jpg' %}") center/cover no-repeat;
+        }
+        .auth-visual .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(60, 70, 100, 0.40) 30%,
+                rgba(30, 35, 55, 0.70) 60%,
+                rgba(15, 18, 30, 0.88) 100%
+            );
+        }
+        .auth-visual__logo {
+            position: relative;
+            z-index: 2;
+            margin-bottom: auto;
+        }
+        .auth-visual__logo img {
+            height: 55px;
+        }
+        .auth-visual__content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+        }
+        .auth-visual__content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 14px;
+        }
+        .auth-visual__content p {
+            font-size: 15px;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 380px;
+        }
+        .auth-visual__dots {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(5, 8px);
+            gap: 10px;
+            opacity: 0.2;
+        }
+        .auth-visual__dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        /* ── Right form panel ── */
+        .auth-form-wrap {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 40px 30px;
+            background: #f8f9fc;
+            overflow-y: auto;
+        }
+        .auth-form-wrap::-webkit-scrollbar {
+            width: 6px;
+        }
+        .auth-form-wrap::-webkit-scrollbar-thumb {
+            background: #d0d3de;
+            border-radius: 9999px;
+        }
+        .auth-form-inner {
+            width: 100%;
+            max-width: 560px;
+            padding: 20px 0 40px;
+        }
+
+        /* Back link */
+        .auth-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #8a8fa8;
+            text-decoration: none;
+            margin-bottom: 30px;
+            padding: 6px 16px 6px 12px;
+            border-radius: 9999px;
+            background: #fff;
+            border: 1px solid #e4e6ef;
+            transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .auth-back i { transition: transform 0.2s; }
+        .auth-back:hover {
+            color: var(--theme-color);
+            border-color: var(--theme-color);
+            box-shadow: 0 2px 8px rgba(77, 64, 202, 0.08);
+        }
+        .auth-back:hover i { transform: translateX(-3px); }
+
+        /* Form logo */
+        .auth-form-logo {
+            display: block;
+            margin-bottom: 24px;
+        }
+        .auth-form-logo img {
+            height: 65px;
+        }
+
+        /* Heading */
+        .auth-heading { margin-bottom: 28px; }
+        .auth-heading h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .auth-heading p {
+            font-size: 15px;
+            color: #6c6c80;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ── User type selection cards ── */
+        .auth-type-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .user-type-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .type-card {
+            position: relative;
+        }
+        .type-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .type-card label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 10px;
+            border: 2px solid #e4e6ef;
+            border-radius: 16px;
+            background: #fff;
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.15s;
+        }
+        .type-card label i {
+            font-size: 26px;
+            color: #b0b5c5;
+            transition: color 0.25s;
+        }
+        .type-card label span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: color 0.25s;
+        }
+        .type-card label:hover {
+            border-color: var(--theme-color);
+            background: #fafaff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(77, 64, 202, 0.08);
+        }
+        .type-card input[type="radio"]:checked + label {
+            border-color: var(--theme-color);
+            background: rgba(77, 64, 202, 0.06);
+            box-shadow: 0 4px 16px rgba(77, 64, 202, 0.12);
+        }
+        .type-card input[type="radio"]:checked + label i {
+            color: var(--theme-color);
+        }
+        .type-card input[type="radio"]:checked + label span {
+            color: var(--theme-color);
+        }
+
+        /* ── Form row ── */
+        .auth-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .auth-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        /* Fields */
+        .auth-field { margin-bottom: 18px; }
+        .auth-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 7px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .auth-field .input-wrap {
+            position: relative;
+        }
+        .auth-field .input-wrap i.field-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b0b5c5;
+            font-size: 15px;
+            pointer-events: none;
+            transition: color 0.25s;
+        }
+        .auth-field input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid #7c83a1;
+            border-radius: 9999px;
+            font-size: 15px;
+            color: #1a1a2e;
+            background: #fff;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+        }
+        .auth-field input::placeholder { color: #b8bcc9; }
+        .auth-field input:hover { border-color: #ccc; }
+        .auth-field input:focus {
+            outline: none;
+            border-color: var(--theme-color);
+            box-shadow: 0 0 0 4px rgba(77, 64, 202, 0.10);
+            background: #fafaff;
+        }
+        .auth-field .input-wrap:focus-within i.field-icon {
+            color: var(--theme-color);
+        }
+
+        /* Password toggle */
+        .toggle-pw {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #b0b5c5;
+            font-size: 15px;
+            z-index: 2;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: color 0.2s, background 0.2s;
+        }
+        .toggle-pw:hover {
+            color: var(--theme-color);
+            background: rgba(77, 64, 202, 0.08);
+        }
+
+        /* Password hint */
+        .pw-hint {
+            font-size: 12px;
+            color: #8a8fa8;
+            margin-top: 6px;
+            padding-left: 22px;
+        }
+
+        /* Submit */
+        .auth-submit {
+            width: 100%;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 9999px;
+            background: var(--theme-color);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(77, 64, 202, 0.25);
+            margin-top: 8px;
+        }
+        .auth-submit:hover {
+            background: var(--theme-color-2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(251, 91, 50, 0.30);
+        }
+        .auth-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(77, 64, 202, 0.20);
+        }
+        .auth-submit i {
+            font-size: 15px;
+            transition: transform 0.25s;
+        }
+        .auth-submit:hover i { transform: translateX(5px); }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            color: #b8bcc9;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e4e6ef;
+        }
+
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            font-size: 14px;
+            color: #6c6c80;
+        }
+        .auth-footer a {
+            display: inline-block;
+            color: var(--theme-color);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 28px;
+            border: 2px solid var(--theme-color);
+            border-radius: 9999px;
+            margin-top: 10px;
+            transition: background 0.25s, color 0.25s, transform 0.15s;
+        }
+        .auth-footer a:hover {
+            background: var(--theme-color);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Alerts */
+        .auth-alert {
+            border: none;
+            border-radius: 14px;
+            padding: 12px 22px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+        .field-error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            padding-left: 20px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 991px) {
+            .auth-visual { display: none; }
+            .auth-form-wrap { padding: 30px 20px 20px; }
+        }
+        @media (max-width: 575px) {
+            .user-type-grid { grid-template-columns: repeat(2, 1fr); }
+            .auth-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-page">
+    <!-- Left visual panel -->
+    <div class="auth-visual">
+        <div class="bg-img"></div>
+        <div class="bg-overlay"></div>
+
+        <div class="auth-visual__dots">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <a href="{% url 'index' %}" class="auth-visual__logo">
+            <img src="{% static 'img/brand/logowon.png' %}" alt="WON logo">
+        </a>
+
+        <div class="auth-visual__content">
+            <h2>Begin Your<br>Journey to Global<br>Excellence</h2>
+            <p>Create your account and join thousands of students, parents, and schools across Africa competing in world-class Olympiads.</p>
+        </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="auth-form-wrap">
+        <div class="auth-form-inner">
+            <a href="{% url 'index' %}" class="auth-back">
+                <i class="far fa-long-arrow-left"></i> Back to home
+            </a>
+
+            <a href="{% url 'index' %}" class="auth-form-logo">
+                <img src="{% static 'img/brand/logowon.png' %}" alt="WON logo">
+            </a>
+
+            <div class="auth-heading">
+                <h2>Create your account</h2>
+                <p>Fill in the details below to get started</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert auth-alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    
-                    {% if messages %}
-                        <div class="mb-4">
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    
-                    <form method="POST" class="contact-form-items">
-                        {% csrf_token %}
-                        
-                        <div class="row g-4">
-                            <!-- User Type Selection -->
-                            <div class="col-lg-12">
-                                <div class="form-clt">
-                                    <label>{{ form.user_type.label }}</label>
-                                    <div class="user-type-options">
-                                        <div class="user-type-option">
-                                            <input type="radio" name="user_type" value="student" id="user_type_student" required>
-                                            <label for="user_type_student">
-                                                <i class="fas fa-graduation-cap"></i>
-                                                <span>Student</span>
-                                            </label>
-                                        </div>
-                                        <div class="user-type-option">
-                                            <input type="radio" name="user_type" value="parent" id="user_type_parent" required>
-                                            <label for="user_type_parent">
-                                                <i class="fas fa-users"></i>
-                                                <span>Parent</span>
-                                            </label>
-                                        </div>
-                                        <div class="user-type-option">
-                                            <input type="radio" name="user_type" value="school" id="user_type_school" required>
-                                            <label for="user_type_school">
-                                                <i class="fas fa-school"></i>
-                                                <span>School</span>
-                                            </label>
-                                        </div>
-                                        <div class="user-type-option">
-                                            <input type="radio" name="user_type" value="tutor" id="user_type_tutor" required>
-                                            <label for="user_type_tutor">
-                                                <i class="fas fa-chalkboard-teacher"></i>
-                                                <span>Tutor</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    {% if form.user_type.errors %}
-                                        <div class="text-danger small mt-2">
-                                            {{ form.user_type.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Username -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                                    {{ form.username }}
-                                    {% if form.username.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.username.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Email -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                                    {{ form.email }}
-                                    {% if form.email.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.email.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- First Name -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
-                                    {{ form.first_name }}
-                                    {% if form.first_name.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.first_name.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Last Name -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
-                                    {{ form.last_name }}
-                                    {% if form.last_name.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.last_name.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Phone -->
-                            <div class="col-lg-12">
-                                <div class="form-clt">
-                                    <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
-                                    {{ form.phone }}
-                                    {% if form.phone.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.phone.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Password -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-                                    <div class="password-wrapper">
-                                        {{ form.password1 }}
-                                        <span class="toggle-password" data-target="id_password1">
-                                            <i class="far fa-eye"></i>
-                                        </span>
-                                    </div>
-                                    {% if form.password1.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.password1.errors }}
-                                        </div>
-                                    {% endif %}
-                                    {% if form.password1.help_text %}
-                                        <small class="form-text text-muted">{{ form.password1.help_text }}</small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <!-- Confirm Password -->
-                            <div class="col-lg-6">
-                                <div class="form-clt">
-                                    <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-                                    <div class="password-wrapper">
-                                        {{ form.password2 }}
-                                        <span class="toggle-password" data-target="id_password2">
-                                            <i class="far fa-eye"></i>
-                                        </span>
-                                    </div>
-                                    {% if form.password2.errors %}
-                                        <div class="text-danger small mt-1">
-                                            {{ form.password2.errors }}
-                                        </div>
-                                    {% endif %}
-                                    {% if form.password2.help_text %}
-                                        <small class="form-text text-muted">{{ form.password2.help_text }}</small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            {% if form.non_field_errors %}
-                                <div class="col-lg-12">
-                                    <div class="alert alert-danger">
-                                        {{ form.non_field_errors }}
-                                    </div>
-                                </div>
-                            {% endif %}
-                            
-                            <div class="col-lg-12">
-                                <button type="submit" class="theme-btn w-100">
-                                    <span>Create Account</span> <i class="far fa-long-arrow-right"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="col-lg-12 text-center">
-                                <p class="mt-3">
-                                    Already have an account? 
-                                    <a href="{% url 'login' %}" class="text-primary fw-bold">Login here</a>
-                                </p>
-                            </div>
-                        </div>
-                    </form>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="alert auth-alert alert-danger">
+                    {{ form.non_field_errors }}
                 </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- User Type -->
+                <div>
+                    <span class="auth-type-label">{{ form.user_type.label }}</span>
+                    <div class="user-type-grid">
+                        <div class="type-card">
+                            <input type="radio" name="user_type" value="student" id="user_type_student" required>
+                            <label for="user_type_student">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Student</span>
+                            </label>
+                        </div>
+                        <div class="type-card">
+                            <input type="radio" name="user_type" value="parent" id="user_type_parent" required>
+                            <label for="user_type_parent">
+                                <i class="fas fa-users"></i>
+                                <span>Parent</span>
+                            </label>
+                        </div>
+                        <div class="type-card">
+                            <input type="radio" name="user_type" value="school" id="user_type_school" required>
+                            <label for="user_type_school">
+                                <i class="fas fa-school"></i>
+                                <span>School</span>
+                            </label>
+                        </div>
+                        <div class="type-card">
+                            <input type="radio" name="user_type" value="tutor" id="user_type_tutor" required>
+                            <label for="user_type_tutor">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span>Tutor</span>
+                            </label>
+                        </div>
+                    </div>
+                    {% if form.user_type.errors %}
+                        <div class="field-error" style="margin-top:-14px;margin-bottom:16px;">{{ form.user_type.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Username & Email -->
+                <div class="auth-row">
+                    <div class="auth-field">
+                        <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="{{ form.username.id_for_label }}"
+                                name="{{ form.username.html_name }}"
+                                value="{{ form.username.value|default_if_none:'' }}"
+                                placeholder="Choose a username"
+                            >
+                            <i class="far fa-user field-icon"></i>
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="field-error">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="auth-field">
+                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                        <div class="input-wrap">
+                            <input
+                                type="email"
+                                id="{{ form.email.id_for_label }}"
+                                name="{{ form.email.html_name }}"
+                                value="{{ form.email.value|default_if_none:'' }}"
+                                placeholder="you@example.com"
+                            >
+                            <i class="far fa-envelope field-icon"></i>
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="field-error">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- First Name & Last Name -->
+                <div class="auth-row">
+                    <div class="auth-field">
+                        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="{{ form.first_name.id_for_label }}"
+                                name="{{ form.first_name.html_name }}"
+                                value="{{ form.first_name.value|default_if_none:'' }}"
+                                placeholder="First name"
+                            >
+                            <i class="far fa-id-card field-icon"></i>
+                        </div>
+                        {% if form.first_name.errors %}
+                            <div class="field-error">{{ form.first_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="auth-field">
+                        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="{{ form.last_name.id_for_label }}"
+                                name="{{ form.last_name.html_name }}"
+                                value="{{ form.last_name.value|default_if_none:'' }}"
+                                placeholder="Last name"
+                            >
+                            <i class="far fa-id-card field-icon"></i>
+                        </div>
+                        {% if form.last_name.errors %}
+                            <div class="field-error">{{ form.last_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="auth-row full">
+                    <div class="auth-field">
+                        <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                        <div class="input-wrap">
+                            <input
+                                type="tel"
+                                id="{{ form.phone.id_for_label }}"
+                                name="{{ form.phone.html_name }}"
+                                value="{{ form.phone.value|default_if_none:'' }}"
+                                placeholder="+254 700 000 000"
+                            >
+                            <i class="far fa-phone field-icon"></i>
+                        </div>
+                        {% if form.phone.errors %}
+                            <div class="field-error">{{ form.phone.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="auth-row full">
+                    <div class="auth-field">
+                        <label for="{{ form.password1.id_for_label }}">Password</label>
+                        <div class="input-wrap">
+                            <input
+                                type="password"
+                                id="{{ form.password1.id_for_label }}"
+                                name="{{ form.password1.html_name }}"
+                                placeholder="Create a password (min. 6 characters)"
+                                minlength="6"
+                            >
+                            <i class="far fa-lock field-icon"></i>
+                            <span class="toggle-pw" data-target="{{ form.password1.id_for_label }}">
+                                <i class="far fa-eye"></i>
+                            </span>
+                        </div>
+                        {% if form.password1.errors %}
+                            <div class="field-error">{{ form.password1.errors }}</div>
+                        {% endif %}
+                        {% if form.password2.errors %}
+                            <div class="field-error">{{ form.password2.errors }}</div>
+                        {% endif %}
+                        <div class="pw-hint">Must be at least 6 characters</div>
+                    </div>
+                </div>
+                <!-- Hidden confirm password (auto-synced via JS) -->
+                <input type="hidden" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" value="">
+
+                <!-- Submit -->
+                <button type="submit" class="auth-submit">
+                    Create Account <i class="far fa-long-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="auth-divider">or</div>
+
+            <div class="auth-footer">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
             </div>
         </div>
     </div>
-</section>
-<!-- Signup Section End -->
-{% endblock %}
+</div>
 
-{% block extra_js %}
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script>
-    (function() {
-        const toggles = document.querySelectorAll('.toggle-password');
-        toggles.forEach(function(toggle) {
-            toggle.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const input = document.getElementById(targetId);
-                if (!input) return;
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    this.querySelector('i').classList.remove('fa-eye');
-                    this.querySelector('i').classList.add('fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    this.querySelector('i').classList.remove('fa-eye-slash');
-                    this.querySelector('i').classList.add('fa-eye');
-                }
-            });
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-pw').forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            var input = document.getElementById(this.getAttribute('data-target'));
+            if (!input) return;
+            var icon = this.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
         });
-    })();
-</script>
-{% endblock %}
+    });
 
+    // Sync password1 into hidden password2 field
+    var pw1 = document.getElementById('{{ form.password1.id_for_label }}');
+    var pw2 = document.getElementById('{{ form.password2.id_for_label }}');
+    if (pw1 && pw2) {
+        pw1.addEventListener('input', function() {
+            pw2.value = pw1.value;
+        });
+        // Also sync on form submit as a safety net
+        pw1.closest('form').addEventListener('submit', function() {
+            pw2.value = pw1.value;
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{{ child.get_full_name }}{% endblock %}
+{% block page_title %}Student Profile{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                {% if child.profile_picture %}
+                <img src="{{ child.profile_picture.url }}" alt="{{ child.get_full_name }}" class="w-20 h-20 rounded-full object-cover">
+                {% else %}
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
+                    <span class="text-white font-bold text-2xl">{{ child.first_name.0 }}{{ child.last_name.0 }}</span>
+                </div>
+                {% endif %}
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ child.get_full_name }}</h1>
+                    <p class="text-sm text-gray-600">
+                        {% if child.student_profile.grade_level %}
+                            {{ child.student_profile.grade_level }}
+                        {% else %}
+                            Student
+                        {% endif %}
+                        • {{ child.username }}
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Active</span>
+                        {% if active_subscription %}
+                        <span class="px-3 py-1 text-xs font-medium rounded-full bg-primary-100 text-primary-800">
+                            Subscription: {{ subscription_source|capfirst }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="{% url 'dashboard_applications' %}?student={{ child.id }}" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                    <i class="fas fa-file-alt mr-2"></i> View Applications
+                </a>
+                {% if can_manage %}
+                {% if user.user_type == 'school' %}
+                <a href="{% url 'edit_student' child.id %}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-edit mr-2"></i> Edit Account
+                </a>
+                {% else %}
+                <a href="{% url 'edit_child' child.id %}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-edit mr-2"></i> Edit Account
+                </a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Applications</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ total_applications }}</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Pending Review</p>
+                    <p class="text-2xl font-bold text-orange-600">{{ pending_applications }}</p>
+                </div>
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-clock text-orange-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Accepted</p>
+                    <p class="text-2xl font-bold text-green-600">{{ accepted_applications }}</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Account Details -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Account Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Full Name</p>
+                        <p class="font-medium text-gray-900">{{ child.get_full_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Username</p>
+                        <p class="font-medium text-gray-900">{{ child.username }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Email</p>
+                        <p class="font-medium text-gray-900">{{ child.email|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Phone</p>
+                        <p class="font-medium text-gray-900">{{ child.phone|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">City</p>
+                        <p class="font-medium text-gray-900">{{ child.city|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Country</p>
+                        <p class="font-medium text-gray-900">{{ child.country|default:"—" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student Profile -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Student Profile</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Date of Birth</p>
+                        <p class="font-medium text-gray-900">{{ child.student_profile.date_of_birth|date:"M d, Y"|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Grade Level</p>
+                        <p class="font-medium text-gray-900">{{ child.student_profile.grade_level|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Current School</p>
+                        <p class="font-medium text-gray-900">{{ child.student_profile.current_school|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Guardian</p>
+                        <p class="font-medium text-gray-900">{{ child.student_profile.guardian_name|default:"—" }}</p>
+                    </div>
+                </div>
+                {% if child.student_profile.interests %}
+                <div class="mt-4">
+                    <p class="text-sm text-gray-600 mb-2">Interests</p>
+                    <div class="flex flex-wrap gap-2">
+                        {% for interest in child.student_profile.interests %}
+                        <span class="px-2 py-1 bg-primary-50 text-primary-700 text-xs rounded-full">{{ interest }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <div class="space-y-3">
+                    <a href="{% url 'dashboard_applications' %}?student={{ child.id }}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                        <i class="fas fa-file-alt mr-2"></i> Applications
+                    </a>
+                    {% if can_manage %}
+                    {% if user.user_type == 'school' %}
+                    <a href="{% url 'edit_student' child.id %}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                        <i class="fas fa-edit mr-2"></i> Edit Account
+                    </a>
+                    <a href="{% url 'delete_student' child.id %}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors">
+                        <i class="fas fa-trash mr-2"></i> Delete Account
+                    </a>
+                    {% else %}
+                    <a href="{% url 'edit_child' child.id %}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                        <i class="fas fa-edit mr-2"></i> Edit Account
+                    </a>
+                    <a href="{% url 'delete_child' child.id %}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors">
+                        <i class="fas fa-trash mr-2"></i> Delete Account
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Recent Applications -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">Recent Applications</h2>
+                    <a href="{% url 'dashboard_applications' %}?student={{ child.id }}" class="text-sm text-primary-600 hover:text-primary-700">View all</a>
+                </div>
+                {% if applications %}
+                <div class="space-y-3">
+                    {% for application in applications %}
+                    <a href="{% url 'application_detail' application.id %}" class="block p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <p class="font-medium text-gray-900 text-sm">{{ application.competition.name }}</p>
+                        <p class="text-xs text-gray-600">{{ application.application_number }}</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs text-gray-500">{{ application.created_at|date:"M d, Y" }}</span>
+                            <span class="px-2 py-1 text-xs rounded-full
+                                {% if application.status == 'accepted' %}bg-green-100 text-green-800
+                                {% elif application.status == 'rejected' %}bg-red-100 text-red-800
+                                {% elif application.status == 'under_review' %}bg-orange-100 text-orange-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ application.get_status_display }}
+                            </span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-6 text-sm text-gray-500">No applications yet</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

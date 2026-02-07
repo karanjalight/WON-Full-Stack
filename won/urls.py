@@ -41,6 +41,12 @@ urlpatterns = [
     path('subjects/', views.subjects, name='subjects'),
     path('subjects/<slug:slug>/', views.subject_details, name='subject-details'),
     
+    # Past Papers
+    path('past-papers/', views.past_papers, name='past_papers'),
+    path('past-papers/cart/', views.past_papers_cart, name='past_papers_cart'),
+    path('past-papers/checkout/', views.past_papers_checkout, name='past_papers_checkout'),
+    path('past-papers/<slug:slug>/', views.past_paper_detail, name='past_paper_detail'),
+    
     # News/Resources
     path('news/', views.news, name='news'),
     path('news/<int:pk>/', views.news_details, name='news-details'),
@@ -82,6 +88,38 @@ urlpatterns = [
     path('subscriptions/parents/', views.subscription_parents, name='subscription-parents'),
     path('subscriptions/schools/', views.subscription_schools, name='subscription-schools'),
     path('subscriptions/students/', views.subscription_students, name='subscription-students'),
+    
+    # Subscription Checkout & Payment
+    path('subscriptions/<uuid:plan_id>/checkout/', views.subscription_checkout, name='subscription-checkout'),
+    path('subscriptions/payment/initiate/<uuid:transaction_id>/', views.initiate_paystack_payment, name='initiate-paystack-payment'),
+    path('subscriptions/payment/verify/<uuid:transaction_id>/', views.verify_paystack_payment, name='verify-paystack-payment'),
+    path('subscriptions/payment/webhook/', views.paystack_webhook, name='paystack-webhook'),
+    
+    # Onboarding
+    path('onboarding/subscription/', views.onboarding_subscription, name='onboarding-subscription'),
+    
+    # Dashboard Routes
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/subscription/', views.dashboard_subscription, name='dashboard_subscription'),
+    path('dashboard/subscription/<uuid:subscription_id>/cancel/', views.cancel_pending_subscription, name='cancel_pending_subscription'),
+    path('dashboard/profile/', views.dashboard_profile, name='dashboard_profile'),
+    path('dashboard/children/', views.dashboard_children, name='dashboard_children'),
+    path('dashboard/children/add/', views.add_child, name='add_child'),
+    path('dashboard/children/<uuid:child_id>/edit/', views.edit_child, name='edit_child'),
+    path('dashboard/children/<uuid:child_id>/delete/', views.delete_child, name='delete_child'),
+    path('dashboard/children/<uuid:child_id>/view/', views.child_dashboard_view, name='child_dashboard_view'),
+    path('dashboard/students/', views.dashboard_students, name='dashboard_students'),
+    path('dashboard/students/add/', views.add_school_student, name='add_school_student'),
+    path('dashboard/students/<uuid:child_id>/edit/', views.edit_child, name='edit_student'),
+    path('dashboard/students/<uuid:child_id>/delete/', views.delete_child, name='delete_student'),
+    path('dashboard/students/<uuid:child_id>/view/', views.child_dashboard_view, name='student_dashboard_view'),
+    path('dashboard/applications/', views.dashboard_applications, name='dashboard_applications'),
+    path('dashboard/applications/<uuid:application_id>/', views.application_detail, name='application_detail'),
+    path('dashboard/tutor-sessions/', views.dashboard_tutor_sessions, name='dashboard_tutor_sessions'),
+    path('dashboard/tutor-sessions/<uuid:session_id>/', views.dashboard_tutor_session_detail, name='dashboard_tutor_session_detail'),
+    path('dashboard/tutor-calendar/', views.tutor_calendar, name='tutor_calendar'),
+    path('dashboard/notifications/', views.dashboard_notifications, name='dashboard_notifications'),
+    path('dashboard/settings/', views.dashboard_settings, name='dashboard_settings'),
     
     # Authentication
     path('login/', views.login_view, name='login'),

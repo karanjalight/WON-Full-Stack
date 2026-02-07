@@ -1,0 +1,84 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Session {{ session.session_number }}{% endblock %}
+{% block page_title %}Tutor Session Details{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+        <div class="flex items-start justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Session #{{ session.session_number }}</h1>
+                <p class="text-sm text-gray-600 mt-1">Scheduled for {{ session.scheduled_at|date:"M d, Y H:i" }}</p>
+            </div>
+            <span class="px-3 py-1 text-sm font-medium rounded-full
+                {% if session.status == 'completed' %}bg-green-100 text-green-800
+                {% elif session.status == 'scheduled' %}bg-blue-100 text-blue-800
+                {% elif 'cancelled' in session.status %}bg-red-100 text-red-800
+                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                {{ session.get_status_display }}
+            </span>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Student</h2>
+            <p class="font-medium text-gray-900">{{ session.student.get_full_name }}</p>
+            <p class="text-sm text-gray-600">{{ session.student.email }}</p>
+            {% if session.student.phone %}<p class="text-sm text-gray-600">{{ session.student.phone }}</p>{% endif %}
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Tutor</h2>
+            <p class="font-medium text-gray-900">{{ session.tutor.user.get_full_name }}</p>
+            <p class="text-sm text-gray-600">{{ session.tutor.user.email }}</p>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Session Details</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-600">Subject</p>
+                <p class="font-medium text-gray-900">{{ session.subject.name }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Duration</p>
+                <p class="font-medium text-gray-900">{{ session.duration_minutes }} minutes</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Amount</p>
+                <p class="font-medium text-gray-900">{{ session.currency }} {{ session.amount }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Payment Status</p>
+                <p class="font-medium text-gray-900">{{ session.get_payment_status_display }}</p>
+            </div>
+        </div>
+        
+        {% if session.topic %}
+        <div class="mt-4">
+            <p class="text-sm text-gray-600">Topic</p>
+            <p class="font-medium text-gray-900">{{ session.topic }}</p>
+        </div>
+        {% endif %}
+        
+        {% if session.description %}
+        <div class="mt-4">
+            <p class="text-sm text-gray-600">Description</p>
+            <p class="text-gray-900 whitespace-pre-wrap">{{ session.description }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    {% if session.meeting_link %}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Meeting Link</h2>
+        <a href="{{ session.meeting_link }}" target="_blank" class="text-primary-600 hover:text-primary-700">
+            {{ session.meeting_link }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

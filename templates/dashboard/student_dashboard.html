@@ -1,0 +1,261 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+    <p class="text-gray-500 mt-1">Welcome back, {{ user.get_full_name }} — Your complete overview</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    
+    <!-- My Applications -->
+    <div class="stat-card bg-gradient-to-br from-amber-50 to-orange-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-file-alt text-amber-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-amber-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">My Applications</p>
+        <p class="text-3xl font-bold text-gray-900">{{ total_applications }}</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">Total submitted</p>
+    </div>
+    
+    <!-- Accepted -->
+    <div class="stat-card bg-gradient-to-br from-emerald-50 to-teal-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle text-emerald-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-emerald-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Accepted</p>
+        <p class="text-3xl font-bold text-gray-900">{{ accepted_applications }}</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">Applications accepted</p>
+    </div>
+    
+    <!-- Pending -->
+    <div class="stat-card bg-gradient-to-br from-rose-50 to-pink-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-clock text-rose-500"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-rose-500 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Pending</p>
+        <p class="text-3xl font-bold text-gray-900">{{ pending_applications }}</p>
+        <p class="text-xs text-amber-600 mt-2 font-medium">Awaiting review</p>
+    </div>
+    
+    <!-- Competitions -->
+    <div class="stat-card bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-trophy text-blue-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-clock text-blue-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Competitions</p>
+        <p class="text-3xl font-bold text-gray-900">Explore</p>
+        <a href="{% url 'subjects' %}" class="inline-block mt-3 px-5 py-2 bg-navy-800 text-white text-xs font-medium rounded-full hover:bg-navy-900 transition">
+            Browse Now
+        </a>
+    </div>
+    
+</div>
+
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Upcoming Competitions -->
+        <div class="bg-white rounded-xl border border-gray-300">
+            <div class="p-6 border-b border-gray-300">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">Upcoming Competitions</h2>
+                    <a href="{% url 'subjects' %}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="p-6">
+                {% if upcoming_competitions %}
+                <div class="space-y-4">
+                    {% for competition in upcoming_competitions %}
+                    <div class="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900">{{ competition.name }}</h3>
+                                <p class="text-sm text-gray-600 mt-1">{{ competition.subject.name }}</p>
+                            </div>
+                            {% if competition.is_featured %}
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2.5 py-1 rounded-full font-medium">Featured</span>
+                            {% endif %}
+                        </div>
+                        <div class="flex items-center justify-between mt-3">
+                            <div class="text-sm text-gray-500">
+                                <i class="fas fa-calendar mr-1"></i>
+                                Deadline: {{ competition.application_deadline|date:"M d, Y" }}
+                            </div>
+                            <a href="{% url 'olympiad-details' competition.slug %}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                                Learn More <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-trophy text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 mb-4">No upcoming competitions at the moment</p>
+                    <a href="{% url 'subjects' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+                        Browse Competitions
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- My Applications -->
+        <div class="bg-white rounded-xl border border-gray-300">
+            <div class="p-6 border-b border-gray-300">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">My Applications</h2>
+                    <a href="{% url 'dashboard_applications' %}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="p-6">
+                {% if recent_applications %}
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-300">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Competition</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for application in recent_applications %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ application.competition.short_name|default:application.competition.name|truncatewords:3 }}</td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-full 
+                                        {% if application.status == 'accepted' %}bg-green-100 text-green-800
+                                        {% elif application.status == 'rejected' %}bg-red-100 text-red-800
+                                        {% elif application.status == 'under_review' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ application.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ application.submitted_at|date:"M d, Y"|default:"-" }}</td>
+                                <td class="px-4 py-3">
+                                    <a href="#" class="text-primary-600 hover:text-primary-700 text-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-file-alt text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 mb-4">You haven't applied to any competitions yet</p>
+                    <a href="{% url 'subjects' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+                        <i class="fas fa-plus mr-2"></i> Start Application
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+        <!-- Subscription Card -->
+        <div class="bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl p-6 text-white">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <p class="text-sm opacity-90">Subscription Status</p>
+                    {% if active_subscription and active_subscription.is_valid %}
+                    <h3 class="text-2xl font-bold mt-1">Active</h3>
+                    {% else %}
+                    <h3 class="text-2xl font-bold mt-1">No Plan</h3>
+                    {% endif %}
+                </div>
+                <i class="fas fa-crown text-3xl opacity-80"></i>
+            </div>
+            {% if active_subscription %}
+            <p class="text-sm opacity-90 mb-4">{{ active_subscription.plan.name }} - {{ active_subscription.plan.get_duration_display }}</p>
+            <a href="{% url 'dashboard_subscription' %}" class="block w-full text-center bg-white text-primary-600 font-medium py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                View Details
+            </a>
+            {% else %}
+            <p class="text-sm opacity-90 mb-4">Get access to all competitions and resources.</p>
+            <a href="{% url 'subscription-students' %}" class="block w-full text-center bg-white text-primary-600 font-medium py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                Subscribe Now
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Profile Completion -->
+        <div class="bg-white rounded-xl border border-gray-300 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Profile</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">Profile Completion</span>
+                    <span class="text-sm font-medium text-gray-900">75%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 75%"></div>
+                </div>
+                <a href="{% url 'dashboard_profile' %}" class="block text-center text-sm text-primary-600 hover:text-primary-700 font-medium mt-3">
+                    Complete Your Profile
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl border border-gray-300 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="space-y-3">
+                <a href="{% url 'subjects' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-primary-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-trophy text-primary-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Browse Competitions</span>
+                </a>
+                <a href="{% url 'team' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-green-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-chalkboard-teacher text-green-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Find Tutors</span>
+                </a>
+                <a href="{% url 'destination' %}" class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="bg-purple-100 rounded-xl p-2.5 mr-3">
+                        <i class="fas fa-plane text-purple-600"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Travel Options</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

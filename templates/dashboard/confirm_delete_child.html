@@ -1,0 +1,51 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Delete Account{% endblock %}
+{% block page_title %}Delete Account{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-8">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <div class="flex-1">
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Confirm Delete</h2>
+                <p class="text-gray-600 mb-4">
+                    Are you sure you want to delete <span class="font-semibold text-gray-900">{{ child.get_full_name }}</span>'s account?
+                    This action cannot be undone.
+                </p>
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700 mb-6">
+                    <ul class="space-y-1">
+                        <li>• The student will lose access to their dashboard.</li>
+                        <li>• Applications linked to this student will be removed.</li>
+                        <li>• All profile data for this account will be deleted.</li>
+                    </ul>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="flex items-center gap-3">
+                        <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                            <i class="fas fa-trash mr-2"></i> Delete Account
+                        </button>
+                        {% if user.user_type == 'parent' %}
+                        <a href="{% url 'dashboard_children' %}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                            Cancel
+                        </a>
+                        {% elif user.user_type == 'school' %}
+                        <a href="{% url 'dashboard_students' %}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                            Cancel
+                        </a>
+                        {% else %}
+                        <a href="{% url 'dashboard' %}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">
+                            Cancel
+                        </a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

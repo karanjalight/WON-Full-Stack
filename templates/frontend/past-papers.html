@@ -1,0 +1,904 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Past Papers — WON | World Olympiad Network</title>
+{% endblock %}
+
+{% block meta_description %}Browse and purchase Olympiad past papers to prepare for Mathematics, Science, English, and Computer Science competitions.{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* ===== Hero Section ===== */
+.past-papers-hero {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+    padding: 100px 0 60px;
+}
+.past-papers-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, .82), rgba(30, 58, 138, .72));
+    z-index: 1;
+}
+.past-papers-hero .hero-inner {
+    position: relative;
+    z-index: 2;
+}
+.past-papers-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 14px;
+    line-height: 1.15;
+}
+.past-papers-hero h1 span {
+    color: #f59e0b;
+}
+.past-papers-hero p {
+    color: rgba(255,255,255,.85);
+    font-size: 18px;
+    max-width: 580px;
+    margin: 0 auto 28px;
+}
+.past-papers-hero .hero-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.past-papers-hero .hero-stats .stat-item {
+    text-align: center;
+    color: #fff;
+}
+.past-papers-hero .hero-stats .stat-item h3 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f59e0b;
+    margin-bottom: 2px;
+}
+.past-papers-hero .hero-stats .stat-item span {
+    font-size: 14px;
+    color: rgba(255,255,255,.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== Shop Section ===== */
+.pp-shop-section {
+    padding: 80px 0 100px;
+    background: #f8fafc;
+}
+.pp-section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.pp-section-header h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+.pp-section-header p {
+    color: #64748b;
+    font-size: 16px;
+}
+
+/* Search Bar */
+.pp-search-bar {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    position: relative;
+}
+.pp-search-bar input {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    font-size: 15px;
+    background: #fff;
+    color: #0f172a;
+    transition: border-color .3s;
+    outline: none;
+}
+.pp-search-bar input:focus {
+    border-color: #1e3a8a;
+}
+.pp-search-bar .search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+/* Category Filter */
+.pp-categories {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 45px;
+}
+.pp-cat-btn {
+    padding: 10px 24px;
+    border-radius: 50px;
+    border: 2px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s;
+}
+.pp-cat-btn:hover,
+.pp-cat-btn.active {
+    background: #1e3a8a;
+    border-color: #1e3a8a;
+    color: #fff;
+}
+
+/* Product Grid */
+.pp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+@media (max-width: 991px) {
+    .pp-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 575px) {
+    .pp-grid { grid-template-columns: 1fr; }
+    .past-papers-hero h1 { font-size: 32px; }
+}
+
+/* Product Card */
+.pp-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 16px rgba(0,0,0,.04);
+    transition: transform .3s, box-shadow .3s;
+    display: flex;
+    flex-direction: column;
+}
+.pp-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.1);
+}
+
+/* Card Image */
+.pp-card-img {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: #e2e8f0;
+}
+.pp-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s;
+}
+.pp-card:hover .pp-card-img img {
+    transform: scale(1.06);
+}
+.pp-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e3a8a;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    letter-spacing: .5px;
+}
+.pp-badge i {
+    font-size: 10px;
+}
+.pp-wishlist {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .3s;
+    color: #64748b;
+    font-size: 15px;
+}
+.pp-wishlist:hover {
+    background: #1e3a8a;
+    color: #fff;
+}
+
+/* Card Body */
+.pp-card-body {
+    padding: 20px 22px 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.pp-card-category {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1e3a8a;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+.pp-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+}
+.pp-card-top h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.3;
+}
+.pp-rating {
+    display: flex;
+    gap: 2px;
+    color: #f59e0b;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-left: 10px;
+    margin-top: 3px;
+}
+.pp-card-desc {
+    color: #64748b;
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.pp-price-row {
+    margin-top: auto;
+    margin-bottom: 16px;
+}
+.pp-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+}
+.pp-currency {
+    font-size: 12px;
+    color: #94a3b8;
+    display: block;
+    margin-top: -2px;
+}
+.pp-learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border: 2px solid #1e3a8a;
+    border-radius: 50px;
+    color: #1e3a8a;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all .3s;
+    background: transparent;
+    cursor: pointer;
+    margin-bottom: 16px;
+    width: fit-content;
+}
+.pp-learn-more:hover {
+    background: #1e3a8a;
+    color: #fff;
+}
+.pp-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 12.5px;
+    color: #64748b;
+}
+.pp-in-stock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.pp-in-stock .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+}
+
+/* Load More Button */
+.pp-load-more {
+    text-align: center;
+    margin-top: 50px;
+}
+.pp-load-more .theme-btn {
+    padding: 14px 40px;
+}
+
+/* Floating Cart */
+.pp-floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 20px rgba(30,58,138,.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    transition: all .3s;
+    text-decoration: none;
+}
+.pp-floating-cart:hover { background: #1e40af; transform: scale(1.1); color: #fff; }
+.pp-cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Add to Cart Button on cards */
+.pp-add-cart {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+}
+.pp-add-cart:hover { background: #1e40af; }
+.pp-add-cart.added { background: #22c55e; }
+
+/* Card actions row */
+.pp-card-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+/* Toast */
+.pp-toast {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    z-index: 10000;
+    background: #0f172a;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,.2);
+    transform: translateX(400px);
+    transition: transform .4s cubic-bezier(.175,.885,.32,1.275);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pp-toast.show { transform: translateX(0); }
+.pp-toast i { color: #22c55e; font-size: 18px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Past Papers Hero Section -->
+<section class="past-papers-hero">
+    <div class="hero-inner">
+        <h1 class="wow fadeInUp" data-wow-delay=".3s">Ace Your <span>Olympiad</span> Prep</h1>
+        <p class="wow fadeInUp" data-wow-delay=".5s">Get official past papers from top international Olympiads. Practice with real questions and boost your scores.</p>
+        <div class="hero-stats wow fadeInUp" data-wow-delay=".7s">
+            <div class="stat-item">
+                <h3>500+</h3>
+                <span>Past Papers</span>
+            </div>
+            <div class="stat-item">
+                <h3>12</h3>
+                <span>Subjects</span>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <span>Olympiads</span>
+            </div>
+            <div class="stat-item">
+                <h3>10K+</h3>
+                <span>Students</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Past Papers Shop Section -->
+<section class="pp-shop-section">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="pp-section-header wow fadeInUp" data-wow-delay=".3s">
+            <h2>Explore Our Past Papers</h2>
+            <p>Browse by category to find the perfect preparation material</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="pp-search-bar wow fadeInUp" data-wow-delay=".4s">
+            <i class="far fa-search search-icon"></i>
+            <input type="text" id="ppSearchInput" placeholder="Search papers by name, subject, or Olympiad...">
+        </div>
+
+        <!-- Category Filters -->
+        <div class="pp-categories wow fadeInUp" data-wow-delay=".5s">
+            <button class="pp-cat-btn active" data-category="all">All Papers</button>
+            <button class="pp-cat-btn" data-category="mathematics">Mathematics</button>
+            <button class="pp-cat-btn" data-category="science">Science</button>
+            <button class="pp-cat-btn" data-category="english">English</button>
+            <button class="pp-cat-btn" data-category="computer-science">Computer Science</button>
+            <button class="pp-cat-btn" data-category="physics">Physics</button>
+            <button class="pp-cat-btn" data-category="chemistry">Chemistry</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="pp-grid" id="ppGrid">
+
+            <!-- Card 1 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".3s" data-category="mathematics" data-product-id="imo-2024">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80" alt="IMO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Mathematics</span>
+                    <div class="pp-card-top">
+                        <h4>IMO 2024 Past Paper Bundle</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">Complete set of International Mathematical Olympiad papers from 2020-2024 with detailed solutions and marking schemes.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,500.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/imo-2024/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="imo-2024"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".4s" data-category="science" data-product-id="nso-level-1">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80" alt="NSO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Science</span>
+                    <div class="pp-card-top">
+                        <h4>NSO Level 1 Papers</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">National Science Olympiad Level 1 past papers covering Physics, Chemistry, and Biology for grades 8-12.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,200.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/nso-level-1/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="nso-level-1"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".5s" data-category="english" data-product-id="ieo-prep">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=600&q=80" alt="IEO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">English</span>
+                    <div class="pp-card-top">
+                        <h4>IEO Preparation Pack</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">International English Olympiad past papers with grammar, vocabulary, and comprehension sections. Includes answer keys.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 800.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/ieo-prep/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="ieo-prep"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Shipping</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".3s" data-category="computer-science" data-product-id="nco-full">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1515879218367-8466d910auj7?auto=format&fit=crop&w=600&q=80" alt="NCO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Computer Science</span>
+                    <div class="pp-card-top">
+                        <h4>NCO Full Paper Set</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">National Cyber Olympiad past papers covering algorithms, data structures, logical reasoning, and programming concepts.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,800.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/nco-full/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="nco-full"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".4s" data-category="physics" data-product-id="ipho-theory">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&w=600&q=80" alt="IPhO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Physics</span>
+                    <div class="pp-card-top">
+                        <h4>IPhO Theory & Practical</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">International Physics Olympiad theoretical and practical examination papers with step-by-step solutions from 2019-2024.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 2,000.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/ipho-theory/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="ipho-theory"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".5s" data-category="chemistry" data-product-id="icho-collection">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=600&q=80" alt="IChO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Chemistry</span>
+                    <div class="pp-card-top">
+                        <h4>IChO Paper Collection</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">International Chemistry Olympiad past papers with organic, inorganic, and physical chemistry problems and solutions.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,600.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/icho-collection/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="icho-collection"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".3s" data-category="mathematics" data-product-id="amc-bundle">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80" alt="AMC Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> POPULAR</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Mathematics</span>
+                    <div class="pp-card-top">
+                        <h4>AMC 10 & 12 Bundle</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">American Mathematics Competition papers for AMC 10 and AMC 12 with full solutions. Great for building problem-solving skills.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,300.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/amc-bundle/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="amc-bundle"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".4s" data-category="science" data-product-id="ibo-biology">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1614935151651-0bea6508db6b?auto=format&fit=crop&w=600&q=80" alt="IBO Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> NEW</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Science</span>
+                    <div class="pp-card-top">
+                        <h4>IBO Biology Papers</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">International Biology Olympiad theoretical and practical exam papers covering cell biology, genetics, ecology, and more.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 1,400.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/ibo-biology/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="ibo-biology"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="pp-card wow fadeInUp" data-wow-delay=".5s" data-category="computer-science" data-product-id="ioi-problems">
+                <div class="pp-card-img">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=600&q=80" alt="IOI Past Papers">
+                    <span class="pp-badge"><i class="fas fa-star"></i> QUALITY</span>
+                    <button class="pp-wishlist"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">Computer Science</span>
+                    <div class="pp-card-top">
+                        <h4>IOI Problem Sets</h4>
+                        <div class="pp-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="pp-card-desc">International Olympiad in Informatics competitive programming problems with editorial solutions and test cases.</p>
+                    <div class="pp-price-row">
+                        <span class="pp-price">KSh 2,200.00</span>
+                        <span class="pp-currency">KES</span>
+                    </div>
+                    <div class="pp-card-actions">
+                        <a href="/past-papers/ioi-problems/" class="pp-learn-more">Learn More <i class="far fa-arrow-right"></i></a>
+                        <button class="pp-add-cart" data-id="ioi-problems"><i class="fas fa-cart-plus"></i> Add</button>
+                    </div>
+                    <div class="pp-card-footer">
+                        <span class="pp-in-stock"><span class="dot"></span> In Stock</span>
+                        <span>Free Download</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Load More -->
+        <div class="pp-load-more wow fadeInUp" data-wow-delay=".3s">
+            <a href="#" class="theme-btn">Load More Papers <i class="far fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Floating Cart Button -->
+<a href="{% url 'past_papers_cart' %}" class="pp-floating-cart" id="floatingCart">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="pp-cart-count" id="cartCount">0</span>
+</a>
+
+<!-- Toast Notification -->
+<div class="pp-toast" id="cartToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMsg">Added to cart!</span>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== Cart Utility =====
+function getCart() {
+    try { return JSON.parse(localStorage.getItem('pp_cart') || '[]'); }
+    catch(e) { return []; }
+}
+function saveCart(cart) { localStorage.setItem('pp_cart', JSON.stringify(cart)); }
+function addToCart(productId, qty) {
+    const cart = getCart();
+    const existing = cart.find(i => i.id === productId);
+    if (existing) { existing.qty = Math.min(existing.qty + qty, 10); }
+    else { cart.push({ id: productId, qty: qty }); }
+    saveCart(cart);
+    updateCartCount();
+}
+function getCartCount() {
+    return getCart().reduce((sum, i) => sum + i.qty, 0);
+}
+function updateCartCount() {
+    const el = document.getElementById('cartCount');
+    if (el) { const c = getCartCount(); el.textContent = c; el.style.display = c > 0 ? 'flex' : 'none'; }
+}
+function showToast(msg) {
+    const toast = document.getElementById('cartToast');
+    const msgEl = document.getElementById('toastMsg');
+    if (toast && msgEl) {
+        msgEl.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Category filter
+    const catBtns = document.querySelectorAll('.pp-cat-btn');
+    const cards = document.querySelectorAll('.pp-card');
+
+    catBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            catBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const cat = this.dataset.category;
+            
+            cards.forEach(card => {
+                if (cat === 'all' || card.dataset.category === cat) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Search filter
+    const searchInput = document.getElementById('ppSearchInput');
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        catBtns.forEach(b => b.classList.remove('active'));
+        document.querySelector('.pp-cat-btn[data-category="all"]').classList.add('active');
+        cards.forEach(card => {
+            const title = card.querySelector('h4').textContent.toLowerCase();
+            const desc = card.querySelector('.pp-card-desc').textContent.toLowerCase();
+            const category = card.querySelector('.pp-card-category').textContent.toLowerCase();
+            if (title.includes(query) || desc.includes(query) || category.includes(query)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Wishlist toggle
+    document.querySelectorAll('.pp-wishlist').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                this.style.background = '#1e3a8a';
+                this.style.color = '#fff';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                this.style.background = 'rgba(255,255,255,.9)';
+                this.style.color = '#64748b';
+            }
+        });
+    });
+
+    // Add to Cart from listing
+    document.querySelectorAll('.pp-add-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.id;
+            const title = this.closest('.pp-card').querySelector('h4').textContent;
+            addToCart(productId, 1);
+            this.innerHTML = '<i class="fas fa-check"></i> Added';
+            this.classList.add('added');
+            showToast(title + ' added to cart!');
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
+                this.classList.remove('added');
+            }, 2000);
+        });
+    });
+
+    // Init cart count
+    updateCartCount();
+});
+</script>
+{% endblock %}

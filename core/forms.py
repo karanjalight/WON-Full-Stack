@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from backend.models import (
     User, StudentProfile, Competition, OlympiadApplication, 
     TravelQuote, ApplicationDocument, TutorProfile, TutorSession, Subject,
-    ParentProfile, SchoolProfile
+    ParentProfile, SchoolProfile, SubscriptionPlan, UserSubscription, PaymentTransaction
 )
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
@@ -557,7 +557,479 @@ class SignupForm(UserCreationForm):
                     user=user,
                     school_name=user.get_full_name() or user.username
                 )
-            # Tutor profile would be created separately through admin or a separate form
+            elif user.user_type == 'tutor':
+                # Create a minimal tutor profile so the tutor can access dashboard
+                TutorProfile.objects.create(
+                    user=user,
+                    qualifications="Pending verification",
+                    hourly_rate=0,
+                    specializations="",
+                )
+        
+        return user
+
+
+# ============================================================================
+# SUBSCRIPTION FORMS
+# ============================================================================
+
+class SubscriptionCheckoutForm(forms.Form):
+    """Subscription checkout form"""
+    plan = forms.ModelChoiceField(
+        queryset=SubscriptionPlan.objects.filter(is_active=True),
+        widget=forms.HiddenInput()
+    )
+    
+    payment_method = forms.ChoiceField(
+        choices=[
+            ('paystack', 'Pay with Card (Paystack)'),
+            ('mpesa', 'M-Pesa (Coming Soon)'),
+        ],
+        initial='paystack',
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'})
+    )
+    
+    terms_accepted = forms.BooleanField(
+        required=True,
+        label='I agree to the Terms and Conditions',
+        error_messages={'required': 'You must accept the terms and conditions to proceed.'}
+    )
+    
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        
+        # Filter plans by user type if user is provided
+        if user and hasattr(user, 'user_type'):
+            self.fields['plan'].queryset = SubscriptionPlan.objects.filter(
+                is_active=True,
+                plan_type=user.user_type
+            )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        plan = cleaned_data.get('plan')
+        
+        # Validate user has the correct user type for the plan
+        if self.user and plan:
+            if plan.plan_type != self.user.user_type:
+                raise ValidationError(
+                    f"This plan is for {plan.get_plan_type_display()}s only. "
+                    f"You are registered as a {self.user.get_user_type_display()}."
+                )
+        
+        return cleaned_data
+
+
+class PaymentConfirmationForm(forms.Form):
+    """Payment confirmation form (for manual payment verification)"""
+    payment_reference = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter payment reference number'
+        })
+    )
+    
+    payment_method = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., Paystack, Bank Transfer'
+        })
+    )
+    
+    amount_paid = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': '0.00',
+            'step': '0.01'
+        })
+    )
+    
+    notes = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Additional notes (optional)'
+        }),
+        required=False
+    )
+
+
+# ============================================================================
+# CHILD/STUDENT ACCOUNT MANAGEMENT FORMS
+# ============================================================================
+
+class AddChildForm(forms.ModelForm):
+    """Form for parents to add a child account"""
+    password = forms.CharField(
+        max_length=128,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create a password for this child'
+        }),
+        help_text="Password must be at least 8 characters"
+    )
+    
+    confirm_password = forms.CharField(
+        max_length=128,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm password'
+        })
+    )
+    
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        }),
+        help_text="Child's date of birth"
+    )
+    
+    grade_level = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., Grade 8, Form 3, Year 10'
+        })
+    )
+    
+    interests = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Mathematics, Physics, Chemistry, Biology...'
+        }),
+        help_text="Enter subjects/interests separated by commas"
+    )
+    
+    send_welcome_email = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label='Send welcome email with login credentials'
+    )
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email', 'phone']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First name',
+                'required': True
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name',
+                'required': True
+            }),
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Username for login',
+                'required': True
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'child@example.com'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+1234567890'
+            }),
+        }
+    
+    def __init__(self, *args, parent=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.parent = parent
+        self.fields['email'].required = False
+        self.fields['phone'].required = False
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("This username is already taken. Please choose another.")
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            raise ValidationError("A user with this email already exists.")
+        return email
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+        
+        if password and confirm_password:
+            if password != confirm_password:
+                raise ValidationError("Passwords do not match.")
+            if len(password) < 8:
+                raise ValidationError("Password must be at least 8 characters long.")
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.user_type = 'student'
+        user.set_password(self.cleaned_data['password'])
+        
+        if self.parent:
+            user.parent = self.parent
+            user.created_by = self.parent
+        
+        if commit:
+            user.save()
+            
+            # Create student profile
+            interests_str = self.cleaned_data.get('interests', '')
+            interests_list = [i.strip() for i in interests_str.split(',') if i.strip()] if interests_str else []
+            
+            StudentProfile.objects.create(
+                user=user,
+                date_of_birth=self.cleaned_data['date_of_birth'],
+                grade_level=self.cleaned_data.get('grade_level', ''),
+                interests=interests_list
+            )
+        
+        return user
+
+
+class AddSchoolStudentForm(forms.ModelForm):
+    """Form for schools to add a student account"""
+    password = forms.CharField(
+        max_length=128,
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create a password (optional - will auto-generate if empty)'
+        }),
+        help_text="Leave empty to auto-generate a secure password"
+    )
+    
+    confirm_password = forms.CharField(
+        max_length=128,
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm password'
+        })
+    )
+    
+    date_of_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+    )
+    
+    grade_level = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., Grade 10, Form 4'
+        })
+    )
+    
+    student_id = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'School student ID number'
+        }),
+        help_text="Internal student ID in your school system"
+    )
+    
+    send_credentials_email = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label='Send login credentials via email'
+    )
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email', 'phone']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First name',
+                'required': True
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name',
+                'required': True
+            }),
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Username (will auto-generate if empty)'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'student@school.edu',
+                'required': True
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+1234567890'
+            }),
+        }
+    
+    def __init__(self, *args, school=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.school = school
+        self.fields['username'].required = False
+        self.fields['phone'].required = False
+        self.generated_password = None
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username:
+            # Auto-generate username from first and last name
+            first_name = self.data.get('first_name', '').lower()
+            last_name = self.data.get('last_name', '').lower()
+            if first_name and last_name:
+                base_username = f"{first_name}.{last_name}"
+                username = base_username
+                counter = 1
+                while User.objects.filter(username=username).exists():
+                    username = f"{base_username}{counter}"
+                    counter += 1
+                return username
+        elif User.objects.filter(username=username).exists():
+            raise ValidationError("This username is already taken.")
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            raise ValidationError("A user with this email already exists.")
+        return email
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+        
+        if password:
+            if password != confirm_password:
+                raise ValidationError("Passwords do not match.")
+            if len(password) < 8:
+                raise ValidationError("Password must be at least 8 characters long.")
+        else:
+            # Generate secure password
+            import secrets
+            import string
+            alphabet = string.ascii_letters + string.digits + string.punctuation
+            self.generated_password = ''.join(secrets.choice(alphabet) for i in range(12))
+            cleaned_data['password'] = self.generated_password
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.user_type = 'student'
+        user.set_password(self.cleaned_data['password'])
+        
+        if self.school:
+            user.school = self.school
+            user.created_by = self.school
+        
+        if commit:
+            user.save()
+            
+            # Create student profile
+            StudentProfile.objects.create(
+                user=user,
+                date_of_birth=self.cleaned_data.get('date_of_birth'),
+                grade_level=self.cleaned_data.get('grade_level', ''),
+                current_school=self.school.get_full_name() if self.school else ''
+            )
+        
+        return user
+
+
+class EditChildForm(forms.ModelForm):
+    """Form for editing child/student information"""
+    date_of_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+    )
+    
+    grade_level = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'e.g., Grade 8'
+        })
+    )
+    
+    interests = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Mathematics, Physics, Chemistry...'
+        }),
+        help_text="Enter subjects/interests separated by commas"
+    )
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'profile_picture', 'bio', 'country', 'city']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'profile_picture': forms.FileInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and hasattr(self.instance, 'student_profile'):
+            profile = self.instance.student_profile
+            self.fields['date_of_birth'].initial = profile.date_of_birth
+            self.fields['grade_level'].initial = profile.grade_level
+            if profile.interests:
+                self.fields['interests'].initial = ', '.join(profile.interests) if isinstance(profile.interests, list) else ''
+    
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        
+        if hasattr(user, 'student_profile'):
+            profile = user.student_profile
+            profile.date_of_birth = self.cleaned_data.get('date_of_birth')
+            profile.grade_level = self.cleaned_data.get('grade_level', '')
+            
+            # Handle interests
+            interests_str = self.cleaned_data.get('interests', '')
+            if interests_str:
+                profile.interests = [i.strip() for i in interests_str.split(',') if i.strip()]
+            
+            if commit:
+                profile.save()
         
         return user
 

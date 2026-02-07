@@ -1,0 +1,112 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+    <p class="text-gray-500 mt-1">Welcome to WON — Your complete overview</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    
+    <!-- Profile Completion -->
+    <div class="stat-card bg-gradient-to-br from-amber-50 to-orange-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-user-circle text-amber-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-amber-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Profile Status</p>
+        <p class="text-3xl font-bold text-gray-900">Setup</p>
+        <p class="text-xs text-amber-600 mt-2 font-medium">Complete your profile</p>
+    </div>
+    
+    <!-- Competitions -->
+    <div class="stat-card bg-gradient-to-br from-emerald-50 to-teal-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-trophy text-emerald-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-emerald-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Competitions</p>
+        <p class="text-3xl font-bold text-gray-900">Browse</p>
+        <p class="text-xs text-emerald-600 mt-2 font-medium">Explore olympiads</p>
+    </div>
+    
+    <!-- Subscription -->
+    <div class="stat-card bg-gradient-to-br from-rose-50 to-pink-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-crown text-rose-500"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-arrow-trend-up text-rose-500 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Subscription</p>
+        <p class="text-3xl font-bold text-gray-900">Free</p>
+        <p class="text-xs text-rose-500 mt-2 font-medium">Upgrade to unlock more</p>
+    </div>
+    
+    <!-- Quick Start -->
+    <div class="stat-card bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div class="flex items-start justify-between mb-5">
+            <div class="stat-icon">
+                <i class="fas fa-rocket text-blue-600"></i>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-clock text-blue-600 text-sm"></i>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-1">Get Started</p>
+        <p class="text-3xl font-bold text-gray-900">Today</p>
+        <a href="{% url 'dashboard_profile' %}" class="inline-block mt-3 px-5 py-2 bg-navy-800 text-white text-xs font-medium rounded-full hover:bg-navy-900 transition">
+            Complete Profile
+        </a>
+    </div>
+    
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-8">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="{% url 'dashboard_profile' %}" class="flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-300 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
+                <i class="fas fa-user-edit text-primary-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-900">Complete Profile</p>
+                <p class="text-sm text-gray-500">Set up your account details</p>
+            </div>
+        </a>
+        <a href="{% url 'subjects' %}" class="flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-300 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                <i class="fas fa-trophy text-emerald-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-900">Browse Competitions</p>
+                <p class="text-sm text-gray-500">Find olympiads to enter</p>
+            </div>
+        </a>
+        <a href="{% url 'team' %}" class="flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-300 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                <i class="fas fa-chalkboard-teacher text-purple-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-900">Find Tutors</p>
+                <p class="text-sm text-gray-500">Get expert preparation help</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

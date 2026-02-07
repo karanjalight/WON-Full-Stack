@@ -1,0 +1,703 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Past Paper Detail — WON | World Olympiad Network</title>
+{% endblock %}
+
+{% block meta_description %}View past paper details and add to your cart for Olympiad preparation.{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* ===== Breadcrumb ===== */
+.pp-breadcrumb {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    padding: 120px 0 40px;
+}
+.pp-breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+.pp-breadcrumb-nav a {
+    color: rgba(255,255,255,.7);
+    text-decoration: none;
+    transition: color .3s;
+}
+.pp-breadcrumb-nav a:hover { color: #f59e0b; }
+.pp-breadcrumb-nav span { color: rgba(255,255,255,.4); }
+.pp-breadcrumb-nav .current { color: #fff; font-weight: 600; }
+
+/* ===== Detail Section ===== */
+.pp-detail-section {
+    padding: 60px 0 80px;
+    background: #f8fafc;
+}
+.pp-detail-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.05);
+}
+.pp-detail-img {
+    position: relative;
+    height: 100%;
+    min-height: 400px;
+    overflow: hidden;
+    background: #e2e8f0;
+}
+.pp-detail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.pp-detail-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e3a8a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 8px;
+    letter-spacing: .5px;
+}
+
+/* Detail Info */
+.pp-detail-info {
+    padding: 40px;
+}
+.pp-detail-category {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1e3a8a;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    background: rgba(30,58,138,.08);
+    padding: 5px 14px;
+    border-radius: 20px;
+}
+.pp-detail-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+    line-height: 1.25;
+}
+.pp-detail-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.pp-detail-rating .stars {
+    display: flex;
+    gap: 2px;
+    color: #f59e0b;
+    font-size: 15px;
+}
+.pp-detail-rating .review-count {
+    color: #64748b;
+    font-size: 14px;
+}
+.pp-detail-price {
+    font-size: 36px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+.pp-detail-currency {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+    display: block;
+}
+.pp-detail-desc {
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+}
+
+/* Features */
+.pp-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+}
+.pp-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    color: #334155;
+    font-size: 14.5px;
+}
+.pp-features li i {
+    color: #22c55e;
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Quantity + Add to Cart */
+.pp-quantity-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.pp-qty-control {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.pp-qty-control button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: #f8fafc;
+    font-size: 18px;
+    color: #0f172a;
+    cursor: pointer;
+    transition: background .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pp-qty-control button:hover { background: #e2e8f0; }
+.pp-qty-control input {
+    width: 50px;
+    height: 44px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    outline: none;
+    -moz-appearance: textfield;
+}
+.pp-qty-control input::-webkit-outer-spin-button,
+.pp-qty-control input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.pp-add-cart-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 13px 30px;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.pp-add-cart-btn:hover { background: #1e40af; transform: translateY(-2px); }
+.pp-add-cart-btn.added {
+    background: #22c55e;
+}
+
+.pp-buy-now-btn {
+    padding: 13px 30px;
+    background: #f59e0b;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+.pp-buy-now-btn:hover { background: #d97706; color: #fff; transform: translateY(-2px); }
+
+/* Meta Info */
+.pp-meta {
+    display: flex;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+    flex-wrap: wrap;
+}
+.pp-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #64748b;
+}
+.pp-meta-item i { font-size: 15px; }
+.pp-meta-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+/* ===== Tabs ===== */
+.pp-tabs-section {
+    padding: 0 0 40px;
+    background: #f8fafc;
+}
+.pp-tabs {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    overflow: hidden;
+}
+.pp-tabs .nav-tabs {
+    border-bottom: 2px solid #f1f5f9;
+    padding: 0 30px;
+}
+.pp-tabs .nav-tabs .nav-link {
+    border: none;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 18px 20px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .3s;
+}
+.pp-tabs .nav-tabs .nav-link.active,
+.pp-tabs .nav-tabs .nav-link:hover {
+    color: #1e3a8a;
+    border-bottom-color: #1e3a8a;
+    background: transparent;
+}
+.pp-tabs .tab-content {
+    padding: 30px;
+}
+.pp-tab-text { color: #475569; font-size: 15px; line-height: 1.8; }
+.pp-tab-text h5 { color: #0f172a; font-weight: 700; margin-bottom: 12px; }
+.pp-tab-text ul { padding-left: 20px; margin-bottom: 16px; }
+.pp-tab-text ul li { margin-bottom: 6px; }
+
+/* Review item */
+.pp-review {
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.pp-review:last-child { border-bottom: none; }
+.pp-review-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+.pp-review-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+.pp-review-name { font-weight: 700; color: #0f172a; font-size: 15px; margin-bottom: 2px; }
+.pp-review-date { font-size: 12px; color: #94a3b8; }
+.pp-review-stars { color: #f59e0b; font-size: 13px; display: flex; gap: 2px; margin-bottom: 8px; }
+.pp-review-text { color: #475569; font-size: 14px; line-height: 1.65; }
+
+/* ===== Related Products ===== */
+.pp-related-section {
+    padding: 0 0 80px;
+    background: #f8fafc;
+}
+.pp-related-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 30px;
+}
+
+/* Reuse card styles from listing */
+.pp-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 16px rgba(0,0,0,.04);
+    transition: transform .3s, box-shadow .3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.pp-card:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(0,0,0,.1); }
+.pp-card-img { position: relative; height: 200px; overflow: hidden; background: #e2e8f0; }
+.pp-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.pp-card:hover .pp-card-img img { transform: scale(1.06); }
+.pp-badge { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; background: #1e3a8a; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 5px 12px; border-radius: 6px; }
+.pp-card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+.pp-card-category { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #1e3a8a; letter-spacing: 1px; margin-bottom: 6px; }
+.pp-card-body h4 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.pp-card-price { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: auto; }
+.pp-card-link { display: inline-flex; align-items: center; gap: 6px; color: #1e3a8a; font-weight: 600; font-size: 13.5px; text-decoration: none; margin-top: 12px; transition: gap .3s; }
+.pp-card-link:hover { gap: 10px; color: #1e40af; }
+
+/* ===== Floating Cart ===== */
+.pp-floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 20px rgba(30,58,138,.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    transition: all .3s;
+    text-decoration: none;
+}
+.pp-floating-cart:hover { background: #1e40af; transform: scale(1.1); color: #fff; }
+.pp-cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Toast notification */
+.pp-toast {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    z-index: 10000;
+    background: #0f172a;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,.2);
+    transform: translateX(400px);
+    transition: transform .4s cubic-bezier(.175,.885,.32,1.275);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pp-toast.show { transform: translateX(0); }
+.pp-toast i { color: #22c55e; font-size: 18px; }
+
+@media (max-width: 991px) {
+    .pp-detail-img { min-height: 300px; }
+    .pp-detail-info { padding: 30px 24px; }
+    .pp-detail-title { font-size: 24px; }
+    .pp-detail-price { font-size: 30px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="pp-breadcrumb">
+    <div class="container">
+        <div class="pp-breadcrumb-nav">
+            <a href="{% url 'index' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'past_papers' %}">Past Papers</a>
+            <span>/</span>
+            <span class="current" id="breadcrumbTitle">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Product Detail Section -->
+<section class="pp-detail-section">
+    <div class="container">
+        <div class="pp-detail-card">
+            <div class="row g-0">
+                <div class="col-lg-6">
+                    <div class="pp-detail-img">
+                        <img id="detailImg" src="" alt="">
+                        <span class="pp-detail-badge" id="detailBadge"><i class="fas fa-star"></i> <span>QUALITY</span></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="pp-detail-info">
+                        <span class="pp-detail-category" id="detailCategory"></span>
+                        <h1 class="pp-detail-title" id="detailTitle"></h1>
+                        <div class="pp-detail-rating">
+                            <div class="stars" id="detailStars"></div>
+                            <span class="review-count" id="detailReviews"></span>
+                        </div>
+                        <div class="pp-detail-price" id="detailPrice"></div>
+                        <span class="pp-detail-currency">KES</span>
+                        <p class="pp-detail-desc" id="detailDesc"></p>
+                        <ul class="pp-features" id="detailFeatures"></ul>
+                        <div class="pp-quantity-row">
+                            <div class="pp-qty-control">
+                                <button id="qtyMinus">-</button>
+                                <input type="number" id="qtyInput" value="1" min="1" max="10">
+                                <button id="qtyPlus">+</button>
+                            </div>
+                            <button class="pp-add-cart-btn" id="addToCartBtn">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                            <a href="{% url 'past_papers_checkout' %}" class="pp-buy-now-btn" id="buyNowBtn">
+                                <i class="fas fa-bolt"></i> Buy Now
+                            </a>
+                        </div>
+                        <div class="pp-meta">
+                            <div class="pp-meta-item">
+                                <span class="dot"></span> In Stock
+                            </div>
+                            <div class="pp-meta-item">
+                                <i class="fas fa-download"></i> Instant Download
+                            </div>
+                            <div class="pp-meta-item">
+                                <i class="fas fa-shield-alt"></i> Secure Purchase
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tabs Section -->
+<section class="pp-tabs-section">
+    <div class="container">
+        <div class="pp-tabs">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tabDescription">Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tabIncludes">What's Included</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tabReviews">Reviews</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tabDescription">
+                    <div class="pp-tab-text" id="tabDescContent"></div>
+                </div>
+                <div class="tab-pane fade" id="tabIncludes">
+                    <div class="pp-tab-text" id="tabIncludesContent"></div>
+                </div>
+                <div class="tab-pane fade" id="tabReviews">
+                    <div id="tabReviewsContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+<section class="pp-related-section">
+    <div class="container">
+        <h2 class="pp-related-title">You May Also Like</h2>
+        <div class="row g-4" id="relatedGrid"></div>
+    </div>
+</section>
+
+<!-- Floating Cart Button -->
+<a href="{% url 'past_papers_cart' %}" class="pp-floating-cart" id="floatingCart">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="pp-cart-count" id="cartCount">0</span>
+</a>
+
+<!-- Toast Notification -->
+<div class="pp-toast" id="cartToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMsg">Added to cart!</span>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== Product Catalog =====
+const PP_PRODUCTS = [
+    { id: 'imo-2024', title: 'IMO 2024 Past Paper Bundle', category: 'Mathematics', price: 1500, badge: 'QUALITY', rating: 5, reviews: 128, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80', desc: 'Complete set of International Mathematical Olympiad papers from 2020-2024 with detailed solutions and marking schemes. Perfect for students preparing for national and international math competitions.', features: ['5 years of IMO papers (2020-2024)', 'Full solutions with step-by-step workings', 'Marking schemes included', 'PDF format - instant download', 'Difficulty ratings per question'], descFull: '<h5>About This Collection</h5><p>This comprehensive bundle contains all International Mathematical Olympiad (IMO) papers from 2020 to 2024. Each paper includes the original problems, complete solutions with detailed step-by-step explanations, and official marking schemes.</p><p>The IMO is the world\'s most prestigious mathematics competition for high school students, and these papers represent the pinnacle of mathematical problem-solving.</p>', includes: '<h5>What You Get</h5><ul><li>IMO 2020 Day 1 & Day 2 Papers + Solutions</li><li>IMO 2021 Day 1 & Day 2 Papers + Solutions</li><li>IMO 2022 Day 1 & Day 2 Papers + Solutions</li><li>IMO 2023 Day 1 & Day 2 Papers + Solutions</li><li>IMO 2024 Day 1 & Day 2 Papers + Solutions</li><li>Marking schemes for all papers</li><li>Problem difficulty analysis guide</li></ul>' },
+    { id: 'nso-level-1', title: 'NSO Level 1 Papers', category: 'Science', price: 1200, badge: 'QUALITY', rating: 5, reviews: 94, image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80', desc: 'National Science Olympiad Level 1 past papers covering Physics, Chemistry, and Biology for grades 8-12. Includes answer keys and detailed explanations.', features: ['Covers Physics, Chemistry & Biology', 'Grades 8-12 level papers', 'Answer keys with explanations', 'Topic-wise question analysis', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>Prepare for the National Science Olympiad with this comprehensive collection of Level 1 past papers. Covering all three major science disciplines, these papers are ideal for building a strong foundation.</p>', includes: '<h5>What You Get</h5><ul><li>NSO Level 1 papers for Grades 8-12</li><li>Physics section papers with solutions</li><li>Chemistry section papers with solutions</li><li>Biology section papers with solutions</li><li>Topic-wise analysis guide</li></ul>' },
+    { id: 'ieo-prep', title: 'IEO Preparation Pack', category: 'English', price: 800, badge: 'QUALITY', rating: 4, reviews: 67, image: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80', desc: 'International English Olympiad past papers with grammar, vocabulary, and comprehension sections. Includes answer keys for self-assessment.', features: ['Grammar & vocabulary sections', 'Reading comprehension practice', 'Answer keys included', 'Multiple grade levels', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>Master English language skills with the International English Olympiad preparation pack. These papers test grammar, vocabulary, reading comprehension, and written expression.</p>', includes: '<h5>What You Get</h5><ul><li>IEO past papers (multiple years)</li><li>Grammar section papers</li><li>Vocabulary & word power papers</li><li>Reading comprehension papers</li><li>Answer keys for all sections</li></ul>' },
+    { id: 'nco-full', title: 'NCO Full Paper Set', category: 'Computer Science', price: 1800, badge: 'QUALITY', rating: 5, reviews: 85, image: 'https://images.unsplash.com/photo-1515879218367-8466d910auj7?auto=format&fit=crop&w=800&q=80', desc: 'National Cyber Olympiad past papers covering algorithms, data structures, logical reasoning, and programming concepts for competitive preparation.', features: ['Algorithms & data structures', 'Logical reasoning sections', 'Programming concept questions', 'Multiple difficulty levels', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>The National Cyber Olympiad is one of the premier computer science competitions. This set covers computational thinking, algorithms, data structures, and practical programming concepts.</p>', includes: '<h5>What You Get</h5><ul><li>NCO papers from multiple years</li><li>Algorithm & logic sections</li><li>Data structure problems</li><li>Programming concept questions</li><li>Full answer keys with explanations</li></ul>' },
+    { id: 'ipho-theory', title: 'IPhO Theory & Practical', category: 'Physics', price: 2000, badge: 'QUALITY', rating: 5, reviews: 112, image: 'https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&w=800&q=80', desc: 'International Physics Olympiad theoretical and practical examination papers with step-by-step solutions from 2019-2024.', features: ['Theory & practical papers', '6 years of papers (2019-2024)', 'Step-by-step solutions', 'Experimental procedure guides', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>The International Physics Olympiad (IPhO) represents the highest level of physics competition for secondary school students. This bundle includes both theoretical and experimental papers with detailed solutions.</p>', includes: '<h5>What You Get</h5><ul><li>IPhO Theory papers (2019-2024)</li><li>IPhO Practical/Experimental papers (2019-2024)</li><li>Detailed solutions for all problems</li><li>Experimental setup guides</li><li>Problem-solving strategy guide</li></ul>' },
+    { id: 'icho-collection', title: 'IChO Paper Collection', category: 'Chemistry', price: 1600, badge: 'QUALITY', rating: 4, reviews: 73, image: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=800&q=80', desc: 'International Chemistry Olympiad past papers with organic, inorganic, and physical chemistry problems and solutions.', features: ['Organic chemistry problems', 'Inorganic chemistry sections', 'Physical chemistry questions', 'Lab practical papers', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>Comprehensive collection of International Chemistry Olympiad papers covering all major branches of chemistry. Ideal for advanced students preparing for national and international chemistry competitions.</p>', includes: '<h5>What You Get</h5><ul><li>IChO theoretical papers</li><li>IChO practical/lab papers</li><li>Organic chemistry problem sets</li><li>Inorganic & physical chemistry sets</li><li>Complete solutions</li></ul>' },
+    { id: 'amc-bundle', title: 'AMC 10 & 12 Bundle', category: 'Mathematics', price: 1300, badge: 'POPULAR', rating: 5, reviews: 156, image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80', desc: 'American Mathematics Competition papers for AMC 10 and AMC 12 with full solutions. Great for building problem-solving skills.', features: ['AMC 10 A & B papers', 'AMC 12 A & B papers', 'Full solutions for every problem', 'Difficulty progression guide', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>The AMC (American Mathematics Competition) is the first step on the path to the International Mathematical Olympiad for US students, but these papers are invaluable for any student worldwide looking to strengthen their mathematical reasoning.</p>', includes: '<h5>What You Get</h5><ul><li>AMC 10A & 10B papers (multiple years)</li><li>AMC 12A & 12B papers (multiple years)</li><li>Full solutions with explanations</li><li>Difficulty ratings per problem</li><li>Topic categorization guide</li></ul>' },
+    { id: 'ibo-biology', title: 'IBO Biology Papers', category: 'Science', price: 1400, badge: 'NEW', rating: 4, reviews: 41, image: 'https://images.unsplash.com/photo-1614935151651-0bea6508db6b?auto=format&fit=crop&w=800&q=80', desc: 'International Biology Olympiad theoretical and practical exam papers covering cell biology, genetics, ecology, and more.', features: ['Cell biology & genetics', 'Ecology & evolution sections', 'Biochemistry problems', 'Practical exam papers', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>Prepare for the International Biology Olympiad with this collection covering all major areas of biology. Includes both theoretical and practical components.</p>', includes: '<h5>What You Get</h5><ul><li>IBO theoretical exam papers</li><li>IBO practical exam papers</li><li>Cell biology & genetics sections</li><li>Ecology & evolution sections</li><li>Complete answer keys</li></ul>' },
+    { id: 'ioi-problems', title: 'IOI Problem Sets', category: 'Computer Science', price: 2200, badge: 'QUALITY', rating: 5, reviews: 98, image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80', desc: 'International Olympiad in Informatics competitive programming problems with editorial solutions and test cases.', features: ['Competitive programming problems', 'Editorial solutions', 'Test cases included', 'Algorithm analysis', 'PDF format - instant download'], descFull: '<h5>About This Collection</h5><p>The IOI is the premier competition in algorithmic and computational thinking. These problem sets, complete with editorial solutions and test data, are essential for any aspiring competitive programmer.</p>', includes: '<h5>What You Get</h5><ul><li>IOI competition problems (multiple years)</li><li>Editorial solutions with code</li><li>Test cases for practice</li><li>Algorithm complexity analysis</li><li>Problem-solving patterns guide</li></ul>' }
+];
+
+const DUMMY_REVIEWS = [
+    { name: 'Sarah M.', initials: 'SM', date: 'Jan 15, 2026', rating: 5, text: 'Excellent collection! The solutions are very detailed and helped me understand the problem-solving approaches. Highly recommended for serious Olympiad preparation.' },
+    { name: 'David K.', initials: 'DK', date: 'Dec 28, 2025', rating: 5, text: 'Great value for money. The papers are well-organized and the marking schemes make self-assessment easy. My son improved significantly after practicing with these.' },
+    { name: 'Amina J.', initials: 'AJ', date: 'Nov 10, 2025', rating: 4, text: 'Very good resource. Would have given 5 stars if there were video explanations too. But the written solutions are thorough and clear.' }
+];
+
+// ===== Cart Utility =====
+function getCart() {
+    try { return JSON.parse(localStorage.getItem('pp_cart') || '[]'); }
+    catch(e) { return []; }
+}
+function saveCart(cart) { localStorage.setItem('pp_cart', JSON.stringify(cart)); }
+function addToCart(productId, qty) {
+    const cart = getCart();
+    const existing = cart.find(i => i.id === productId);
+    if (existing) { existing.qty = Math.min(existing.qty + qty, 10); }
+    else { cart.push({ id: productId, qty: qty }); }
+    saveCart(cart);
+    updateCartCount();
+}
+function getCartCount() {
+    return getCart().reduce((sum, i) => sum + i.qty, 0);
+}
+function updateCartCount() {
+    const el = document.getElementById('cartCount');
+    if (el) { const c = getCartCount(); el.textContent = c; el.style.display = c > 0 ? 'flex' : 'none'; }
+}
+function showToast(msg) {
+    const toast = document.getElementById('cartToast');
+    const msgEl = document.getElementById('toastMsg');
+    if (toast && msgEl) {
+        msgEl.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+}
+
+// ===== Detail Page Logic =====
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('id') || window.location.pathname.split('/past-papers/')[1]?.replace('/', '') || 'imo-2024';
+    const product = PP_PRODUCTS.find(p => p.id === slug) || PP_PRODUCTS[0];
+
+    // Populate detail
+    document.getElementById('breadcrumbTitle').textContent = product.title;
+    document.getElementById('detailImg').src = product.image;
+    document.getElementById('detailImg').alt = product.title;
+    document.getElementById('detailBadge').querySelector('span').textContent = product.badge;
+    document.getElementById('detailCategory').textContent = product.category;
+    document.getElementById('detailTitle').textContent = product.title;
+    document.getElementById('detailPrice').textContent = 'KSh ' + product.price.toLocaleString() + '.00';
+    document.getElementById('detailDesc').textContent = product.desc;
+    document.getElementById('detailReviews').textContent = '(' + product.reviews + ' reviews)';
+    document.title = product.title + ' — WON Past Papers';
+
+    // Stars
+    let starsHtml = '';
+    for (let i = 0; i < 5; i++) {
+        starsHtml += i < product.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+    }
+    document.getElementById('detailStars').innerHTML = starsHtml;
+
+    // Features
+    document.getElementById('detailFeatures').innerHTML = product.features.map(f =>
+        '<li><i class="fas fa-check-circle"></i> ' + f + '</li>'
+    ).join('');
+
+    // Tabs
+    document.getElementById('tabDescContent').innerHTML = product.descFull;
+    document.getElementById('tabIncludesContent').innerHTML = product.includes;
+    document.getElementById('tabReviewsContent').innerHTML = DUMMY_REVIEWS.map(r => `
+        <div class="pp-review">
+            <div class="pp-review-header">
+                <div class="pp-review-avatar">${r.initials}</div>
+                <div>
+                    <div class="pp-review-name">${r.name}</div>
+                    <div class="pp-review-date">${r.date}</div>
+                </div>
+            </div>
+            <div class="pp-review-stars">${'<i class="fas fa-star"></i>'.repeat(r.rating)}${'<i class="far fa-star"></i>'.repeat(5 - r.rating)}</div>
+            <div class="pp-review-text">${r.text}</div>
+        </div>
+    `).join('');
+
+    // Related products (same category, excluding current)
+    const related = PP_PRODUCTS.filter(p => p.id !== product.id).slice(0, 3);
+    document.getElementById('relatedGrid').innerHTML = related.map(p => `
+        <div class="col-lg-4 col-md-6">
+            <div class="pp-card">
+                <div class="pp-card-img">
+                    <img src="${p.image}" alt="${p.title}">
+                    <span class="pp-badge"><i class="fas fa-star"></i> ${p.badge}</span>
+                </div>
+                <div class="pp-card-body">
+                    <span class="pp-card-category">${p.category}</span>
+                    <h4>${p.title}</h4>
+                    <span class="pp-card-price">KSh ${p.price.toLocaleString()}.00</span>
+                    <a href="/past-papers/${p.id}/" class="pp-card-link">View Details <i class="far fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Quantity controls
+    const qtyInput = document.getElementById('qtyInput');
+    document.getElementById('qtyMinus').addEventListener('click', () => {
+        qtyInput.value = Math.max(1, parseInt(qtyInput.value) - 1);
+    });
+    document.getElementById('qtyPlus').addEventListener('click', () => {
+        qtyInput.value = Math.min(10, parseInt(qtyInput.value) + 1);
+    });
+
+    // Add to Cart
+    document.getElementById('addToCartBtn').addEventListener('click', function() {
+        const qty = parseInt(qtyInput.value) || 1;
+        addToCart(product.id, qty);
+        this.innerHTML = '<i class="fas fa-check"></i> Added!';
+        this.classList.add('added');
+        showToast(product.title + ' added to cart!');
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+            this.classList.remove('added');
+        }, 2000);
+    });
+
+    // Buy Now
+    document.getElementById('buyNowBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const qty = parseInt(qtyInput.value) || 1;
+        addToCart(product.id, qty);
+        window.location.href = this.href;
+    });
+
+    updateCartCount();
+});
+</script>
+{% endblock %}

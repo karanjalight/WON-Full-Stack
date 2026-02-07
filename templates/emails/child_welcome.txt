@@ -1,0 +1,36 @@
+Welcome to World Olympiad Network!
+
+Hi {{ child.first_name }},
+
+Great news! Your parent, {{ parent.get_full_name }}, has created an account for you on World Olympiad Network.
+
+Your Login Credentials:
+------------------------
+Username: {{ username }}
+Password: {{ password }}
+
+Login URL: http://worldolympiadsnetwork.org/login/
+
+What You Can Do:
+- Browse olympiad competitions worldwide
+- Apply for competitions you're interested in
+- Get expert tutor support
+- Access travel assistance for international competitions
+- Track your applications and progress
+
+Getting Started:
+1. Log in with your credentials above
+2. Complete your profile
+3. Explore competitions in your favorite subjects
+4. Apply for competitions that interest you!
+
+Your account is covered under your parent's subscription, so you have full access to all features.
+
+Need Help?
+If you have any questions or need assistance, feel free to contact us or ask your parent.
+
+Best regards,
+World Olympiad Network Team
+
+---
+This is an automated email. Please do not reply to this email.
