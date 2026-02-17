@@ -4,88 +4,353 @@
 {% block title %}Application Submitted Successfully | WON{% endblock %}
 
 {% block content %}
-<section class="section-padding" style="padding: 100px 0;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="success-card text-center">
-                    <div class="success-icon mb-4">
-                        <i class="fas fa-check-circle" style="font-size: 80px; color: #28a745;"></i>
-                    </div>
-                    <h2 class="mb-3">Application Submitted Successfully!</h2>
-                    <p class="text-muted mb-4">Your application has been received and is being processed.</p>
-                    
-                    <div class="application-details bg-light p-4 rounded mb-4">
-                        <h5 class="mb-3">Application Details</h5>
-                        <div class="row text-start">
-                            <div class="col-md-6 mb-2">
-                                <strong>Application Number:</strong><br>
-                                <span class="text-primary">{{ application.application_number }}</span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <strong>Competition:</strong><br>
-                                {{ application.competition.name }}
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <strong>Status:</strong><br>
-                                <span class="badge bg-info">{{ application.get_status_display }}</span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <strong>Submitted:</strong><br>
-                                {{ application.submitted_at|date:"F d, Y" }}
-                            </div>
+<div class="breadcrumb-wrapper section-padding bg-cover app-success-breadcrumb">
+    <div class="container-fluid">
+        <div class="page-heading">
+            <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><i class="far fa-slash"></i></li>
+                <li>Application Success</li>
+            </ul>
+            <h1 class="wow fadeInUp" data-wow-delay=".5s">Submission Complete</h1>
+        </div>
+    </div>
+</div>
+
+<section class="app-success-shell">
+    <div class="app-success-inner">
+        <article class="app-success-card app-success-hero">
+            <div class="app-success-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m8 12 2.6 2.6L16 9.2"></path>
+                </svg>
+            </div>
+            <div class="app-success-hero-copy">
+                <p class="app-success-kicker">Application received</p>
+                <h2>Application submitted successfully</h2>
+                <p>Your submission has been received and is now queued for review by our admissions and travel support teams.</p>
+            </div>
+            <div class="app-success-status-pill">
+                <span>Status</span>
+                <strong>{{ application.get_status_display }}</strong>
+            </div>
+        </article>
+
+        <div class="app-success-grid">
+            <article class="app-success-card">
+                <header class="app-success-card-header">
+                    <h3>Application Details</h3>
+                    <p>Track your submission with these details.</p>
+                </header>
+                <div class="app-success-card-body">
+                    <div class="app-detail-grid">
+                        <div class="app-detail-item">
+                            <span>Application number</span>
+                            <strong>{{ application.application_number }}</strong>
+                        </div>
+                        <div class="app-detail-item">
+                            <span>Competition</span>
+                            <strong>{{ application.competition.name }}</strong>
+                        </div>
+                        <div class="app-detail-item">
+                            <span>Status</span>
+                            <strong>{{ application.get_status_display }}</strong>
+                        </div>
+                        <div class="app-detail-item">
+                            <span>Submitted on</span>
+                            <strong>{{ application.submitted_at|date:"F d, Y" }}</strong>
                         </div>
                     </div>
-                    
-                    <div class="next-steps mb-4">
-                        <h5 class="mb-3">What's Next?</h5>
-                        <ul class="list-unstyled text-start" style="max-width: 500px; margin: 0 auto;">
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> You will receive a confirmation email shortly</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Our team will review your application</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> You'll be notified of any additional requirements</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Travel quote will be sent to your email</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <a href="{% url 'index' %}" class="theme-btn me-3">
-                            <span>Go to Home</span> <i class="far fa-long-arrow-right"></i>
-                        </a>
-                        <a href="{% url 'download-quotation-pdf' application.id %}" class="theme-btn me-3">
-                            <span>Download Quotation PDF</span> <i class="far fa-download"></i>
-                        </a>
-                        <a href="{% url 'olympiads' %}" class="btn btn-outline-primary">
-                            <span>Browse More Competitions</span>
-                        </a>
-                    </div>
                 </div>
-            </div>
+            </article>
+
+            <article class="app-success-card">
+                <header class="app-success-card-header">
+                    <h3>What Happens Next</h3>
+                    <p>Typical next steps after submission.</p>
+                </header>
+                <div class="app-success-card-body">
+                    <ul class="app-next-steps">
+                        <li><span>✓</span> Confirmation email sent to your inbox shortly.</li>
+                        <li><span>✓</span> Application reviewed by our admissions team.</li>
+                        <li><span>✓</span> Any additional requirements communicated if needed.</li>
+                        <li><span>✓</span> Travel quotation finalized and shared by email.</li>
+                    </ul>
+                </div>
+            </article>
         </div>
+
+        <article class="app-success-card app-success-actions">
+            <a href="{% url 'download-quotation-pdf' application.id %}" class="theme-btn">
+                <span>Download Quotation PDF</span> <i class="far fa-download"></i>
+            </a>
+            <a href="{% url 'olympiads' %}" class="app-btn-ghost">
+                <span>Browse Competitions</span>
+            </a>
+            <a href="{% url 'index' %}" class="app-btn-ghost">
+                <span>Go to Home</span>
+            </a>
+        </article>
     </div>
 </section>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .success-card {
-        background: white;
-        border-radius: 10px;
-        padding: 50px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    :root {
+        --app-bg: #f5f5f7;
+        --app-surface: #ffffff;
+        --app-border: rgba(209, 213, 219, 0.9);
+        --app-title: #111827;
+        --app-muted: #4b5563;
     }
-    
-    .success-icon {
-        animation: scaleIn 0.5s ease;
+
+    .app-success-breadcrumb {
+        background-image: url("{% static 'img/hero/1.png' %}");
+        background-position: center;
+        background-size: cover;
     }
-    
-    @keyframes scaleIn {
-        from {
-            transform: scale(0);
+
+    .app-success-shell {
+        background: var(--app-bg);
+        padding: 32px 0 80px;
+    }
+
+    .app-success-inner {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .app-success-card {
+        background: var(--app-surface);
+        border: 1px solid var(--app-border);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .app-success-hero {
+        padding: 18px 20px;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .app-success-icon-wrap {
+        width: 54px;
+        height: 54px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        border: 1px solid rgba(22, 163, 74, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #16a34a;
+    }
+
+    .app-success-icon-wrap svg {
+        width: 30px;
+        height: 30px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+    }
+
+    .app-success-kicker {
+        margin: 0 0 2px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+    }
+
+    .app-success-hero-copy h2 {
+        margin: 0;
+        font-size: 28px;
+        color: var(--app-title);
+        line-height: 1.2;
+    }
+
+    .app-success-hero-copy p {
+        margin: 7px 0 0;
+        color: var(--app-muted);
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .app-success-status-pill {
+        border: 1px solid rgba(129, 140, 248, 0.35);
+        background: #eef2ff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        min-width: 150px;
+    }
+
+    .app-success-status-pill span {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+    }
+
+    .app-success-status-pill strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 14px;
+        color: #3730a3;
+    }
+
+    .app-success-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .app-success-card-header {
+        padding: 14px 18px 10px;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        background: #f9fafb;
+    }
+
+    .app-success-card-header h3 {
+        margin: 0;
+        font-size: 19px;
+        color: var(--app-title);
+    }
+
+    .app-success-card-header p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .app-success-card-body {
+        padding: 16px 18px 18px;
+    }
+
+    .app-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .app-detail-item {
+        border: 1px solid var(--app-border);
+        border-radius: 12px;
+        padding: 10px 11px;
+    }
+
+    .app-detail-item span {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+    }
+
+    .app-detail-item strong {
+        display: block;
+        margin-top: 4px;
+        color: #111827;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .app-next-steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .app-next-steps li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        color: #374151;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .app-next-steps li span {
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        border: 1px solid rgba(22, 163, 74, 0.25);
+        color: #16a34a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .app-success-actions {
+        padding: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .app-success-actions .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .app-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        background: #fff;
+        color: #374151;
+        padding: 10px 14px;
+        min-height: 42px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .app-btn-ghost:hover {
+        border-color: var(--theme-color);
+        color: var(--theme-color);
+    }
+
+    @media (max-width: 900px) {
+        .app-success-hero {
+            grid-template-columns: auto minmax(0, 1fr);
         }
-        to {
-            transform: scale(1);
+
+        .app-success-status-pill {
+            grid-column: 1 / -1;
+            width: fit-content;
+        }
+
+        .app-success-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .app-success-hero-copy h2 {
+            font-size: 24px;
+        }
+
+        .app-detail-grid {
+            grid-template-columns: minmax(0, 1fr);
         }
     }
 </style>
 {% endblock %}
-

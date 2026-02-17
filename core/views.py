@@ -4,10 +4,16 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.core.cache import cache
 from django.db import transaction, models
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
+from urllib.parse import quote
+import calendar
+import json
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -24,11 +30,10 @@ from backend.models import (
     BlogPost,
 )
 from core.forms import (
-    ApplicationStep1Form, TravelQuoteForm, StudentRegistrationForm,
-    StudentProfileForm, DocumentUploadForm, ApplicationReviewForm,
+    ApplicationStep1Form, TravelQuoteForm, DocumentUploadForm, ApplicationReviewForm,
     TravelQuoteRequestForm, TutorSessionBookingForm, LoginForm, SignupForm,
     SubscriptionCheckoutForm, PaymentConfirmationForm, AddChildForm,
-    AddSchoolStudentForm, EditChildForm
+    AddSchoolStudentForm, EditChildForm, UserProfileForm
 )
 
 # Create your views here.
@@ -203,11 +208,17 @@ def index(request):
         status='published',
     ).order_by('-published_at', '-created_at')[:3]
 
+    # Homepage hero filter options (same params used by olympiads listing)
+    filter_subjects = Subject.objects.filter(is_active=True).order_by('name')
+
     context = {
         'featured_competitions': featured_competitions,
         'featured_subjects': featured_subjects,
         'events': events,
         'latest_posts': latest_posts,
+        'filter_subjects': filter_subjects,
+        'region_choices': Destination.REGION_CHOICES,
+        'age_group_options': ['4-9', '10-13', '14-16', '17-20', '21-30'],
     }
     return render(request, 'frontend/index.html', context)
 
@@ -471,6 +482,19 @@ def destination_details(request, slug):
         region=destination.region,
         is_active=True
     ).exclude(id=destination.id).order_by('country', 'city')[:6]
+
+    # Build a destination image gallery from DB destination records.
+    destination_gallery = Destination.objects.filter(
+        is_active=True,
+        image__isnull=False
+    ).exclude(image='').annotate(
+        gallery_priority=models.Case(
+            models.When(id=destination.id, then=models.Value(0)),
+            models.When(region=destination.region, then=models.Value(1)),
+            default=models.Value(2),
+            output_field=models.IntegerField(),
+        )
+    ).order_by('gallery_priority', 'country', 'city')[:10]
     
     # Generate Google Maps embed URL if iframe_url is not provided
     map_url = destination.iframe_url
@@ -485,6 +509,7 @@ def destination_details(request, slug):
         'destination': destination,
         'competitions': competitions,
         'related_destinations': related_destinations,
+        'destination_gallery': destination_gallery,
         'map_url': map_url,
     }
     
@@ -984,9 +1009,12 @@ def tour_list(request):
 def olympiads(request):
     """Olympiads listing page view"""
     # Get filter parameters from request
-    subject_slug = request.GET.get('subject')
-    location = request.GET.get('location')
-    search_query = request.GET.get('search')
+    subject_slug = (request.GET.get('subject') or '').strip()
+    region = (request.GET.get('region') or '').strip()
+    competition_date_raw = (request.GET.get('competition_date') or '').strip()
+    age_group = (request.GET.get('age_group') or '').strip()
+    location = (request.GET.get('location') or '').strip()  # legacy support
+    search_query = (request.GET.get('search') or '').strip()
     
     # Start with active competitions
     competitions = Competition.objects.filter(is_active=True).select_related('subject', 'destination')
@@ -994,16 +1022,43 @@ def olympiads(request):
     # Apply filters
     if subject_slug:
         competitions = competitions.filter(subject__slug=subject_slug)
-    
-    if location:
-        competitions = competitions.filter(destination__city__icontains=location) | \
-                      competitions.filter(destination__country__icontains=location)
-    
+
+    if region:
+        competitions = competitions.filter(destination__region=region)
+    elif location:
+        competitions = competitions.filter(
+            models.Q(destination__city__icontains=location) |
+            models.Q(destination__country__icontains=location)
+        )
+
+    if competition_date_raw:
+        parsed_date = None
+        for date_format in ("%d-%m-%Y", "%Y-%m-%d"):
+            try:
+                parsed_date = datetime.strptime(competition_date_raw, date_format).date()
+                break
+            except ValueError:
+                continue
+        if parsed_date:
+            competitions = competitions.filter(start_date__lte=parsed_date, end_date__gte=parsed_date)
+
+    if age_group and '-' in age_group:
+        try:
+            age_min_str, age_max_str = age_group.split('-', 1)
+            requested_min = int(age_min_str)
+            requested_max = int(age_max_str)
+            # Keep competitions whose accepted age range overlaps selected range.
+            competitions = competitions.filter(
+                age_group_min__lte=requested_max,
+                age_group_max__gte=requested_min
+            )
+        except (TypeError, ValueError):
+            pass
+
     if search_query:
         competitions = competitions.filter(
-            name__icontains=search_query
-        ) | competitions.filter(
-            description__icontains=search_query
+            models.Q(name__icontains=search_query) |
+            models.Q(description__icontains=search_query)
         )
     
     # Order by featured first, then by application deadline
@@ -1032,8 +1087,13 @@ def olympiads(request):
         'destinations': destinations,
         'current_subject': subject_slug,
         'current_subject_name': current_subject_name,
+        'current_region': region,
+        'current_competition_date': competition_date_raw,
+        'current_age_group': age_group,
         'current_location': location,
         'search_query': search_query,
+        'region_choices': Destination.REGION_CHOICES,
+        'age_group_options': ['4-9', '10-13', '14-16', '17-20', '21-30'],
     }
     
     return render(request, 'frontend/olympiads.html', context)
@@ -1041,6 +1101,113 @@ def olympiads(request):
 def error_404(request, exception=None):
     """Custom 404 error page view"""
     return render(request, 'frontend/404.html', status=404)
+
+
+# ============================================================================
+# TRAVEL LOCATION API HELPERS
+# ============================================================================
+
+def _fallback_countries_from_destinations():
+    return list(
+        Destination.objects.filter(is_active=True)
+        .exclude(country__isnull=True)
+        .exclude(country__exact='')
+        .values_list('country', flat=True)
+        .distinct()
+        .order_by('country')
+    )
+
+
+def _fallback_cities_from_destinations(country):
+    return list(
+        Destination.objects.filter(is_active=True, country__iexact=country)
+        .exclude(city__isnull=True)
+        .exclude(city__exact='')
+        .values_list('city', flat=True)
+        .distinct()
+        .order_by('city')
+    )
+
+
+def _get_departure_countries():
+    cache_key = 'travel_quote_departure_countries_v1'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    countries = []
+    try:
+        req = Request(
+            'https://restcountries.com/v3.1/all?fields=name',
+            headers={'User-Agent': 'WON-TravelQuote/1.0'}
+        )
+        with urlopen(req, timeout=8) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+
+        countries = sorted({
+            item.get('name', {}).get('common', '').strip()
+            for item in payload
+            if item.get('name', {}).get('common')
+        })
+    except (URLError, HTTPError, TimeoutError, ValueError, json.JSONDecodeError):
+        countries = _fallback_countries_from_destinations()
+
+    cache.set(cache_key, countries, 60 * 60 * 24)
+    return countries
+
+
+def _get_departure_cities(country):
+    country = (country or '').strip()
+    if not country:
+        return []
+
+    normalized = quote(country.lower(), safe='')
+    cache_key = f'travel_quote_departure_cities_v1:{normalized}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    cities = []
+    try:
+        request_body = json.dumps({'country': country}).encode('utf-8')
+        req = Request(
+            'https://countriesnow.space/api/v0.1/countries/cities',
+            data=request_body,
+            headers={
+                'Content-Type': 'application/json',
+                'User-Agent': 'WON-TravelQuote/1.0'
+            }
+        )
+        with urlopen(req, timeout=8) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+
+        if not payload.get('error') and isinstance(payload.get('data'), list):
+            cities = sorted({city.strip() for city in payload['data'] if city and city.strip()})
+    except (URLError, HTTPError, TimeoutError, ValueError, json.JSONDecodeError):
+        cities = _fallback_cities_from_destinations(country)
+
+    cache.set(cache_key, cities, 60 * 60 * 12)
+    return cities
+
+
+def departure_countries_api(request):
+    """API endpoint for departure country suggestions."""
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    return JsonResponse({'countries': _get_departure_countries()})
+
+
+def departure_cities_api(request):
+    """API endpoint for departure city suggestions by country."""
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    country = (request.GET.get('country') or '').strip()
+    if not country:
+        return JsonResponse({'cities': []})
+
+    return JsonResponse({'cities': _get_departure_cities(country)})
 
 
 # ============================================================================
@@ -1056,17 +1223,20 @@ def start_application(request, slug):
         messages.error(request, "Applications for this competition are currently closed.")
         return redirect('olympiad-details', slug=slug)
     
-    # Check if user is authenticated and can submit applications
-    if request.user.is_authenticated:
-        if not request.user.can_submit_application():
-            subscription, source_type, source_user = request.user.get_subscription_source()
-            if not subscription:
-                messages.error(request, "You need an active subscription to submit applications. Please subscribe or contact your parent/school.")
-                return redirect('onboarding-subscription')
-            else:
-                # Has subscription but reached limit
-                messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
-                return redirect('dashboard')
+    # User must create an account before applying
+    if not request.user.is_authenticated:
+        messages.info(request, "Create an account to register for this Olympiad.")
+        return redirect('signup')
+
+    # Signed-in users without subscription are routed to dashboard
+    if not request.user.has_active_subscription():
+        messages.error(request, "You need an active subscription to apply. Please subscribe from your dashboard.")
+        return redirect('dashboard')
+
+    # Enforce application limits for student accounts
+    if request.user.user_type == 'student' and not request.user.can_submit_application():
+        messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
+        return redirect('dashboard')
     
     # Initialize session data
     request.session['application_data'] = {
@@ -1087,6 +1257,23 @@ def application_step(request, step):
         return redirect('olympiads')
     
     competition = get_object_or_404(Competition, id=app_data['competition_id'], is_active=True)
+
+    # Keep applicant identity in session in sync with account data.
+    if request.user.is_authenticated:
+        student_profile = getattr(request.user, 'student_profile', None)
+        identity_defaults = {
+            'first_name': request.user.first_name or app_data.get('first_name', ''),
+            'last_name': request.user.last_name or app_data.get('last_name', ''),
+            'email': request.user.email or app_data.get('email', ''),
+            'phone': request.user.phone or app_data.get('phone', ''),
+            'date_of_birth': (
+                student_profile.date_of_birth.isoformat()
+                if student_profile and student_profile.date_of_birth
+                else app_data.get('date_of_birth')
+            ),
+        }
+        app_data.update(identity_defaults)
+        request.session['application_data'] = app_data
     
     # Check if application is still open
     if not competition.is_application_open():
@@ -1094,7 +1281,7 @@ def application_step(request, step):
         return redirect('olympiad-details', slug=competition.slug)
     
     step = int(step)
-    total_steps = 7
+    total_steps = 5
     
     # Handle form submissions
     if request.method == 'POST':
@@ -1102,11 +1289,6 @@ def application_step(request, step):
             form = ApplicationStep1Form(request.POST)
             if form.is_valid():
                 app_data.update({
-                    'first_name': form.cleaned_data['first_name'],
-                    'last_name': form.cleaned_data['last_name'],
-                    'email': form.cleaned_data['email'],
-                    'phone': form.cleaned_data['phone'],
-                    'date_of_birth': form.cleaned_data['date_of_birth'].isoformat(),
                     'emergency_contact_name': form.cleaned_data['emergency_contact_name'],
                     'emergency_contact_phone': form.cleaned_data['emergency_contact_phone'],
                     'motivation_letter': form.cleaned_data.get('motivation_letter', ''),
@@ -1134,82 +1316,18 @@ def application_step(request, step):
                 return redirect('application-step', step=3)
         
         elif step == 3:
-            # Check if user is logged in
-            if request.user.is_authenticated:
-                app_data['user_id'] = str(request.user.id)
-                app_data['step'] = 4
-                request.session['application_data'] = app_data
-                return redirect('application-step', step=4)
-            else:
-                # Handle registration
-                reg_form = StudentRegistrationForm(request.POST)
-                if reg_form.is_valid():
-                    user = reg_form.save()
-                    # Update user with data from step 1
-                    user.first_name = app_data.get('first_name', '')
-                    user.last_name = app_data.get('last_name', '')
-                    user.email = app_data.get('email', '')
-                    user.phone = app_data.get('phone', '')
-                    user.save()
-                    
-                    # Create or update student profile
-                    student_profile, created = StudentProfile.objects.get_or_create(user=user)
-                    if app_data.get('date_of_birth'):
-                        student_profile.date_of_birth = datetime.fromisoformat(app_data['date_of_birth']).date()
-                        student_profile.save()
-                    
-                    # Auto login
-                    login(request, user)
-                    app_data['user_id'] = str(user.id)
-                    app_data['step'] = 4
-                    request.session['application_data'] = app_data
-                    messages.success(request, "Account created successfully!")
-                    return redirect('application-step', step=4)
-                else:
-                    form = reg_form
-                    return render(request, 'frontend/application/step3.html', {
-                        'form': form,
-                        'competition': competition,
-                        'step': step,
-                        'total_steps': total_steps,
-                        'app_data': app_data,
-                    })
+            # Document upload step: continue to review
+            # Document upload - handled via AJAX or separate view
+            app_data['step'] = 4
+            request.session['application_data'] = app_data
+            return redirect('application-step', step=4)
         
         elif step == 4:
-            if not request.user.is_authenticated:
-                messages.error(request, "Please log in to continue.")
-                return redirect('application-step', step=3)
-            
-            # Create student profile if it doesn't exist
-            student_profile, created = StudentProfile.objects.get_or_create(user=request.user)
-            profile_form = StudentProfileForm(request.POST, instance=student_profile)
-            if profile_form.is_valid():
-                profile_form.save()
+            review_form = ApplicationReviewForm(request.POST)
+            if review_form.is_valid():
                 app_data['step'] = 5
                 request.session['application_data'] = app_data
                 return redirect('application-step', step=5)
-            else:
-                form = profile_form
-                return render(request, 'frontend/application/step4.html', {
-                    'form': form,
-                    'competition': competition,
-                    'step': step,
-                    'total_steps': total_steps,
-                    'app_data': app_data,
-                })
-        
-        elif step == 5:
-            # Document upload - handled via AJAX or separate view
-            app_data['step'] = 6
-            request.session['application_data'] = app_data
-            return redirect('application-step', step=6)
-        
-        elif step == 6:
-            review_form = ApplicationReviewForm(request.POST)
-            if review_form.is_valid():
-                app_data['step'] = 7
-                request.session['application_data'] = app_data
-                return redirect('application-step', step=7)
             else:
                 form = review_form
                 return render(request, 'frontend/application/step6.html', {
@@ -1220,25 +1338,19 @@ def application_step(request, step):
                     'app_data': app_data,
                 })
         
-        elif step == 7:
+        elif step == 5:
             # Final submission
             return submit_application(request)
     
     # Render appropriate step form
     if step == 1:
         # Pre-fill form if data exists
-        initial = {}
-        if app_data.get('first_name'):
-            initial = {
-                'first_name': app_data.get('first_name'),
-                'last_name': app_data.get('last_name'),
-                'email': app_data.get('email'),
-                'phone': app_data.get('phone'),
-                'emergency_contact_name': app_data.get('emergency_contact_name'),
-                'emergency_contact_phone': app_data.get('emergency_contact_phone'),
-                'motivation_letter': app_data.get('motivation_letter'),
-                'special_requirements': app_data.get('special_requirements'),
-            }
+        initial = {
+            'emergency_contact_name': app_data.get('emergency_contact_name') or request.user.get_full_name() or request.user.username,
+            'emergency_contact_phone': app_data.get('emergency_contact_phone') or request.user.phone,
+            'motivation_letter': app_data.get('motivation_letter'),
+            'special_requirements': app_data.get('special_requirements'),
+        }
         form = ApplicationStep1Form(initial=initial)
         form.fields['competition'].initial = competition
     
@@ -1255,38 +1367,22 @@ def application_step(request, step):
         form = TravelQuoteForm(initial=initial)
     
     elif step == 3:
-        if request.user.is_authenticated:
-            app_data['user_id'] = str(request.user.id)
-            app_data['step'] = 4
-            request.session['application_data'] = app_data
-            return redirect('application-step', step=4)
-        form = StudentRegistrationForm()
+        if not request.user.is_authenticated:
+            messages.error(request, "Please log in to continue.")
+            return redirect('login')
+        form = None  # Documents handled separately
     
     elif step == 4:
         if not request.user.is_authenticated:
             messages.error(request, "Please log in to continue.")
-            return redirect('application-step', step=3)
-        # Create student profile if it doesn't exist
-        student_profile, created = StudentProfile.objects.get_or_create(user=request.user)
-        form = StudentProfileForm(instance=student_profile)
+            return redirect('login')
+        form = ApplicationReviewForm()
     
     elif step == 5:
         if not request.user.is_authenticated:
             messages.error(request, "Please log in to continue.")
-            return redirect('application-step', step=3)
-        form = None  # Documents handled separately
-    
-    elif step == 6:
-        if not request.user.is_authenticated:
-            messages.error(request, "Please log in to continue.")
-            return redirect('application-step', step=3)
-        form = ApplicationReviewForm()
-    
-    elif step == 7:
-        if not request.user.is_authenticated:
-            messages.error(request, "Please log in to continue.")
-            return redirect('application-step', step=3)
-        # Step 7 shows processing and auto-submits
+            return redirect('login')
+        # Step 5 shows processing and auto-submits
         # The actual submission happens via POST to submit_application
         if request.method == 'POST':
             return submit_application(request)
@@ -1296,7 +1392,18 @@ def application_step(request, step):
         messages.error(request, "Invalid step.")
         return redirect('olympiads')
     
-    template = f'frontend/application/step{step}.html'
+    step_template_map = {
+        1: 'frontend/application/step1.html',
+        2: 'frontend/application/step2.html',
+        3: 'frontend/application/step5.html',  # Documents
+        4: 'frontend/application/step6.html',  # Review
+        5: 'frontend/application/step7.html',  # Submit
+    }
+    template = step_template_map.get(step)
+    if not template:
+        messages.error(request, "Invalid step.")
+        return redirect('olympiads')
+
     return render(request, template, {
         'form': form,
         'competition': competition,
@@ -1315,15 +1422,15 @@ def submit_application(request):
         messages.error(request, "Please complete all steps.")
         return redirect('olympiads')
     
-    # Check if user can submit applications (subscription check)
-    if not request.user.can_submit_application():
-        subscription, source_type, source_user = request.user.get_subscription_source()
-        if not subscription:
-            messages.error(request, "You need an active subscription to submit applications. Please subscribe or contact your parent/school.")
-            return redirect('onboarding-subscription')
-        else:
-            messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
-            return redirect('dashboard')
+    # Signed-in users require an active subscription before final submission
+    if not request.user.has_active_subscription():
+        messages.error(request, "You need an active subscription to submit applications. Please subscribe from your dashboard.")
+        return redirect('dashboard')
+
+    # Enforce application limits for student accounts
+    if request.user.user_type == 'student' and not request.user.can_submit_application():
+        messages.error(request, "You have reached the maximum number of applications for your subscription plan.")
+        return redirect('dashboard')
     
     competition = get_object_or_404(Competition, id=app_data['competition_id'])
     
@@ -1389,7 +1496,7 @@ def submit_application(request):
     
     except Exception as e:
         messages.error(request, f"An error occurred: {str(e)}")
-        return redirect('application-step', step=6)
+        return redirect('application-step', step=4)
 
 
 def application_success(request, application_id):
@@ -1440,213 +1547,259 @@ def download_quotation_pdf(request, application_id):
     """Generate and download quotation PDF for application"""
     application = get_object_or_404(OlympiadApplication, id=application_id, student=request.user)
     
-    # Create a BytesIO buffer for the PDF
     buffer = BytesIO()
-    
-    # Create the PDF object
-    doc = SimpleDocTemplate(buffer, pagesize=A4, 
-                           rightMargin=72, leftMargin=72,
-                           topMargin=72, bottomMargin=72)
-    
-    # Container for the 'Flowable' objects
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=54,
+        leftMargin=54,
+        topMargin=54,
+        bottomMargin=54
+    )
+
     elements = []
-    
-    # Define styles
     styles = getSampleStyleSheet()
-    
-    # Custom styles
+
+    # Brand palette and base styles
+    brand_primary = colors.HexColor('#1f2a44')
+    brand_accent = colors.HexColor('#4D40CA')
+    text_main = colors.HexColor('#111827')
+    text_muted = colors.HexColor('#6b7280')
+    border_soft = colors.HexColor('#d1d5db')
+    panel_bg = colors.HexColor('#f9fafb')
+
     title_style = ParagraphStyle(
-        'CustomTitle',
+        'QuoteTitle',
         parent=styles['Heading1'],
-        fontSize=24,
-        textColor=colors.HexColor('#1a1a1a'),
-        spaceAfter=30,
-        alignment=TA_CENTER,
+        fontSize=19,
+        textColor=text_main,
+        spaceAfter=4,
+        alignment=TA_LEFT,
         fontName='Helvetica-Bold'
     )
-    
-    heading_style = ParagraphStyle(
-        'CustomHeading',
-        parent=styles['Heading2'],
-        fontSize=14,
-        textColor=colors.HexColor('#2c3e50'),
-        spaceAfter=12,
-        spaceBefore=20,
-        fontName='Helvetica-Bold'
-    )
-    
-    normal_style = ParagraphStyle(
-        'CustomNormal',
+
+    subtitle_style = ParagraphStyle(
+        'QuoteSubtitle',
         parent=styles['Normal'],
         fontSize=10,
-        textColor=colors.HexColor('#333333'),
-        spaceAfter=8,
-        leading=14
+        textColor=text_muted,
+        leading=14,
+        spaceAfter=10,
+        alignment=TA_LEFT
     )
-    
-    # Title
-    title = Paragraph("TRAVEL QUOTATION", title_style)
-    elements.append(title)
-    elements.append(Spacer(1, 0.2*inch))
-    
-    # Company info header
-    company_info = [
-        ['<b>readtrips</b>', ''],
-        ['Travel & Tour Services', ''],
-        ['Nairobi, Kenya', ''],
-        ['Email: info@readtrips.com', ''],
-        ['Phone: +254 700 000 000', ''],
-    ]
-    
-    company_table = Table(company_info, colWidths=[4*inch, 2*inch])
-    company_table.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (0, 0), 16),
-        ('FONTSIZE', (0, 1), (-1, -1), 10),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#2c3e50')),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
+
+    section_title_style = ParagraphStyle(
+        'QuoteSectionTitle',
+        parent=styles['Heading2'],
+        fontSize=11,
+        textColor=brand_primary,
+        spaceAfter=8,
+        spaceBefore=4,
+        fontName='Helvetica-Bold'
+    )
+
+    body_style = ParagraphStyle(
+        'QuoteBody',
+        parent=styles['Normal'],
+        fontSize=9.8,
+        textColor=text_main,
+        leading=14,
+        spaceAfter=4
+    )
+
+    note_style = ParagraphStyle(
+        'QuoteNote',
+        parent=styles['Normal'],
+        fontSize=9,
+        textColor=text_muted,
+        leading=13
+    )
+
+    amount_style = ParagraphStyle(
+        'QuoteAmount',
+        parent=styles['Normal'],
+        fontSize=16,
+        textColor=brand_primary,
+        fontName='Helvetica-Bold'
+    )
+
+    # Top accent strip
+    brand_strip = Table([['']], colWidths=[doc.width])
+    brand_strip.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), brand_accent),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
     ]))
-    elements.append(company_table)
-    elements.append(Spacer(1, 0.3*inch))
-    
-    # Quotation details
+    elements.append(brand_strip)
+    elements.append(Spacer(1, 8))
+
     quotation_date = application.submitted_at.strftime('%B %d, %Y') if application.submitted_at else timezone.now().strftime('%B %d, %Y')
-    
-    quotation_info = [
-        ['<b>Quotation Number:</b>', application.application_number or 'N/A'],
-        ['<b>Date:</b>', quotation_date],
-        ['<b>Valid Until:</b>', (timezone.now() + timezone.timedelta(days=30)).strftime('%B %d, %Y')],
-    ]
-    
-    quotation_table = Table(quotation_info, colWidths=[2.5*inch, 3.5*inch])
-    quotation_table.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
+
+    header_left = (
+        "<b>WORLD OLYMPIAD NETWORK</b><br/>"
+        "Travel & Participation Quotation<br/>"
+        "Nairobi, Kenya<br/>"
+        "Email: info@readtrips.com<br/>"
+        "Phone: +254 700 000 000"
+    )
+    header_right = (
+        f"<b>Quotation No.</b> {application.application_number or 'N/A'}<br/>"
+        f"<b>Issue Date</b> {quotation_date}<br/>"
+        f"<b>Valid Until</b> {(timezone.now() + timezone.timedelta(days=30)).strftime('%B %d, %Y')}<br/>"
+        "<b>Document Type</b> Official Cost Quotation"
+    )
+    header_table = Table(
+        [[Paragraph(header_left, body_style), Paragraph(header_right, body_style)]],
+        colWidths=[doc.width * 0.58, doc.width * 0.42]
+    )
+    header_table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#333333')),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-        ('TOPPADDING', (0, 0), (-1, -1), 8),
-        ('LEFTPADDING', (0, 0), (-1, -1), 0),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ('BACKGROUND', (0, 0), (-1, -1), panel_bg),
+        ('BOX', (0, 0), (-1, -1), 1, border_soft),
+        ('LEFTPADDING', (0, 0), (-1, -1), 12),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 12),
+        ('TOPPADDING', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
     ]))
-    elements.append(quotation_table)
-    elements.append(Spacer(1, 0.3*inch))
-    
-    # Customer Information
-    customer_heading = Paragraph("Customer Information", heading_style)
-    elements.append(customer_heading)
-    
+    elements.append(header_table)
+    elements.append(Spacer(1, 14))
+
+    elements.append(Paragraph("Travel Quotation", title_style))
+    elements.append(Paragraph("Prepared for participation planning, budgeting, and review.", subtitle_style))
+
     student = application.student
-    customer_info = [
-        ['<b>Name:</b>', student.get_full_name() or student.username],
-        ['<b>Email:</b>', student.email],
-        ['<b>Application Number:</b>', application.application_number or 'N/A'],
-    ]
-    
-    customer_table = Table(customer_info, colWidths=[2.5*inch, 3.5*inch])
-    customer_table.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#333333')),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-        ('TOPPADDING', (0, 0), (-1, -1), 8),
-        ('LEFTPADDING', (0, 0), (-1, -1), 0),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
-    ]))
-    elements.append(customer_table)
-    elements.append(Spacer(1, 0.3*inch))
-    
-    # Competition/Tour Details
-    competition_heading = Paragraph("Competition/Tour Details", heading_style)
-    elements.append(competition_heading)
-    
     competition = application.competition
-    competition_info = [
-        ['<b>Competition:</b>', competition.name],
-        ['<b>Subject:</b>', competition.subject.name if competition.subject else 'N/A'],
-        ['<b>Destination:</b>', f"{competition.destination.city}, {competition.destination.country}" if competition.destination else 'N/A'],
-        ['<b>Round:</b>', application.round.name if application.round else 'N/A'],
-        ['<b>Status:</b>', application.get_status_display()],
+    destination_text = f"{competition.destination.city}, {competition.destination.country}" if competition.destination else 'N/A'
+    round_text = application.round.name if application.round else 'N/A'
+    subject_text = competition.subject.name if competition.subject else 'N/A'
+
+    profile_sections = [
+        ("Applicant Profile", [
+            ("Name", student.get_full_name() or student.username),
+            ("Email", student.email or "N/A"),
+            ("Application Number", application.application_number or "N/A"),
+        ]),
+        ("Competition Profile", [
+            ("Competition", competition.name),
+            ("Subject", subject_text),
+            ("Destination", destination_text),
+            ("Round", round_text),
+            ("Status", application.get_status_display()),
+        ])
     ]
-    
-    competition_table = Table(competition_info, colWidths=[2.5*inch, 3.5*inch])
-    competition_table.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#333333')),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-        ('TOPPADDING', (0, 0), (-1, -1), 8),
-        ('LEFTPADDING', (0, 0), (-1, -1), 0),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
-    ]))
-    elements.append(competition_table)
-    elements.append(Spacer(1, 0.3*inch))
-    
-    # Pricing Information
-    pricing_heading = Paragraph("Pricing Information", heading_style)
-    elements.append(pricing_heading)
-    
+
+    for section_title, rows in profile_sections:
+        elements.append(Paragraph(section_title, section_title_style))
+        section_data = [[
+            Paragraph(f"<b>{label}</b>", body_style),
+            Paragraph(str(value) if value else "N/A", body_style)
+        ] for label, value in rows]
+        section_table = Table(section_data, colWidths=[doc.width * 0.28, doc.width * 0.72])
+        section_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TEXTCOLOR', (0, 0), (0, -1), brand_primary),
+            ('TEXTCOLOR', (1, 0), (1, -1), text_main),
+            ('FONTSIZE', (0, 0), (-1, -1), 9.8),
+            ('LINEBELOW', (0, 0), (-1, -2), 0.35, border_soft),
+            ('LEFTPADDING', (0, 0), (-1, -1), 8),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            ('TOPPADDING', (0, 0), (-1, -1), 7),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
+            ('BOX', (0, 0), (-1, -1), 0.8, border_soft),
+            ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+        ]))
+        elements.append(section_table)
+        elements.append(Spacer(1, 10))
+
+    elements.append(Paragraph("Financial Summary", section_title_style))
+    cost_value = float(application.total_cost or 0)
     pricing_data = [
-        ['<b>Description</b>', '<b>Amount</b>'],
-        ['Total Cost', f"KES {application.total_cost:,.2f}"],
+        ['Description', 'Amount'],
+        ['Participation & travel package estimate', f"KES {cost_value:,.2f}"],
+        ['Subtotal', f"KES {cost_value:,.2f}"],
+        ['Total Quotation Amount', f"KES {cost_value:,.2f}"],
     ]
-    
-    pricing_table = Table(pricing_data, colWidths=[4*inch, 2*inch])
+    pricing_table = Table(pricing_data, colWidths=[doc.width * 0.66, doc.width * 0.34])
     pricing_table.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('FONTNAME', (0, 0), (1, 0), 'Helvetica-Bold'),
+        ('BACKGROUND', (0, 0), (-1, 0), panel_bg),
+        ('TEXTCOLOR', (0, 0), (-1, 0), brand_primary),
+        ('FONTNAME', (0, 1), (-1, -2), 'Helvetica'),
+        ('TEXTCOLOR', (0, 1), (-1, -2), text_main),
+        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+        ('TEXTCOLOR', (0, -1), (-1, -1), brand_primary),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#333333')),
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f0f0f0')),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
-        ('TOPPADDING', (0, 0), (-1, -1), 10),
-        ('LEFTPADDING', (0, 0), (-1, -1), 10),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
+        ('LINEABOVE', (0, -1), (-1, -1), 1, brand_accent),
+        ('BOX', (0, 0), (-1, -1), 0.8, border_soft),
+        ('INNERGRID', (0, 0), (-1, -2), 0.35, border_soft),
+        ('LEFTPADDING', (0, 0), (-1, -1), 9),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 9),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
     ]))
     elements.append(pricing_table)
-    elements.append(Spacer(1, 0.3*inch))
-    
-    # Additional Notes
-    if application.special_requirements:
-        notes_heading = Paragraph("Special Requirements", heading_style)
-        elements.append(notes_heading)
-        notes_para = Paragraph(application.special_requirements, normal_style)
-        elements.append(notes_para)
-        elements.append(Spacer(1, 0.3*inch))
-    
-    # Footer
-    footer_text = Paragraph(
-        "<i>This quotation is valid for 30 days from the date of issue. "
-        "For any inquiries, please contact us at info@readtrips.com or +254 700 000 000.</i>",
-        ParagraphStyle(
-            'FooterStyle',
-            parent=styles['Normal'],
-            fontSize=9,
-            textColor=colors.HexColor('#666666'),
-            alignment=TA_CENTER,
-            spaceBefore=20
-        )
+    elements.append(Spacer(1, 10))
+
+    total_highlight = Table(
+        [[Paragraph("Payable Amount", body_style), Paragraph(f"KES {cost_value:,.2f}", amount_style)]],
+        colWidths=[doc.width * 0.55, doc.width * 0.45]
     )
-    elements.append(footer_text)
-    
-    # Build PDF with watermark
+    total_highlight.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#eef2ff')),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#c7d2fe')),
+        ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+    ]))
+    elements.append(total_highlight)
+    elements.append(Spacer(1, 10))
+
+    if application.special_requirements:
+        elements.append(Paragraph("Special Requirements", section_title_style))
+        notes_para = Paragraph(application.special_requirements, body_style)
+        elements.append(notes_para)
+        elements.append(Spacer(1, 8))
+
+    terms_title = Paragraph("Terms, Ethics & Validity", section_title_style)
+    terms_text = Paragraph(
+        "- This quotation is valid for 30 calendar days from the issue date.<br/>"
+        "- Pricing is provided for planning and may vary based on provider availability and policy updates.<br/>"
+        "- The quotation follows fair-practice standards and does not include hidden charges.<br/>"
+        "- For support, contact info@readtrips.com or +254 700 000 000.",
+        note_style
+    )
+    elements.append(terms_title)
+    elements.append(terms_text)
+    elements.append(Spacer(1, 18))
+
+    signature_table = Table(
+        [[
+            Paragraph("<b>Prepared by</b><br/>WON Travel Desk", body_style),
+            Paragraph("<b>Authorized signature</b><br/>__________________________", body_style)
+        ]],
+        colWidths=[doc.width * 0.5, doc.width * 0.5]
+    )
+    signature_table.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LINEABOVE', (0, 0), (-1, 0), 0.4, border_soft),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(signature_table)
+
     class WatermarkedCanvas(canvas.Canvas):
         def __init__(self, *args, **kwargs):
-            canvas.Canvas.__init__(self, *args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.pages = []
         
         def showPage(self):
@@ -1655,47 +1808,31 @@ def download_quotation_pdf(request, application_id):
         
         def save(self):
             page_count = len(self.pages)
-            for page in self.pages:
+            for page_num, page in enumerate(self.pages, start=1):
                 self.__dict__.update(page)
-                self.draw_watermark()
-                canvas.Canvas.showPage(self)
-            canvas.Canvas.save(self)
+                self.draw_watermark(page_num, page_count)
+                super().showPage()
+            super().save()
         
-        def draw_watermark(self):
+        def draw_watermark(self, page_num, page_count):
             self.saveState()
-            # Set watermark properties
-            self.setFont('Helvetica-Bold', 60)
-            # Use gray color with transparency effect (light gray)
-            self.setFillColorRGB(0.88, 0.88, 0.88)  # #e0e0e0 equivalent
-            
-            # Rotate and position watermark
-            self.translate(A4[0]/2, A4[1]/2)
-            self.rotate(45)
-            self.drawCentredString(0, 0, 'readtrips')
-            self.restoreState()
-            
-            # Add footer with contact info
-            self.saveState()
-            self.setFont('Helvetica', 8)
-            self.setFillColor(colors.HexColor('#666666'))
-            
-            footer_text = "readtrips | Nairobi, Kenya | Email: info@readtrips.com | Phone: +254 700 000 000"
+            self.setStrokeColor(colors.HexColor('#d1d5db'))
+            self.line(54, 44, A4[0] - 54, 44)
+            self.setFont('Helvetica', 8.2)
+            self.setFillColor(colors.HexColor('#6b7280'))
+            footer_text = "World Olympiads Network"
             text_width = self.stringWidth(footer_text, 'Helvetica', 8)
             self.drawString((A4[0] - text_width) / 2, 30, footer_text)
+            self.drawRightString(A4[0] - 54, 30, f"Page {page_num} of {page_count}")
             self.restoreState()
-    
-    # Build PDF
+
     doc.build(elements, canvasmaker=WatermarkedCanvas)
-    
-    # Get the value of the BytesIO buffer
     pdf = buffer.getvalue()
     buffer.close()
-    
-    # Create HTTP response
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="quotation_{application.application_number}.pdf"'
     response.write(pdf)
-    
     return response
 
 
@@ -2233,19 +2370,23 @@ def subscription_checkout(request, plan_id):
         form = SubscriptionCheckoutForm(request.POST, user=request.user)
         if form.is_valid():
             # Create pending subscription
-            from datetime import timedelta
-            from dateutil.relativedelta import relativedelta
+            def add_months(dt, months):
+                month_index = dt.month - 1 + months
+                year = dt.year + (month_index // 12)
+                month = (month_index % 12) + 1
+                day = min(dt.day, calendar.monthrange(year, month)[1])
+                return dt.replace(year=year, month=month, day=day)
             
             # Calculate subscription end date based on duration
             start_date = timezone.now()
             if plan.duration == 'monthly':
-                end_date = start_date + relativedelta(months=1)
+                end_date = add_months(start_date, 1)
             elif plan.duration == 'quarterly':
-                end_date = start_date + relativedelta(months=3)
+                end_date = add_months(start_date, 3)
             elif plan.duration == 'annually':
-                end_date = start_date + relativedelta(years=1)
+                end_date = add_months(start_date, 12)
             else:
-                end_date = start_date + relativedelta(months=1)
+                end_date = add_months(start_date, 1)
             
             # Create subscription record (pending payment)
             subscription = UserSubscription.objects.create(
@@ -2757,11 +2898,23 @@ def cancel_pending_subscription(request, subscription_id):
 
 @login_required
 def dashboard_profile(request):
-    """Profile management page"""
+    """Unified profile & settings page"""
     user = request.user
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated.")
+            return redirect('dashboard_profile')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserProfileForm(instance=user)
     
     context = {
         'user': user,
+        'form': form,
     }
     
     return render(request, 'dashboard/profile.html', context)
@@ -3062,18 +3215,30 @@ def application_detail(request, application_id):
 @login_required
 def dashboard_notifications(request):
     """Notifications page"""
-    # Get the base queryset
+    # Base queryset (newest first)
     notifications_qs = Notification.objects.filter(user=request.user).order_by('-created_at')
-    
-    # Mark unread notifications as read (before slicing)
-    notifications_qs.filter(is_read=False).update(is_read=True, read_at=timezone.now())
-    
-    # Get the sliced notifications for display
-    notifications = notifications_qs[:20]
-    
+
+    # Count unread before we mutate anything so we can still
+    # show an accurate number in the template for this request
+    unread_count = notifications_qs.filter(is_read=False).count()
+
+    # Take a slice for display and keep it as a list so the in‑memory
+    # objects still reflect their original is_read state for styling.
+    notifications = list(notifications_qs[:20])
+
+    # Mark any unread notifications in this slice as read in the database,
+    # so badge counts and future requests stay in sync.
+    unread_ids = [n.id for n in notifications if not n.is_read]
+    if unread_ids:
+        notifications_qs.filter(id__in=unread_ids, is_read=False).update(
+            is_read=True,
+            read_at=timezone.now()
+        )
+
     context = {
         'user': request.user,
         'notifications': notifications,
+        'unread_count': unread_count,
     }
     
     return render(request, 'dashboard/notifications.html', context)
@@ -3081,12 +3246,8 @@ def dashboard_notifications(request):
 
 @login_required
 def dashboard_settings(request):
-    """Settings page"""
-    context = {
-        'user': request.user,
-    }
-    
-    return render(request, 'dashboard/settings.html', context)
+    """Backwards‑compatible redirect to unified profile/settings page"""
+    return redirect('dashboard_profile')
 
 
 # ============================================================================

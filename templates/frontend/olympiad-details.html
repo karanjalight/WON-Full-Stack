@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% if competition.banner_image %}{{ competition.banner_image.url }}{% elif competition.image %}{{ competition.image.url }}{% else %}{% static 'img/hero/1.png' %}{% endif %}');">
+        <!--  Breadcrumb / Hero Section (aligned with Olympiads list) -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% if competition.banner_image %}{{ competition.banner_image.url }}{% elif competition.image %}{{ competition.image.url }}{% else %}{% static 'img/hero/1.png' %}{% endif %}');">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                         <li>
                             <a href="{% url 'index' %}">
-                            Home
+                                Home
                             </a>
                         </li>
                         <li>
@@ -25,7 +25,9 @@
                             {{ competition.name }}
                         </li>
                     </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">{{ competition.name }}</h1>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">
+                        {{ competition.name }}
+                    </h1>
                 </div>
             </div>
             <div class="plane-shape float-bob-x">
@@ -33,979 +35,1937 @@
             </div>
         </div>
 
-        <!--  Tour Details Section Start -->
-        <section class="tour-details-section section-padding">
-            <div class="container">
-                <div class="tour-details-wrapper">
-                    <div class="row g-">
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="tour-details-items">
-                                <div class="details-thumb">
-                                    {% if competition.image %}
-                                        <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+    <section class="olympiad-shell">
+        <!-- Sticky page header -->
+       
+        <!-- Main layout -->
+        <div class="olympiad-shell-body">
+            <!-- Left column -->
+            <div class="olympiad-shell-main">
+                <!-- Hero / overview card -->
+                <article class="olympiad-card olympiad-card-hero">
+                    
+                    <div class="olympiad-hero-media">
+                        {% if competition.image %}
+                            <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+                        {% else %}
+                            <img src="{% static 'img/tour/default.jpg' %}" alt="{{ competition.name }}">
+                        {% endif %}                       
+                    </div>
+                    <div class="olympiad-hero-content">
+                        <div class="olympiad-hero-title-block">
+                            <p class="olympiad-hero-kicker">
+                                {{ competition.subject.name }} Olympiad
+                            </p>
+                            <h2 class="olympiad-hero-title">
+                                {{ competition.name }}
+                            </h2>
+                            <p class="olympiad-hero-subtitle">
+                                {{ competition.destination.city }}, {{ competition.destination.country }} ·
+                                {{ competition.start_date|date:"M d" }} – {{ competition.end_date|date:"M d, Y" }}
+                            </p>
+                        </div>
+                        <div class="olympiad-hero-header-row">
+                            <div class="olympiad-price-chip">
+                                <!-- <p class="olympiad-price-label">Base registration fee</p> -->
+                                <p class="olympiad-price-amount">
+                                    {{ competition.currency }}{{ competition.base_price|floatformat:2 }}
+                                    <span class="olympiad-price-muted">per participant</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="olympiad-hero-meta-strip">
+                            <div class="olympiad-hero-meta-pill">
+                                <span class="olympiad-hero-meta-label">Competition window</span>
+                                <span class="olympiad-hero-meta-value">
+                                    {{ competition.start_date|date:"M d" }} – {{ competition.end_date|date:"M d, Y" }}
+                                </span>
+                            </div>
+                            <div class="olympiad-hero-meta-pill">
+                                <span class="olympiad-hero-meta-label">Application deadline</span>
+                                <span class="olympiad-hero-meta-value">
+                                    {{ competition.application_deadline|date:"M d, Y" }}
+                                </span>
+                            </div>
+                            
+                        </div>
+                        <div class="olympiad-hero-grid">
+                            <div class="olympiad-hero-metric">
+                                <p class="olympiad-hero-metric-label">Format</p>
+                                <p class="olympiad-hero-metric-value">
+                                    {% if competition.is_online %}
+                                        Online
+                                    {% elif competition.is_hybrid %}
+                                        Hybrid
                                     {% else %}
-                                        <img src="{% static 'img/tour/default.jpg' %}" alt="{{ competition.name }}">
+                                        In-person
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="olympiad-hero-metric">
+                                <p class="olympiad-hero-metric-label">Age bracket</p>
+                                <p class="olympiad-hero-metric-value">
+                                    {{ competition.age_group_min }}–{{ competition.age_group_max }} yrs
+                                </p>
+                            </div>
+                            <div class="olympiad-hero-metric">
+                                <p class="olympiad-hero-metric-label">Location</p>
+                                <p class="olympiad-hero-metric-value">
+                                    {{ competition.destination.city }}, {{ competition.destination.country }}
+                                </p>
+                            </div>
+                            <div class="olympiad-hero-metric">
+                                <p class="olympiad-hero-metric-label">Subject</p>
+                                <p class="olympiad-hero-metric-value">
+                                    {{ competition.subject.name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="olympiad-hero-cta-wrap">
+                            {% if competition.is_application_open %}
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.has_active_subscription %}
+                                        <a href="{% url 'start-application' competition.slug %}" class="theme-btn">
+                                            <span>Apply for this Olympiad</span> <i class="far fa-long-arrow-right"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'dashboard' %}" class="theme-btn olympiad-theme-btn-disabled">
+                                            <span>Get subscription to apply</span> <i class="far fa-long-arrow-right"></i>
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'signup' %}" class="theme-btn">
+                                        <span>Create account to apply</span> <i class="far fa-user-plus"></i>
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <button class="theme-btn olympiad-theme-btn-disabled" disabled>
+                                    <span>Applications closed</span> <i class="far fa-lock"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                </article>
+
+                <!-- Details stack -->
+                <section class="olympiad-section-stack">
+                    <!-- About -->
+                    <article class="olympiad-card">
+                        <header class="olympiad-card-header">
+                            <div class="olympiad-card-title-row">
+                                <h2>Overview</h2>
+                                <span class="olympiad-chip-muted">
+                                    <span class="olympiad-dot-status"></span>
+                                    Competition details
+                                </span>
+                            </div>
+                            <p class="olympiad-card-subtitle">
+                                Understand what this Olympiad focuses on, who it’s for, and what to expect.
+                            </p>
+                        </header>
+                        <div class="olympiad-card-body olympiad-rich-text">
+                            {% if competition.description %}
+                                {{ competition.description|safe }}
+                            {% else %}
+                                <p class="olympiad-empty-text">
+                                    A detailed description for this Olympiad has not been provided yet.
+                                </p>
+                            {% endif %}
+                        </div>
+                    </article>
+
+                    <!-- Requirements -->
+                    <article class="olympiad-card">
+                        <header class="olympiad-card-header">
+                            <div class="olympiad-card-title-row">
+                                <h2>Eligibility & requirements</h2>
+                            </div>
+                            <p class="olympiad-card-subtitle">
+                                Verify that your participants meet the academic and age criteria before applying.
+                            </p>
+                        </header>
+                        <div class="olympiad-card-body olympiad-rich-text">
+                            {% if competition.requirements %}
+                                {{ competition.requirements|safe }}
+                            {% else %}
+                                <div class="olympiad-empty-state">
+                                    <div class="olympiad-empty-icon">
+                                        <!-- lucide:info -->
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M12 16v-4"></path>
+                                            <path d="M12 8h.01"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="olympiad-empty-content">
+                                        <h3>Requirements coming soon</h3>
+                                        <p>Specific eligibility and documentation requirements will be published by the organizers.</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+
+                    <!-- Subject & tutors -->
+                    <article class="olympiad-card">
+                        <header class="olympiad-card-header">
+                            <div class="olympiad-card-title-row">
+                                <h2>Subject & preparation</h2>
+                            </div>
+                            <p class="olympiad-card-subtitle">
+                                Explore the subject focus and connect with tutors who specialize in {{ competition.subject.name }}.
+                            </p>
+                        </header>
+                        <div class="olympiad-card-body olympiad-subject-layout">
+                            <div class="olympiad-subject-main">
+                                <div class="olympiad-subject-header">
+                                    <div class="olympiad-subject-meta">
+                                        {% if competition.subject.icon %}
+                                            <div class="olympiad-subject-avatar">
+                                                <img src="{{ competition.subject.icon.url }}" alt="{{ competition.subject.name }}">
+                                            </div>
+                                        {% else %}
+                                            <div class="olympiad-subject-avatar olympiad-subject-avatar-fallback">
+                                                <!-- lucide:book-open -->
+                                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M12 3v18"></path>
+                                                    <path d="M19.5 4.5 12 3 4.5 4.5"></path>
+                                                    <path d="M19.5 19.5 12 21l-7.5-1.5"></path>
+                                                    <path d="M4.5 4.5v15"></path>
+                                                    <path d="M19.5 4.5v15"></path>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <p class="olympiad-subject-label">Olympiad subject</p>
+                                            <p class="olympiad-subject-name">{{ competition.subject.name }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="olympiad-subject-stat-row">
+                                        <div class="olympiad-stat-chip">
+                                            <span class="olympiad-stat-label">Active competitions: {{ competition.subject.total_olympiads }}</span></div>
+                                        <div class="olympiad-stat-chip">
+                                            <span class="olympiad-stat-label">Available tutors:{{ competition.subject.total_tutors }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="olympiad-subject-description olympiad-rich-text">
+                                    {% if competition.subject.description %}
+                                        {{ competition.subject.description|safe }}
+                                    {% else %}
+                                        <p class="olympiad-empty-text">
+                                            We’re curating a richer description for this subject. In the meantime, you can still discover tutors and related Olympiads.
+                                        </p>
                                     {% endif %}
                                 </div>
-                                <div class="details-content">
-                                    <span class="location-icon">
-                                        <i class="far fa-map-marker-alt"></i>
-                                        {{ competition.destination.city }}, {{ competition.destination.country }}
-                                    </span>
-                                    <h2>
-                                        {{ competition.name }}
-                                    </h2>
-                                    {% if competition.short_name %}
-                                    <p class="mb-2"><strong>Short Name:</strong> {{ competition.short_name }}</p>
-                                    {% endif %}
-                                    <div class="mb-3">
-                                        {{ competition.description|safe }}
-                                    </div>
-                                    {% if competition.requirements %}
-                                    <div class="mb-3">
-                                        <h4>Requirements</h4>
-                                        <div class="requirements-content">
-                                            {{ competition.requirements|safe }}
+                            </div>
+                            <aside class="olympiad-subject-aside">
+                                <div class="olympiad-subject-aside-card">
+                                    <div class="olympiad-subject-aside-header">
+                                        <div>
+                                            <p class="olympiad-subject-aside-title">1:1 preparation support</p>
+                                            <p class="olympiad-subject-aside-subtitle">
+                                                Work with vetted tutors who specialize in {{ competition.subject.name }} Olympiad preparation.
+                                            </p>
                                         </div>
                                     </div>
-                                    {% endif %}
-                                    <!-- <div class="destination-list-item">
-                                        <h4>
-                                            Competition Benefits & Features
-                                        </h4>
-                                        <div class="destination-list">
-                                            <ul class="list">
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Official IMO Certificate
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Gold, Silver & Bronze Medals
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    International Recognition
-                                                </li>
-                                            </ul>
-                                            <ul class="list">
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Study Materials Provided
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Expert Mentorship Program
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    University Scholarship Opportunities
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="tour-details-icon">
-                                        <div class="row g-5 justity-content-end">
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="flaticon-connection"></i>
-                                                    <h5>Virtual Participation</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="flaticon-cyber-security"></i>
-                                                    <h5>Secure Testing Environment</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="flaticon-guide"></i>
-                                                    <h5>Expert Mentorship</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="fas fa-book"></i>
-                                                    <h5>Study Resources</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="fas fa-certificate"></i>
-                                                    <h5>Official Certificates</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="fas fa-trophy"></i>
-                                                    <h5>Medals & Awards</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="fas fa-users"></i>
-                                                    <h5>Global Networking</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="icon">
-                                                    <i class="fas fa-graduation-cap"></i>
-                                                    <h5>University Recognition</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="faq-items">
-                                        <h4>Competition Schedule</h4>
-                                        <div class="faq-accordion">
-                                            <div class="accordion" id="accordion2">
-                                                <div class="accordion-item mb-3">
-                                                    <h5 class="accordion-header">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
-                                                            <span>Day 1:</span>  Registration & Opening Ceremony
-                                                        </button>
-                                                    </h5>
-                                                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                                        <div class="accordion-body">
-                                                            Welcome to IMO 2025! Check-in begins at 9:00 AM. Participants will receive their competition materials, ID badges, and information packets. The opening ceremony starts at 2:00 PM, featuring keynote speakers and an introduction to the competition rules and format. Networking session follows at 4:00 PM.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="accordion-item mb-3">
-                                                    <h5 class="accordion-header">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
-                                                            <span>Day 2:</span> First Competition Day (Problems 1-3)
-                                                        </button>
-                                                    </h5>
-                                                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                                        <div class="accordion-body">
-                                                            Competition Day 1: Participants will tackle problems 1, 2, and 3. The exam session runs from 9:00 AM to 1:30 PM (4.5 hours). Each problem is worth 7 points. Topics covered include algebra, number theory, and combinatorics. Lunch break at 2:00 PM, followed by optional problem discussion sessions at 4:00 PM.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="accordion-item mb-3">
-                                                    <h5 class="accordion-header">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
-                                                            <span>Day 3:</span>  Second Competition Day (Problems 4-6)
-                                                        </button>
-                                                    </h5>
-                                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#accordion">
-                                                        <div class="accordion-body">
-                                                            Competition Day 2: Participants will solve problems 4, 5, and 6. The exam session runs from 9:00 AM to 1:30 PM (4.5 hours). Topics include geometry, functional equations, and advanced problem-solving. These problems are typically more challenging than Day 1. Evening relaxation activities and cultural exchange programs available.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="accordion-item">
-                                                    <h5 class="accordion-header">
-                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
-                                                            <span>Day 4:</span>   Results & Award Ceremony
-                                                        </button>
-                                                    </h5>
-                                                    <div id="faq4" class="accordion-collapse collapse show" data-bs-parent="#accordion">
-                                                        <div class="accordion-body">
-                                                            Final day featuring the awards ceremony at 3:00 PM. Gold, Silver, and Bronze medals will be awarded to top performers. All participants receive official IMO certificates. Special recognition for perfect scores and outstanding solutions. Closing remarks by IMO leadership and announcement of next year's host country. Networking reception at 5:00 PM.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --> 
-                                    
-                                    <!-- Competition Venue & Destination Section -->
-                                    <div class="destination-list-item mt-5">
-                                        <h3 class="mb-4">
-                                            <i class="far fa-map-marker-alt me-2"></i> Competition Venue & Destination
-                                        </h3>
-                                        <div class="destination-info-wrapper">
-                                            {% if competition.destination.image %}
-                                            <div class="mb-4">
-                                                
-                                                <div class="google-map" style="height: 400px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1);"> 
-                                                    <iframe src="{{ competition.destination.iframe_url }}" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy"></iframe>
-                                                </div>
-                                            </div>
-                                            {% endif %}
-                                            <div class="destination-content">
-                                                <h4 class="mb-3">{{ competition.destination.city }}, {{ competition.destination.country }}</h4>
-                                                <div class="destination-meta mb-3">
-                                                    <ul class="list">
-                                                        <li>
-                                                            <i class="far fa-globe"></i>
-                                                            <strong>Region:</strong> {{ competition.destination.region|title }}
-                                                        </li>
-                                                        {% if competition.destination.package_price_min or competition.destination.package_price_max %}
-                                                        <li>
-                                                            <i class="far fa-dollar-sign"></i>
-                                                            <strong>Package Range:</strong> 
-                                                            {{ competition.destination.currency }}
-                                                            {% if competition.destination.package_price_min %}{{ competition.destination.package_price_min|floatformat:0 }}{% endif %}
-                                                            {% if competition.destination.package_price_min and competition.destination.package_price_max %} - {% endif %}
-                                                            {% if competition.destination.package_price_max %}{{ competition.destination.package_price_max|floatformat:0 }}{% endif %}
-                                                        </li>
+                                    <div class="olympiad-tutor-list">
+                                        {% if tutors %}
+                                            {% for tutor in tutors %}
+                                                <div class="olympiad-tutor-row">
+                                                    <div class="olympiad-tutor-avatar">
+                                                        {% if tutor.user.profile_picture %}
+                                                            <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}">
+                                                        {% else %}
+                                                            <!-- lucide:user -->
+                                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                                <circle cx="12" cy="8" r="4"></circle>
+                                                                <path d="M6 20a6 6 0 0 1 12 0"></path>
+                                                            </svg>
                                                         {% endif %}
-                                                    </ul>
+                                                    </div>
+                                                    <div class="olympiad-tutor-main">
+                                                        <div class="olympiad-tutor-name-row">
+                                                            <p class="olympiad-tutor-name">
+                                                                {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
+                                                            </p>
+                                                        </div>
+                                                        <p class="olympiad-tutor-role">
+                                                            {{ competition.subject.name }} specialist
+                                                        </p>
+                                                        <div class="olympiad-tutor-meta-row">
+                                                            {% if tutor.average_rating %}
+                                                                <div class="olympiad-rating-pill">
+                                                                    <span class="olympiad-icon">
+                                                                        <!-- lucide:star -->
+                                                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                                            <path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+                                                                        </svg>
+                                                                    </span>
+                                                                    <span>{{ tutor.average_rating|floatformat:1 }}</span>
+                                                                    <span class="olympiad-rating-muted">
+                                                                        • {{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }}
+                                                                    </span>
+                                                                </div>
+                                                            {% else %}
+                                                                <span class="olympiad-muted-small">No reviews yet</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="olympiad-tutor-side">
+                                                        <p class="olympiad-tutor-rate">
+                                                            {{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}
+                                                            <span class="olympiad-tutor-rate-unit">/hour</span>
+                                                        </p>
+                                                        <a href="{% url 'team-details' tutor.user.id %}" class="olympiad-btn-ghost">
+                                                            <span>View</span>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                {% if competition.destination.description %}
-                                                    <div class="mb-4">{{ competition.destination.description|safe }}</div>
-                                                {% endif %}
-                                                <a href="{% url 'contact' %}?subject=Travel Quote Request for {{ competition.destination.city }}" class="theme-btn mb-4">
-                                                    <span>Generate Trip Quotation</span> <i class="far fa-long-arrow-right"></i>
+                                            {% endfor %}
+                                            <div class="olympiad-tutor-footer">
+                                                <a href="{% url 'team' %}?subject={{ competition.subject.slug }}" class="olympiad-btn-secondary">
+                                                    <span>Browse all {{ competition.subject.name }} tutors</span>
                                                 </a>
                                             </div>
-                                            
-                                        </div>
+                                        {% else %}
+                                            <div class="olympiad-empty-state">
+                                                <div class="olympiad-empty-icon">
+                                                    <!-- lucide:users -->
+                                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="9" cy="7" r="4"></circle>
+                                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                    </svg>
+                                                </div>
+                                                <div class="olympiad-empty-content">
+                                                    <h3>No tutors available yet</h3>
+                                                    <p>We’re onboarding tutors for {{ competition.subject.name }}. Check back soon or contact us for updates.</p>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    
-                                    <!-- Subject Details Section -->
-                                    <div class="destination-list-item mt-5">
-                                        <h3 class="mb-4">
-                                            <i class="fas fa-book me-2"></i> Subject: {{ competition.subject.name }}
-                                        </h3>
-                                        <div class="subject-info-wrapper">
-                                            <div class="d-flex align-items-start gap-3 mb-4">
-                                                {% if competition.subject.icon %}
-                                                    <div class="subject-icon-wrapper">
-                                                        <img src="{{ competition.subject.icon.url }}" alt="{{ competition.subject.name }}" style="max-width: 100px; height: auto; border-radius: 10px;">
-                                                    </div>
-                                                {% endif %}
-                                                <div class="flex-grow-1">
-                                                    {% if competition.subject.description %}
-                                                        <div class="mb-3 subject-description-preview">{{ competition.subject.description|safe }}</div>
-                                                    {% else %}
-                                                        <p class="mb-3">Explore {{ competition.subject.name }} Olympiad competitions and access expert tutors to help you prepare for success.</p>
-                                                    {% endif %}
-                                                    <div class="subject-stats d-flex flex-wrap gap-2 mb-3">
-                                                        <span class="badge bg-primary" style="padding: 8px 15px; font-size: 14px;">
-                                                            <i class="fas fa-trophy me-1"></i> {{ competition.subject.total_olympiads }} Competitions
-                                                        </span>
-                                                        <span class="badge bg-success" style="padding: 8px 15px; font-size: 14px;">
-                                                            <i class="fas fa-chalkboard-teacher me-1"></i> {{ competition.subject.total_tutors }} Tutors Available
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Quick Facts Card -->
-                                            <div class="subject-sidebar-card p-4 rounded mb-4" style="background: linear-gradient(135deg, #232f63 0%, #263b99  100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                                <h5 class="mb-4 text-white">
-                                                    <i class="fas fa-chart-line me-2"></i> Quick Facts
-                                                </h5>
-                                                <ul class="list-unstyled mb-4">
-                                                    <li class="mb-3 d-flex align-items-center">
-                                                        <i class="fas fa-trophy me-3" style="font-size: 20px;"></i>
-                                                        <div>
-                                                            <strong style="display: block;">Total Competitions</strong>
-                                                            <span style="font-size: 24px; font-weight: bold;">{{ competition.subject.total_olympiads }}</span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="mb-3 d-flex align-items-center">
-                                                        <i class="fas fa-chalkboard-teacher me-3" style="font-size: 20px;"></i>
-                                                        <div>
-                                                            <strong style="display: block;">Available Tutors</strong>
-                                                            <span style="font-size: 24px; font-weight: bold;">{{ competition.subject.total_tutors }}</span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="mb-3 d-flex align-items-center">
-                                                        <i class="fas fa-book me-3" style="font-size: 20px;"></i>
-                                                        <div>
-                                                            <strong style="display: block;">Study Resources</strong>
-                                                            <span>Available</span>
-                                                        </div>
-                                                    </li>
-                                                </ul> 
-                                            </div>
-                                            
-                                            <button class="theme-btn mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#subjectDetails" aria-expanded="false" aria-controls="subjectDetails">
-                                                <span>View More Details & Tutors</span> <i class="far fa-long-arrow-right"></i>
-                                            </button>
-                                            
-                                            <!-- Collapsible Subject Details -->
-                                            <div class="collapse mt-3" id="subjectDetails">
-                                                <div class="subject-details-expanded">
-                                                    {% if competition.subject.description %}
-                                                        <div class="mb-4 p-4 bg-light rounded">
-                                                            <h5 class="mb-3">
-                                                                <i class="fas fa-info-circle me-2"></i> About {{ competition.subject.name }}
-                                                            </h5>
-                                                            <div class="mb-0">{{ competition.subject.description|safe }}</div>
-                                                        </div>
-                                                    {% endif %}
-                                                    
-                                                    <!-- Tutors Section -->
-                                                    {% if tutors %}
-                                                        <div class="tutors-section mt-4">
-                                                            <h5 class="mb-4">
-                                                                <i class="fas fa-chalkboard-teacher me-2"></i> Available Tutors for {{ competition.subject.name }}
-                                                            </h5>
-                                                            <div class="tutors-list">
-                                                                {% for tutor in tutors %}
-                                                                <div class="tutor-card p-4 border rounded mb-3" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                                                                    <div class="d-flex align-items-start gap-3">
-                                                                        {% if tutor.user.profile_picture %}
-                                                                            <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="rounded-circle" style="width: 70px; height: 70px; object-fit: cover; border: 3px solid #f0f0f0;">
-                                                                        {% else %}
-                                                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 3px solid #f0f0f0;">
-                                                                                <i class="fas fa-user text-white" style="font-size: 24px;"></i>
-                                                                            </div>
-                                                                        {% endif %}
-                                                                        <div class="flex-grow-1">
-                                                                            <h6 class="mb-1 fw-bold">
-                                                                                {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                                                                            </h6>
-                                                                            <p class="text-muted small mb-2">
-                                                                                <i class="fas fa-graduation-cap me-1"></i>{{ competition.subject.name }} Specialist
-                                                                            </p>
-                                                                            <div class="d-flex align-items-center gap-2 mb-2">
-                                                                                {% if tutor.average_rating %}
-                                                                                    <div class="star d-flex align-items-center">
-                                                                                        <i class="fas fa-star text-warning me-1"></i>
-                                                                                        <strong class="me-1">{{ tutor.average_rating|floatformat:1 }}</strong>
-                                                                                    </div>
-                                                                                    <span class="small text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
-                                                                                {% else %}
-                                                                                    <span class="small text-muted">No ratings yet</span>
-                                                                                {% endif %}
-                                                                            </div>
-                                                                            <p class="mb-3">
-                                                                                <strong class="text-primary" style="font-size: 18px;">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
-                                                                                <span class="text-muted small">/hour</span>
-                                                                            </p>
-                                                                            <a href="{% url 'team-details' tutor.user.id %}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
-                                                                                <span>View Profile</span> <i class="far fa-long-arrow-right"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                {% endfor %}
-                                                            </div>
-                                                            <div class="mt-4 text-center">
-                                                                <a href="{% url 'team' %}?subject={{ competition.subject.slug }}" class="theme-btn">
-                                                                    <span>View All Tutors for {{ competition.subject.name }}</span> <i class="far fa-long-arrow-right"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info mt-4">
-                                                            <i class="fas fa-info-circle me-2"></i>
-                                                            <p class="mb-0">No tutors available for {{ competition.subject.name }} at the moment. Check back soon!</p>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- <div class="review-area">
-                                        <h3>
-                                            Participant Reviews
-                                        </h3>
-                                        <div class="courses-reviews-box-items">
-                                            <div class="courses-reviews-box">
-                                                <div class="reviews-box">
-                                                    <h2><span class="odometer" data-count="4.9">00</span></h2>
-                                                    <div class="star">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                    </div>
-                                                    <p>856+ Reviews</p>
-                                                </div>
-                                                <div class="reviews-ratting-right">
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-two"></div>
-                                                        </div>
-                                                        <span>Services</span>
-                                                    </div>
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-three"></div>
-                                                        </div>
-                                                        <span>Safety</span>
-                                                    </div>
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-three"></div>
-                                                        </div>
-                                                        <span>Guides</span>
-                                                    </div>
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-four"></div>
-                                                        </div>
-                                                        <span>Foods</span>
-                                                    </div>
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-five"></div>
-                                                        </div>
-                                                        <span>Hotels</span>
-                                                    </div>
-                                                    <div class="reviews-ratting-item">
-                                                        <div class="star">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="far fa-star"></i>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-value style-five"></div>
-                                                        </div>
-                                                        <span>Places</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="client-review-items">
-                                        <h3>Clients Reviews</h3>
-                                        <div class="clinet-box-items">
-                                            <div class="clinet-box">
-                                                <div class="star">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <h5>
-                                                    "Our family trip was amazing from start to finish! The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
-                                                </h5>
-                                                <div class="review-wrap-area d-flex gap-4 align-items-center">
-                                                    <div class="review-thumb">
-                                                        <img src="{% static 'img/tour/client.png' %}" alt="img">
-                                                    </div>
-                                                    <div class="review-content">
-                                                        <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                            <div class="cont">
-                                                                <h5>Smith Thomas</h5>
-                                                                <span>from New York, USA</span>
-                                                            </div>
-                                                            <h6><a href="#">Reply</a></h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="clinet-box style-2">
-                                                <div class="star">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <h5>
-                                                    The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
-                                                </h5>
-                                                <div class="review-wrap-area d-flex gap-4 align-items-center">
-                                                    <div class="review-thumb">
-                                                        <img src="{% static 'img/tour/client.png' %}" alt="img">
-                                                    </div>
-                                                    <div class="review-content">
-                                                        <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                            <div class="cont">
-                                                                <h5>Smith Thomas</h5>
-                                                                <span>from New York, USA</span>
-                                                            </div>
-                                                            <h6><a href="#">Reply</a></h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="clinet-box-3">
-                                            <div class="star">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <h5>
-                                                "Our family trip was amazing from start to finish! The itinerary was perfect, the guides were knowledgeable, and the service was excellent. I can’t wait to book our next adventure!"
-                                            </h5>
-                                            <div class="review-wrap-area d-flex gap-4 align-items-center">
-                                                <div class="review-thumb">
-                                                    <img src="{% static 'img/tour/client.png' %}" alt="img">
-                                                </div>
-                                                <div class="review-content">
-                                                    <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                        <div class="cont">
-                                                            <h5>Smith Thomas</h5>
-                                                            <span>from New York, USA</span>
-                                                        </div>
-                                                        <img src="{% static 'img/tour/quote.png' %}" alt="img">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="review-comment-items">
-                                        <h3>Add Your Reviews</h3>
-                                        <ul>
-                                            <li>
-                                                Services
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                Hotel
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                Places
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <ul class="mb-0">
-                                            <li>
-                                                Safety
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                Foods
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                Guides
-                                                <div class="star">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <h4>Leave Feedback</h4>
-                                        <form action="#" id="contact-form" method="POST">
-                                            <div class="row g-4">
-                                                <div class="col-lg-6">
-                                                    <div class="form-clt">
-                                                        <input type="text" name="name" id="name" placeholder="Your name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-clt">
-                                                        <input type="text" name="phone" id="phone" placeholder="Your phone">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-clt">
-                                                        <input type="text" name="email2" id="email21" placeholder="Your email">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-clt">
-                                                        <textarea name="message" id="message" placeholder="Your comments..."></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <button type="submit" class="theme-btn text-center">
-                                                        <span>Submit Reviews</span> <i class="far fa-long-arrow-right"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div> -->
                                 </div>
-                            </div>
+                            </aside>
                         </div>
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="tour-details-sidebar sticky-style">
-                                <div class="tour-sidebar-items">
-                                    <h3>Competition Registration</h3>
-                                    <ul class="form-list">
-                                        <li>
-                                            Competition Date:
-                                            <div class="form-clt">
-                                                <div class="input-group">
-                                                    <input class="form-control bg-white text-dark fw-bold" style="background-color: #fff !important; color: #212529 !important;" type="text" value="{{ competition.start_date|date:'M d' }} - {{ competition.end_date|date:'M d, Y' }}" readonly>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            Application Deadline:
-                                            <div class="form-clt">
-                                                <div class="input-group">
-                                                    <input class="form-control" type="text" value="{{ competition.application_deadline|date:'M d, Y' }}" readonly>
-                                                    <span class="input-group-addon"><i class="far fa-calendar"></i></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            Age Group:
-                                            <div class="form-clt">
-                                                <input class="form-control" type="text" value="{{ competition.age_group_min }}-{{ competition.age_group_max }} years" readonly>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            Subject:
-                                            <div class="form-clt">
-                                                <input class="form-control" type="text" value="{{ competition.subject.name }}" readonly>
-                                            </div>
-                                        </li>
-                                        <!-- <li>
-                                            Status:
-                                            <div class="form-clt">
-                                                <span class="badge {% if competition.status == 'upcoming' %}bg-success{% elif competition.status == 'ongoing' %}bg-primary{% elif competition.status == 'completed' %}bg-secondary{% else %}bg-danger{% endif %}">
-                                                    {{ competition.get_status_display }}
-                                                </span>
-                                            </div>
-                                        </li> -->
-                                    </ul>
-                                    <div class="tickets-list">
-                                        <p>Registration Fee</p>
-                                        <ul>
-                                            <li>
-                                               {{ competition.currency }}{{ competition.base_price|floatformat:2 }}</b>
-                                                <div class="form-clt">
-                                                    <div class="form">
-                                                        <select class="single-select w-100" id="participants">
-                                                            <option value="1"> 01 Participant</option>
-                                                            <option value="2"> 02 Participants</option>
-                                                            <option value="3"> 03 Participants</option>
-                                                            <option value="4"> 04 Participants</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                    </article>
+
+                    <!-- Destination -->
+                    <article class="olympiad-card">
+                        <header class="olympiad-card-header">
+                            <div class="olympiad-card-title-row">
+                                <h2>Venue & destination</h2>
+                            </div>
+                            <p class="olympiad-card-subtitle">
+                                Get a feel for the host city and typical travel investment for your delegation.
+                            </p>
+                        </header>
+                        <div class="olympiad-card-body olympiad-destination-layout">
+                            <div class="olympiad-destination-main">
+                                <div class="olympiad-destination-heading">
+                                    <div>
+                                        <p class="olympiad-destination-label">Host city</p>
+                                        <p class="olympiad-destination-name">
+                                            {{ competition.destination.city }}, {{ competition.destination.country }}
+                                        </p>
                                     </div>
-                                    <div class="extra-items">
-                                        <p>Add Extra:</p>
-                                        <label class="checkbox-single d-flex justify-content-between align-items-center">
-                                            <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                <span class="checkbox-area d-center">
-                                                    <input type="checkbox">
-                                                    <span class="checkmark d-center"></span>
-                                                </span>
-                                                <span class="text-color">
-                                                    Add service per booking
+                                    <div class="olympiad-destination-meta-chips">
+                                        <span class="olympiad-chip-soft">
+                                            <span class="olympiad-chip-label">Region</span>
+                                            <span class="olympiad-chip-value">{{ competition.destination.region|title }}</span>
+                                        </span>
+                                        {% if competition.destination.package_price_min or competition.destination.package_price_max %}
+                                            <span class="olympiad-chip-soft">
+                                                <span class="olympiad-chip-label">Typical package</span>
+                                                <span class="olympiad-chip-value">
+                                                    {{ competition.destination.currency }}
+                                                    {% if competition.destination.package_price_min %}
+                                                        {{ competition.destination.package_price_min|floatformat:0 }}
+                                                    {% endif %}
+                                                    {% if competition.destination.package_price_min and competition.destination.package_price_max %}
+                                                        – 
+                                                    {% endif %}
+                                                    {% if competition.destination.package_price_max %}
+                                                        {{ competition.destination.package_price_max|floatformat:0 }}
+                                                    {% endif %}
                                                 </span>
                                             </span>
-                                            <span class="text-color">$45</span>
-                                        </label>
-                                        <label class="checkbox-single d-flex justify-content-between align-items-center">
-                                            <span class="d-flex gap-xl-3 gap-2 align-items-center">
-                                                <span class="checkbox-area d-center">
-                                                    <input type="checkbox">
-                                                    <span class="checkmark d-center"></span>
-                                                </span>
-                                                <span class="text-color">
-                                                    Add service per personal
-                                                </span>
-                                            </span>
-                                            <span class="text-color">$35</span>
-                                        </label>
+                                        {% endif %}
                                     </div>
-                                    <ul class="total-list">
-                                        <li>
-                                            Total:
-                                        </li>
-                                        <li id="total-price">
-                                            {{ competition.currency }}{{ competition.base_price|floatformat:2 }}
-                                        </li>
-                                    </ul>
-                                    {% if competition.is_application_open %}
-                                    <a href="{% url 'start-application' competition.slug %}" class="theme-btn">
-                                        <span>Apply Now</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
+                                </div>
+                                <div class="olympiad-destination-description olympiad-rich-text">
+                                    {% if competition.destination.description %}
+                                        {{ competition.destination.description|safe }}
                                     {% else %}
-                                    <a href="#" class="theme-btn" style="opacity: 0.6; cursor: not-allowed;" onclick="return false;">
-                                        <span>Application Closed</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
+                                        <p class="olympiad-empty-text">
+                                            Destination details will be shared closer to the competition dates.
+                                        </p>
                                     {% endif %}
-                                    <p class="text">Need any help?</p>
                                 </div>
-                                {% if competition.is_featured %}
-                                <div class="offer-card bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
-                                    <h3>Featured Competition</h3>
-                                    <p>This is a featured Olympiad competition</p>
+                                <div class="olympiad-destination-actions">
+                                    <a href="{% url 'contact' %}?subject=Travel Quote Request for {{ competition.destination.city }}" class="olympiad-btn-secondary">
+                                        <span class="olympiad-btn-icon">
+                                            <!-- lucide:plane -->
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="m17.5 6.5-10 10L3 21l4.5-4.5 10-10a1.414 1.414 0 0 0-2-2Z"></path>
+                                                <path d="M8.5 8.5 15 15"></path>
+                                            </svg>
+                                        </span>
+                                        <span>Request travel quotation</span>
+                                    </a>
                                 </div>
-                                {% endif %}
                             </div>
+                            <aside class="olympiad-destination-aside">
+                                <div class="olympiad-map-shell">
+                                    {% if competition.destination.iframe_url %}
+                                        <div class="olympiad-map">
+                                            <iframe
+                                                src="{{ competition.destination.iframe_url }}"
+                                                style="border:0;"
+                                                allowfullscreen=""
+                                                loading="lazy">
+                                            </iframe>
+                                        </div>
+                                    {% else %}
+                                        <div class="olympiad-map-skeleton" aria-hidden="true"></div>
+                                    {% endif %}
+                                </div>
+                            </aside>
                         </div>
-                    </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+
+        <!-- Mobile sticky CTA -->
+        <div class="olympiad-mobile-cta d-md-none">
+            <div class="olympiad-mobile-cta-inner">
+                <div>
+                    <p class="olympiad-mobile-price">
+                        {{ competition.currency }}{{ competition.base_price|floatformat:2 }}
+                    </p>
+                    <p class="olympiad-mobile-sub">
+                        Per participant • {{ competition.destination.city }}
+                    </p>
+                </div>
+                <div class="olympiad-mobile-cta-action">
+                    {% if competition.is_application_open %}
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.has_active_subscription %}
+                                <a href="{% url 'start-application' competition.slug %}" class="olympiad-btn-primary olympiad-btn-full">
+                                    <span>Apply</span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'dashboard' %}" class="olympiad-btn-primary olympiad-btn-full olympiad-btn-disabled">
+                                    <span>Get subscription</span>
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'signup' %}" class="olympiad-btn-primary olympiad-btn-full">
+                                <span>Create account</span>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <button class="olympiad-btn-primary olympiad-btn-full olympiad-btn-disabled" disabled>
+                            <span>Closed</span>
+                        </button>
+                    {% endif %}
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Related Competitions Section -->
+        <!-- Related competitions -->
         {% if related_competitions %}
-        <section class="tour-section fix section-padding">
-            <div class="container">
-                <div class="section-title-area text-center mb-5">
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Related Competitions</h2>
-                    <p class="wow fadeInUp" data-wow-delay=".5s">Explore other competitions in {{ competition.subject.name }}</p>
+        <section class="olympiad-related-section">
+            <div class="olympiad-related-header">
+                <div>
+                    <h2>Related competitions</h2>
+                    <p>Discover other {{ competition.subject.name }} Olympiads that might fit your delegation.</p>
                 </div>
-                <div class="row g-4">
-                    {% for related in related_competitions %}
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>{{ related.currency }}{{ related.base_price|floatformat:0 }}</h4>
-                                    <span>/ person</span>
-                                </div>
-                                {% if related.image %}
-                                    <img src="{{ related.image.url }}" alt="{{ related.name }}">
-                                {% else %}
-                                    <img src="{% static 'img/tour/default.jpg' %}" alt="{{ related.name }}">
-                                {% endif %}
-                                {% if related.is_featured %}
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                </div>
-                                {% endif %}
-                            </div>
-                            <div class="content">
-                                <h4>
+            </div>
+            <div class="olympiad-related-grid">
+                {% for related in related_competitions %}
+                    <article class="olympiad-related-card">
+                        <div class="olympiad-related-media">
+                            {% if related.image %}
+                                <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                            {% else %}
+                                <img src="{% static 'img/tour/default.jpg' %}" alt="{{ related.name }}">
+                            {% endif %}
+                            {% if related.is_featured %}
+                                <span class="olympiad-related-badge">Featured</span>
+                            {% endif %}
+                        </div>
+                        <div class="olympiad-related-body">
+                            <div class="olympiad-related-top">
+                                <p class="olympiad-related-title">
                                     <a href="{% url 'olympiad-details' related.slug %}">{{ related.name }}</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
+                                </p>
+                                <p class="olympiad-related-location">
                                     {{ related.destination.city }}, {{ related.destination.country }}
-                                </span>
-                                <a href="{% url 'olympiad-details' related.slug %}" class="theme-btn">
-                                    <span>View Details</span> <i class="far fa-long-arrow-right"></i>
+                                </p>
+                            </div>
+                            <div class="olympiad-related-bottom">
+                                <div class="olympiad-related-price">
+                                    <span class="olympiad-related-price-value">
+                                        {{ related.currency }}{{ related.base_price|floatformat:0 }}
+                                    </span>
+                                    <span class="olympiad-related-price-unit">per participant</span>
+                                </div>
+                                <a href="{% url 'olympiad-details' related.slug %}" class="olympiad-btn-ghost">
+                                    <span>View</span>
                                 </a>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                </div>
+                    </article>
+                {% endfor %}
             </div>
         </section>
         {% endif %}
-
+    </section>
 {% endblock %}
 
 {% block extra_css %}
+{{ block.super }}
 <style>
-    /* Professional styling for destination and subject sections */
-    .destination-list-item {
-        padding: 30px 0;
+    :root {
+        /* Light theme using global landing-page palette */
+        --olympiad-bg: #f5f5f7;
+        --olympiad-surface: #ffffff;
+        --olympiad-surface-soft: #f9fafb;
+        --olympiad-surface-subtle: #f3f4f6;
+        --olympiad-border-subtle: rgba(15, 23, 42, 0.06);
+        --olympiad-border-softer: rgba(148, 163, 184, 0.3);
+        --olympiad-radius-lg: 16px;
+        --olympiad-radius-xl: 20px;
+        --olympiad-radius-pill: 999px;
+        /* Use landing primary / accent colors */
+        --olympiad-primary: var(--theme-color);
+        --olympiad-primary-soft: rgba(77, 64, 202, 0.08);
+        --olympiad-primary-strong: #4D40CA;
+        --olympiad-accent: var(--theme-color-2);
+        --olympiad-text-main: #111827;
+        --olympiad-text-muted: #4b5563;
+        --olympiad-text-subtle: #9ca3af;
+        --olympiad-shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.10);
+        --olympiad-shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+        --olympiad-shadow-subtle: 0 10px 25px rgba(15, 23, 42, 0.06);
+        --olympiad-gap-2: 8px;
+        --olympiad-gap-3: 12px;
+        --olympiad-gap-4: 16px;
+        --olympiad-gap-5: 20px;
+        --olympiad-gap-6: 24px;
     }
-    
-    .destination-list-item h3 {
-        font-size: 28px;
-        font-weight: 700;
-        color: #212529;
-        border-bottom: 3px solid var(--theme-color);
-        padding-bottom: 15px;
-        margin-bottom: 30px;
+
+    .olympiad-shell {
+        position: relative;
+        min-height: 100vh;
+        background: var(--olympiad-bg);
+        color: var(--olympiad-text-main);
+        padding: 32px 0 80px;
     }
-    
-    .destination-info-wrapper {
-        background: #fff;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+
+    .olympiad-shell::before {
+        content: none;
     }
-    
-    .destination-content h4 {
-        font-size: 24px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 15px;
+
+    .olympiad-shell-header {
+        position: sticky;
+        top: 72px;
+        z-index: 40;
+        margin: 0 auto 24px;
+        padding: 16px 24px;
+        max-width: 1120px;
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 24px;
+        border-radius: var(--olympiad-radius-xl);
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+        backdrop-filter: blur(10px);
     }
-    
-    .destination-meta .list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+
+    .olympiad-shell-header-main {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
-    
-    .destination-meta .list li {
-        padding: 10px 0;
-        border-bottom: 1px solid #f0f0f0;
+
+    .olympiad-breadcrumb {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-breadcrumb a {
+        color: var(--olympiad-text-muted);
+        text-decoration: none;
+        transition: color 150ms ease;
+    }
+
+    .olympiad-breadcrumb a:hover {
+        color: var(--olympiad-primary-strong);
+    }
+
+    .olympiad-breadcrumb-current {
+        color: #111827;
+    }
+
+    .olympiad-shell-title-row {
         display: flex;
         align-items: center;
         gap: 10px;
     }
-    
-    .destination-meta .list li:last-child {
-        border-bottom: none;
+
+    .olympiad-shell-title {
+        font-size: 26px;
+        line-height: 1.2;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
     }
-    
-    .destination-meta .list li i {
-        color: var(--theme-color);
-        font-size: 18px;
-        width: 25px;
+
+    .olympiad-shell-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: var(--olympiad-radius-pill);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        font-size: 11px;
+        color: var(--olympiad-text-muted);
+        background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.12), transparent 60%);
     }
-    
-    .map-area {
-        background: #fff;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        height: fit-content;
+
+    .olympiad-shell-subtitle-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--olympiad-text-subtle);
     }
-    
-    .map-area h5 {
-        font-size: 20px;
-        font-weight: 600;
-        color: #212529;
-        margin-bottom: 20px;
+
+    .olympiad-pill-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        border-radius: var(--olympiad-radius-pill);
+        background: rgba(243, 244, 246, 0.9);
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        color: var(--olympiad-text-muted);
     }
-    
-    .subject-info-wrapper {
-        background: #fff;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+
+    .olympiad-dot-separator {
+        width: 4px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.7);
     }
-    
-    .subject-icon-wrapper {
-        flex-shrink: 0;
+
+    .olympiad-meta-muted {
+        color: var(--olympiad-text-subtle);
     }
-    
-    .subject-stats .badge {
-        font-size: 14px;
-        padding: 10px 18px;
-        border-radius: 25px;
+
+    .olympiad-icon {
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
     }
-    
-    .tutor-card {
-        background: #fff;
-        transition: all 0.3s ease;
-        border: 1px solid #e9ecef !important;
+
+    .olympiad-icon svg {
+        width: 12px;
+        height: 12px;
+        stroke: currentColor;
+        stroke-width: 1.75;
+        fill: none;
     }
-    
-    .tutor-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
-        border-color: var(--theme-color) !important;
-    }
-    
-    .subject-sidebar-card {
-        position: relative;
-    }
-    
-    .tutors-list {
+
+    .olympiad-shell-header-actions {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        min-width: 280px;
     }
-    
-    .subject-details-expanded {
-        animation: fadeIn 0.5s ease-in;
+
+    .olympiad-header-meta-row {
+        display: flex;
+        gap: 10px;
     }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+    .olympiad-header-meta-pill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: var(--olympiad-radius-pill);
+        background: rgba(249, 250, 251, 0.9);
+        border: 1px solid rgba(209, 213, 219, 0.9);
     }
-    
-    .google-map {
-        border-radius: 10px;
+
+    .olympiad-header-meta-label {
+        margin: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-header-meta-value {
+        margin: 0;
+        font-size: 13px;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .olympiad-header-actions-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .olympiad-price-chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(249, 250, 251, 0.9);
+        border: 1px solid rgba(209, 213, 219, 0.9);
+    }
+
+    .olympiad-price-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        margin: 0 0 2px;
+    }
+
+    .olympiad-price-amount {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--olympiad-primary-strong);
+    }
+
+    .olympiad-price-muted {
+        font-size: 11px;
+        font-weight: 400;
+        color: #6b7280;
+        margin-left: 4px;
+    }
+
+    .olympiad-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border-radius: var(--olympiad-radius-pill);
+        border: none;
+        cursor: pointer;
+        background: radial-gradient(circle at 0% 0%, var(--olympiad-primary), #312e81);
+        color: #e5e7eb;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 18px 40px rgba(59, 130, 246, 0.35);
+        transition: transform 120ms ease, box-shadow 120ms ease, background 160ms ease, opacity 100ms ease;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .olympiad-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 20px 48px rgba(59, 130, 246, 0.45);
+        background: radial-gradient(circle at 0% 0%, var(--olympiad-primary-strong), #3730a3);
+    }
+
+    .olympiad-btn-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.38);
+    }
+
+    .olympiad-btn-disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+        box-shadow: none;
+        background: rgba(31, 41, 55, 0.9);
+    }
+
+    .olympiad-btn-icon {
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .olympiad-btn-icon svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        fill: none;
+    }
+
+    .olympiad-btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: var(--olympiad-radius-pill);
+        border: 1px solid var(--theme-color);
+        background: var(--theme-color);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease;
+        white-space: nowrap;
+    }
+
+    .olympiad-btn-secondary:hover {
+        background: #3f33b0;
+        border-color: #3f33b0;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .olympiad-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 7px 13px;
+        border-radius: var(--olympiad-radius-pill);
+        border: 1px solid var(--theme-color);
+        background: var(--theme-color);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease;
+        white-space: nowrap;
+    }
+
+    .olympiad-btn-ghost:hover {
+        background: #3f33b0;
+        border-color: #3f33b0;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .olympiad-btn-full {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .olympiad-shell-body {
+        margin: 0 auto;
+        padding: 8px 16px 0;
+        max-width: 1120px;
+        display: block;
+    }
+
+    .olympiad-shell-main {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .olympiad-card {
+        border-radius: var(--olympiad-radius-lg);
+        background: var(--olympiad-surface);
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
         overflow: hidden;
     }
-    
-    .google-map iframe {
-        border-radius: 10px;
+
+    .olympiad-card-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.35fr);
+        gap: 0;
+        min-height: 260px;
     }
-    
-    .subject-description-preview {
-        max-height: 150px;
-        overflow: hidden;
+
+    .olympiad-hero-media {
         position: relative;
+        overflow: hidden;
+        border-right: 1px solid rgba(229, 231, 235, 0.9);
     }
-    
-    .subject-description-preview::after {
-        content: '...';
+
+    .olympiad-hero-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .olympiad-hero-media::after {
+        content: "";
         position: absolute;
-        bottom: 0;
-        right: 0;
-        background: white;
-        padding-left: 10px;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.65), transparent 55%);
+        pointer-events: none;
     }
-    
-    /* Responsive adjustments */
-    @media (max-width: 991px) {
-        .subject-sidebar-card {
-            position: relative;
-            top: 0;
-            margin-top: 30px;
+
+    .olympiad-hero-badges {
+        position: absolute;
+        left: 14px;
+        bottom: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        z-index: 2;
+    }
+
+    .olympiad-badge-positive {
+        padding: 4px 12px;
+        border-radius: var(--olympiad-radius-pill);
+        background: rgba(34, 197, 94, 0.18);
+        border: 1px solid rgba(34, 197, 94, 0.7);
+        color: #bbf7d0;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .olympiad-badge-muted {
+        padding: 4px 12px;
+        border-radius: var(--olympiad-radius-pill);
+        background: #f3f4f6;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        color: #4b5563;
+        font-size: 11px;
+    }
+
+    .olympiad-badge-soft {
+        padding: 4px 11px;
+        border-radius: var(--olympiad-radius-pill);
+        background: #eef2ff;
+        border: 1px solid rgba(129, 140, 248, 0.5);
+        color: #4338CA;
+        font-size: 11px;
+    }
+
+    .olympiad-hero-content {
+        padding: 18px 22px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .olympiad-hero-title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .olympiad-hero-kicker {
+        margin: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    .olympiad-hero-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .olympiad-hero-subtitle {
+        margin: 0;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .olympiad-hero-header-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 10px;
+    }
+
+    .olympiad-hero-meta-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .olympiad-hero-meta-pill {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #f9fafb;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        font-size: 11px;
+        color: #4b5563;
+    }
+
+    .olympiad-hero-meta-label {
+        font-weight: 500;
+        margin-right: 4px;
+    }
+
+    .olympiad-hero-meta-value {
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .olympiad-hero-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 14px;
+    }
+
+    .olympiad-hero-cta-wrap {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .olympiad-hero-cta-wrap .theme-btn {
+        box-shadow: none !important;
+        border-radius: 999px;
+        padding: 10px 20px;
+    }
+
+    .olympiad-hero-cta-wrap .theme-btn:hover {
+        box-shadow: none !important;
+    }
+
+    .olympiad-theme-btn-disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .olympiad-hero-metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        margin: 0 0 2px;
+    }
+
+    .olympiad-hero-metric-value {
+        font-size: 13px;
+        color: #111827;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .olympiad-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .olympiad-card-header {
+        padding: 14px 18px 4px;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        background: #f9fafb;
+    }
+
+    .olympiad-card-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .olympiad-card-header h2 {
+        font-size: 15px;
+        letter-spacing: 0;
+        margin: 0;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .olympiad-chip-muted {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: var(--olympiad-radius-pill);
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        font-size: 11px;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-dot-status {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .olympiad-card-subtitle {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--olympiad-text-muted);
+    }
+
+    .olympiad-card-body {
+        padding: 14px 18px 16px;
+        font-size: 13px;
+        color: var(--olympiad-text-main);
+    }
+
+    .olympiad-rich-text p {
+        margin-bottom: 8px;
+    }
+
+    .olympiad-rich-text ul,
+    .olympiad-rich-text ol {
+        padding-left: 18px;
+        margin-bottom: 8px;
+    }
+
+    .olympiad-empty-text {
+        margin: 0;
+        color: var(--olympiad-text-subtle);
+        font-size: 13px;
+    }
+
+    .olympiad-empty-state {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px dashed rgba(148, 163, 184, 0.5);
+    }
+
+    .olympiad-empty-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: rgba(30, 64, 175, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #c7d2fe;
+    }
+
+    .olympiad-empty-icon svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        fill: none;
+    }
+
+    .olympiad-empty-content h3 {
+        margin: 0 0 2px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #e5e7eb;
+    }
+
+    .olympiad-empty-content p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-subject-layout {
+        display: block;
+    }
+
+    .olympiad-subject-main {
+        padding-right: 0;
+        border-right: none;
+    }
+
+    .olympiad-subject-header {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .olympiad-subject-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .olympiad-subject-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .olympiad-subject-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .olympiad-subject-avatar-fallback svg {
+        width: 18px;
+        height: 18px;
+        stroke: #9ca3af;
+        stroke-width: 1.9;
+        fill: none;
+    }
+
+    .olympiad-subject-label {
+        margin: 0 0 1px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #4b5563;
+        white-space: nowrap;
+    }
+
+    .olympiad-subject-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+    }
+
+    .olympiad-subject-stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .olympiad-stat-chip {
+        padding: 4px 10px;
+        border-radius: var(--olympiad-radius-pill);
+        background: #eef2ff;
+        border: 1px solid rgba(129, 140, 248, 0.35);
+        white-space: nowrap;
+    }
+
+    .olympiad-stat-label {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #4b5563;
+        white-space: nowrap;
+    }
+
+    .olympiad-stat-value {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+    }
+
+    .olympiad-subject-description {
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    .olympiad-subject-aside {
+        padding-left: 0;
+        margin-top: 16px;
+    }
+
+    .olympiad-subject-aside-card {
+        border-radius: 14px;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 10px 12px 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .olympiad-subject-aside-header {
+        margin-bottom: 8px;
+    }
+
+    .olympiad-subject-aside-title {
+        margin: 0 0 2px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .olympiad-subject-aside-subtitle {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+    }
+
+    .olympiad-tutor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .olympiad-tutor-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 10px;
+        padding: 8px 9px;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+    }
+
+    .olympiad-tutor-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #eef2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .olympiad-tutor-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .olympiad-tutor-avatar svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--theme-color);
+        stroke-width: 1.9;
+        fill: none;
+    }
+
+    .olympiad-tutor-main {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .olympiad-tutor-name {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .olympiad-tutor-role {
+        margin: 0;
+        font-size: 11px;
+        color: #4b5563;
+    }
+
+    .olympiad-tutor-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 2px;
+    }
+
+    .olympiad-rating-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #eef2ff;
+        font-size: 11px;
+        color: #111827;
+    }
+
+    .olympiad-rating-muted {
+        font-size: 10px;
+        color: #4b5563;
+    }
+
+    .olympiad-muted-small {
+        font-size: 11px;
+        color: #4b5563;
+    }
+
+    .olympiad-tutor-side {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+    }
+
+    .olympiad-tutor-rate {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+    }
+
+    .olympiad-tutor-rate-unit {
+        font-size: 10px;
+        color: #4b5563;
+        margin-left: 2px;
+    }
+
+    .olympiad-tutor-footer {
+        margin-top: 4px;
+        text-align: center;
+    }
+
+    .olympiad-destination-layout {
+        display: block;
+    }
+
+    .olympiad-destination-main {
+        padding-right: 0;
+        border-right: none;
+    }
+
+    .olympiad-destination-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    .olympiad-destination-label {
+        margin: 0 0 1px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #4b5563;
+        white-space: nowrap;
+    }
+
+    .olympiad-destination-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+    }
+
+    .olympiad-destination-meta-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .olympiad-chip-soft {
+        padding: 4px 10px;
+        border-radius: var(--olympiad-radius-pill);
+        background: #eef2ff;
+        border: 1px solid rgba(129, 140, 248, 0.35);
+        font-size: 11px;
+        color: #374151;
+        white-space: nowrap;
+    }
+
+    .olympiad-chip-label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 10px;
+        color: #4b5563;
+        margin-right: 4px;
+    }
+
+    .olympiad-chip-value {
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .olympiad-destination-description {
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    .olympiad-destination-actions {
+        margin-top: 10px;
+    }
+
+    .olympiad-destination-aside {
+        padding-left: 0;
+        margin-top: 16px;
+    }
+
+    .olympiad-map-shell {
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .olympiad-map {
+        position: relative;
+        padding-bottom: 64%;
+        height: 0;
+    }
+
+    .olympiad-map iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .olympiad-map-skeleton {
+        height: 220px;
+        background-image:
+            linear-gradient(120deg, rgba(55, 65, 81, 0.2), rgba(55, 65, 81, 0.6), rgba(55, 65, 81, 0.2));
+        background-size: 200% 100%;
+        animation: olympiad-shimmer 1300ms infinite linear;
+    }
+
+    .olympiad-summary-card {
+        border-radius: var(--olympiad-radius-xl);
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: var(--olympiad-shadow-card);
+        padding: 14px 16px 14px;
+        color: var(--olympiad-text-main);
+    }
+
+    .olympiad-summary-header h2 {
+        margin: 0 0 2px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .olympiad-summary-header p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-summary-price {
+        margin-top: 10px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: radial-gradient(circle at 0 0, rgba(79, 70, 229, 0.3), rgba(30, 64, 175, 0.4));
+        border: 1px solid rgba(129, 140, 248, 0.7);
+    }
+
+    .olympiad-summary-price-main {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .olympiad-summary-price-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #c7d2fe;
+    }
+
+    .olympiad-summary-price-value {
+        font-size: 17px;
+        font-weight: 700;
+        color: #e0e7ff;
+    }
+
+    .olympiad-summary-price-note {
+        margin: 2px 0 0;
+        font-size: 11px;
+        color: #c7d2fe;
+    }
+
+    .olympiad-summary-list {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .olympiad-summary-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(30, 64, 175, 0.45);
+    }
+
+    .olympiad-summary-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .olympiad-summary-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #a5b4fc;
+    }
+
+    .olympiad-summary-icon svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+    }
+
+    .olympiad-summary-item-label {
+        margin: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-summary-item-value {
+        margin: 0;
+        font-size: 13px;
+        color: var(--olympiad-text-main);
+        font-weight: 500;
+    }
+
+    .olympiad-summary-actions {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .olympiad-skeleton-card {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .olympiad-skeleton-line {
+        height: 10px;
+        border-radius: 999px;
+        background-image:
+            linear-gradient(120deg, rgba(31, 41, 55, 0.6), rgba(55, 65, 81, 0.9), rgba(31, 41, 55, 0.6));
+        background-size: 200% 100%;
+        animation: olympiad-shimmer 1300ms infinite linear;
+    }
+
+    .olympiad-skeleton-line-lg {
+        width: 70%;
+    }
+
+    .olympiad-skeleton-line-md {
+        width: 50%;
+    }
+
+    .olympiad-skeleton-spacer {
+        height: 8px;
+    }
+
+    .olympiad-mobile-cta {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 50;
+        background: #ffffff;
+        border-top: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.06);
+        padding: 8px 14px 10px;
+        display: none;
+    }
+
+    .olympiad-mobile-cta-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .olympiad-mobile-price {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #e5e7eb;
+    }
+
+    .olympiad-mobile-sub {
+        margin: 0;
+        font-size: 11px;
+        color: var(--olympiad-text-subtle);
+    }
+
+    .olympiad-mobile-cta-action {
+        flex: 0 0 44%;
+    }
+
+    .olympiad-related-section {
+        margin: 28px auto 0;
+        max-width: 1120px;
+        padding: 0 16px;
+    }
+
+    .olympiad-related-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .olympiad-related-header h2 {
+        margin: 0 0 2px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .olympiad-related-header p {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+    }
+
+    .olympiad-related-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .olympiad-related-card {
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        display: flex;
+        flex-direction: column;
+        transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+
+    .olympiad-related-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 50px rgba(15, 23, 42, 0.95);
+        border-color: rgba(129, 140, 248, 0.7);
+    }
+
+    .olympiad-related-media {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .olympiad-related-media img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+        transform: scale(1.02);
+        transition: transform 200ms ease;
+    }
+
+    .olympiad-related-card:hover .olympiad-related-media img {
+        transform: scale(1.06);
+    }
+
+    .olympiad-related-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: rgba(251, 191, 36, 0.9);
+        color: #1f2937;
+        font-weight: 600;
+    }
+
+    .olympiad-related-body {
+        padding: 10px 12px 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .olympiad-related-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .olympiad-related-title a {
+        color: #111827;
+        text-decoration: none;
+    }
+
+    .olympiad-related-title a:hover {
+        color: var(--theme-color);
+    }
+
+    .olympiad-related-location {
+        margin: 0;
+        font-size: 11px;
+        color: #4b5563;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .olympiad-related-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    .olympiad-related-price-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+    }
+
+    .olympiad-related-price-unit {
+        display: block;
+        font-size: 10px;
+        color: #4b5563;
+        white-space: nowrap;
+    }
+
+    @keyframes olympiad-shimmer {
+        0% {
+            background-position: -200% 0;
         }
-        
-        .destination-list-item h3 {
-            font-size: 24px;
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .olympiad-shell {
+            padding-top: 20px;
+        }
+
+        .olympiad-shell-header {
+            position: static;
+            flex-direction: column;
+            align-items: stretch;
+            top: auto;
+        }
+
+        .olympiad-shell-header-actions {
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+        }
+
+        .olympiad-shell-body {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .olympiad-shell-aside {
+            position: static;
+        }
+
+        .olympiad-card-hero {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .olympiad-hero-media img {
+            max-height: 220px;
+        }
+
+        .olympiad-subject-layout,
+        .olympiad-destination-layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .olympiad-subject-main,
+        .olympiad-destination-main {
+            padding-right: 0;
+            border-right: none;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .olympiad-subject-aside,
+        .olympiad-destination-aside {
+            padding-left: 0;
+        }
+
+        .olympiad-related-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .olympiad-shell {
+            padding-bottom: 92px;
+        }
+
+        .olympiad-shell-header {
+            margin-bottom: 14px;
+            padding: 14px 14px;
+        }
+
+        .olympiad-shell-title {
+            font-size: 20px;
+        }
+
+        .olympiad-hero-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .olympiad-hero-cta-wrap .theme-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .olympiad-card-header {
+            padding: 12px 14px 4px;
+        }
+
+        .olympiad-card-body {
+            padding: 12px 14px 14px;
+        }
+
+        .olympiad-related-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .olympiad-mobile-cta {
+            display: block;
         }
     }
 </style>
@@ -1013,12 +1973,7 @@
 
 {% block extra_js %}
 <script>
-    // Update total price based on number of participants
-    document.getElementById('participants').addEventListener('change', function() {
-        const basePrice = {{ competition.base_price }};
-        const participants = parseInt(this.value);
-        const total = basePrice * participants;
-        document.getElementById('total-price').textContent = '{{ competition.currency }}' + total.toFixed(2);
-    });
+    // If you later hydrate this page via JS, you can toggle the skeleton card
+    // by updating the data-loading attribute on .olympiad-summary-card elements.
 </script>
 {% endblock %}

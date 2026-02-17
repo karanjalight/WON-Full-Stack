@@ -7,7 +7,7 @@
 
 {% block content %}
         <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: url('{% static 'img/hero/destinations.jpg' %}')">
+        <div class="breadcrumb-wrapper section-padding bg-cover destination-breadcrumb">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
@@ -76,22 +76,11 @@
                                         {% endif %}
                                     </span>
                                 </h6>
-                                <ul class="list">
-                                    <li>
-                                        <i class="far fa-calendar"></i>
-                                        {% if item.date_range %}
-                                            {{ item.date_range }}
-                                        {% else %}
-                                            Year-round
-                                        {% endif %}
-                                    </li>
-                                    <li>
-                                        <i class="far fa-flag"></i>
-                                        {{ dest.city }}{% if item.cities_display and item.cities_display != dest.city %}, {{ item.cities_display }}{% endif %}
-                                    </li>
-                                </ul>
-                                <a href="{% url 'destination-details' dest.slug %}" class="theme-btn w-100 mt-3">
-                                    Explore destination <i class="far fa-long-arrow-right"></i>
+                               
+                                <a href="{% url 'destination-details' dest.slug %}" style="padding: 10px 20px !important;" class="theme-btn w-100 py-2 mt-3 destination-cta-btn">
+                                    <span>View Destination</span> 
+                                    <i class="far fa-long-arrow-right" style="font-size: 12px; color:#111827 !important;"></i>
+
                                 </a>
                             </div>
                         </div>
@@ -143,6 +132,93 @@
 
 {% block extra_css %}
 <style>
+    .destination-breadcrumb {
+        background-image: url("{% static 'img/hero/destinations.jpg' %}");
+    }
+
+    .tour-box-items {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(229, 231, 235, 0.95);
+        background: #ffffff;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .tour-box-items .thumb {
+        overflow: hidden;
+    }
+
+    .tour-box-items .thumb img {
+        transition: transform 280ms ease;
+    }
+
+    .tour-box-items:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.11);
+        border-color: rgba(77, 64, 202, 0.25);
+    }
+
+    .tour-box-items:hover .thumb img {
+        transform: scale(1.05);
+    }
+
+    .tour-box-items .content {
+        padding: 20px;
+    }
+
+    .tour-box-items .content > span {
+        color: #6b7280;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+    }
+
+    .tour-box-items .content h4 a {
+        color: #111827;
+    }
+
+    .tour-box-items .content h4 a:hover {
+        color: var(--theme-color);
+    }
+
+    .tour-box-items .content h6 {
+        color: #374151;
+    }
+
+    .tour-box-items .content h6 span {
+        color: #111827;
+        font-weight: 700;
+    }
+
+    .tour-box-items .content .list li {
+        color: #4b5563;
+    }
+
+    .tour-box-items .content .list li i {
+        color: var(--theme-color);
+    }
+
+    .destination-cta-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .destination-cta-btn,
+    .destination-cta-btn span,
+    .destination-cta-btn i {
+        color: #ffffff !important;
+    }
+
+    .destination-cta-btn i {
+        transition: transform 180ms ease;
+    }
+
+    .destination-cta-btn:hover i {
+        transform: translateX(3px);
+    }
+
     .tour-section {
         background: #f8f9fa;
         padding: 80px 0;
@@ -361,6 +437,7 @@
         margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 2;          /* show only 2 lines */
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -19,17 +19,7 @@ class ApplicationStep1Form(forms.Form):
         queryset=Competition.objects.filter(is_active=True),
         widget=forms.HiddenInput()
     )
-    
-    # Basic applicant info (can be filled without account)
-    first_name = forms.CharField(max_length=150, required=True)
-    last_name = forms.CharField(max_length=150, required=True)
-    email = forms.EmailField(required=True)
-    phone = forms.CharField(max_length=20, required=True)
-    date_of_birth = forms.DateField(
-        required=True,
-        widget=forms.DateInput(attrs={'type': 'date'})
-    )
-    
+
     # Emergency contact
     emergency_contact_name = forms.CharField(max_length=255, required=True)
     emergency_contact_phone = forms.CharField(max_length=20, required=True)
@@ -51,8 +41,22 @@ class ApplicationStep1Form(forms.Form):
 
 class TravelQuoteForm(forms.Form):
     """Step 2: Travel Quote Information"""
-    departure_city = forms.CharField(max_length=100, required=True)
-    departure_country = forms.CharField(max_length=100, required=True)
+    departure_city = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Start typing city',
+            'autocomplete': 'off'
+        })
+    )
+    departure_country = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Start typing country',
+            'autocomplete': 'off'
+        })
+    )
     departure_date = forms.DateField(
         required=True,
         widget=forms.DateInput(attrs={'type': 'date'})
@@ -456,6 +460,7 @@ class LoginForm(AuthenticationForm):
 
 class SignupForm(UserCreationForm):
     """Signup form with user type selection"""
+    username = forms.CharField(required=False, widget=forms.HiddenInput())
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -463,20 +468,12 @@ class SignupForm(UserCreationForm):
             'placeholder': 'your.email@example.com'
         })
     )
-    first_name = forms.CharField(
-        max_length=150,
+    full_name = forms.CharField(
+        max_length=255,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'First Name'
-        })
-    )
-    last_name = forms.CharField(
-        max_length=150,
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Last Name'
+            'placeholder': 'Full Name'
         })
     )
     phone = forms.CharField(
@@ -485,6 +482,14 @@ class SignupForm(UserCreationForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '+1234567890'
+        })
+    )
+    location = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Select your country'
         })
     )
     user_type = forms.ChoiceField(
@@ -503,12 +508,8 @@ class SignupForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'phone', 'user_type', 'password1', 'password2')
+        fields = ('email', 'full_name', 'phone', 'user_type', 'password1', 'password2')
         widgets = {
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Choose a username'
-            }),
             'password1': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Password'
@@ -521,27 +522,47 @@ class SignupForm(UserCreationForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = 'Username'
         self.fields['email'].label = 'Email Address'
-        self.fields['first_name'].label = 'First Name'
-        self.fields['last_name'].label = 'Last Name'
+        self.fields['full_name'].label = 'Full Name'
         self.fields['phone'].label = 'Phone Number'
+        self.fields['location'].label = 'Location'
         self.fields['user_type'].label = 'I am a'
         self.fields['password1'].label = 'Password'
         self.fields['password2'].label = 'Confirm Password'
     
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
+        email = (self.cleaned_data.get('email') or '').strip().lower()
+        if User.objects.filter(email__iexact=email).exists():
             raise ValidationError("A user with this email already exists.")
+        if User.objects.filter(username__iexact=email).exists():
+            raise ValidationError("An account with this email already exists.")
         return email
+
+    def clean_location(self):
+        location = (self.cleaned_data.get('location') or '').strip()
+        if not location:
+            raise ValidationError("Please select your country.")
+        return location
+
+    def clean_full_name(self):
+        full_name = (self.cleaned_data.get('full_name') or '').strip()
+        if not full_name:
+            raise ValidationError("Please enter your full name.")
+        return full_name
     
     def save(self, commit=True):
         user = super().save(commit=False)
+        full_name = self.cleaned_data['full_name'].strip()
+        name_parts = full_name.split()
+        first_name = name_parts[0] if name_parts else ''
+        last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
+
+        user.username = self.cleaned_data['email']
         user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        user.first_name = first_name
+        user.last_name = last_name
         user.phone = self.cleaned_data['phone']
+        user.country = self.cleaned_data['location']
         user.user_type = self.cleaned_data['user_type']
         
         if commit:
@@ -1032,4 +1053,21 @@ class EditChildForm(forms.ModelForm):
                 profile.save()
         
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    """Profile form for the logged‑in user (name, contact, avatar, bio)."""
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'profile_picture', 'bio', 'country', 'city']
+        widgets = {
+            'first_name': forms.TextInput(),
+            'last_name': forms.TextInput(),
+            'email': forms.EmailInput(),
+            'phone': forms.TextInput(),
+            'profile_picture': forms.FileInput(),
+            'bio': forms.Textarea(attrs={'rows': 4}),
+            'country': forms.TextInput(),
+            'city': forms.TextInput(),
+        }
 

@@ -6,458 +6,771 @@
 {% endblock %}
 
 {% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 100px 0 80px; position: relative; overflow: hidden;">
-            {% if subject.icon %}
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('{{ subject.icon.url }}') center/cover; opacity: 0.15;"></div>
-            {% endif %}
-            <div class="container-fluid" style="position: relative; z-index: 1;">
-                <div class="page-heading">
-                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                        <li>
-                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
+    <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url(&quot;{% if subject.icon %}{{ subject.icon.url }}{% else %}{% static 'img/hero/1.png' %}{% endif %}&quot;);">
+        <div class="container-fluid">
+            <div class="page-heading">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li>
+                        <a href="{% url 'index' %}">
                             Home
-                            </a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
-                        </li>
-                        <li>
-                            <a href="{% url 'subjects' %}" style="color: rgba(255,255,255,0.9);">Subjects</a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
-                        </li>
-                        <li style="color: white;">
-                            {{ subject.name }}
-                        </li>
-                    </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">{{ subject.name }}</h1>
-                </div>
+                        </a>
+                    </li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li>
+                        <a href="{% url 'subjects' %}">
+                            Subjects
+                        </a>
+                    </li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li>{{ subject.name }}</li>
+                </ul>
+                <h1 class="wow fadeInUp" data-wow-delay=".5s">{{ subject.name }}</h1>
             </div>
         </div>
+        <div class="plane-shape float-bob-x">
+            <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+        </div>
+    </div>
 
-        <!--  Subject Details Section Start -->
-        <section class="subject-details-section section-padding">
-            <div class="container">
-                <div class="subject-details-wrapper">
-                    <div class="row g-4">
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="subject-details-items">
-                                <!-- Subject Header -->
-                                <div class="subject-header mb-4">
-                                    <div class="d-flex  align-items-center gap-4 mb-4">
-                                        {% if subject.icon %}
-                                            <div class="subject-icon-large">
-                                                <img src="{{ subject.icon.url }}" alt="{{ subject.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                            </div>
-                                        {% endif %}
-                                        <div class="flex-grow-1">
-                                            <h2 class="mb-3">{{ subject.name }}</h2>
-                                            
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {% if subject.description %}
-                                                <div class="subject-description mb-4">
-                                                    {{ subject.description|safe }}
-                                                </div>
-                                            {% else %}
-                                                <p class="text-muted mb-4">Explore {{ subject.name }} Olympiad competitions, access expert tutors, and discover exciting destinations for academic excellence.</p>
-                                            {% endif %}
-                                    </div>
-                                </div>
-
-                                <!-- Statistics Cards -->
-                                <!-- <div style="display: hidden;" class="subject-stats-cards  mb-5">
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <div class="stat-card text-center p-4 rounded" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                                <div class="stat-icon mb-3">
-                                                    <i class="fas fa-trophy" style="font-size: 40px;"></i>
-                                                </div>
-                                                <h3 class="mb-2" style="font-size: 36px; font-weight: 700;">{{ subject.total_olympiads }}</h3>
-                                                <p class="mb-0" style="font-size: 16px; opacity: 0.9;">Olympiad{{ subject.total_olympiads|pluralize }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="stat-card text-center p-4 rounded" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                                <div class="stat-icon mb-3">
-                                                    <i class="fas fa-chalkboard-teacher" style="font-size: 40px;"></i>
-                                                </div>
-                                                <h3 class="mb-2" style="font-size: 36px; font-weight: 700;">{{ subject.total_tutors }}</h3>
-                                                <p class="mb-0" style="font-size: 16px; opacity: 0.9;">Tutor{{ subject.total_tutors|pluralize }} Available</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="stat-card text-center p-4 rounded" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                                <div class="stat-icon mb-3">
-                                                    <i class="fas fa-map-marker-alt" style="font-size: 40px;"></i>
-                                                </div>
-                                                <h3 class="mb-2" style="font-size: 36px; font-weight: 700;">{{ destinations|length }}</h3>
-                                                <p class="mb-0" style="font-size: 16px; opacity: 0.9;">Destination{{ destinations|length|pluralize }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <!-- Olympiads Section -->
-                                {% if competitions %}
-                                <div class="subject-section mb-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <h3 class="mb-0">
-                                            <i class="fas fa-trophy me-2"></i> Olympiad Competitions
-                                        </h3>
-                                        <a href="{% url 'olympiads' %}?subject={{ subject.slug }}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
-                                            <span>View All</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                    <div class="row g-4">
-                                        {% for competition in competitions %}
-                                        <div class="col-md-6">
-                                            <div class="competition-card p-4 border rounded h-100" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                                                <div class="competition-header mb-3">
-                                                    {% if competition.image %}
-                                                        <img src="{{ competition.image.url }}" alt="{{ competition.name }}" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
-                                                    {% endif %}
-                                                    <h5 class="mb-2">
-                                                        <a href="{% url 'olympiad-details' competition.slug %}" style="color: #212529; text-decoration: none;">
-                                                            {{ competition.name }}
-                                                        </a>
-                                                    </h5>
-                                                    <p class="text-muted small mb-2">
-                                                        <i class="far fa-map-marker-alt me-1"></i>
-                                                        {{ competition.destination.city }}, {{ competition.destination.country }}
-                                                    </p>
-                                                    <p class="text-muted small mb-3">
-                                                        <i class="far fa-calendar me-1"></i>
-                                                        {{ competition.start_date|date:"M d" }} - {{ competition.end_date|date:"M d, Y" }}
-                                                    </p>
-                                                </div>
-                                                <div class="competition-footer d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <strong class="text-primary" style="font-size: 18px;">$ {{ competition.base_price|floatformat:2 }}</strong>
-                                                        <span class="text-muted small">/ person</span>
-                                                    </div>
-                                                    <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn" style="padding: 6px 16px; font-size: 13px;">
-                                                        <span>View Details</span> <i class="far fa-long-arrow-right"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <!-- Tutors Section -->
-                                {% if tutors %}
-                                <div class="subject-section mb-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <h3 class="mb-0">
-                                            <i class="fas fa-chalkboard-teacher me-2"></i> Expert Tutors
-                                        </h3>
-                                        <a href="{% url 'team' %}?subject={{ subject.slug }}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
-                                            <span>View All Tutors</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                    <div class="row g-4">
-                                        {% for tutor in tutors %}
-                                        <div class="col-md-6">
-                                            <div class="tutor-card p-4 border rounded h-100" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                                                <div class="d-flex align-items-start gap-3">
-                                                    {% if tutor.user.profile_picture %}
-                                                        <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #f0f0f0;">
-                                                    {% else %}
-                                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border: 3px solid #f0f0f0;">
-                                                            <i class="fas fa-user text-white" style="font-size: 32px;"></i>
-                                                        </div>
-                                                    {% endif %}
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold">
-                                                            {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                                                        </h6>
-                                                        <p class="text-muted small mb-2">
-                                                            <i class="fas fa-graduation-cap me-1"></i>{{ subject.name }} Specialist
-                                                        </p>
-                                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                                            {% if tutor.average_rating %}
-                                                                <div class="star d-flex align-items-center">
-                                                                    <i class="fas fa-star text-warning me-1"></i>
-                                                                    <strong class="me-1">{{ tutor.average_rating|floatformat:1 }}</strong>
-                                                                </div>
-                                                                <span class="small text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
-                                                            {% else %}
-                                                                <span class="small text-muted">No ratings yet</span>
-                                                            {% endif %}
-                                                        </div>
-                                                        <p class="mb-3">
-                                                            <strong class="text-primary" style="font-size: 18px;">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
-                                                            <span class="text-muted small">/hour</span>
-                                                        </p>
-                                                        <a href="{% url 'team-details' tutor.user.id %}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
-                                                            <span>View Profile</span> <i class="far fa-long-arrow-right"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <!-- Destinations Section -->
-                                {% if destinations %}
-                                <div class="subject-section mb-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <h3 class="mb-0">
-                                            <i class="fas fa-map-marker-alt me-2"></i> Competition Destinations
-                                        </h3>
-                                        <a href="{% url 'destination' %}" class="theme-btn" style="padding: 8px 20px; font-size: 14px;">
-                                            <span>View All Destinations</span> <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                    <div class="row g-4">
-                                        {% for destination in destinations %}
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="destination-card border rounded overflow-hidden h-100" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                                                {% if destination.image %}
-                                                    <img src="{{ destination.image.url }}" alt="{{ destination.city }}" class="w-100" style="height: 200px; object-fit: cover;">
-                                                {% else %}
-                                                    <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ destination.city }}" class="w-100" style="height: 200px; object-fit: cover;">
-                                                {% endif %}
-                                                <div class="p-3">
-                                                    <h6 class="mb-2">
-                                                        <a href="{% url 'destination-details' destination.slug %}" style="color: #212529; text-decoration: none;">
-                                                            {{ destination.city }}, {{ destination.country }}
-                                                        </a>
-                                                    </h6>
-                                                    <p class="text-muted small mb-2">
-                                                        <i class="far fa-globe me-1"></i>{{ destination.get_region_display }}
-                                                    </p>
-                                                    {% if destination.package_price_min or destination.package_price_max %}
-                                                    <p class="mb-0">
-                                                        <strong class="text-primary">{{ destination.currency }}{{ destination.package_price_min|floatformat:0 }}</strong>
-                                                        {% if destination.package_price_max %}
-                                                            <span class="text-muted">- {{ destination.currency }}{{ destination.package_price_max|floatformat:0 }}</span>
-                                                        {% endif %}
-                                                    </p>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <!-- Sidebar -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="subject-sidebar sticky-style">
-                                <!-- Quick Facts -->
-                                <div class="sidebar-card p-4 rounded mb-4" style="background: linear-gradient(135deg, #232f63 0%, #263b99 100%); color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-                                    <h5 class="mb-4 text-white">
-                                        <i class="fas fa-chart-line me-2"></i> Quick Facts
-                                    </h5>
-                                    <ul class="list-unstyled mb-0">
-                                        <li class="mb-3 d-flex align-items-center">
-                                            <i class="fas fa-trophy me-3" style="font-size: 20px;"></i>
-                                            <div>
-                                                <strong style="display: block;">Total Competitions</strong>
-                                                <span style="font-size: 24px; font-weight: bold;">
-                                                    {{ competitions|length }}
-                                                </span>
-                                            </div>
-                                        </li>
-                                        <li class="mb-3 d-flex align-items-center">
-                                            <i class="fas fa-chalkboard-teacher me-3" style="font-size: 20px;"></i>
-                                            <div>
-                                                <strong style="display: block;">Available Tutors</strong>
-                                                <span style="font-size: 24px; font-weight: bold;">{{ subject.total_tutors }}</span>
-                                            </div>
-                                        </li>
-                                        <li class="mb-3 d-flex align-items-center">
-                                            <i class="fas fa-map-marker-alt me-3" style="font-size: 20px;"></i>
-                                            <div>
-                                                <strong style="display: block;">Destinations</strong>
-                                                <span style="font-size: 24px; font-weight: bold;">{{ destinations|length }}</span>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex align-items-center">
-                                            <i class="fas fa-book me-3" style="font-size: 20px;"></i>
-                                            <div>
-                                                <strong style="display: block;">Study Resources</strong>
-                                                <span>Available</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                 
-
-                                <!-- Related Subjects -->
-                                {% if related_subjects %}
-                                <div class="sidebar-card p-4 border rounded">
-                                    <h5 class="mb-4">
-                                        <i class="fas fa-book-open me-2"></i> Related Subjects
-                                    </h5>
-                                    <ul class="list-unstyled mb-0">
-                                        {% for related in related_subjects %}
-                                        <li class="mb-3 pb-3 border-bottom">
-                                            <div class="d-flex align-items-center gap-3">
-                                                {% if related.icon %}
-                                                    <img src="{{ related.icon.url }}" alt="{{ related.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
-                                                {% endif %}
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1">
-                                                        <a href="{% url 'subject-details' related.slug %}" style="color: #212529; text-decoration: none;">
-                                                            {{ related.name }}
-                                                        </a>
-                                                    </h6>
-                                                    <p class="text-muted small mb-0">
-                                                        {{ related.total_olympiads }} competition{{ related.total_olympiads|pluralize }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+    <section class="subject-shell">
+        <div class="subject-shell-body">
+            <article class="subject-card subject-hero-card">
+                <div class="subject-hero-media">
+                    {% if subject.icon %}
+                        <img src="{{ subject.icon.url }}" alt="{{ subject.name }}">
+                    {% else %}
+                        <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ subject.name }}">
+                    {% endif %}
                 </div>
-            </div>
-        </section>
-
-        <!-- Related Subjects Section -->
-        {% if related_subjects %}
-        <section class="related-subjects-section section-padding fix" style="background: #f8f9fa;">
-            <div class="container">
-                <div class="section-title-area text-center mb-5">
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Explore Other Subjects</h2>
-                    <p class="wow fadeInUp" data-wow-delay=".5s">Discover more academic subjects and their Olympiad opportunities</p>
-                </div>
-                <div class="row g-4">
-                    {% for related in related_subjects %}
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="subject-card border rounded overflow-hidden h-100" style="transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                            {% if related.icon %}
-                                <img src="{{ related.icon.url }}" alt="{{ related.name }}" class="w-100" style="height: 250px; object-fit: cover;">
+                <div class="subject-hero-content">
+                    <div class="subject-hero-title-block">
+                        <p class="subject-hero-kicker">Academic subject</p>
+                        <h2 class="subject-hero-title">{{ subject.name }}</h2>
+                        <p class="subject-hero-subtitle">
+                            {% if subject.description %}
+                                {{ subject.description|striptags|truncatewords:28 }}
                             {% else %}
-                                <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ related.name }}" class="w-100" style="height: 250px; object-fit: cover;">
+                                Explore Olympiad competitions, tutors, and destinations for {{ subject.name }}.
                             {% endif %}
-                            <div class="p-4">
-                                <h4 class="mb-3">
-                                    <a href="{% url 'subject-details' related.slug %}" style="color: #212529; text-decoration: none;">
-                                        {{ related.name }}
-                                    </a>
-                                </h4>
-                                {% if related.description %}
-                                    <p class="text-muted mb-3">{{ related.description|truncatewords:20|safe }}</p>
-                                {% endif %}
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="badge bg-primary me-2">{{ related.total_olympiads }} Competitions</span>
-                                        <span class="badge bg-success">{{ related.total_tutors }} Tutors</span>
+                        </p>
+                    </div>
+
+                    <div class="subject-stat-row">
+                        <span class="subject-stat-chip">
+                            <span class="subject-stat-label">Competitions</span>
+                            <span class="subject-stat-value">{{ competitions|length }}</span>
+                        </span>
+                        <span class="subject-stat-chip">
+                            <span class="subject-stat-label">Tutors</span>
+                            <span class="subject-stat-value">{{ subject.total_tutors }}</span>
+                        </span>
+                        <span class="subject-stat-chip">
+                            <span class="subject-stat-label">Destinations</span>
+                            <span class="subject-stat-value">{{ destinations|length }}</span>
+                        </span>
+                    </div>
+
+                    <div class="subject-hero-actions">
+                        <a href="{% url 'olympiads' %}?subject={{ subject.slug }}" class="theme-btn">
+                            <span>Browse Olympiads</span> <i class="far fa-long-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'team' %}?subject={{ subject.slug }}" class="subject-btn-ghost">
+                            <span>Find Tutors</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <section class="subject-section-stack">
+                <article class="subject-card">
+                    <header class="subject-card-header">
+                        <h3>Subject Overview</h3>
+                        <p>A quick understanding of what learners gain in this track.</p>
+                    </header>
+                    <div class="subject-card-body subject-rich-text">
+                        {% if subject.description %}
+                            {{ subject.description|safe }}
+                        {% else %}
+                            <p class="subject-empty-text">
+                                A detailed description for this subject will be published soon.
+                            </p>
+                        {% endif %}
+                    </div>
+                </article>
+
+                {% if competitions %}
+                <article class="subject-card">
+                    <header class="subject-card-header subject-card-header-inline">
+                        <div>
+                            <h3>Olympiad Competitions</h3>
+                            <p>Premium opportunities currently available under {{ subject.name }}.</p>
+                        </div>
+                        <a href="{% url 'olympiads' %}?subject={{ subject.slug }}" class="subject-btn-ghost">
+                            <span>View all</span>
+                        </a>
+                    </header>
+                    <div class="subject-card-body">
+                        <div class="subject-product-grid">
+                            {% for competition in competitions %}
+                                <article class="subject-product-tile">
+                                    <div class="subject-product-media">
+                                        {% if competition.image %}
+                                            <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+                                        {% else %}
+                                            <img src="{% static 'img/tour/default.jpg' %}" alt="{{ competition.name }}">
+                                        {% endif %}
                                     </div>
-                                    <a href="{% url 'subject-details' related.slug %}" class="theme-btn" style="padding: 6px 16px; font-size: 13px;">
-                                        <span>View Details</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                                    <div class="subject-product-body">
+                                        <h4>
+                                            <a href="{% url 'olympiad-details' competition.slug %}">{{ competition.name }}</a>
+                                        </h4>
+                                        <p class="subject-product-sub">
+                                            {{ competition.destination.city }}, {{ competition.destination.country }}
+                                        </p>
+                                        <div class="subject-product-meta-row">
+                                            <span class="subject-pill-soft">
+                                                {{ competition.start_date|date:"M d" }} - {{ competition.end_date|date:"M d, Y" }}
+                                            </span>
+                                        </div>
+                                        <div class="subject-product-footer">
+                                            <p class="subject-product-price">
+                                                {{ competition.currency }}{{ competition.base_price|floatformat:2 }}
+                                                <span>per participant</span>
+                                            </p>
+                                            <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn">
+                                                <span>View</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
+                </article>
+                {% endif %}
+
+                {% if tutors %}
+                <article class="subject-card">
+                    <header class="subject-card-header subject-card-header-inline">
+                        <div>
+                            <h3>Expert Tutors</h3>
+                            <p>Top tutors available for {{ subject.name }} preparation.</p>
+                        </div>
+                        <a href="{% url 'team' %}?subject={{ subject.slug }}" class="subject-btn-ghost">
+                            <span>View all tutors</span>
+                        </a>
+                    </header>
+                    <div class="subject-card-body">
+                        <div class="subject-tutor-grid">
+                            {% for tutor in tutors %}
+                                <article class="subject-tutor-tile">
+                                    <div class="subject-tutor-head">
+                                        <div class="subject-tutor-avatar">
+                                            {% if tutor.user.profile_picture %}
+                                                <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}">
+                                            {% else %}
+                                                <i class="fas fa-user"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h4>{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}</h4>
+                                            <p>{{ subject.name }} specialist</p>
+                                        </div>
+                                    </div>
+                                    <div class="subject-tutor-meta">
+                                        {% if tutor.average_rating %}
+                                            <span class="subject-pill-soft">
+                                                {{ tutor.average_rating|floatformat:1 }} ★ · {{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }}
+                                            </span>
+                                        {% else %}
+                                            <span class="subject-pill-soft">No reviews yet</span>
+                                        {% endif %}
+                                        <span class="subject-pill-soft subject-pill-price">
+                                            {{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }} / hour
+                                        </span>
+                                    </div>
+                                    <div class="subject-tutor-actions">
+                                        <a href="{% url 'team-details' tutor.user.id %}" class="theme-btn">
+                                            <span>View profile</span> <i class="far fa-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+                {% endif %}
+
+                {% if destinations %}
+                <article class="subject-card">
+                    <header class="subject-card-header subject-card-header-inline">
+                        <div>
+                            <h3>Competition Destinations</h3>
+                            <p>Destinations where {{ subject.name }} competitions are hosted.</p>
+                        </div>
+                        <a href="{% url 'destination' %}" class="subject-btn-ghost">
+                            <span>View destinations</span>
+                        </a>
+                    </header>
+                    <div class="subject-card-body">
+                        <div class="subject-product-grid subject-destination-grid">
+                            {% for destination in destinations %}
+                                <article class="subject-product-tile">
+                                    <div class="subject-product-media">
+                                        {% if destination.image %}
+                                            <img src="{{ destination.image.url }}" alt="{{ destination.city }}">
+                                        {% else %}
+                                            <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ destination.city }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="subject-product-body">
+                                        <h4>
+                                            <a href="{% url 'destination-details' destination.slug %}">{{ destination.city }}, {{ destination.country }}</a>
+                                        </h4>
+                                        <p class="subject-product-sub">{{ destination.get_region_display }}</p>
+                                        <div class="subject-product-meta-row">
+                                            {% if destination.package_price_min or destination.package_price_max %}
+                                                <span class="subject-pill-soft subject-pill-price">
+                                                    {{ destination.currency }}{{ destination.package_price_min|floatformat:0 }}{% if destination.package_price_max %} - {{ destination.currency }}{{ destination.package_price_max|floatformat:0 }}{% endif %}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+                {% endif %}
+            </section>
+        </div>
+    </section>
+
+    {% if related_subjects %}
+    <section class="subject-related-section">
+        <div class="subject-related-inner">
+            <div class="subject-related-header">
+                <h3>Related Subjects</h3>
+                <p>Explore adjacent tracks with similar competition opportunities.</p>
             </div>
-        </section>
-        {% endif %}
+            <div class="subject-related-grid">
+                {% for related in related_subjects %}
+                    <article class="subject-related-tile">
+                        <div class="subject-related-media">
+                            {% if related.icon %}
+                                <img src="{{ related.icon.url }}" alt="{{ related.name }}">
+                            {% else %}
+                                <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ related.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="subject-related-body">
+                            <h4><a href="{% url 'subject-details' related.slug %}">{{ related.name }}</a></h4>
+                            {% if related.description %}
+                                <p>{{ related.description|striptags|truncatewords:16 }}</p>
+                            {% endif %}
+                            <div class="subject-related-meta">
+                                <span class="subject-pill-soft">{{ related.total_olympiads }} competitions</span>
+                                <span class="subject-pill-soft">{{ related.total_tutors }} tutors</span>
+                            </div>
+                            <a href="{% url 'subject-details' related.slug %}" class="theme-btn">
+                                <span>View details</span> <i class="far fa-long-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
 
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .subject-details-section {
-        padding-top: 50px;
-        padding-bottom: 80px;
+    :root {
+        --subject-bg: #f5f5f7;
+        --subject-surface: #ffffff;
+        --subject-border: rgba(209, 213, 219, 0.9);
+        --subject-muted: #4b5563;
+        --subject-subtle: #9ca3af;
+        --subject-title: #111827;
+        --subject-pill-bg: #eef2ff;
+        --subject-radius-lg: 16px;
+        --subject-radius-xl: 20px;
     }
-    
-    .subject-header h2 {
-        font-size: 36px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 20px;
+
+    .subject-shell {
+        background: var(--subject-bg);
+        padding: 28px 0 70px;
     }
-    
-    .subject-description {
-        font-size: 16px;
-        line-height: 1.8;
-        color: #495057;
+
+    .subject-shell-body {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
     }
-    
-    .stat-card {
-        transition: transform 0.3s ease;
+
+    .subject-card {
+        background: var(--subject-surface);
+        border: 1px solid var(--subject-border);
+        border-radius: var(--subject-radius-lg);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
     }
-    
-    .stat-card:hover {
-        transform: translateY(-5px);
+
+    .subject-hero-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.35fr);
+        min-height: 280px;
     }
-    
-    .subject-section {
-        padding: 30px 0;
-        border-top: 1px solid #e9ecef;
+
+    .subject-hero-media {
+        position: relative;
+        border-right: 1px solid rgba(229, 231, 235, 0.9);
     }
-    
-    .subject-section:first-of-type {
-        border-top: none;
+
+    .subject-hero-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
-    
-    .subject-section h3 {
+
+    .subject-hero-content {
+        padding: 20px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 14px;
+    }
+
+    .subject-hero-kicker {
+        margin: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--subject-muted);
+    }
+
+    .subject-hero-title {
+        margin: 0;
         font-size: 28px;
+        line-height: 1.2;
         font-weight: 700;
-        color: #212529;
+        color: var(--subject-title);
     }
-    
-    .competition-card:hover,
-    .tutor-card:hover,
-    .destination-card:hover,
-    .subject-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
+
+    .subject-hero-subtitle {
+        margin: 8px 0 0;
+        font-size: 14px;
+        color: var(--subject-muted);
+        line-height: 1.65;
     }
-    
-    .sidebar-card {
-        background: #fff;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+
+    .subject-stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
     }
-    
-    .sticky-style {
-        position: sticky;
-        top: 100px;
+
+    .subject-stat-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--subject-pill-bg);
+        border: 1px solid rgba(129, 140, 248, 0.3);
     }
-    
-    @media (max-width: 991px) {
-        .sticky-style {
-            position: relative;
-            top: 0;
+
+    .subject-stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--subject-muted);
+    }
+
+    .subject-stat-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--subject-title);
+    }
+
+    .subject-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .subject-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--theme-color);
+        background: #ffffff;
+        color: var(--theme-color);
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 150ms ease;
+        white-space: nowrap;
+    }
+
+    .subject-btn-ghost:hover {
+        background: var(--theme-color);
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .subject-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .subject-card-header {
+        padding: 16px 20px 10px;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        background: #f9fafb;
+    }
+
+    .subject-card-header h3 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--subject-title);
+    }
+
+    .subject-card-header p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: var(--subject-muted);
+    }
+
+    .subject-card-header-inline {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .subject-card-body {
+        padding: 18px 20px 20px;
+    }
+
+    .subject-rich-text p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #1f2937;
+    }
+
+    .subject-empty-text {
+        color: var(--subject-muted);
+        margin: 0;
+    }
+
+    .subject-product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .subject-destination-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .subject-product-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .subject-product-media img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .subject-product-body {
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .subject-product-body h4 {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.35;
+    }
+
+    .subject-product-body h4 a {
+        color: var(--subject-title);
+        text-decoration: none;
+    }
+
+    .subject-product-body h4 a:hover {
+        color: var(--theme-color);
+    }
+
+    .subject-product-sub {
+        margin: 0;
+        font-size: 12px;
+        color: var(--subject-muted);
+    }
+
+    .subject-product-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .subject-pill-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: var(--subject-pill-bg);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: #374151;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .subject-pill-price {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .subject-product-footer {
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .subject-product-price {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--subject-title);
+    }
+
+    .subject-product-price span {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--subject-muted);
+        margin-left: 4px;
+    }
+
+    .subject-product-footer .theme-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .subject-tutor-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .subject-tutor-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .subject-tutor-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .subject-tutor-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #eef2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--theme-color);
+        flex-shrink: 0;
+    }
+
+    .subject-tutor-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .subject-tutor-head h4 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--subject-title);
+    }
+
+    .subject-tutor-head p {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: var(--subject-muted);
+    }
+
+    .subject-tutor-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .subject-tutor-actions .theme-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .subject-related-section {
+        background: #f9fafb;
+        padding: 56px 0 76px;
+    }
+
+    .subject-related-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+    }
+
+    .subject-related-header h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .subject-related-header p {
+        margin: 6px 0 0;
+        color: var(--subject-muted);
+    }
+
+    .subject-related-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .subject-related-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 16px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .subject-related-media img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .subject-related-body {
+        padding: 14px 14px 16px;
+    }
+
+    .subject-related-body h4 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .subject-related-body h4 a {
+        color: #111827;
+        text-decoration: none;
+    }
+
+    .subject-related-body h4 a:hover {
+        color: var(--theme-color);
+    }
+
+    .subject-related-body p {
+        margin: 8px 0;
+        font-size: 13px;
+        color: var(--subject-muted);
+    }
+
+    .subject-related-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .subject-related-body .theme-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 1023px) {
+        .subject-hero-card {
+            grid-template-columns: minmax(0, 1fr);
         }
-        
-        .subject-header h2 {
-            font-size: 28px;
+
+        .subject-hero-media {
+            border-right: 0;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+            min-height: 220px;
         }
-        
-        .subject-section h3 {
+
+        .subject-product-grid,
+        .subject-tutor-grid,
+        .subject-related-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .subject-destination-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .subject-shell {
+            padding-top: 18px;
+        }
+
+        .subject-card-header-inline {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .subject-product-grid,
+        .subject-tutor-grid,
+        .subject-related-grid,
+        .subject-destination-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .subject-hero-title {
             font-size: 24px;
         }
     }
 </style>
 {% endblock %}
-
-
-
-

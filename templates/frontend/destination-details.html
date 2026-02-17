@@ -5,537 +5,891 @@
 <title>{{ destination.city }}, {{ destination.country }} - Destination Details | WON</title>
 {% endblock %}
 
-{% block meta_description %}
-<meta name="description" content="Explore {{ destination.city }}, {{ destination.country }} - {{ destination.description|truncatewords:30 }}">
-{% endblock %}
+{% block meta_description %}Explore {{ destination.city }}, {{ destination.country }} - {{ destination.description|truncatewords:30 }}{% endblock %}
 
 {% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% if destination.image %}{{ destination.image.url }}{% else %}{% static 'img/breadcrumb-bg.jpg' %}{% endif %}');">
-            <div class="container-fluid">
-                <div class="page-heading">
-                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                        <li>
-                            <a href="{% url 'index' %}">
-                            Home
-                            </a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash"></i>
-                        </li>
-                        <li>
-                            <a href="{% url 'destination' %}">Destinations</a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash"></i>
-                        </li>
-                        <li>
-                            {{ destination.city }}, {{ destination.country }}
-                        </li>
-                    </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">{{ destination.city }}, {{ destination.country }}</h1>
-                </div>
-            </div>
-            <div class="plane-shape float-bob-x">
-                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+    {% if destination.image %}
+    <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{{ destination.image.url }}');">
+    {% else %}
+    <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+    {% endif %}
+        <div class="container-fluid">
+            <div class="page-heading">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li><a href="{% url 'destination' %}">Destinations</a></li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li>{{ destination.city }}, {{ destination.country }}</li>
+                </ul>
+                <h1 class="wow fadeInUp" data-wow-delay=".5s">{{ destination.city }}, {{ destination.country }}</h1>
             </div>
         </div>
+        <div class="plane-shape float-bob-x">
+            <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+        </div>
+    </div>
 
-        <!--  Destination Details Section Start -->
-        <section class="destination-details-section section-padding">
-            <div class="container">
-                <div class="destination-details-wrapper">
-                    <div class="row g-5">
-                        <div class="col-xl-8 col-12">
-                            <div class="details-post wow fadeInUp" data-wow-delay=".3s">
-                                <div class="details-image">
-                                    {% if destination.image %}
-                                        <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
-                                    {% else %}
-                                        <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ destination.name }}">
-                                    {% endif %}
-                                </div>
-                                <div class="details-content">
-                                    <div class="destination-header mb-4">
-                                        <span class="location-icon">
-                                            <i class="far fa-map-marker-alt"></i>
-                                            {{ destination.city }}, {{ destination.country }}
-                                        </span>
-                                        <h2 class="mt-3">
-                                            {{ destination.name }}
-                                        </h2>
-                                        <div class="destination-meta d-flex align-items-center gap-3 mt-3">
-                                            <span class="badge bg-primary">{{ destination.get_region_display }}</span>
-                                            {% if destination.total_olympiads > 0 %}
-                                            <span class="text-muted">
-                                                <i class="fas fa-trophy"></i> {{ destination.total_olympiads }} Competition{{ destination.total_olympiads|pluralize }}
-                                            </span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    
-                                    {% if destination.description %}
-                                    <div class="destination-description mb-4">
-                                        <p>{{ destination.description|linebreaks }}</p>
-                                    </div>
-                                    {% endif %}
-                                    
-                                    {% if destination.climate_info %}
-                                    <div class="destination-info-box mb-4">
-                                        <h4><i class="fas fa-cloud-sun"></i> Climate Information</h4>
-                                        <p>{{ destination.climate_info|linebreaks }}</p>
-                                    </div>
-                                    {% endif %}
-                                    
-                                    {% if destination.visa_requirements %}
-                                    <div class="destination-info-box mb-4">
-                                        <h4><i class="fas fa-passport"></i> Visa Requirements</h4>
-                                        <p>{{ destination.visa_requirements|linebreaks }}</p>
-                                    </div>
-                                    {% endif %}
-                                    
-                                    <!-- <div class="destination-list-item mb-4">
-                                        <h4>
-                                            <i class="fas fa-star"></i> Why Choose This Destination?
-                                        </h4>
-                                        <div class="destination-list">
-                                            <ul class="list">
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Trusted, Local Travel Experts
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Flexible, Hassle-Free Bookings
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Real-Time Itinerary Updates
-                                                </li>
-                                            </ul>
-                                            <ul class="list">
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Flexible Cancellation Policies
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Customized Travel Experiences
-                                                </li>
-                                                <li>
-                                                    <i class="flaticon-check"></i>
-                                                    Exclusive Travel Deals
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
-                                    
-                                    {% if competitions %}
-                                    <div class="related-competitions mt-4 mb-4">
-                                        <h4>
-                                            <i class="fas fa-trophy"></i> Upcoming Competitions in {{ destination.city }}
-                                        </h4>
-                                        <div class="row g-3 mt-3">
-                                            {% for competition in competitions %}
-                                            <div class="col-md-6">
-                                                <div class="competition-card p-3 border rounded">
-                                                    <h6 class="mb-2">
-                                                        <a href="{% url 'olympiad-details' competition.slug %}">{{ competition.name }}</a>
-                                                    </h6>
-                                                    <p class="text-muted small mb-2">
-                                                        <i class="fas fa-calendar"></i> {{ competition.start_date|date:"M d, Y" }}
-                                                    </p>
-                                                    {% if competition.subject %}
-                                                    <span class="badge bg-secondary">{{ competition.subject.name }}</span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    
-                                    <div class="map-area mt-5">
-                                        <h2>
-                                            <i class="fas fa-map-marked-alt"></i> View on Map
-                                        </h2>
-                                        <div class="google-map mt-3">
-                                            <iframe 
-                                                src="{{ map_url }}" 
-                                                width="100%" 
-                                                height="500" 
-                                                style="border:0; border-radius: 10px;" 
-                                                allowfullscreen="" 
-                                                loading="lazy" 
-                                                referrerpolicy="no-referrer-when-downgrade">
-                                            </iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    <section class="destination-shell">
+        <div class="destination-shell-body">
+            <article class="destination-card destination-hero-card">
+                <div class="destination-hero-content">
+                    <div class="destination-hero-title-block">
+                        <div class="destination-hero-pill-row">
+                            <span class="destination-hero-pill">Destination Guide</span>
+                            <span class="destination-hero-pill">{{ destination.get_region_display }}</span>
                         </div>
+                        <h2 class="destination-hero-title">{{ destination.city }}, {{ destination.country }}</h2>
                         
-                        <!-- Sidebar -->
-                        <div class="col-xl-4 col-12">
-                            <div class="main-side-bar sticky-style">
-                                <!-- Destination Info Card -->
-                                <div class="destination-single-sideber-widget wow fadeInUp" data-wow-delay=".4s">
-                                    <div class="widget-title">
-                                        <h3><i class="fas fa-info-circle"></i> Destination Info</h3>
-                                    </div>
-                                    <ul class="destination-card">
-                                        <li>
-                                            <strong>Country:</strong>
-                                            <span>{{ destination.country }}</span>
-                                        </li>
-                                        <li>
-                                            <strong>City:</strong>
-                                            <span>{{ destination.city }}</span>
-                                        </li>
-                                        <!-- <li>
-                                            <strong>Region:</strong>
-                                            <span>{{ destination.get_region_display }}</span>
-                                        </li> -->
-                                        {% if destination.continent %}
-                                        <li>
-                                            <strong>Continent:</strong>
-                                            <span>{{ destination.continent }}</span>
-                                        </li>
-                                        {% endif %}
-                                        {% if destination.timezone %}
-                                        <li>
-                                            <strong>Timezone:</strong>
-                                            <span>{{ destination.timezone }}</span>
-                                        </li>
-                                        {% endif %}
-                                        {% if destination.currency %}
-                                        <li>
-                                            <strong>Currency:</strong>
-                                            <span>{{ destination.currency }}</span>
-                                        </li>
-                                        {% endif %}
-                                        {% if destination.package_price_min or destination.package_price_max %}
-                                        <li>
-                                            <strong>Package Price:</strong>
-                                            <span>
-                                                {% if destination.package_price_min and destination.package_price_max %}
-                                                    {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }} - {{ destination.package_price_max|floatformat:0 }}
-                                                {% elif destination.package_price_min %}
-                                                    From {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }}
-                                                {% elif destination.package_price_max %}
-                                                    Up to {{ destination.currency }} {{ destination.package_price_max|floatformat:0 }}
-                                                {% endif %}
-                                            </span>
-                                        </li>
-                                        {% endif %}
-                                        {% if destination.total_olympiads > 0 %}
-                                        <li>
-                                            <strong>Competitions:</strong>
-                                            <span>{{ destination.total_olympiads }} Available</span>
-                                        </li>
-                                        {% endif %}
-                                    </ul>
-                                    
-                                    <!-- CTA: Generate Quote -->
-                                    <div class="quote-cta mt-4">
-                                        <a href="{% url 'generate-travel-quote-destination' destination.slug %}" class="theme-btn w-100 text-center" style="display: block; padding: 15px; font-size: 16px; font-weight: 600;">
-                                          Generate Travel Quote
-                                        </a>
-                                        <p class="text-center text-muted small mt-2">
-                                            Get a personalized travel quote for {{ destination.city }}
-                                        </p>
-                                    </div>
-                                    
-                                    <!-- Alternative: Direct Contact -->
-                                    <div class="contact-cta mt-3">
-                                        <a href="{% url 'contact' %}?destination={{ destination.slug }}" class="btn btn-outline-primary w-100">
-                                            <i class="fas fa-envelope"></i> Contact Us About This Destination
-                                        </a>
-                                    </div>
-                                </div>
-                                
-                                <!-- Offer Card
-                                <div class="offer-card bg-cover mt-4 wow fadeInUp" data-wow-delay=".5s" style="background-image: url('{% static 'img/destinations/offter-card.jpg' %}');">
-                                    <h3>Book Now and Enjoy Amazing Savings!</h3>
-                                    <img src="{% static 'img/destinations/disocunt.png' %}" alt="img">
-                                </div> -->
-                                
-                                <!-- Related Destinations -->
-                                {% if related_destinations %}
-                                <div class="related-destinations mt-4 wow fadeInUp" data-wow-delay=".6s">
-                                    <div class="widget-title">
-                                        <h3><i class="fas fa-map"></i> Other Destinations in {{ destination.get_region_display }}</h3>
-                                    </div>
-                                    <div class="related-destinations-list">
-                                        {% for related in related_destinations %}
-                                        <div class="related-destination-item mb-3">
-                                            <a href="{% url 'destination-details' related.slug %}" class="d-flex align-items-center gap-3">
-                                                {% if related.image %}
-                                                <img src="{{ related.image.url }}" alt="{{ related.name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                                                {% else %}
-                                                <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ related.name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                                                {% endif %}
-                                                <div>
-                                                    <h6 class="mb-0">{{ related.city }}</h6>
-                                                    <p class="text-muted small mb-0">{{ related.country }}</p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                    </div>
+                    <div class="destination-hero-facts">
+                        <div class="destination-hero-fact">
+                            <span>Competitions</span>
+                            <strong>{{ destination.total_olympiads }}</strong>
+                        </div>
+                        {% if destination.timezone %}
+                        <div class="destination-hero-fact">
+                            <span>Timezone</span>
+                            <strong>{{ destination.timezone }}</strong>
+                        </div>
+                        {% endif %}
+                        {% if destination.continent %}
+                        <div class="destination-hero-fact">
+                            <span>Continent</span>
+                            <strong>{{ destination.continent }}</strong>
+                        </div>
+                        {% endif %}
+                        <div class="destination-hero-fact">
+                            <span>Package Range</span>
+                            <strong>
+                                {% if destination.package_price_min and destination.package_price_max %}
+                                    {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }} - {{ destination.package_price_max|floatformat:0 }}
+                                {% elif destination.package_price_min %}
+                                    From {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }}
+                                {% elif destination.package_price_max %}
+                                    Up to {{ destination.currency }} {{ destination.package_price_max|floatformat:0 }}
+                                {% else %}
+                                    Custom quote
                                 {% endif %}
-                            </div>
+                            </strong>
                         </div>
                     </div>
+                    <div class="destination-hero-actions">
+                        <a href="{% url 'generate-travel-quote-destination' destination.slug %}" class="theme-btn">
+                            <span>Generate Travel Quote</span> <i class="far fa-long-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'contact' %}?destination={{ destination.slug }}" class="destination-btn-ghost">
+                            <span>Talk to us</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </section>
+                <div class="destination-hero-media">
+                    <div class="destination-map-shell destination-map-shell-hero">
+                        <iframe
+                            src="{{ map_url }}"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </article>
 
+            <section class="destination-section-stack">
+                <article class="destination-card">
+                    <header class="destination-card-header">
+                        <h3>Destination Overview</h3>
+                        <p>Quick insights and travel context for delegates and families.</p>
+                    </header>
+                    <div class="destination-card-body destination-rich-text">
+                        {% if destination.description %}
+                            {{ destination.description|linebreaks }}
+                        {% else %}
+                            <p class="destination-empty-text">Overview details will be published soon.</p>
+                        {% endif %}
+                    </div>
+                </article>
+
+                {% if destination.climate_info or destination.visa_requirements %}
+                <article class="destination-card">
+                    <header class="destination-card-header">
+                        <h3>Travel Guidance</h3>
+                        <p>Plan early with climate and visa information.</p>
+                    </header>
+                    <div class="destination-card-body destination-guidance-grid">
+                        {% if destination.climate_info %}
+                            <div class="destination-guidance-tile">
+                                <h4>Climate Information</h4>
+                                <p>{{ destination.climate_info|linebreaks }}</p>
+                            </div>
+                        {% endif %}
+                        {% if destination.visa_requirements %}
+                            <div class="destination-guidance-tile">
+                                <h4>Visa Requirements</h4>
+                                <p>{{ destination.visa_requirements|linebreaks }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endif %}
+
+                <article class="destination-card">
+                    <header class="destination-card-header destination-card-header-inline">
+                        <div>
+                            <h3>Destination Facts</h3>
+                            <p>Key information for planning participation and travel.</p>
+                        </div>
+                    </header>
+                    <div class="destination-card-body">
+                        <div class="destination-facts-grid">
+                            <div class="destination-fact-item"><span>Country</span><strong>{{ destination.country }}</strong></div>
+                            <div class="destination-fact-item"><span>City</span><strong>{{ destination.city }}</strong></div>
+                            {% if destination.continent %}
+                            <div class="destination-fact-item"><span>Continent</span><strong>{{ destination.continent }}</strong></div>
+                            {% endif %}
+                            {% if destination.timezone %}
+                            <div class="destination-fact-item"><span>Timezone</span><strong>{{ destination.timezone }}</strong></div>
+                            {% endif %}
+                            {% if destination.currency %}
+                            <div class="destination-fact-item"><span>Currency</span><strong>{{ destination.currency }}</strong></div>
+                            {% endif %}
+                            {% if destination.package_price_min or destination.package_price_max %}
+                            <div class="destination-fact-item">
+                                <span>Package Price</span>
+                                <strong>
+                                    {% if destination.package_price_min and destination.package_price_max %}
+                                        {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }} - {{ destination.package_price_max|floatformat:0 }}
+                                    {% elif destination.package_price_min %}
+                                        From {{ destination.currency }} {{ destination.package_price_min|floatformat:0 }}
+                                    {% elif destination.package_price_max %}
+                                        Up to {{ destination.currency }} {{ destination.package_price_max|floatformat:0 }}
+                                    {% endif %}
+                                </strong>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+
+                {% if competitions %}
+                <article class="destination-card">
+                    <header class="destination-card-header destination-card-header-inline">
+                        <div>
+                            <h3>Upcoming Competitions</h3>
+                            <p>Olympiads scheduled in {{ destination.city }}.</p>
+                        </div>
+                    </header>
+                    <div class="destination-card-body">
+                        <div class="destination-product-grid">
+                            {% for competition in competitions %}
+                                <article class="destination-product-tile">
+                                    <div class="destination-product-media">
+                                        {% if competition.image %}
+                                            <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+                                        {% else %}
+                                            <img src="{% static 'img/tour/default.jpg' %}" alt="{{ competition.name }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="destination-product-body">
+                                        <h4><a href="{% url 'olympiad-details' competition.slug %}">{{ competition.name }}</a></h4>
+                                        <p class="destination-product-sub">{{ competition.start_date|date:"M d, Y" }}</p>
+                                        {% if competition.subject %}
+                                            <span class="destination-pill-soft">{{ competition.subject.name }}</span>
+                                        {% endif %}
+                                        <div class="destination-product-footer">
+                                            <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn">
+                                                <span>View details</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+                {% endif %}
+
+                <article class="destination-card">
+                    <header class="destination-card-header">
+                        <h3>Destination Gallery</h3>
+                        <p>Photo highlights from destinations in our database.</p>
+                    </header>
+                    <div class="destination-card-body">
+                        <div class="destination-gallery-carousel" id="destinationGalleryCarousel">
+                            <button type="button" class="destination-gallery-nav prev" aria-label="Previous image">&#10094;</button>
+                            <div class="destination-gallery-track" id="destinationGalleryTrack">
+                                {% for gallery_destination in destination_gallery %}
+                                    <article class="destination-gallery-item">
+                                        <a href="{% url 'destination-details' gallery_destination.slug %}">
+                                            <img src="{{ gallery_destination.image.url }}" alt="{{ gallery_destination.city }}, {{ gallery_destination.country }}">
+                                            <div class="destination-gallery-caption">
+                                                <p>{{ gallery_destination.city }}, {{ gallery_destination.country }}</p>
+                                                <span>{{ gallery_destination.get_region_display }}</span>
+                                            </div>
+                                        </a>
+                                    </article>
+                                {% empty %}
+                                    <article class="destination-gallery-item">
+                                        <img src="{% static 'img/destinations/01.jpg' %}" alt="Destination gallery image">
+                                        <div class="destination-gallery-caption">
+                                            <p>{{ destination.city }}, {{ destination.country }}</p>
+                                            <span>Gallery updates coming soon</span>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="destination-gallery-nav next" aria-label="Next image">&#10095;</button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </section>
+
+    {% if related_destinations %}
+    <section class="destination-related-section">
+        <div class="destination-related-inner">
+            <div class="destination-related-header">
+                <h3>More in {{ destination.get_region_display }}</h3>
+                <p>Explore other destinations in the same region.</p>
+            </div>
+            <div class="destination-related-grid">
+                {% for related in related_destinations %}
+                    <article class="destination-related-tile">
+                        <div class="destination-related-media">
+                            {% if related.image %}
+                                <img src="{{ related.image.url }}" alt="{{ related.city }}, {{ related.country }}">
+                            {% else %}
+                                <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ related.city }}, {{ related.country }}">
+                            {% endif %}
+                        </div>
+                        <div class="destination-related-body">
+                            <h4><a href="{% url 'destination-details' related.slug %}">{{ related.city }}, {{ related.country }}</a></h4>
+                            <p>{{ related.get_region_display }}</p>
+                            <a href="{% url 'destination-details' related.slug %}" class="theme-btn">
+                                <span>View destination</span> <i class="far fa-long-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .destination-details-section {
-        background: #f8f9fa;
+    :root {
+        --destination-bg: #f5f5f7;
+        --destination-surface: #ffffff;
+        --destination-border: rgba(209, 213, 219, 0.9);
+        --destination-muted: #4b5563;
+        --destination-title: #111827;
+        --destination-pill-bg: #eef2ff;
+        --destination-radius-lg: 16px;
     }
-    
-    .details-post {
-        background: white;
-        border-radius: 15px;
+
+    .destination-shell {
+        background: var(--destination-bg);
+        padding: 28px 0 70px;
+    }
+
+    .destination-shell-body {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .destination-card {
+        background: var(--destination-surface);
+        border: 1px solid var(--destination-border);
+        border-radius: var(--destination-radius-lg);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
         overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
-    
-    .details-image {
+
+    .destination-hero-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        min-height: 320px;
+    }
+
+    .destination-hero-media {
         position: relative;
+        border-left: 1px solid rgba(229, 231, 235, 0.9);
         overflow: hidden;
-        height: 400px;
+        min-height: 320px;
     }
-    
-    .details-image img {
+
+    .destination-hero-media img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
+        display: block;
     }
-    
-    .details-post:hover .details-image img {
-        transform: scale(1.05);
+
+    .destination-hero-content {
+        padding: 24px 26px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
     }
-    
-    .details-content {
-        padding: 40px;
+
+    .destination-hero-pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
     }
-    
-    .location-icon {
-        color: var(--theme-color);
-        font-weight: 600;
+
+    .destination-hero-pill {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #eef2ff;
+        border: 1px solid rgba(129, 140, 248, 0.35);
+        font-size: 11px;
+        font-weight: 600;
+        color: #4338ca;
+        white-space: nowrap;
     }
-    
-    .destination-header h2 {
-        color: #212529;
-        font-size: 32px;
+
+    .destination-hero-title {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
         font-weight: 700;
-        margin-bottom: 15px;
+        color: var(--destination-title);
     }
-    
-    .destination-meta .badge {
-        padding: 8px 15px;
+
+    .destination-hero-subtitle {
+        margin: 8px 0 0;
         font-size: 14px;
+        color: var(--destination-muted);
+        line-height: 1.65;
     }
-    
-    .destination-info-box {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 4px solid var(--theme-color);
+
+    .destination-hero-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
     }
-    
-    .destination-info-box h4 {
-        color: #212529;
-        margin-bottom: 15px;
-        font-size: 20px;
+
+    .destination-hero-fact {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #ffffff;
+        min-width: 0;
     }
-    
-    .destination-info-box h4 i {
+
+    .destination-hero-fact span {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--destination-muted);
+    }
+
+    .destination-hero-fact strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--destination-title);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .destination-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .destination-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--theme-color);
+        background: #ffffff;
         color: var(--theme-color);
-        margin-right: 10px;
-    }
-    
-    .competition-card {
-        transition: all 0.3s ease;
-        background: white;
-    }
-    
-    .competition-card:hover {
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transform: translateY(-2px);
-    }
-    
-    .competition-card h6 a {
-        color: #212529;
+        font-size: 13px;
+        font-weight: 600;
         text-decoration: none;
-        transition: color 0.3s ease;
+        transition: all 150ms ease;
+        white-space: nowrap;
     }
-    
-    .competition-card h6 a:hover {
-        color: var(--theme-color);
+
+    .destination-btn-ghost:hover {
+        background: var(--theme-color);
+        color: #ffffff;
+        transform: translateY(-1px);
     }
-    
-    .map-area {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+    .destination-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
-    
-    .map-area h2 {
-        color: #212529;
-        font-size: 24px;
-        margin-bottom: 20px;
+
+    .destination-card-header {
+        padding: 16px 20px 10px;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        background: #f9fafb;
     }
-    
-    .map-area h2 i {
-        color: var(--theme-color);
-        margin-right: 10px;
+
+    .destination-card-header h3 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--destination-title);
     }
-    
-    .main-side-bar {
-        position: sticky;
-        top: 100px;
+
+    .destination-card-header p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: var(--destination-muted);
     }
-    
-    .destination-single-sideber-widget {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
+
+    .destination-card-header-inline {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
     }
-    
-    .widget-title h3 {
-        color: #212529;
-        font-size: 22px;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+
+    .destination-card-body {
+        padding: 18px 20px 20px;
     }
-    
-    .widget-title h3 i {
-        color: var(--theme-color);
-        margin-right: 10px;
+
+    .destination-rich-text p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #1f2937;
     }
-    
-    .destination-card {
-        list-style: none;
-        padding: 0;
+
+    .destination-empty-text {
+        color: var(--destination-muted);
         margin: 0;
     }
-    
-    .destination-card li {
-        padding: 15px 0;
-        border-bottom: 1px solid #f0f0f0;
+
+    .destination-guidance-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .destination-guidance-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 12px;
+        padding: 12px 14px;
+        background: #ffffff;
+    }
+
+    .destination-guidance-tile h4 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .destination-guidance-tile p {
+        margin: 0;
+        font-size: 13px;
+        color: #4b5563;
+    }
+
+    .destination-facts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .destination-fact-item {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 3px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 12px;
+        padding: 10px 12px;
     }
-    
-    .destination-card li:last-child {
-        border-bottom: none;
+
+    .destination-fact-item span {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--destination-muted);
     }
-    
-    .destination-card li strong {
-        color: #212529;
+
+    .destination-fact-item strong {
+        color: #111827;
+        font-size: 14px;
         font-weight: 600;
     }
-    
-    .destination-card li span {
-        color: #6c757d;
-        text-align: right;
+
+    .destination-product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
     }
-    
-    .quote-cta .theme-btn {
-        background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-2) 100%);
-        border: none;
-        color: white;
-        transition: all 0.3s ease;
+
+    .destination-product-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .destination-product-media img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .destination-product-body {
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .destination-product-body h4 {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.35;
+    }
+
+    .destination-product-body h4 a {
+        color: #111827;
         text-decoration: none;
     }
-    
-    .quote-cta .theme-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    
-    .related-destinations-list {
-        margin-top: 20px;
-    }
-    
-    .related-destination-item a {
-        text-decoration: none;
-        color: #212529;
-        transition: all 0.3s ease;
-    }
-    
-    .related-destination-item a:hover {
+
+    .destination-product-body h4 a:hover {
         color: var(--theme-color);
     }
-    
-    .related-destination-item h6 {
-        font-size: 16px;
+
+    .destination-product-sub {
+        margin: 0;
+        font-size: 12px;
+        color: var(--destination-muted);
+    }
+
+    .destination-pill-soft {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: var(--destination-pill-bg);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: #374151;
+        font-size: 11px;
+        width: fit-content;
+    }
+
+    .destination-product-footer .theme-btn {
+        margin-top: 4px;
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .destination-map-shell {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        background: #ffffff;
+    }
+
+    .destination-map-shell iframe {
+        display: block;
+    }
+
+    .destination-map-shell-hero {
+        height: 100%;
+        min-height: 320px;
+        border-radius: 0;
+        border: 0;
+    }
+
+    .destination-gallery-carousel {
+        position: relative;
+    }
+
+    .destination-gallery-track {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 2px 38px;
+    }
+
+    .destination-gallery-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .destination-gallery-item {
+        flex: 0 0 calc(33.333% - 8px);
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+        scroll-snap-align: start;
+        min-width: 0;
+    }
+
+    .destination-gallery-item a {
+        color: inherit;
+        text-decoration: none;
+        display: block;
+    }
+
+    .destination-gallery-item img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .destination-gallery-caption {
+        padding: 10px 12px 12px;
+    }
+
+    .destination-gallery-caption p {
+        margin: 0;
+        font-size: 14px;
         font-weight: 600;
+        color: #111827;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    
-    @media (max-width: 991px) {
-        .main-side-bar {
-            position: relative;
-            top: 0;
-            margin-top: 30px;
+
+    .destination-gallery-caption span {
+        margin-top: 4px;
+        display: block;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .destination-gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.95);
+        background: #ffffff;
+        color: #111827;
+        cursor: pointer;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        line-height: 1;
+        transition: all 150ms ease;
+    }
+
+    .destination-gallery-nav:hover {
+        border-color: var(--theme-color);
+        color: var(--theme-color);
+    }
+
+    .destination-gallery-nav.prev {
+        left: 0;
+    }
+
+    .destination-gallery-nav.next {
+        right: 0;
+    }
+
+    .destination-related-section {
+        background: #f9fafb;
+        padding: 56px 0 76px;
+    }
+
+    .destination-related-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+    }
+
+    .destination-related-header h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .destination-related-header p {
+        margin: 6px 0 0;
+        color: var(--destination-muted);
+    }
+
+    .destination-related-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .destination-related-tile {
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        border-radius: 16px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .destination-related-media img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .destination-related-body {
+        padding: 14px 14px 16px;
+    }
+
+    .destination-related-body h4 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .destination-related-body h4 a {
+        color: #111827;
+        text-decoration: none;
+    }
+
+    .destination-related-body h4 a:hover {
+        color: var(--theme-color);
+    }
+
+    .destination-related-body p {
+        margin: 7px 0 10px;
+        color: var(--destination-muted);
+        font-size: 13px;
+    }
+
+    .destination-related-body .theme-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 1023px) {
+        .destination-hero-card {
+            grid-template-columns: minmax(0, 1fr);
         }
-        
-        .details-content {
-            padding: 25px;
+
+        .destination-hero-media {
+            border-left: 0;
+            border-top: 1px solid rgba(229, 231, 235, 0.9);
+            min-height: 220px;
         }
-        
-        .destination-header h2 {
-            font-size: 26px;
+
+        .destination-map-shell-hero {
+            min-height: 280px;
+        }
+
+        .destination-hero-facts,
+        .destination-guidance-grid,
+        .destination-facts-grid,
+        .destination-product-grid,
+        .destination-related-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .destination-gallery-item {
+            flex-basis: calc(50% - 6px);
         }
     }
-    
-    .sticky-style {
-        transition: all 0.3s ease;
+
+    @media (max-width: 767px) {
+        .destination-shell {
+            padding-top: 18px;
+        }
+
+        .destination-card-header-inline {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .destination-hero-facts,
+        .destination-guidance-grid,
+        .destination-facts-grid,
+        .destination-product-grid,
+        .destination-related-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .destination-hero-title {
+            font-size: 24px;
+        }
+
+        .destination-gallery-track {
+            padding: 2px 28px;
+        }
+
+        .destination-gallery-item {
+            flex-basis: 100%;
+        }
+
+        .destination-gallery-item img {
+            height: 200px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Add smooth scroll animations
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+    document.addEventListener('DOMContentLoaded', function () {
+        const carousel = document.getElementById('destinationGalleryCarousel');
+        if (!carousel) return;
+
+        const track = document.getElementById('destinationGalleryTrack');
+        const prev = carousel.querySelector('.destination-gallery-nav.prev');
+        const next = carousel.querySelector('.destination-gallery-nav.next');
+        if (!track || !prev || !next) return;
+
+        const getScrollStep = () => {
+            const firstItem = track.querySelector('.destination-gallery-item');
+            if (!firstItem) return track.clientWidth;
+            const style = window.getComputedStyle(track);
+            const gap = parseInt(style.columnGap || style.gap || '12', 10);
+            return firstItem.getBoundingClientRect().width + gap;
         };
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.wow').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
+
+        prev.addEventListener('click', function () {
+            track.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+        });
+
+        next.addEventListener('click', function () {
+            track.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
         });
     });
 </script>

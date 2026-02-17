@@ -6,235 +6,262 @@
 {% endblock %}
 
 {% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%), url('{% static 'img/index/tutor1.jpg' %}'); background-size: cover; background-position: center;">
-            <div class="container-fluid">
-                <div class="page-heading">
-                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                        <li>
-                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
-                            Home
-                            </a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
-                        </li>
-                        <li style="color: white;">
-                            Our Tutors
-                        </li>
-                    </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">Expert Tutors</h1>
-                    <p class="wow fadeInUp" data-wow-delay=".7s" style="color: rgba(255,255,255,0.95); font-size: 18px; margin-top: 15px; max-width: 700px;">
-                        Connect with Olympiad-approved tutors for one-on-one coaching, mock exams, and strategy sessions.
-                    </p>
-                </div>
-            </div>
-            <div class="plane-shape float-bob-x">
-                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+    <div class="breadcrumb-wrapper section-padding bg-cover tutors-breadcrumb">
+        <div class="container-fluid">
+            <div class="page-heading">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li>Expert Tutors</li>
+                </ul>
+                <h1 class="wow fadeInUp" data-wow-delay=".5s">Find an Olympiad Tutor</h1>
             </div>
         </div>
+    </div>
 
-        <!-- Tutors Section Start -->
-        <section class="tutors-section fix section-padding" style="background: #f8f9fa; padding-top: 60px; padding-bottom: 80px;">
-            <div class="container">
-                <div class="row g-4">
-                    <!-- Filter Sidebar -->
-                    <div class="col-xl-3 col-lg-4">
-                        <div class="tutor-filters-sidebar sticky-style">
-                            <div class="filter-card">
-                                <h4 class="filter-title">
-                                    <i class="fas fa-filter me-2"></i>Filter Tutors
-                                </h4>
-                                
-                                <form method="get" action="{% url 'team' %}" id="filter-form">
-                                    <!-- Search -->
-                                    <div class="filter-group">
-                                        <label class="filter-label">Search</label>
-                                        <input type="text" name="search" class="form-control" placeholder="Name, title, specialization..." value="{{ search_query }}">
-                                    </div>
-                                    
-                                    <!-- Subject Filter -->
-                                    <div class="filter-group">
-                                        <label class="filter-label">Subject</label>
-                                        <select name="subject" class="form-select">
-                                            <option value="">All Subjects</option>
-                                            {% for subject in subjects %}
-                                            <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>
-                                                {{ subject.name }}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    
-                                    <!-- Rate Range -->
-                                    <div class="filter-group">
-                                        <label class="filter-label">Hourly Rate</label>
-                                        <div class="rate-range-inputs">
-                                            <input type="number" name="min_rate" class="form-control" placeholder="Min" value="{{ min_rate }}" step="0.01" min="0">
-                                            <span class="range-separator">-</span>
-                                            <input type="number" name="max_rate" class="form-control" placeholder="Max" value="{{ max_rate }}" step="0.01" min="0">
-                                        </div>
-                                        {% if rate_range.min_rate and rate_range.max_rate %}
-                                        <small class="text-muted">Range: {{ rate_range.min_rate|floatformat:0 }} - {{ rate_range.max_rate|floatformat:0 }} USD</small>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <!-- Sort By -->
-                                    <div class="filter-group">
-                                        <label class="filter-label">Sort By</label>
-                                        <select name="sort" class="form-select">
-                                            <option value="featured" {% if sort_by == 'featured' %}selected{% endif %}>Featured First</option>
-                                            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
-                                            <option value="rate_low" {% if sort_by == 'rate_low' %}selected{% endif %}>Price: Low to High</option>
-                                            <option value="rate_high" {% if sort_by == 'rate_high' %}selected{% endif %}>Price: High to Low</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <!-- Filter Buttons -->
-                                    <div class="filter-actions">
-                                        <button type="submit" class="btn-filter-apply">
-                                            <i class="fas fa-search me-2"></i>Apply Filters
-                                        </button>
-                                        <a href="{% url 'team' %}" class="btn-filter-reset">
-                                            <i class="fas fa-redo me-2"></i>Reset
-                                        </a>
-                                    </div>
-                                </form>
+    <!-- Tutor listing: search-first layout with horizontal cards -->
+    <section class="tutor-shell">
+        <div class="tutor-shell-inner">
+            <!-- Sticky header bar with search + filters -->
+            <header class="tutor-header-bar">
+                <div class="tutor-header-main">
+                    <div class="tutor-eyebrow">
+                        <span class="tutor-dot"></span>
+                        Vetted Olympiad preparation tutors
+                    </div>
+                    <div class="tutor-header-row">
+                        <h2>Browse tutors</h2>
+                        <span class="tutor-header-meta">
+                            {% if tutors %}
+                                {{ tutors.paginator.count }} tutor{{ tutors.paginator.count|pluralize }} available
+                            {% else %}
+                                No tutors currently available
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <form class="tutor-header-filters" method="get" action="{% url 'team' %}">
+                    <div class="tutor-search-wrap">
+                        <span class="tutor-search-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="11" cy="11" r="6" stroke="currentColor"></circle>
+                                <path d="M16 16l3 3" stroke="currentColor" stroke-linecap="round"></path>
+                            </svg>
+                        </span>
+                        <input
+                            id="tutorSearch"
+                            type="text"
+                            name="search"
+                            class="tutor-search-input"
+                            placeholder="Search by name, subject, or keyword"
+                            value="{{ search_query }}"
+                        />
+                    </div>
+                    <div class="tutor-header-controls">
+                        <div class="tutor-select-group">
+                            <label for="subjectFilter">Subject</label>
+                            <select id="subjectFilter" name="subject">
+                                <option value="">All subjects</option>
+                                {% for subject in subjects %}
+                                    <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>
+                                        {{ subject.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="tutor-rate-group">
+                            <label>Hourly rate (USD)</label>
+                            <div class="tutor-rate-inputs">
+                                <input type="number" name="min_rate" placeholder="Min" value="{{ min_rate }}" step="0.01" min="0">
+                                <span class="tutor-rate-separator">–</span>
+                                <input type="number" name="max_rate" placeholder="Max" value="{{ max_rate }}" step="0.01" min="0">
                             </div>
+                        </div>
+                        <div class="tutor-select-group">
+                            <label for="sortFilter">Sort</label>
+                            <select id="sortFilter" name="sort">
+                                <option value="featured" {% if sort_by == 'featured' %}selected{% endif %}>Featured first</option>
+                                <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest rated</option>
+                                <option value="rate_low" {% if sort_by == 'rate_low' %}selected{% endif %}>Price: low to high</option>
+                                <option value="rate_high" {% if sort_by == 'rate_high' %}selected{% endif %}>Price: high to low</option>
+                            </select>
+                        </div>
+                        <div class="tutor-header-actions">
+                            <button type="submit" class="tutor-btn-primary">
+                                <span>Apply</span>
+                            </button>
+                            {% if search_query or current_subject or min_rate or max_rate or sort_by %}
+                                <a href="{% url 'team' %}" class="tutor-btn-ghost-small">Reset</a>
+                            {% endif %}
                         </div>
                     </div>
-                    
-                    <!-- Tutors Listing -->
-                    <div class="col-xl-9 col-lg-8">
-                        <!-- Results Count -->
-                        {% if tutors %}
-                        <div class="results-header mb-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h3 class="mb-1" style="font-size: 24px; font-weight: 700; color: #212529;">
-                                        {% if search_query or current_subject or min_rate or max_rate %}
-                                            Found <strong>{{ tutors.paginator.count }}</strong> tutor{{ tutors.paginator.count|pluralize }}
-                                        {% else %}
-                                            {{ tutors.paginator.count }} Expert Tutor{{ tutors.paginator.count|pluralize }} Available
-                                        {% endif %}
-                                    </h3>
-                                    {% if search_query or current_subject or min_rate or max_rate %}
-                                    <p class="text-muted mb-0" style="font-size: 14px;">
-                                        {% if search_query %}<span class="badge bg-primary me-1">Search: "{{ search_query }}"</span>{% endif %}
-                                        {% if current_subject %}<span class="badge bg-info me-1">Subject: {{ current_subject|title }}</span>{% endif %}
-                                        {% if min_rate or max_rate %}<span class="badge bg-success me-1">Rate Filter Active</span>{% endif %}
-                                    </p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Tutors Grid -->
-                        <div class="row g-4">
-                            {% for tutor in tutors %}
-                            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="{% cycle '.2s' '.4s' '.6s' %}">
-                                <div class="tutor-card">
-                                    <div class="tutor-card-header">
-                                        {% if tutor.is_featured %}
-                                        <span class="featured-badge">
-                                            <i class="fas fa-star"></i> Featured
-                                        </span>
-                                        {% endif %}
-                                        <div class="tutor-image-wrapper">
+                    {% if rate_range.min_rate and rate_range.max_rate %}
+                        <p class="tutor-rate-note">
+                            Typical range: {{ rate_range.min_rate|floatformat:0 }} – {{ rate_range.max_rate|floatformat:0 }} USD / hour
+                        </p>
+                    {% endif %}
+                </form>
+            </header>
+
+            <!-- Active filter chips -->
+            <div class="tutor-active-filters">
+                {% if search_query %}
+                    <span class="tutor-chip">
+                        <strong>Search</strong>
+                        <span>"{{ search_query }}"</span>
+                    </span>
+                {% endif %}
+                {% if current_subject %}
+                    <span class="tutor-chip">
+                        <strong>Subject</strong>
+                        <span>{{ current_subject|title }}</span>
+                    </span>
+                {% endif %}
+                {% if min_rate or max_rate %}
+                    <span class="tutor-chip">
+                        <strong>Rate</strong>
+                        <span>
+                            {% if min_rate %}from {{ min_rate }}{% endif %}
+                            {% if max_rate %} to {{ max_rate }}{% endif %}
+                        </span>
+                    </span>
+                {% endif %}
+                {% if not search_query and not current_subject and not min_rate and not max_rate %}
+                    <span class="tutor-chip tutor-chip-muted">
+                        Browsing all tutors – refine using the toolbar above.
+                    </span>
+                {% endif %}
+            </div>
+
+            <!-- Results + cards -->
+            <div class="tutor-content">
+                {% if tutors %}
+                    <div class="tutor-results-summary">
+                        <span>
+                            Showing
+                            <strong>{{ tutors.start_index }} – {{ tutors.end_index }}</strong>
+                            of
+                            <strong>{{ tutors.paginator.count }}</strong>
+                            tutor{{ tutors.paginator.count|pluralize }}
+                        </span>
+                    </div>
+
+                    <div class="tutor-list">
+                        {% for tutor in tutors %}
+                            <article class="tutor-row-card">
+                                <div class="tutor-row-main">
+                                    <div class="tutor-row-avatar-col">
+                                        <div class="tutor-row-avatar">
                                             {% if tutor.user.profile_picture %}
-                                                <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="tutor-image">
+                                                <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name|default:tutor.user.username }}">
                                             {% else %}
-                                                <div class="tutor-image-placeholder">
-                                                    <i class="fas fa-user"></i>
+                                                <div class="tutor-row-avatar-fallback">
+                                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"></circle>
+                                                        <path d="M6 20a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                                                    </svg>
                                                 </div>
                                             {% endif %}
                                         </div>
-                                    </div>
-                                    <div class="tutor-card-body">
-                                        <div class="tutor-name-section">
-                                            <h4 class="tutor-name">
-                                                {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                                            </h4>
-                                            {% if tutor.specializations %}
-                                            <p class="tutor-specialization">
-                                                <i class="fas fa-graduation-cap me-1"></i>{{ tutor.specializations|truncatewords:8 }}
-                                            </p>
-                                            {% endif %}
+                                        <div class="tutor-row-tag">
+                                            <span class="tutor-years-pill">
+                                                {{ tutor.experience_years }}+ years of tutoring
+                                            </span>
                                         </div>
-                                        
-                                        <!-- Subjects -->
-                                        <div class="tutor-subjects">
+                                    </div>
+
+                                    <div class="tutor-row-body">
+                                        <div class="tutor-row-header">
+                                            <div class="tutor-row-name-block">
+                                                <h3>
+                                                    {% if tutor.title %}{{ tutor.title }} {% endif %}
+                                                    {{ tutor.user.get_full_name|default:tutor.user.username }}
+                                                </h3>
+                                                <p class="tutor-row-subtitle">
+                                                    Olympiad preparation tutor
+                                                </p>
+                                                {% if tutor.specializations %}
+                                                    <a href="{% url 'team-details' tutor.user.id %}" class="tutor-row-link">
+                                                        {{ tutor.specializations|truncatewords:12 }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            <div class="tutor-row-rating">
+                                                {% if tutor.average_rating > 0 %}
+                                                    <div class="tutor-stars" aria-label="Rating {{ tutor.average_rating|floatformat:1 }} out of 5">
+                                                        <span class="tutor-star-icon">★</span>
+                                                        <span class="tutor-star-icon">★</span>
+                                                        <span class="tutor-star-icon">★</span>
+                                                        <span class="tutor-star-icon">★</span>
+                                                        <span class="tutor-star-icon tutor-star-muted">★</span>
+                                                    </div>
+                                                    <p class="tutor-rating-text">
+                                                        {{ tutor.average_rating|floatformat:1 }}
+                                                        <span>({{ tutor.total_reviews }})</span>
+                                                    </p>
+                                                {% else %}
+                                                    <p class="tutor-rating-text tutor-rating-empty">Not rated yet</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <p class="tutor-row-description">
+                                            {% if tutor.qualifications %}
+                                                {{ tutor.qualifications|truncatewords:24 }}
+                                            {% elif tutor.specializations %}
+                                                {{ tutor.specializations|truncatewords:24 }}
+                                            {% else %}
+                                                Focused one-on-one Olympiad preparation with practice problems, strategy, and tailored feedback.
+                                            {% endif %}
+                                        </p>
+
+                                        <div class="tutor-row-tags">
                                             {% for tutor_subject in tutor.subjects.all|slice:":3" %}
-                                            <span class="subject-badge">{{ tutor_subject.subject.name }}</span>
+                                                <span>{{ tutor_subject.subject.name }}</span>
                                             {% endfor %}
                                             {% if tutor.subjects.count > 3 %}
-                                            <span class="subject-badge">+{{ tutor.subjects.count|add:"-3" }} more</span>
+                                                <span>+{{ tutor.subjects.count|add:"-3" }} more</span>
                                             {% endif %}
                                         </div>
-                                        
-                                        <!-- Rating -->
-                                        <div class="tutor-rating">
-                                            {% if tutor.average_rating > 0 %}
-                                            <div class="stars">
-                                                {% with rating_int=tutor.average_rating|floatformat:0 %}
-                                                    {% if rating_int >= 1 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                    {% if rating_int >= 2 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                    {% if rating_int >= 3 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                    {% if rating_int >= 4 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                    {% if rating_int >= 5 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                {% endwith %}
-                                            </div>
-                                            <span class="rating-text">
-                                                <strong>{{ tutor.average_rating|floatformat:1 }}</strong>
-                                                <span class="text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
-                                            </span>
-                                            {% else %}
-                                            <span class="text-muted">No ratings yet</span>
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <!-- Stats -->
-                                        <div class="tutor-stats">
-                                            <div class="stat-item">
-                                                <i class="fas fa-chalkboard-teacher"></i>
-                                                <span>{{ tutor.experience_years }}+ years</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <i class="fas fa-users"></i>
-                                                <span>{{ tutor.total_sessions }} sessions</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Price -->
-                                        <div class="tutor-price">
-                                            <span class="price-amount">{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</span>
-                                            <span class="price-unit">/hour</span>
-                                        </div>
-                                    </div>
-                                    <div class="tutor-card-footer">
-                                        <a href="{% url 'team-details' tutor.user.id %}" class="btn-view-profile">
-                                            <span>View Profile</span>
-                                            <i class="far fa-long-arrow-right"></i>
-                                        </a>
-                                        {% if tutor.calendly_link %}
-                                        <a href="{{ tutor.calendly_link }}" target="_blank" class="btn-book-session">
-                                            <i class="far fa-calendar-alt"></i> Book Session
-                                        </a>
-                                        {% endif %}
                                     </div>
                                 </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        
-                        <!-- Pagination -->
-                        {% if tutors.has_other_pages %}
-                        <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
+
+                                <div class="tutor-row-side">
+                                    <div class="tutor-row-price">
+                                        <span class="tutor-price-label">USD</span>
+                                        <span class="tutor-price-amount">
+                                            {{ tutor.hourly_rate|floatformat:0 }}
+                                        </span>
+                                        <span class="tutor-price-unit">/ hour</span>
+                                    </div>
+                                    <ul class="tutor-row-perks">
+                                        <li>
+                                            <span class="tutor-perk-icon">✓</span>
+                                            1:1 Olympiad preparation
+                                        </li>
+                                        <li>
+                                            <span class="tutor-perk-icon">✓</span>
+                                            {{ tutor.total_sessions }} completed session{{ tutor.total_sessions|pluralize }}
+                                        </li>
+                                        <li>
+                                            <span class="tutor-perk-icon">✓</span>
+                                            {% if tutor.is_accepting_students %}Accepting new students{% else %}Limited availability{% endif %}
+                                        </li>
+                                    </ul>
+                                    <a href="{% url 'team-details' tutor.user.id %}" class="tutor-btn-view">
+                                        View profile
+                                    </a>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+
+                    {% if tutors.has_other_pages %}
+                        <div class="page-nav-wrap mt-4 text-center wow fadeInUp" data-wow-delay=".2s">
                             <ul>
                                 {% if tutors.has_previous %}
                                     <li><a class="page-numbers" href="?page={{ tutors.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">Previous</a></li>
                                 {% endif %}
-                                
                                 {% for num in tutors.paginator.page_range %}
                                     {% if tutors.number == num %}
                                         <li><a class="page-numbers current" href="#">{{ num }}</a></li>
@@ -242,406 +269,688 @@
                                         <li><a class="page-numbers" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a></li>
                                     {% endif %}
                                 {% endfor %}
-                                
                                 {% if tutors.has_next %}
                                     <li><a class="page-numbers" href="?page={{ tutors.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if min_rate %}&min_rate={{ min_rate }}{% endif %}{% if max_rate %}&max_rate={{ max_rate }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">Next</a></li>
                                 {% endif %}
                             </ul>
                         </div>
-                        {% endif %}
-                        {% else %}
-                        <!-- No Results -->
-                        <div class="no-results text-center py-5">
-                            <div style="max-width: 500px; margin: 0 auto;">
-                                <i class="fas fa-user-graduate" style="font-size: 64px; color: #dee2e6; margin-bottom: 20px;"></i>
-                                <h3 style="margin-bottom: 15px; color: #2c3e50; font-weight: 600;">No tutors found</h3>
-                                {% if search_query or current_subject or min_rate or max_rate %}
-                                    <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.7;">
-                                        No tutors match your search criteria. Try adjusting your filters.
-                                    </p>
-                                    <a href="{% url 'team' %}" class="theme-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 30px;">
-                                        <span>View All Tutors</span> <i class="far fa-arrow-right"></i>
-                                    </a>
-                                {% else %}
-                                    <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.7;">
-                                        There are currently no tutors available. Please check back later.
-                                    </p>
-                                    <a href="{% url 'index' %}" class="theme-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 30px;">
-                                        <span>Go to Home</span> <i class="far fa-arrow-right"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
+                    {% endif %}
+                {% else %}
+                    <article class="tutor-empty-card">
+                        <div class="tutor-empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-linecap="round"></path>
+                                <circle cx="12" cy="7" r="4" stroke="currentColor"></circle>
+                            </svg>
                         </div>
-                        {% endif %}
-                    </div>
-                </div>
+                        <h3>No tutors found</h3>
+                        <p>
+                            {% if search_query or current_subject or min_rate or max_rate %}
+                                No tutors match your current filters. Try widening your search or resetting filters.
+                            {% else %}
+                                There are no tutors available right now. Check back soon – new profiles are added regularly.
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'team' %}" class="tutor-btn-primary">
+                            View all tutors
+                        </a>
+                    </article>
+                {% endif %}
             </div>
-        </section>
-
+        </div>
+    </section>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .tutors-section {
-        background: #f8f9fa;
+    :root {
+        --tutor-bg: #f5f5f7;
+        --tutor-surface: #ffffff;
+        --tutor-border: rgba(209, 213, 219, 0.9);
+        --tutor-text: #111827;
+        --tutor-muted: #4b5563;
     }
-    
-    .sticky-style {
-        position: sticky;
-        top: 100px;
+
+    .tutors-breadcrumb {
+        background-image: url("{% static 'img/index/tutor1.jpg' %}");
+        background-position: center;
+        background-size: cover;
     }
-    
-    /* Filter Sidebar */
-    .filter-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        margin-bottom: 30px;
+
+    .tutor-shell {
+        background: var(--tutor-bg);
+        padding: 30px 0 80px;
     }
-    
-    .filter-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+
+    .tutor-shell-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
-    
-    .filter-title i {
-        color: var(--theme-color, #667eea);
+
+    .tutor-header-bar {
+        position: static;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 16px 38px rgba(15, 23, 42, 0.06);
+        backdrop-filter: blur(14px);
     }
-    
-    .filter-group {
-        margin-bottom: 20px;
+
+    .tutor-header-main {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
-    
-    .filter-label {
-        display: block;
+
+    .tutor-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        color: #4f46e5;
+        font-size: 11px;
         font-weight: 600;
-        color: #495057;
-        margin-bottom: 8px;
-        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
-    
-    .filter-group .form-control,
-    .filter-group .form-select {
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 10px 15px;
-        font-size: 14px;
-        transition: all 0.3s ease;
+
+    .tutor-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #a5b4fc, #4f46e5);
     }
-    
-    .filter-group .form-control:focus,
-    .filter-group .form-select:focus {
-        border-color: var(--theme-color, #667eea);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+
+    .tutor-header-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .tutor-header-row h2 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.2;
+        color: var(--tutor-text);
+        letter-spacing: -0.02em;
+    }
+
+    .tutor-header-meta {
+        font-size: 13px;
+        color: var(--tutor-muted);
+    }
+
+    .tutor-header-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tutor-search-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .tutor-search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        color: #9ca3af;
+    }
+
+    .tutor-search-icon svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 1.7;
+    }
+
+    .tutor-search-input {
+        width: 100%;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 9px 12px 9px 34px;
+        font-size: 13px;
+        color: var(--tutor-text);
+        background: rgba(249, 250, 251, 0.96);
         outline: none;
+        transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
-    
-    .rate-range-inputs {
+
+    .tutor-search-input:focus {
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.2);
+        background: #ffffff;
+    }
+
+    .tutor-header-controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 0.9fr) auto;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .tutor-select-group,
+    .tutor-rate-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--tutor-muted);
+    }
+
+    .tutor-select-group label,
+    .tutor-rate-group label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+    }
+
+    .tutor-select-group select {
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 7px 12px;
+        font-size: 13px;
+        color: var(--tutor-text);
+        background: #ffffff;
+    }
+
+    .tutor-rate-inputs {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: 6px;
+    }
+
+    .tutor-rate-inputs input {
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 7px 10px;
+        font-size: 13px;
+        background: #ffffff;
+    }
+
+    .tutor-rate-separator {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+
+    .tutor-header-actions {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 6px;
+        justify-content: flex-end;
     }
-    
-    .rate-range-inputs .form-control {
-        flex: 1;
-    }
-    
-    .range-separator {
-        color: #6c757d;
-        font-weight: 600;
-    }
-    
-    .filter-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 25px;
-    }
-    
-    .btn-filter-apply {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+
+    .tutor-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border-radius: 999px;
         border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        color: #f9fafb;
+        font-size: 13px;
         font-weight: 600;
-        font-size: 14px;
+        text-decoration: none;
         cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
+        box-shadow: 0 14px 36px rgba(79, 70, 229, 0.35);
+        transition: transform 140ms ease, box-shadow 140ms ease;
     }
-    
-    .btn-filter-apply:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        color: white;
+
+    .tutor-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 48px rgba(79, 70, 229, 0.45);
     }
-    
-    .btn-filter-reset {
-        background: #f8f9fa;
-        color: #6c757d;
-        border: 1px solid #e0e0e0;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 500;
-        font-size: 14px;
-        text-align: center;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        width: 100%;
-        display: inline-block;
-    }
-    
-    .btn-filter-reset:hover {
-        background: #e9ecef;
-        color: #495057;
+
+    .tutor-btn-ghost-small {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        background: #ffffff;
+        color: #4b5563;
+        font-size: 12px;
         text-decoration: none;
     }
-    
-    /* Tutor Cards */
-    .tutor-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        height: 100%;
+
+    .tutor-btn-ghost-small:hover {
+        border-color: var(--theme-color);
+        color: var(--theme-color);
+    }
+
+    .tutor-rate-note {
+        margin: 0;
+        font-size: 11px;
+        color: #6b7280;
+    }
+
+    .tutor-active-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    .tutor-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        background: #ffffff;
+        color: #4b5563;
+    }
+
+    .tutor-chip strong {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .tutor-chip-muted {
+        background: #f3f4f6;
+        border-style: dashed;
+        border-color: rgba(209, 213, 219, 0.9);
+    }
+
+    .tutor-content {
         display: flex;
         flex-direction: column;
+        gap: 12px;
     }
-    
-    .tutor-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+
+    .tutor-results-summary {
+        font-size: 12px;
+        color: #6b7280;
     }
-    
-    .tutor-card-header {
-        position: relative;
-        padding: 20px 20px 0;
+
+    .tutor-results-summary strong {
+        color: #111827;
     }
-    
-    .featured-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-        z-index: 2;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+
+    .tutor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
-    
-    .tutor-image-wrapper {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 15px;
-        border-radius: 50%;
+
+    .tutor-row-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+        gap: 18px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+        transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+
+    .tutor-row-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+        border-color: rgba(79, 70, 229, 0.4);
+    }
+
+    .tutor-row-main {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .tutor-row-avatar-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        min-width: 110px;
+    }
+
+    .tutor-row-avatar {
+        width: 88px;
+        height: 88px;
+        border-radius: 999px;
+        border: 3px solid #e5e7eb;
         overflow: hidden;
-        border: 4px solid #f0f0f0;
-        position: relative;
+        background: #eef2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    
-    .tutor-image {
+
+    .tutor-row-avatar img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
     }
-    
-    .tutor-image-placeholder {
+
+    .tutor-row-avatar-fallback {
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-size: 48px;
+        color: #4f46e5;
     }
-    
-    .tutor-card-body {
-        padding: 0 20px 20px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+
+    .tutor-row-avatar-fallback svg {
+        width: 40px;
+        height: 40px;
     }
-    
-    .tutor-name-section {
+
+    .tutor-row-tag {
+        font-size: 11px;
+        color: #4b5563;
         text-align: center;
-        margin-bottom: 15px;
     }
-    
-    .tutor-name {
-        font-size: 20px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 8px;
-        line-height: 1.3;
-    }
-    
-    .tutor-specialization {
-        font-size: 13px;
-        color: #6c757d;
-        margin: 0;
-    }
-    
-    .tutor-subjects {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 15px;
-        justify-content: center;
-    }
-    
-    .subject-badge {
-        background: #f0f4ff;
-        color: #667eea;
+
+    .tutor-years-pill {
+        display: inline-flex;
         padding: 4px 10px;
-        border-radius: 12px;
+        border-radius: 999px;
+        background: #f3f4ff;
+        color: #4338ca;
+        border: 1px solid rgba(129, 140, 248, 0.5);
         font-size: 11px;
         font-weight: 600;
     }
-    
-    .tutor-rating {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    
-    .stars {
+
+    .tutor-row-body {
         display: flex;
-        justify-content: center;
-        gap: 3px;
-        margin-bottom: 5px;
+        flex-direction: column;
+        gap: 8px;
     }
-    
-    .stars i {
-        color: #ffc107;
-        font-size: 14px;
+
+    .tutor-row-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: flex-start;
     }
-    
-    .rating-text {
+
+    .tutor-row-name-block h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #111827;
+    }
+
+    .tutor-row-subtitle {
+        margin: 3px 0 2px;
         font-size: 13px;
-        color: #495057;
+        color: #6b7280;
     }
-    
-    .tutor-stats {
+
+    .tutor-row-link {
+        font-size: 13px;
+        color: var(--theme-color);
+        text-decoration: none;
+    }
+
+    .tutor-row-link:hover {
+        text-decoration: underline;
+    }
+
+    .tutor-row-rating {
+        text-align: right;
+    }
+
+    .tutor-stars {
+        display: inline-flex;
+        gap: 2px;
+        font-size: 14px;
+        color: #facc15;
+    }
+
+    .tutor-star-muted {
+        color: #e5e7eb;
+    }
+
+    .tutor-rating-text {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .tutor-rating-text span {
+        color: #9ca3af;
+    }
+
+    .tutor-rating-empty {
+        color: #9ca3af;
+    }
+
+    .tutor-row-description {
+        margin: 0;
+        font-size: 13px;
+        color: #4b5563;
+        line-height: 1.6;
+    }
+
+    .tutor-row-tags {
         display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 15px;
-        padding: 15px 0;
-        border-top: 1px solid #f0f0f0;
-        border-bottom: 1px solid #f0f0f0;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
     }
-    
-    .stat-item {
+
+    .tutor-row-tags span {
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 4px 9px;
+        font-size: 11px;
+        color: #4b5563;
+        background: #f9fafb;
+    }
+
+    .tutor-row-side {
+        border-left: 1px solid rgba(229, 231, 235, 0.9);
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .tutor-row-price {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tutor-price-label {
+        font-size: 11px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .tutor-price-amount {
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.1;
+    }
+
+    .tutor-price-unit {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .tutor-row-perks {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        color: #4b5563;
+    }
+
+    .tutor-row-perks li {
         display: flex;
         align-items: center;
         gap: 6px;
+    }
+
+    .tutor-perk-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #16a34a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+    }
+
+    .tutor-btn-view {
+        align-self: stretch;
+        margin-top: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 8px 14px;
         font-size: 13px;
-        color: #6c757d;
+        font-weight: 600;
+        color: var(--theme-color);
+        text-decoration: none;
+        background: #ffffff;
+        transition: background 130ms ease, border-color 130ms ease, transform 130ms ease, box-shadow 130ms ease;
     }
-    
-    .stat-item i {
-        color: var(--theme-color, #667eea);
+
+    .tutor-btn-view:hover {
+        background: var(--theme-color);
+        color: #f9fafb;
+        border-color: var(--theme-color);
+        box-shadow: 0 14px 34px rgba(59, 130, 246, 0.35);
+        transform: translateY(-1px);
     }
-    
-    .tutor-price {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    
-    .price-amount {
-        font-size: 28px;
-        font-weight: 700;
-        color: #667eea;
-    }
-    
-    .price-unit {
-        font-size: 14px;
-        color: #6c757d;
-        margin-left: 5px;
-    }
-    
-    .tutor-card-footer {
-        padding: 0 20px 20px;
+
+    .tutor-empty-card {
+        margin-top: 8px;
+        padding: 32px 26px;
+        border-radius: 18px;
+        background: radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.06), transparent 55%),
+                    radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.04), transparent 55%),
+                    #ffffff;
+        border: 1px dashed rgba(209, 213, 219, 0.9);
+        text-align: left;
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
-    
-    .btn-view-profile {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        text-align: center;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        display: flex;
+
+    .tutor-empty-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: #eef2ff;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        color: #4f46e5;
+        margin-bottom: 4px;
     }
-    
-    .btn-view-profile:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        color: white;
-        text-decoration: none;
+
+    .tutor-empty-icon svg {
+        width: 22px;
+        height: 22px;
     }
-    
-    .btn-book-session {
-        background: #f8f9fa;
-        color: #667eea;
-        padding: 10px 20px;
-        border-radius: 8px;
-        text-align: center;
-        text-decoration: none;
-        font-weight: 500;
+
+    .tutor-empty-card h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #111827;
+    }
+
+    .tutor-empty-card p {
+        margin: 0 0 8px;
         font-size: 13px;
-        transition: all 0.3s ease;
-        border: 1px solid #e0e0e0;
+        color: #4b5563;
     }
-    
-    .btn-book-session:hover {
-        background: #e9ecef;
-        color: #667eea;
-        text-decoration: none;
-    }
-    
-    .results-header {
-        background: white;
-        padding: 20px 25px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .no-results {
-        background: white;
-        padding: 60px 20px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
-    
-    @media (max-width: 991px) {
-        .sticky-style {
-            position: relative;
-            top: 0;
-            margin-bottom: 30px;
+
+    @media (max-width: 1023px) {
+        .tutor-row-card {
+            grid-template-columns: minmax(0, 1fr);
         }
-        
-        .tutor-card {
-            margin-bottom: 20px;
+
+        .tutor-row-side {
+            border-left: none;
+            border-top: 1px solid rgba(229, 231, 235, 0.9);
+            padding-left: 0;
+            padding-top: 12px;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .tutor-row-price {
+            flex: 0 0 auto;
+        }
+
+        .tutor-row-perks {
+            flex: 1;
+        }
+
+        .tutor-btn-view {
+            flex: 0 0 130px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .tutor-header-bar {
+            position: static;
+        }
+
+        .tutor-header-controls {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .tutor-row-main {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .tutor-row-avatar-col {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .tutor-row-card {
+            padding: 14px 14px;
+        }
+
+        .tutor-row-side {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tutor-btn-view {
+            width: 100%;
         }
     }
 </style>

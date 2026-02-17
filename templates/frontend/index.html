@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div class="container">
-                <div class="booking-list-area-1">
+                <form method="get" action="{% url 'olympiads' %}" class="booking-list-area-1">
                     <div class="booking-list">
                         <div class="icon">
                             <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
@@ -128,12 +128,10 @@
                             <div class="form-clt">
                                 <div class="form">
                                     <select id="subject-select" name="subject" class="single-select w-100">
-                                        <option>Select subject</option>
-                                        <option>Mathematics</option>
-                                        <option>Physics</option>
-                                        <option>Chemistry</option>
-                                        <option>Biology</option>
-                                        <option>Informatics</option>
+                                        <option value="">Select subject</option>
+                                        {% for subject in filter_subjects %}
+                                        <option value="{{ subject.slug }}">{{ subject.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -148,12 +146,10 @@
                             <div class="form-clt">
                                 <div class="form">
                                     <select id="region-select" name="region" class="single-select w-100">
-                                        <option>Select region</option>
-                                        <option>Global</option>
-                                        <option>Africa</option>
-                                        <option>Europe</option>
-                                        <option>Asia</option>
-                                        <option>Americas</option>
+                                        <option value="">Select region</option>
+                                        {% for value, label in region_choices %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -182,12 +178,10 @@
                             <div class="form-clt">
                                 <div class="form">
                                     <select id="age-group-select" name="age_group" class="single-select w-100">
-                                        <option>Select age group</option>
-                                        <option>4-9</option>
-                                        <option>10-13</option>
-                                        <option>14-16</option>
-                                        <option>17-20</option>
-                                        <option>21-30</option>
+                                        <option value="">Select age group</option>
+                                        {% for option in age_group_options %}
+                                        <option value="{{ option }}">{{ option }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -196,7 +190,7 @@
                     <button type="submit" class="theme-btn">
                         <span>Search  <i class="far fa-search" aria-hidden="true"></i></span>
                     </button>
-                </div>
+                </form>
             </div>
         </section>
 
@@ -593,7 +587,7 @@
                                     Past Papers
                                 </h3>
                                 <p>Download curated past papers with answer keys for IMO, IPhO, IChO, and beyond. Each pack includes examiner insights and suggested solution paths.</p>
-                                <a href="resources.html" class="theme-btn">
+                                <a href="past-papers" class="theme-btn">
                                     <span>Browse Papers</span> <i class="far fa-long-arrow-right"></i>
                                 </a>
                             </div>
