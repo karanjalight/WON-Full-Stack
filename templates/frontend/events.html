@@ -1,0 +1,137 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            Events
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Campus Events & Highlights</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!-- Events Listing Section Start -->
+        <section class="tour-descover-section section-padding fix bg-cover" style="background-image: url({% static 'img/tour/bg2.jpg' %});">
+            <div class="container">
+                <div class="tour-discover-wrapper">
+                    <div class="row g-4">
+                        <div class="col-xl-5">
+                            <div class="tour-content lg-center">
+                                <div class="section-title">
+                                    <span class="wow fadeInUp">Discover Campus Events</span>
+                                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Upcoming events <br> and recent highlights</h2>
+                                    <p class="mt-3 mt-mb-0 wow fadeInUp" data-wow-delay=".5s">
+                                        Browse learning sessions, community gatherings, and special campus highlights.
+                                        Join upcoming events or explore recaps from recent moments.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-7">
+                            <div class="tour-places-wrapper-4">
+                                <div class="content">
+                                    <span>Upcoming & Past</span>
+                                    <h3>Events that bring the WON community together.</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-4">
+                        <div class="col-lg-8">
+                            <div class="blog-posts">
+                                {% if upcoming_events %}
+                                    {% for event in upcoming_events %}
+                                    <div class="single-blog-post">
+                                        <div class="post-featured-thumb bg-cover" style="background-image: url('{% if event.image %}{{ event.image.url }}{% else %}{% static 'img/news/post-1.jpg' %}{% endif %}');">
+                                        </div>
+                                        <div class="post-content">
+                                            <div class="post-meta">
+                                                <span><i class="fal fa-calendar-alt"></i>{{ event.start_datetime|date:"M d, Y" }}</span>
+                                                <span><i class="fal fa-clock"></i>{{ event.start_datetime|time:"g:i A" }} - {{ event.end_datetime|time:"g:i A" }}</span>
+                                                <span><i class="{{ event.category_icon }}"></i>{{ event.get_category_display }}</span>
+                                            </div>
+                                            <h2>
+                                                <a href="{% url 'event-detail' event.slug %}">
+                                                    {{ event.title }}
+                                                </a>
+                                            </h2>
+                                            {% if event.summary %}
+                                            <p>{{ event.summary }}</p>
+                                            {% endif %}
+                                            <a href="{% url 'event-detail' event.slug %}" class="theme-btn mt-4 line-height">
+                                                <span>View Details</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No upcoming events at the moment. Please check again soon.</p>
+                                {% endif %}
+
+                                {% if past_events %}
+                                <div class="mt-5">
+                                    <h3 class="mb-4">Recent Highlights</h3>
+                                    {% for event in past_events %}
+                                    <div class="single-blog-post">
+                                        <div class="post-featured-thumb bg-cover" style="background-image: url('{% if event.image %}{{ event.image.url }}{% else %}{% static 'img/news/post-2.jpg' %}{% endif %}');">
+                                        </div>
+                                        <div class="post-content">
+                                            <div class="post-meta">
+                                                <span><i class="fal fa-calendar-alt"></i>{{ event.start_datetime|date:"M d, Y" }}</span>
+                                                <span><i class="{{ event.category_icon }}"></i>{{ event.get_category_display }}</span>
+                                            </div>
+                                            <h2>
+                                                <a href="{% url 'event-detail' event.slug %}">
+                                                    {{ event.title }}
+                                                </a>
+                                            </h2>
+                                            {% if event.summary %}
+                                            <p>{{ event.summary }}</p>
+                                            {% endif %}
+                                            <a href="{% url 'event-detail' event.slug %}" class="theme-btn mt-4 line-height">
+                                                <span>View Recap</span> <i class="far fa-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <aside class="main-sidebar">
+                                <div class="single-sidebar-widget">
+                                    <h4>About WON Events</h4>
+                                    <p>
+                                        Events showcase competitions, workshops, parent sessions and community stories
+                                        happening across the World Olympiad Network.
+                                    </p>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+

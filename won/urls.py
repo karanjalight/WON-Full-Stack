@@ -51,6 +51,10 @@ urlpatterns = [
     path('news/', views.news, name='news'),
     path('news/<int:pk>/', views.news_details, name='news-details'),
     
+    # Events
+    path('events/', views.events_list, name='events'),
+    path('events/<slug:slug>/', views.event_detail, name='event-detail'),
+    
     # Tutors
     path('tutors/', views.team, name='team'),
     path('tutors/<uuid:pk>/', views.team_details, name='team-details'),

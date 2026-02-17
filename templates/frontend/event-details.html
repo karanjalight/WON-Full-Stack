@@ -1,0 +1,139 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover" style="background-image: url('{% static 'img/breadcrumb-bg.jpg' %}');">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            <a href="{% url 'events' %}">
+                                Events
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            {{ event.title }}
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Event Details</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!--  Event Details Section Start -->
+        <section class="blog-wrapper news-wrapper section-padding">
+            <div class="container">
+                <div class="news-area">
+                    <div class="row">
+                        <div class="col-12 col-xl-8 col-lg-7">
+                            <div class="blog-post-details border-wrap mt-0">
+                                <div class="single-blog-post post-details mt-0">
+                                    <div class="post-content pt-0">
+                                        <h2>{{ event.title }}</h2>
+                                        <div class="post-meta mt-3">
+                                            <span><i class="fal fa-calendar-alt"></i>{{ event.start_datetime|date:"M d, Y" }}</span>
+                                            <span><i class="fal fa-clock"></i>{{ event.start_datetime|time:"g:i A" }} - {{ event.end_datetime|time:"g:i A" }}</span>
+                                            <span><i class="far fa-map-marker-alt"></i>{{ event.location }}</span>
+                                            <span><i class="{{ event.category_icon }}"></i>{{ event.get_category_display }}</span>
+                                        </div>
+                                        {% if event.image %}
+                                        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="single-post-image mt-4 mb-4">
+                                        {% endif %}
+                                        {% if event.summary %}
+                                        <p class="lead">
+                                            {{ event.summary }}
+                                        </p>
+                                        {% endif %}
+                                        {% if event.description %}
+                                        <p>
+                                            {{ event.description|linebreaks }}
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {% if related_events %}
+                                <div class="mt-5">
+                                    <h3>More events you may like</h3>
+                                    <div class="row g-4 mt-2">
+                                        {% for item in related_events %}
+                                        <div class="col-md-4">
+                                            <div class="news-box-items-4">
+                                                <div class="news-img">
+                                                    <img src="{% if item.image %}{{ item.image.url }}{% else %}https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600&h=400&fit=crop{% endif %}" alt="{{ item.title }}">
+                                                </div>
+                                                <div class="news-content">
+                                                    <ul>
+                                                        <li>{{ item.start_datetime|date:"M d, Y" }}</li>
+                                                    </ul>
+                                                    <h3>
+                                                        <a href="{% url 'event-detail' item.slug %}">
+                                                            {{ item.title }}
+                                                        </a>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-4 col-lg-5">
+                            <aside class="main-sidebar">
+                                <div class="single-sidebar-widget">
+                                    <h4>Event Info</h4>
+                                    <ul class="recent-posts">
+                                        <li>
+                                            <span>Date</span>
+                                            <p>{{ event.start_datetime|date:"l, M d, Y" }}</p>
+                                        </li>
+                                        <li>
+                                            <span>Time</span>
+                                            <p>{{ event.start_datetime|time:"g:i A" }} - {{ event.end_datetime|time:"g:i A" }}</p>
+                                        </li>
+                                        <li>
+                                            <span>Location</span>
+                                            <p>{{ event.location }}</p>
+                                        </li>
+                                        <li>
+                                            <span>Category</span>
+                                            <p>{{ event.get_category_display }}</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="single-sidebar-widget">
+                                    <h4>Share Event</h4>
+                                    <div class="social-share">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-instagram"></i></a>
+                                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+

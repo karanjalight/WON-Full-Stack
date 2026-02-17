@@ -17,10 +17,11 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from io import BytesIO
 from backend.models import (
-    Competition, Subject, Destination, TutorProfile, User, 
+    Competition, Subject, Destination, TutorProfile, User,
     StudentProfile, OlympiadApplication, TravelQuote, ApplicationDocument,
     TravelQuoteItem, SubscriptionPlan, TutorSession, ParentProfile, SchoolProfile,
-    ContactMessage, UserSubscription, PaymentTransaction, Notification
+    ContactMessage, UserSubscription, PaymentTransaction, Notification, Event,
+    BlogPost,
 )
 from core.forms import (
     ApplicationStep1Form, TravelQuoteForm, StudentRegistrationForm,
@@ -177,7 +178,38 @@ def account_view(request):
 
 def index(request):
     """Landing page view"""
-    return render(request, 'frontend/index.html')
+    today = timezone.now().date()
+    
+    # Get up to 6 newest active Olympiad competitions
+    featured_competitions = Competition.objects.filter(
+        is_active=True,
+        status__in=['upcoming', 'ongoing'],
+        application_deadline__gte=today,
+    ).order_by('-created_at')[:6]
+
+    # Get subjects to highlight on the landing page
+    # We only switch to dynamic display when there are at least 4 subjects
+    featured_subjects = Subject.objects.filter(
+        is_active=True
+    ).order_by('-total_olympiads', 'name')[:8]
+
+    # Events for the homepage carousel (upcoming and recent highlights)
+    events = Event.objects.filter(
+        is_published=True,
+    ).order_by('-is_featured', '-start_datetime')[:8]
+
+    # Latest published blog posts/news for the homepage
+    latest_posts = BlogPost.objects.filter(
+        status='published',
+    ).order_by('-published_at', '-created_at')[:3]
+
+    context = {
+        'featured_competitions': featured_competitions,
+        'featured_subjects': featured_subjects,
+        'events': events,
+        'latest_posts': latest_posts,
+    }
+    return render(request, 'frontend/index.html', context)
 
 def about(request):
     """About page view"""
@@ -208,6 +240,41 @@ def contact(request):
         return redirect('contact')
 
     return render(request, 'frontend/contact.html')
+
+
+def events_list(request):
+    """Public events listing page (upcoming and past)."""
+    today = timezone.now()
+
+    upcoming_events = Event.objects.filter(
+        is_published=True,
+        start_datetime__gte=today,
+    ).order_by('start_datetime')
+
+    past_events = Event.objects.filter(
+        is_published=True,
+        start_datetime__lt=today,
+    ).order_by('-start_datetime')[:20]
+
+    context = {
+        'upcoming_events': upcoming_events,
+        'past_events': past_events,
+    }
+    return render(request, 'frontend/events.html', context)
+
+
+def event_detail(request, slug):
+    """Single event detail page."""
+    event = get_object_or_404(Event, slug=slug, is_published=True)
+    related_events = Event.objects.filter(
+        is_published=True,
+    ).exclude(id=event.id).order_by('-start_datetime')[:3]
+
+    context = {
+        'event': event,
+        'related_events': related_events,
+    }
+    return render(request, 'frontend/event-details.html', context)
 
 def destination(request):
     """Destinations listing page view with filtering and pagination"""

@@ -1286,6 +1286,79 @@ class Resource(models.Model):
         return f"{self.title} ({self.get_resource_type_display()})"
 
 
+class Event(models.Model):
+    """Events for the WON community (upcoming and past)."""
+
+    STATUS_CHOICES = (
+        ('upcoming', 'Upcoming'),
+        ('past', 'Past Event'),
+    )
+
+    CATEGORY_CHOICES = (
+        ('featured', 'Featured'),
+        ('community', 'Community'),
+        ('workshop', 'Workshop'),
+        ('recap', 'Recap'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=300, unique=True, blank=True)
+
+    # Content
+    summary = models.TextField(blank=True, null=True, help_text="Short teaser for cards and lists.")
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='events/', blank=True, null=True)
+
+    # Meta
+    location = models.CharField(max_length=255)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='featured')
+
+    # Schedule
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
+
+    # Status & publishing
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='upcoming')
+    is_featured = models.BooleanField(default=True, help_text="Show in homepage events carousel.")
+    is_published = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'events'
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+        ordering = ['-is_featured', '-start_datetime']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+
+        # Auto-mark events as past once their start date is before today,
+        # but only if they haven't been manually set to another state.
+        if self.start_datetime and self.status == 'upcoming':
+            if self.start_datetime.date() < timezone.now().date():
+                self.status = 'past'
+
+        super().save(*args, **kwargs)
+
+    @property
+    def category_icon(self):
+        """Return a Font Awesome icon class for the event category."""
+        mapping = {
+            'featured': 'fas fa-bullhorn',
+            'community': 'fas fa-users',
+            'workshop': 'fas fa-laptop-code',
+            'recap': 'fas fa-history',
+        }
+        return mapping.get(self.category, 'fas fa-calendar-alt')
+
+    def __str__(self):
+        return self.title
+
+
 class BlogPost(models.Model):
     """Blog posts and news articles"""
     STATUS_CHOICES = (

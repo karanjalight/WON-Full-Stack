@@ -40,6 +40,22 @@
         <!--<< Custom Styles >>-->
         {% block extra_css %}
         <style>
+            /* Accessible skip link for keyboard users */
+            .skip-link {
+                position: absolute;
+                top: -40px;
+                left: 0;
+                background-color: #111;
+                color: #fff;
+                padding: 8px 16px;
+                z-index: 10000;
+                border-radius: 0 0 4px 0;
+                text-decoration: none;
+            }
+            .skip-link:focus {
+                top: 0;
+            }
+
             /* Make Olympiads dropdown wider to show text in one line */
             .main-menu ul li .submenu {
                 min-width: 400px !important;
@@ -164,11 +180,50 @@
                 margin: 6px 16px;
                 border-color: #eee;
             }
+
+            /* Ensure good contrast for body text on light backgrounds */
+            body {
+                color: #222222;
+            }
+
+            /* Improve contrast for muted footer text */
+            .footer-content p,
+            .footer-bottom-wrapper p {
+                color: #444444;
+            }
+
+            /* Improve contrast for small helper text */
+            .header-search-bar p,
+            .app-text,
+            .contact-items span {
+                color: #3d3d3d;
+            }
+
+            /* Booking bar labels and helper text (override light grays) */
+            .booking-list-area-1 .content h5,
+            .booking-list-area-1 .content .booking-label {
+                color: #222222;
+            }
+
+            /* Destination subject meta text */
+            .destination-feature-box .content span {
+                color: #444444;
+            }
+
+            /* Generic small/meta gray text throughout the template */
+            .news-content ul li,
+            .news-content ul li b,
+            .search-bar .contact-search-form-box p,
+            .header-1 .header-right .contact-items .content span {
+                color: #3b3b3b;
+            }
         </style>
         {% endblock %}
     </head>
 
     <body>
+
+        <a href="#main-content" class="skip-link">Skip to main content</a>
 
         <!-- Preloader Start -->
         <div id="preloader" class="preloader">
@@ -201,8 +256,8 @@
         </div>
 
         <!-- Back To Top start -->
-        <button id="back-top" class="back-to-top">
-            <i class="fas fa-long-arrow-up"></i>
+        <button id="back-top" class="back-to-top" type="button" aria-label="Back to top">
+            <i class="fas fa-long-arrow-up" aria-hidden="true"></i>
         </button>
 
         <!-- Offcanvas Area Start -->
@@ -213,12 +268,12 @@
                         <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                         <div class="offcanvas__logo">
                             <a href="{% url 'index' %}" class="header-logo">
-                                <img style="height: 60px;" src="{% static 'img/brand/logowon.png' %}" alt="WON logo">
+                                <img style="height: 60px;" src="{% static 'img/brand/logowon.png' %}" alt="World Olympiad Network logo">
                             </a>
                         </div>
                             <div class="offcanvas__close">
-                                <button>
-                                <i class="fas fa-times"></i>
+                            <button type="button" aria-label="Close navigation panel">
+                                <i class="fas fa-times" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -236,16 +291,21 @@
         {% include 'partials/navbar.html' %}
         
         <!-- Search Section Start -->
-        <div class="header-search-bar d-flex align-items-center">
-            <button class="search-close">×</button>
+        <div class="header-search-bar d-flex align-items-center" role="search">
+            <button class="search-close" type="button" aria-label="Close search">
+                <span aria-hidden="true">×</span>
+            </button>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
                         <div class="search-bar">
                             <div class="contact-form-box contact-search-form-box">
-                                <form action="#">
-                                    <input type="email" placeholder="Search here...">
-                                    <button type="submit"><i class="far fa-search"></i></button>
+                                <form action="#" role="search">
+                                    <label for="site-search" class="visually-hidden">Search WON</label>
+                                    <input id="site-search" type="search" name="q" placeholder="Search here...">
+                                    <button type="submit" aria-label="Submit search">
+                                        <i class="far fa-search" aria-hidden="true"></i>
+                                    </button>
                                 </form>
                                 <p>Type above and press Enter to search. Press Close to cancel.</p>
                             </div>
@@ -256,20 +316,24 @@
         </div>
 
         <!-- Main Content -->
-        {% block content %}
-        {% endblock %}
+        <main id="main-content" class="site-main" role="main">
+            {% block content %}
+            {% endblock %}
+        </main>
 
         <!-- Footer Section Start -->
         <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
             <div class="container">
                 <div class="footer-newsletter-items">
                     <h2>Stay Updated on Competition Deadlines & Opportunities</h2>
-                    <div class="footer-input">
-                        <input type="email" id="email2" placeholder="Enter your email">
+                    <form class="footer-input" action="#" method="post" novalidate>
+                        {% csrf_token %}
+                        <label for="footer-email" class="visually-hidden">Email address</label>
+                        <input type="email" id="footer-email" name="email" placeholder="Enter your email">
                         <button class="newsletter-btn" type="submit">
-                          Subscribe <i class="far fa-search"></i>
+                          Subscribe <i class="far fa-search" aria-hidden="true"></i>
                         </button>
-                    </div>
+                    </form>
                 </div>
                 <div class="footer-wrapper">
                     <div class="row">
@@ -283,7 +347,7 @@
                                     <div class="contact-info-items">
                                         <div class="contact-items">
                                             <div class="icon">
-                                                <img src="{% static 'img/mail.png' %}" alt="img">
+                                                <img src="{% static 'img/mail.png' %}" alt="" role="presentation">
                                             </div>
                                             <div class="content">
                                                 <span>Mail Us</span>
@@ -301,9 +365,15 @@
                                         </a>
                                     </div>
                                     <div class="social-icon">
-                                        <a href="https://instagram.com/worldolympiadnetwork"><i class="fab fa-instagram"></i></a>
-                                        <a href="https://twitter.com/won_global"><i class="fab fa-twitter"></i></a>
-                                        <a href="https://linkedin.com/company/world-olympiad-network"><i class="fab fa-linkedin-in"></i></a>
+                                        <a href="https://instagram.com/worldolympiadnetwork" aria-label="WON on Instagram">
+                                            <i class="fab fa-instagram" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="https://twitter.com/won_global" aria-label="WON on Twitter">
+                                            <i class="fab fa-twitter" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="https://linkedin.com/company/world-olympiad-network" aria-label="WON on LinkedIn">
+                                            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

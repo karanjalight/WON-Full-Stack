@@ -4,20 +4,24 @@
 
 {% block content %}
         <!-- Hero Section Start -->
-        <section class="hero-section hero-4">
+        <section class="hero-section hero-4" aria-label="World Olympiad Network hero">
             <div class="array-button">
-                <button class="array-prev"><i class="far fa-long-arrow-left"></i></button>
-                <button class="array-next"><i class="far fa-long-arrow-right"></i></button>
+                <button class="array-prev" type="button" aria-label="Previous slide">
+                    <i class="far fa-long-arrow-left" aria-hidden="true"></i>
+                </button>
+                <button class="array-next" type="button" aria-label="Next slide">
+                    <i class="far fa-long-arrow-right" aria-hidden="true"></i>
+                </button>
             </div>
             <div class="swiper hero-slider">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="hero-items">
                             <div class="plane-shape">
-                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="" role="presentation">
                             </div>
                             <div class="plane-shape-2">
-                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="" role="presentation">
                             </div>
                             <div class="hero-bg bg-cover" style="background-image: url('{% static 'img/index/study1.jpg' %}');"></div>
                             <div class="container">
@@ -39,10 +43,10 @@
                     <div class="swiper-slide">
                         <div class="hero-items">
                             <div class="plane-shape">
-                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="" role="presentation">
                             </div>
                             <div class="plane-shape-2">
-                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="" role="presentation">
                             </div>
                             <div class="hero-bg bg-cover" style="background-image: url('{% static 'img/index/study2.jpg' %}');"></div>
                             <div class="container">
@@ -64,10 +68,10 @@
                     <div class="swiper-slide">
                         <div class="hero-items">
                             <div class="plane-shape">
-                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="" role="presentation">
                             </div>
                             <div class="plane-shape-2">
-                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="" role="presentation">
                             </div>
                             <div class="hero-bg bg-cover" style="background-image: url('{% static 'img/index/study6.jpg' %}');"></div>
                             <div class="container">
@@ -89,10 +93,10 @@
                     <div class="swiper-slide">
                         <div class="hero-items">
                             <div class="plane-shape">
-                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-2.png' %}" alt="" role="presentation">
                             </div>
                             <div class="plane-shape-2">
-                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="img">
+                                <img src="{% static 'img/hero/new/plane-3.png' %}" alt="" role="presentation">
                             </div>
                             <div class="hero-bg bg-cover" style="background-image: url('{% static 'img/index/tutor1.jpg' %}');"></div>
                             <div class="container">
@@ -117,13 +121,13 @@
                 <div class="booking-list-area-1">
                     <div class="booking-list">
                         <div class="icon">
-                            <img src="{% static 'img/hero/location.png' %}" alt="img">
+                            <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
                         </div>
                         <div class="content">
-                            <h5>Subject</h5>
+                            <h5><label for="subject-select" class="booking-label">Subject</label></h5>
                             <div class="form-clt">
                                 <div class="form">
-                                    <select class="single-select w-100">
+                                    <select id="subject-select" name="subject" class="single-select w-100">
                                         <option>Select subject</option>
                                         <option>Mathematics</option>
                                         <option>Physics</option>
@@ -137,13 +141,13 @@
                     </div>
                     <div class="booking-list">
                         <div class="icon">
-                            <img src="{% static 'img/hero/location.png' %}" alt="img">
+                            <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
                         </div>
                         <div class="content">
-                            <h5>Region</h5>
+                            <h5><label for="region-select" class="booking-label">Region</label></h5>
                             <div class="form-clt">
                                 <div class="form">
-                                    <select class="single-select w-100">
+                                    <select id="region-select" name="region" class="single-select w-100">
                                         <option>Select region</option>
                                         <option>Global</option>
                                         <option>Africa</option>
@@ -157,27 +161,27 @@
                     </div>
                     <div class="booking-list">
                         <div class="icon">
-                            <img src="{% static 'img/hero/location.png' %}" alt="img">
+                            <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
                         </div>
                         <div class="content">
-                            <h5>Competition Date</h5>
+                            <h5><label for="competition-date" class="booking-label">Competition Date</label></h5>
                             <div class="form-clt">
                                 <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
-                                    <input class="form-control" type="text" placeholder="Select date" readonly="">
-                                    <span class="input-group-addon"><i class="far fa-calendar"></i></span>
+                                    <input id="competition-date" name="competition_date" class="form-control" type="text" placeholder="Select date" readonly="">
+                                    <span class="input-group-addon" aria-hidden="true"><i class="far fa-calendar"></i></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="booking-list">
                         <div class="icon">
-                            <img src="{% static 'img/hero/location.png' %}" alt="img">
+                            <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
                         </div>
                         <div class="content">
-                            <h5>Age Group</h5>
+                            <h5><label for="age-group-select" class="booking-label">Age Group</label></h5>
                             <div class="form-clt">
                                 <div class="form">
-                                    <select class="single-select w-100">
+                                    <select id="age-group-select" name="age_group" class="single-select w-100">
                                         <option>Select age group</option>
                                         <option>4-9</option>
                                         <option>10-13</option>
@@ -190,7 +194,7 @@
                         </div>
                     </div>
                     <button type="submit" class="theme-btn">
-                        <span>Search  <i class="far fa-search"></i></span>
+                        <span>Search  <i class="far fa-search" aria-hidden="true"></i></span>
                     </button>
                 </div>
             </div>
@@ -198,336 +202,96 @@
 
 
         <!--tour Package Section Start -->
-        <section class="tour-package-section fix s section-padding">
-            <div class="container">
-                <div class="section-title text-center">
-                    <span class="wow fadeInUp">Subscriptions</span>
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">
-                        Subscription Packages
-                    </h2>
-                    <p class="mt-3 wow fadeInUp" data-wow-delay=".5s">
-                        Choose from our flexible subscription packages designed to fit different needs. <br>
-                        Enjoy exclusive benefits, priority access, and exceptional value when you subscribe with us.
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="tour-main-item mt-30">
-                            <div class="tour-box-items-3 bg-cover" style="background-image: url({% static 'img/index/parents.jpg' %});">
-                                <div class="tour-content">
-                                    <h3>
-                                        Parents  
-                                    </h3>
-                                    <p class="text-white mb-4 font-weight-bold">
-                                        Your Child is <br>
-                                        A global Champion
-                                    </p>
-                                    <a href="{% url 'subscription-parents' %}" class="theme-btn">
-                                        <span>Get Started</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                                <!-- <div class="percent-image">
-                                    <img src="{% static 'img/tour/circle.png' %}" alt="img">
-                                </div> -->
-                            </div>
-                            <div class="shape">
-                                <img src="{% static 'img/tour/shape1.png' %}" alt="img">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="tour-main-item mt-30">
-                            <div class="tour-box-items-3 style-2 bg-cover" style="background-image: url({% static 'img/index/school2.jpg' %});">
-                                <div class="tour-content">
-                                    <h3>
-                                        Schools
-                                    </h3>
-                                    <p class="text-white mb-4 font-weight-bold">
-                                        Showcase your school <br> to be global leaders
-                                    </p>
-                                    <a href="{% url 'subscription-schools' %}" class="theme-btn">
-                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                                <div class="percent-image">
-                                    <img src="{% static 'img/tour/circle2.png' %}" alt="img">
-                                </div>
-                            </div>
-                            <div class="shape">
-                                <img src="{% static 'img/tour/shape2.png' %}" alt="img">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
-                        <div class="tour-main-item mt-30">
-                            <div class="tour-box-items-3 style-3 bg-cover" style="background-image: url({% static 'img/index/study4.jpg' %});">
-                                <div class="tour-content">
-                                    <h3>
-                                        Students
-                                    </h3>
-                                    <p class="text-white mb-4 font-weight-bold">
-                                        Access resources and <br> Excell Abroad
-                                    </p>
-                                    <a href="{% url 'subscription-students' %}" class="theme-btn">
-                                        <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                               
-                            </div>
-                            <div class="shape">
-                                <img src="{% static 'img/tour/shape3.png' %}" alt="img">
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section> 
+         
 
 
         <!-- Trending Section Start -->
-        <section style="display: hidden;" class="trending-destinations section-padding fix">
+        <section class="trending-destinations section-padding fix">
             <div class="container">
                 <div class="section-title-area lg-center">
                     <div class="section-title">
                         <span class="wow fadeInUp">Featured Competitions</span>
-                        <h2 class="wow fadeInUp" data-wow-delay=".3s">Olympiads open for 2025</h2>
+                        <h2 class="wow fadeInUp" data-wow-delay=".3s">Olympiads open for 2026</h2>
                     </div>
-                    <a href="tour.html" class="theme-btn theme-btn-2 wow fadeInUp" data-wow-delay=".5s">
+                    <a href="{% url 'olympiads' %}" class="theme-btn theme-btn-2 wow fadeInUp" data-wow-delay=".5s">
                         <span>View All Competitions</span> <i class="far fa-long-arrow-right"></i>
                     </a>
                 </div>
                 <!-- Featured Competitions Section -->
+                {% if featured_competitions %}
                 <div class="row g-4">
+                    {% for competition in featured_competitions %}
                     <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
                         <div class="amazing-tour-items mt-0">
                             <div class="thumb">
                                 <div class="post-box">
-                                    <h4>$333</h4>
+                                    <h4>
+                                        {{ competition.currency }} {{ competition.base_price }}
+                                    </h4>
                                     <span>/ person</span>
                                 </div>
-                                <img src="{% static 'img/contests/contest1.webp' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
+                                {% if competition.image %}
+                                <img src="{{ competition.image.url }}" alt="{{ competition.name }}" loading="lazy" style="height: 250px; object-fit: cover; width: 100%;">
+                                {% else %}
+                                <img src="{% static 'img/contests/contest1.webp' %}" alt="Featured Olympiad competition" loading="lazy" style="height: 250px; object-fit: cover; width: 100%;">
+                                {% endif %}
                                 <div class="list-items">
+                                    {% if competition.is_featured %}
                                     <h6>FEATURED</h6>
+                                    {% endif %}
                                     <ul class="popup-icon">
                                         <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
+                                            <a href="{% url 'olympiad-details' competition.slug %}" class="video-buttton" aria-label="View {{ competition.name }} details">
+                                                <i class="far fa-video" aria-hidden="true"></i>
                                             </a>
                                         </li>
+                                        {% if competition.image %}
                                         <li>
-                                            <a href="{% static 'img/contests/contest1.webp' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
+                                            <a href="{{ competition.image.url }}" class="img-popup" aria-label="View image for {{ competition.name }}">
+                                                <i class="far fa-camera" aria-hidden="true"></i>
                                             </a>
                                         </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>
                             <div class="content">
                                 <h4>
-                                    <a href="tour-details.html">International Mathematical Olympiad (IMO) — Melbourne, Australia</a>
+                                    <a href="{% url 'olympiad-details' competition.slug %}">
+                                        {{ competition.name }}
+                                    </a>
                                 </h4>
                                 <span class="location-icon">
                                     <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
+                                    {{ competition.destination.city }}, {{ competition.destination.country }}
                                 </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn">
+                                    <span>View Details</span> <i class="far fa-long-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>$565</h4>
-                                    <span>/ person</span>
-                                </div>
-                                <img src="{% static 'img/contests/contest2.jpeg' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                    <ul class="popup-icon">
-                                        <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{% static 'img/contests/contest2.jpeg' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- Fallback static UI when no active competitions -->
+                <div class="row g-4">
+                    <div class="col-12 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="amazing-tour-items mt-0 text-center">
                             <div class="content">
-                                <h4>
-                                    <a href="tour-details.html">International Physics Olympiad (IPhO) — Tehran, Iran</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
-                                </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>$290</h4>
-                                    <span>/ person</span>
-                                </div>
-                                <img src="{% static 'img/contests/contest3.jpg' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                    <ul class="popup-icon">
-                                        <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{% static 'img/contests/contest3.jpg' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <h4>
-                                    <a href="tour-details.html">Pan-African Mathematics Olympiad (PAMO) — Egypt</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
-                                </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>$565</h4>
-                                    <span>/ person</span>
-                                </div>
-                                <img src="{% static 'img/contests/contest4.png' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                    <ul class="popup-icon">
-                                        <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{% static 'img/contests/contest4.png' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <h4>
-                                    <a href="tour-details.html">Chemistry Olympiad — Showcase Event</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
-                                </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>$855</h4>
-                                    <span>/ person</span>
-                                </div>
-                                <img src="{% static 'img/contests/contest5.jpg' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                    <ul class="popup-icon">
-                                        <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{% static 'img/contests/contest5.jpg' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <h4>
-                                    <a href="tour-details.html">Biology Olympiad — Regional Qualifiers</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
-                                </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".7s">
-                        <div class="amazing-tour-items mt-0">
-                            <div class="thumb">
-                                <div class="post-box">
-                                    <h4>$436</h4>
-                                    <span>/ person</span>
-                                </div>
-                                <img src="{% static 'img/contests/contest6.jpg' %}" alt="img" style="height: 250px; object-fit: cover; width: 100%;">
-                                <div class="list-items">
-                                    <h6>FEATURED</h6>
-                                    <ul class="popup-icon">
-                                        <li>
-                                            <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-buttton video-popup">
-                                                <i class="far fa-video"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{% static 'img/contests/contest6.jpg' %}" class="img-popup">
-                                                <i class="far fa-camera"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <h4>
-                                    <a href="tour-details.html">Informatics Olympiad — Coming Soon</a>
-                                </h4>
-                                <span class="location-icon">
-                                    <i class="far fa-map-marker-alt"></i>
-                                    132, Tic St, Wingston, New York 12401
-                                </span>
-                                <a href="tour-details.html" class="theme-btn">
-                                    <span>Book Now</span> <i class="far fa-long-arrow-right"></i>
+                                <h3>More featured Olympiad packages are coming soon</h3>
+                                <p class="mt-3 mb-4">
+                                    We’re curating new competitions and travel packages right now. 
+                                    Check back shortly, or browse all currently open Olympiads.
+                                </p>
+                                <a href="/olympiads" class="theme-btn">
+                                    <span>Browse All Olympiads</span> <i class="far fa-long-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
             </div>
         </section>
@@ -542,7 +306,7 @@
                     <div class="row g-4 align-items-center">
                         <div class="col-lg-5">
                             <div class="about-image wow img-custom-anim-left">
-                                <img src="{% static 'img/contests/landingcompete.png' %}" alt="img">
+                                <img src="{% static 'img/contests/landingcompete.png' %}" alt="Students competing in an international Olympiad" loading="lazy">
                                 <div class="about-box float-bob-y">
                                     <h2><span class="odometer" data-count="4">00</span>+</h2>
                                     <p>YEARS OF EXPERIENCE</p>
@@ -600,7 +364,7 @@
                                                 <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
                                                 <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
                                               </svg>
-                                              Premium subscriptions (Paystack-ready)
+                                              Premium subscriptions
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -629,7 +393,7 @@
 
 
         <!-- Brand Section Start -->
-        <div class="brand-section fix section-padding sect-bg pt-0">
+        <!-- <div class="brand-section fix section-padding sect-bg pt-0">
             <div class="container">
                 <p class="brand-text wow fadeInUp">
                     Partnering with international Olympiad committees and Read Trips to deliver seamless access to global competitions and travel support
@@ -669,7 +433,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <br><br><br>
@@ -691,94 +455,116 @@
                     </a>
                 </div>
                 <div class="row">
+                    {% if featured_subjects and featured_subjects|length >= 4 %}
+                    {% for subject in featured_subjects %}
+                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                        <div class="destination-feature-box">
+                            <div class="icon{% if forloop.counter == 2 %} bg-2{% elif forloop.counter == 3 %} bg-3{% elif forloop.counter == 4 %} bg-4{% elif forloop.counter == 5 %} bg-5{% elif forloop.counter == 6 %} bg-6{% elif forloop.counter == 7 %} bg-7{% elif forloop.counter == 8 %} bg-8{% endif %}">
+                                {% if subject.icon %}
+                                <img src="{{ subject.icon.url }}" alt="{{ subject.name }}">
+                                {% else %}
+                                <img src="{% static 'img/icon-01.svg' %}" alt="{{ subject.name }} icon" loading="lazy">
+                                {% endif %}
+                            </div>
+                            <div class="content">
+                                <h6>{{ subject.name }}</h6>
+                                <span>
+                                    <b>{{ subject.total_tutors }}</b> Tutors - Olympiads <b>2026</b>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                         <div class="destination-feature-box">
                             <div class="icon">
-                                <img src="{% static 'img/icon-01.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-01.svg' %}" alt="Mathematics icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Mathematics</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
                         <div class="destination-feature-box">
                             <div class="icon bg-2">
-                                <img src="{% static 'img/icon-02.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-02.svg' %}" alt="Physics icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Physics</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
                         <div class="destination-feature-box">
                             <div class="icon bg-3">
-                                <img src="{% static 'img/icon-3.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-3.svg' %}" alt="Chemistry icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Chemistry</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                         <div class="destination-feature-box">
                             <div class="icon bg-4">
-                                <img src="{% static 'img/icon-4.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-4.svg' %}" alt="Biology icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Biology</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                         <div class="destination-feature-box">
                             <div class="icon bg-5">
-                                <img src="{% static 'img/icon-5.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-5.svg' %}" alt="Informatics icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Informatics</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".4s">
                         <div class="destination-feature-box">
                             <div class="icon bg-6">
-                                <img src="{% static 'img/icon-6.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-6.svg' %}" alt="Astronomy icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Astronomy</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".6s">
                         <div class="destination-feature-box">
                             <div class="icon bg-7">
-                                <img src="{% static 'img/icon-7.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-7.svg' %}" alt="Geography icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Geography</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                         <div class="destination-feature-box">
                             <div class="icon bg-8">
-                                <img src="{% static 'img/icon-8.svg' %}" alt="icon">
+                                <img src="{% static 'img/icon-8.svg' %}" alt="Linguistics icon" loading="lazy">
                             </div>
                             <div class="content">
                                 <h6>Linguistics</h6>
-                                <span><b>5</b> Tutors - Olympiads <b>2025</b></span>
+                                <span><b>5</b> Tutors - Olympiads <b>2026</b></span>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 
                 
@@ -812,10 +598,10 @@
                                 </a>
                             </div>
                             <div class="percent-image">
-                                <img src="{% static 'img/tour/circle.png' %}" alt="img">
+                                <img src="{% static 'img/tour/circle.png' %}" alt="" role="presentation" loading="lazy">
                             </div>
                             <div class="shape-image">
-                                <img src= "{% static 'img/index/pastpaper.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
+                                <img src= "{% static 'img/index/pastpaper.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="Stack of Olympiad past papers" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -835,7 +621,7 @@
                                 <img src="{% static 'img/tour/circle.png' %}" alt="img">
                             </div> -->
                             <div class="shape-image">
-                                <img src="{% static 'img/index/tutor2.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="img">
+                                <img src="{% static 'img/index/tutor2.jpg' %}" style="object-fit: cover; width: 100%; height: 100%;" alt="Olympiad tutor teaching a student" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -855,13 +641,13 @@
                         <span>Explore Destinations</span> <i class="far fa-long-arrow-right"></i>
                     </a>
                     <div class="discount-shape float-bob-y">
-                        <img src="{% static 'img/cta/discount.png' %}" alt="img">
+                        <img src="{% static 'img/cta/discount.png' %}" alt="" role="presentation" loading="lazy">
                     </div>
                     <div class="bag-shape float-bob-x">
-                        <img src="{% static 'img/cta/bag.png' %}" alt="img">
+                        <img src="{% static 'img/cta/bag.png' %}" alt="" role="presentation" loading="lazy">
                     </div>
                     <div class="plane-shape">
-                        <img src="{% static 'img/cta/olane-shape.png' %}" alt="img">
+                        <img src="{% static 'img/cta/olane-shape.png' %}" alt="" role="presentation" loading="lazy">
                     </div>
                 </div>
 
@@ -1173,7 +959,7 @@
 
 
         <!-- Events Section Start -->
-        <section class="tour-descover-section section-padding fix bg-cover" style="background-image: url({% static 'img/tour/bg2.jpg' %});">
+        <section class="tour-descover-section section-padding fix bg-cover" style="background-image: url({% static 'img/tour/bg2.jpg' %});" aria-label="Upcoming and recent events">
             <div class="container">
                 <div class="tour-discover-wrapper">
                     <div class="row g-4">
@@ -1187,211 +973,112 @@
                                 </p>
                             </div>
                             <div class="tour-button mt-3">
-                                <a href="events.html" class="theme-btn wow fadeInUp" data-wow-delay=".5s">
+                                <a href="{% url 'events' %}" class="theme-btn wow fadeInUp" data-wow-delay=".5s">
                                     <span>View All Events</span> <i class="far fa-long-arrow-right"></i>
                                 </a>
                             </div>
                            </div>
                         </div>
                         <div class="col-xl-7">
-                            <div class="swiper tour-slider">
+                            <div class="swiper tour-slider events-slider">
                                 <div class="swiper-wrapper">
+                                    {% if events %}
+                                        {% for event in events %}
                                     <div class="swiper-slide">
                                         <div class="tour-card-item">
                                             <div class="tour-image">
-                                                <img src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800&h=600&fit=crop" alt="Students attending tech talk">
+                                                {% if event.image %}
+                                                    <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy">
+                                                {% else %}
+                                                    <img src="https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&h=600&fit=crop" alt="{{ event.title }}" loading="lazy">
+                                                {% endif %}
                                             </div>
                                             <div class="tour-content">
-                                                <h6><span>Upcoming</span> Mar 12, 2026</h6>
+                                                <h6>
+                                                    <span>{{ event.get_status_display }}</span>
+                                                    {{ event.start_datetime|date:"M d, Y" }}
+                                                </h6>
                                                 <h4>
-                                                    <a href="event-details.html">
-                                                        Innovation Summit 2026: <br> Build, Learn, Connect
+                                                    <a href="{% url 'event-detail' event.slug %}">
+                                                        {{ event.title }}
                                                     </a>
                                                 </h4>
                                                 <ul>
                                                     <li>
                                                         <i class="far fa-map-marker-alt"></i>
-                                                        Main Auditorium, Science Block
+                                                        {{ event.location }}
                                                     </li>
                                                 </ul>
                                                 <div class="list">
                                                     <ul>
                                                         <li>
                                                             <i class="far fa-clock"></i>
-                                                            9:00 AM - 4:30 PM
+                                                            {{ event.start_datetime|time:"g:i A" }} - {{ event.end_datetime|time:"g:i A" }}
                                                         </li>
                                                     </ul>
-                                                        <div class="star">
-                                                            <a href="#" aria-label="Event category"><i class="fas fa-bullhorn"></i></a>
-                                                            <span>Featured</span>
-                                                        </div>
+                                                    <div class="star" aria-label="Event category {{ event.get_category_display }}">
+                                                        <span class="event-category-icon" aria-hidden="true">
+                                                            <i class="{{ event.category_icon }}"></i>
+                                                        </span>
+                                                        <span>{{ event.get_category_display }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                        {% endfor %}
+                                    {% else %}
                                     <div class="swiper-slide">
                                         <div class="tour-card-item">
                                             <div class="tour-image">
-                                                <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop" alt="Cultural festival performance">
+                                                <img src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800&h=600&fit=crop" alt="Stay tuned for events" loading="lazy">
                                             </div>
                                             <div class="tour-content">
-                                                <h6><span>Upcoming</span> Apr 5, 2026</h6>
+                                                <h6><span>Upcoming</span></h6>
                                                 <h4>
-                                                    <a href="event-details.html">
-                                                        Cultural Night: Food, Dance <br> and Live Music
-                                                    </a>
+                                                    <span>
+                                                        New events are coming soon
+                                                    </span>
                                                 </h4>
                                                 <ul>
                                                     <li>
                                                         <i class="far fa-map-marker-alt"></i>
-                                                        Student Center Courtyard
+                                                        World Olympiad Network
                                                     </li>
                                                 </ul>
                                                 <div class="list">
                                                     <ul>
                                                         <li>
                                                             <i class="far fa-clock"></i>
-                                                            5:00 PM - 9:00 PM
+                                                            Stay tuned
                                                         </li>
                                                     </ul>
-                                                        <div class="star">
-                                                            <a href="#" aria-label="Event category"><i class="fas fa-users"></i></a>
-                                                            <span>Community</span>
-                                                        </div>
+                                                    <div class="star" aria-label="Event category Announcements">
+                                                        <span class="event-category-icon" aria-hidden="true">
+                                                            <i class="fas fa-calendar-alt"></i>
+                                                        </span>
+                                                        <span>Announcements</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="swiper-slide">
-                                        <div class="tour-card-item">
-                                            <div class="tour-image">
-                                                <img src="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=600&fit=crop" alt="Coding workshop session">
-                                            </div>
-                                            <div class="tour-content">
-                                                <h6><span>Upcoming</span> Apr 18, 2026</h6>
-                                                <h4>
-                                                    <a href="event-details.html">
-                                                        AI for Everyone: Hands-on <br> Workshop Series
-                                                    </a>
-                                                </h4>
-                                                <ul>
-                                                    <li>
-                                                        <i class="far fa-map-marker-alt"></i>
-                                                        Lab 3, Innovation Hub
-                                                    </li>
-                                                </ul>
-                                                <div class="list">
-                                                    <ul>
-                                                        <li>
-                                                            <i class="far fa-clock"></i>
-                                                            2:00 PM - 6:00 PM
-                                                        </li>
-                                                    </ul>
-                                                        <div class="star">
-                                                            <a href="#" aria-label="Event category"><i class="fas fa-laptop-code"></i></a>
-                                                            <span>Workshop</span>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="tour-card-item">
-                                            <div class="tour-image">
-                                                <img src="https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&h=600&fit=crop" alt="Graduation ceremony celebration">
-                                            </div>
-                                            <div class="tour-content">
-                                                <h6><span>Past Event</span> Feb 2, 2026</h6>
-                                                <h4>
-                                                    <a href="event-details.html">
-                                                        Alumni Talk: Career Paths <br> and Mentorship
-                                                    </a>
-                                                </h4>
-                                                <ul>
-                                                    <li>
-                                                        <i class="far fa-map-marker-alt"></i>
-                                                        Lecture Hall B
-                                                    </li>
-                                                </ul>
-                                                <div class="list">
-                                                    <ul>
-                                                        <li>
-                                                            <i class="far fa-clock"></i>
-                                                            11:00 AM - 1:00 PM
-                                                        </li>
-                                                    </ul>
-                                                        <div class="star">
-                                                            <a href="#" aria-label="Event category"><i class="fas fa-history"></i></a>
-                                                            <span>Recap</span>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
+                                    {% endif %}
                                 </div>
                             </div>
-                            <div class="swiper-dot4 mt-5">
-                                <div class="dot"></div>
+                            <div class="events-slider-controls">
+                                <button type="button" class="events-prev" aria-label="Previous event">
+                                    <i class="far fa-long-arrow-left"></i>
+                                </button>
+                                <button type="button" class="events-next" aria-label="Next event">
+                                    <i class="far fa-long-arrow-right"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!--  Marquee Section Start -->
-        <div class="marquee-section fix section-padding pt-0">
-           
-            <div class="marque-wrapper hidden style-3">
-                <div dir="rtl" class="swiper text-slider-2">
-                    <div class="swiper-wrapper slide-transtion">
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Secure Online Booking</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Verified Customer Reviews</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>24/7 Customer Support</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Exclusive Travel Packages</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Special Member Discounts</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Local Destination Insights</h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide brand-slide-element">
-                            <div class="marque-text">
-                                <img src="{% static 'img/marque.png' %}" alt="img">
-                                <h3>Affordable Travel Deals</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         
         
@@ -1472,78 +1159,65 @@
                     <h2 class="wow fadeInUp" data-wow-delay=".5s">Latest Travel Insights and <br> Destination Guides</h2>
                 </div>
                 <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="news-box-items-4">
-                            <div class="news-img">
-                                <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=800&h=600&fit=crop" alt="Family traveling together">
-                                <ul class="post-date">
-                                    <li>
-                                        22
-                                    </li>
-                                    <li>
-                                        JAN
-                                    </li>
-                                </ul>
+                    {% if latest_posts %}
+                        {% for post in latest_posts %}
+                            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".{{ forloop.counter|add:"2" }}s">
+                                <div class="news-box-items-4">
+                                    <div class="news-img">
+                                        <img
+                                            src="{% if post.featured_image %}{{ post.featured_image.url }}{% else %}https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=800&h=600&fit=crop{% endif %}"
+                                            alt="{{ post.title }}"
+                                            loading="lazy"
+                                        >
+                                        {% with display_date=post.published_at|default:post.created_at %}
+                                            {% if display_date %}
+                                                <ul class="post-date">
+                                                    <li>
+                                                        {{ display_date|date:"d" }}
+                                                    </li>
+                                                    <li>
+                                                        {{ display_date|date:"b"|upper }}
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </div>
+                                    <div class="news-content">
+                                        <ul>
+                                            <li>
+                                                <b>By</b>
+                                                {% if post.author %}
+                                                    {{ post.author.get_full_name|default:post.author.username }}
+                                                {% else %}
+                                                    Admin Team
+                                                {% endif %}
+                                            </li>
+                                            <li>
+                                                <b>{{ post.comments_count }}</b> Comments
+                                            </li>
+                                        </ul>
+                                        <h3>
+                                            <a href="{{ post.get_absolute_url }}" aria-label="Read more: {{ post.title }}">
+                                                {{ post.title }}
+                                            </a>
+                                        </h3>
+                                        <p>
+                                            {{ post.excerpt|default:post.content|truncatewords:20 }}
+                                        </p>
+                                        <a href="{{ post.get_absolute_url }}" class="link-btn">
+                                            Continue Reading <i class="far fa-long-arrow-right" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="news-content">
-                                <ul>
-                                    <li> <b>By</b> Admin</li>
-                                    <li><b>23</b> Comments</li>
-                                </ul>
-                                <h3><a href="news-details.html">The top 10 places to traveling in the world with your family</a></h3>
-                                <p>We offer carefully curated destinations and tours that capture the true essence.</p>
-                                <a href="news-details.html" class="link-btn">Continue Reading <i class="far fa-long-arrow-right"></i></a>
-                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12 text-center wow fadeInUp" data-wow-delay=".3s">
+                            <p class="mb-0">
+                                Coming soon
+                            </p>
                         </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="news-box-items-4">
-                            <div class="news-img">
-                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop" alt="Education and learning">
-                                <ul class="post-date">
-                                    <li>
-                                        09
-                                    </li>
-                                    <li>
-                                        May
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="news-content">
-                                <ul>
-                                    <li> <b>By</b> Admin</li>
-                                    <li><b>23</b> Comments</li>
-                                </ul>
-                                <h3><a href="news-details.html">Enrich Your Mind Envision Your Future Education for Success</a></h3>
-                                <p>We offer carefully curated destinations and tours that capture the true essence.</p>
-                                <a href="news-details.html" class="link-btn">Continue Reading <i class="far fa-long-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
-                        <div class="news-box-items-4">
-                            <div class="news-img">
-                                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop" alt="Green nature landscape">
-                                <ul class="post-date">
-                                    <li>
-                                        08
-                                    </li>
-                                    <li>
-                                        APR
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="news-content">
-                                <ul>
-                                    <li> <b>By</b> Admin</li>
-                                    <li><b>23</b> Comments</li>
-                                </ul>
-                                <h3><a href="news-details.html">Exploring The Green Spaces Of Realar Residence</a></h3>
-                                <p>We offer carefully curated destinations and tours that capture the true essence.</p>
-                                <a href="news-details.html" class="link-btn">Continue Reading <i class="far fa-long-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </section>

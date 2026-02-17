@@ -6169,6 +6169,54 @@ p {
   }
 }
 
+/* Custom horizontal scroll for events slider */
+.tour-discover-wrapper .events-slider .swiper-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+.tour-discover-wrapper .events-slider .swiper-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+.tour-discover-wrapper .events-slider .swiper-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+.tour-discover-wrapper .events-slider .swiper-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tour-discover-wrapper .events-slider .swiper-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.events-slider-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+.events-slider-controls button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(5, 6, 60, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #05063c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.events-slider-controls button:hover {
+  background: #fb5b32;
+  color: #ffffff;
+}
+
 .tour-places-wrapper-4 {
   margin-top: 30px;
   background-color: var(--white);
