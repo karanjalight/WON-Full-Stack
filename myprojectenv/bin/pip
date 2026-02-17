@@ -1,4 +1,4 @@
-#!/home/won/WON-Full-Stack/myprojectenv/bin/python3
+#!/home/WON-Full-Stack/myprojectenv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
