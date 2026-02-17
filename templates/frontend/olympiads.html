@@ -6,7 +6,7 @@
 
 {% block content %}
         <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url('{% static 'img/hero/1.png' %}');">
+        <div class="breadcrumb-wrapper section-padding  bg-cover" style="background-image: url(&quot;{% static 'img/hero/1.png' %}&quot;);">
             <div class="container-fluid">
                 <div class="page-heading">
                     <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
@@ -31,6 +31,16 @@
         </div>
 
         <style>
+            .amazing-tour-section.olympiads-list-section {
+                padding-top: 100px;
+                position: relative;
+                z-index: 3;
+            }
+            .olympiad-filter-wrap {
+                margin-top: -88px;
+                position: relative;
+                z-index: 20;
+            }
             .active-filters .badge {
                 padding: 0.5rem 0.75rem;
                 font-size: 0.875rem;
@@ -57,138 +67,235 @@
                 margin: 0;
                 font-size: 0.9rem;
             }
+            .olympiads-list-section .amazing-tour-items .thumb img {
+                width: 100%;
+                height: 240px;
+                object-fit: cover;
+                display: block;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 {
+                background: var(--white);
+                border-radius: 57.5px;
+                box-shadow: 0 4px 45px 8px rgba(0, 0, 0, 0.1);
+                padding: 28px 34px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                margin-top: 0;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .booking-list {
+                display: flex;
+                gap: 15px;
+                line-height: 1;
+                width: 100%;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .booking-list .content h5 {
+                font-size: 14px;
+                font-weight: 600;
+                color: #8e8f8f;
+                font-family: "Nunito", sans-serif;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .form-clt .nice-select {
+                padding: 0;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                background: transparent;
+                font-size: 16px;
+                font-family: "Nunito", sans-serif;
+                color: var(--header);
+                font-weight: 800;
+                text-transform: capitalize;
+                height: initial;
+                line-height: 1.3;
+                padding-right: 18px;
+                min-width: 120px;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .form-clt .nice-select::after {
+                right: 0;
+                border-bottom: 1px solid var(--header);
+                border-right: 1px solid var(--header);
+                width: 9px;
+                height: 9px;
+                top: 28%;
+                margin-top: 0;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .form-clt input {
+                padding: 0;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                background: transparent;
+                font-size: 16px;
+                font-family: "Nunito", sans-serif;
+                color: var(--header);
+                font-weight: 800;
+                text-transform: capitalize;
+                height: initial;
+                line-height: 1.3;
+                margin-top: 2px;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .form-control::placeholder {
+                color: var(--header);
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .form-clt .input-group-addon {
+                margin-left: -45px !important;
+                color: var(--header);
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn {
+                padding: 18px 30px;
+                width: 100%;
+                max-width: 170px;
+                border-radius: 999px;
+                flex-shrink: 0;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn span {
+                margin-right: 0;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn span i {
+                width: initial;
+                height: initial;
+                line-height: initial;
+                background-color: transparent;
+                margin-left: 10px;
+                color: var(--white);
+            }
+            @media (max-width: 1199px) {
+                .amazing-tour-section.olympiads-list-section {
+                    padding-top: 64px;
+                }
+                .olympiad-filter-wrap {
+                    margin-top: -52px;
+                }
+                .olympiad-filter-wrap .booking-list-area-1 {
+                    flex-wrap: wrap;
+                    gap: 14px;
+                    border-radius: 22px;
+                    padding: 24px 22px;
+                }
+                .olympiad-filter-wrap .booking-list-area-1 > .booking-list,
+                .olympiad-filter-wrap .booking-list-area-1 > button,
+                .olympiad-filter-wrap .booking-list-area-1 .theme-btn {
+                    width: 100%;
+                    max-width: initial;
+                }
+            }
         </style>
 
         <!-- Olympiad Competitions Section Start -->
-        <section class="amazing-tour-section section-padding">
+        <section class="amazing-tour-section olympiads-list-section section-padding">
             <div class="container">
                 <div class="amazing-tour-wrapper">
-                    <div class="row g-4">
-                        <div class="col-xl-3 col-lg-4">
-                            <div class="tour-sidebar-area sticky-style">
-                                <div class="tour-destination-sidebar">
-                                    <form method="get" action="{% url 'olympiads' %}" id="filterForm">
-                                    <div class="booking-list-area">
-                                        <div class="booking-list">
-                                            <div class="icon">
-                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <h5>Location</h5>
-                                                <div class="form-clt">
-                                                    <div class="form">
-                                                        <select class="single-select w-100" name="location" id="locationFilter">
-                                                            <option value="">All Locations</option>
-                                                            {% for destination in destinations %}
-                                                            <option value="{{ destination.city }}" {% if current_location == destination.city %}selected{% endif %}>
-                                                                {{ destination.city }}, {{ destination.country }}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="booking-list">
-                                            <div class="icon">
-                                                <img src="{% static 'img/hero/location.png' %}" alt="img">
-                                            </div>
-                                            <div class="content">
-                                                <h5>Olympiad Category</h5>
-                                                <div class="form-clt">
-                                                    <div class="form">
-                                                        <select class="single-select w-100" name="subject" id="subjectFilter">
-                                                            <option value="">All Categories</option>
-                                                            {% for subject in subjects %}
-                                                            <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>
-                                                                {{ subject.name }}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="search-widget mt-3">
-                                            <button type="submit" class="theme-btn w-100"><span>Apply Filters</span><i class="fal fa-search"></i></button>
-                                        </div>
-                                        {% if current_location or current_subject %}
-                                        <div class="search-widget mt-2">
-                                            <a href="{% url 'olympiads' %}" class="theme-btn w-100 btn-outline"><span>Clear All Filters</span><i class="fal fa-times"></i></a>
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    </form>
-                                    <div class="popular-posts">
-                                        <div class="single-post-item">
-                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-1.jpg' %}');"></div>
-                                            <div class="post-content">
-                                                <div class="star">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                               <h5><a href="tour-details.html">Math Olympiad Challenge</a></h5>
-                                                   
-                                                <p>
-                                                    From <b> $129.00 </b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="single-post-item">
-                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-2.jpg' %}');"></div>
-                                            <div class="post-content">
-                                                <div class="star">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <h5><a href="tour-details.html">Science Olympiad Series</a></h5>
-                                                <p>
-                                                    From <b> $189.00 </b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="single-post-item">
-                                            <div class="thumb bg-cover" style="background-image: url('{% static 'img/tour/post-3.jpg' %}');"></div>
-                                            <div class="post-content">
-                                                <div class="star">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <h5><a href="tour-details.html">Coding Competition</a></h5>
-                                                <p>
-                                                    From <b> $229.00 </b>
-                                                </p>
-                                            </div>
+                    <div class="olympiad-filter-wrap mb-4">
+                        <form method="get" action="{% url 'olympiads' %}" class="booking-list-area-1">
+                            <div class="booking-list">
+                                <div class="icon">
+                                    <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
+                                </div>
+                                <div class="content">
+                                    <h5><label for="subject-filter-select" class="booking-label">Subject</label></h5>
+                                    <div class="form-clt">
+                                        <div class="form">
+                                            <select id="subject-filter-select" name="subject" class="single-select w-100">
+                                                <option value="">Select subject</option>
+                                                {% for subject in subjects %}
+                                                    <option value="{{ subject.slug }}" {% if current_subject == subject.slug %}selected{% endif %}>{{ subject.name }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-9 col-lg-8">
+
+                            <div class="booking-list">
+                                <div class="icon">
+                                    <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
+                                </div>
+                                <div class="content">
+                                    <h5><label for="region-filter-select" class="booking-label">Region</label></h5>
+                                    <div class="form-clt">
+                                        <div class="form">
+                                            <select id="region-filter-select" name="region" class="single-select w-100">
+                                                <option value="">Select region</option>
+                                                {% for value, label in region_choices %}
+                                                    <option value="{{ value }}" {% if current_region == value %}selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="booking-list">
+                                <div class="icon">
+                                    <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
+                                </div>
+                                <div class="content">
+                                    <h5><label for="competition-date-filter" class="booking-label">Competition Date</label></h5>
+                                    <div class="form-clt">
+                                        <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+                                            <input id="competition-date-filter" name="competition_date" class="form-control" type="text" placeholder="Select date" value="{{ current_competition_date }}" readonly>
+                                            <span class="input-group-addon" aria-hidden="true"><i class="far fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="booking-list">
+                                <div class="icon">
+                                    <img src="{% static 'img/hero/location.png' %}" alt="" role="presentation" loading="lazy">
+                                </div>
+                                <div class="content">
+                                    <h5><label for="age-group-filter-select" class="booking-label">Age Group</label></h5>
+                                    <div class="form-clt">
+                                        <div class="form">
+                                            <select id="age-group-filter-select" name="age_group" class="single-select w-100">
+                                                <option value="">Select age group</option>
+                                                {% for option in age_group_options %}
+                                                    <option value="{{ option }}" {% if current_age_group == option %}selected{% endif %}>{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="theme-btn">
+                                <span>Search  <i class="far fa-search" aria-hidden="true"></i></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12">
                             <!-- Active Filters Display -->
-                            {% if current_location or current_subject %}
+                            {% if current_subject or current_region or current_competition_date or current_age_group %}
                             <div class="active-filters mb-4 p-3 bg-light rounded">
                                 <div class="d-flex flex-wrap align-items-center gap-2">
                                     <strong>Active Filters:</strong>
                                     {% if current_subject_name %}
                                     <span class="badge bg-primary">
                                         Category: {{ current_subject_name }}
-                                        <a href="?{% if current_location %}location={{ current_location }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                        <a href="?{% if current_region %}region={{ current_region }}&{% endif %}{% if current_competition_date %}competition_date={{ current_competition_date }}&{% endif %}{% if current_age_group %}age_group={{ current_age_group }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
                                     </span>
                                     {% endif %}
-                                    {% if current_location %}
+                                    {% if current_region %}
                                     <span class="badge bg-primary">
-                                        Location: {{ current_location }}
-                                        <a href="?{% if current_subject %}subject={{ current_subject }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                        Region: {{ current_region|title }}
+                                        <a href="?{% if current_subject %}subject={{ current_subject }}&{% endif %}{% if current_competition_date %}competition_date={{ current_competition_date }}&{% endif %}{% if current_age_group %}age_group={{ current_age_group }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                    </span>
+                                    {% endif %}
+                                    {% if current_competition_date %}
+                                    <span class="badge bg-primary">
+                                        Date: {{ current_competition_date }}
+                                        <a href="?{% if current_subject %}subject={{ current_subject }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}{% if current_age_group %}age_group={{ current_age_group }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
+                                    </span>
+                                    {% endif %}
+                                    {% if current_age_group %}
+                                    <span class="badge bg-primary">
+                                        Age: {{ current_age_group }}
+                                        <a href="?{% if current_subject %}subject={{ current_subject }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}{% if current_competition_date %}competition_date={{ current_competition_date }}{% endif %}" class="text-white ms-1" style="text-decoration: none;">×</a>
                                     </span>
                                     {% endif %}
                                     <a href="{% url 'olympiads' %}" class="btn btn-sm btn-outline-secondary ms-2">Clear All</a>
@@ -263,19 +370,19 @@
                             <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
                                 <ul>
                                     {% if competitions.has_previous %}
-                                        <li><a class="page-numbers" href="?page={{ competitions.previous_page_number }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a></li>
+                                        <li><a class="page-numbers" href="?page={{ competitions.previous_page_number }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}{% if current_competition_date %}&competition_date={{ current_competition_date }}{% endif %}{% if current_age_group %}&age_group={{ current_age_group }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a></li>
                                     {% endif %}
                                     
                                     {% for num in competitions.paginator.page_range %}
                                         {% if competitions.number == num %}
                                             <li><a class="page-numbers current" href="#">{{ num }}</a></li>
                                         {% elif num > competitions.number|add:'-3' and num < competitions.number|add:'3' %}
-                                            <li><a class="page-numbers" href="?page={{ num }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
+                                            <li><a class="page-numbers" href="?page={{ num }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}{% if current_competition_date %}&competition_date={{ current_competition_date }}{% endif %}{% if current_age_group %}&age_group={{ current_age_group }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
                                         {% endif %}
                                     {% endfor %}
                                     
                                     {% if competitions.has_next %}
-                                        <li><a class="page-numbers" href="?page={{ competitions.next_page_number }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a></li>
+                                        <li><a class="page-numbers" href="?page={{ competitions.next_page_number }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}{% if current_competition_date %}&competition_date={{ current_competition_date }}{% endif %}{% if current_age_group %}&age_group={{ current_age_group }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a></li>
                                     {% endif %}
                                 </ul>
                             </div>

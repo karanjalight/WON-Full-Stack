@@ -4,7 +4,7 @@
 {% block application_content %}
 <div class="step-content">
     <h3 class="mb-4">Travel Quote Request</h3>
-    <p class="text-muted mb-4">Help us generate a personalized travel quote for your competition journey.</p>
+    <p class="text-muted mb-4">Choose your departure country first, then pick your city from smart suggestions.</p>
     
     <form method="post" id="applicationForm2">
         {% csrf_token %}
@@ -12,19 +12,27 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="{{ form.departure_city.id_for_label }}">{{ form.departure_city.label }} <span class="text-danger">*</span></label>
-                    {{ form.departure_city }}
-                    {% if form.departure_city.errors %}
-                        <div class="text-danger small">{{ form.departure_city.errors }}</div>
+                    <label for="{{ form.departure_country.id_for_label }}">{{ form.departure_country.label }} <span class="text-danger">*</span></label>
+                    <div class="autocomplete-wrap" id="country-autocomplete">
+                        {{ form.departure_country }}
+                        <div class="autocomplete-dropdown" id="country-dropdown"></div>
+                    </div>
+                    <small id="departure-country-help" class="form-text text-muted">Type or select your departure country.</small>
+                    {% if form.departure_country.errors %}
+                        <div class="text-danger small">{{ form.departure_country.errors }}</div>
                     {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="{{ form.departure_country.id_for_label }}">{{ form.departure_country.label }} <span class="text-danger">*</span></label>
-                    {{ form.departure_country }}
-                    {% if form.departure_country.errors %}
-                        <div class="text-danger small">{{ form.departure_country.errors }}</div>
+                    <label for="{{ form.departure_city.id_for_label }}">{{ form.departure_city.label }} <span class="text-danger">*</span></label>
+                    <div class="autocomplete-wrap" id="city-autocomplete">
+                        {{ form.departure_city }}
+                        <div class="autocomplete-dropdown" id="city-dropdown"></div>
+                    </div>
+                    <small id="departure-city-help" class="form-text text-muted">Select a country first to load city suggestions.</small>
+                    {% if form.departure_city.errors %}
+                        <div class="text-danger small">{{ form.departure_city.errors }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -76,11 +84,250 @@
                 <i class="far fa-arrow-left me-2"></i> Previous Step
             </a>
             <button type="submit" class="theme-btn">
-                <span>Continue to Account Setup</span> <i class="far fa-long-arrow-right"></i>
+                <span>Continue to Documents</span> <i class="far fa-long-arrow-right"></i>
             </button>
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countryInput = document.getElementById('{{ form.departure_country.id_for_label }}');
+        const cityInput = document.getElementById('{{ form.departure_city.id_for_label }}');
+        const countryDropdown = document.getElementById('country-dropdown');
+        const cityDropdown = document.getElementById('city-dropdown');
+        const countryHelp = document.getElementById('departure-country-help');
+        const cityHelp = document.getElementById('departure-city-help');
+        const MAX_OPTIONS = 8;
+        let countries = [];
+        let cities = [];
+        let countryHighlightIndex = -1;
+        let cityHighlightIndex = -1;
+
+        if (!countryInput || !cityInput) {
+            return;
+        }
+
+        function createDropdownItems(dropdown, values, onSelect, highlightedIndex) {
+            dropdown.innerHTML = '';
+            if (!values.length) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            values.slice(0, MAX_OPTIONS).forEach(function (value, index) {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'autocomplete-item' + (highlightedIndex === index ? ' active' : '');
+                item.textContent = value;
+                item.addEventListener('mousedown', function (event) {
+                    event.preventDefault();
+                    onSelect(value);
+                });
+                dropdown.appendChild(item);
+            });
+
+            dropdown.classList.add('show');
+        }
+
+        function hideDropdown(dropdown) {
+            dropdown.classList.remove('show');
+        }
+
+        function filterOptions(values, query) {
+            const q = (query || '').trim().toLowerCase();
+            if (!q) {
+                return values.slice(0, MAX_OPTIONS);
+            }
+
+            return values.filter(function (value) {
+                return value.toLowerCase().includes(q);
+            }).slice(0, MAX_OPTIONS);
+        }
+
+        function setCityEnabled(enabled) {
+            cityInput.disabled = !enabled;
+            if (!enabled) {
+                cityInput.value = '';
+            }
+        }
+
+        async function loadCountries() {
+            countryHelp.textContent = 'Loading countries...';
+            try {
+                const response = await fetch('{% url "departure-countries-api" %}');
+                if (!response.ok) {
+                    throw new Error('Country request failed');
+                }
+                const data = await response.json();
+                countries = Array.isArray(data.countries) ? data.countries : [];
+                countryHelp.textContent = countries.length ? 'Type or select your departure country.' : 'No countries available right now.';
+            } catch (error) {
+                countryHelp.textContent = 'Could not load countries. You can still type manually.';
+            }
+        }
+
+        async function loadCities(country) {
+            const selectedCountry = (country || '').trim();
+            if (!selectedCountry) {
+                cities = [];
+                setCityEnabled(false);
+                cityHelp.textContent = 'Choose your departure country first.';
+                return;
+            }
+
+            cityHelp.textContent = 'Loading cities...';
+            try {
+                const url = '{% url "departure-cities-api" %}?country=' + encodeURIComponent(selectedCountry);
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('City request failed');
+                }
+                const data = await response.json();
+                cities = Array.isArray(data.cities) ? data.cities : [];
+                setCityEnabled(true);
+                cityHelp.textContent = cities.length
+                    ? 'Start typing to quickly find your departure city.'
+                    : 'No suggested cities found. You can still type manually.';
+            } catch (error) {
+                setCityEnabled(true);
+                cityHelp.textContent = 'Could not load cities. You can still type manually.';
+            }
+        }
+
+        function selectCountry(value) {
+            countryInput.value = value;
+            hideDropdown(countryDropdown);
+            loadCities(value);
+            cityInput.focus();
+        }
+
+        function selectCity(value) {
+            cityInput.value = value;
+            hideDropdown(cityDropdown);
+        }
+
+        function handleKeyboardNav(event, options, dropdown, getHighlightIndex, setHighlightIndex, onSelect) {
+            if (!options.length) {
+                return;
+            }
+
+            let highlightIndex = getHighlightIndex();
+
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                highlightIndex = (highlightIndex + 1) % options.length;
+                setHighlightIndex(highlightIndex);
+                return;
+            }
+
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                highlightIndex = highlightIndex <= 0 ? options.length - 1 : highlightIndex - 1;
+                setHighlightIndex(highlightIndex);
+                return;
+            }
+
+            if (event.key === 'Enter' && highlightIndex >= 0 && highlightIndex < options.length) {
+                event.preventDefault();
+                onSelect(options[highlightIndex]);
+                return;
+            }
+
+            if (event.key === 'Escape') {
+                hideDropdown(dropdown);
+            }
+        }
+
+        countryInput.addEventListener('focus', function () {
+            const options = filterOptions(countries, countryInput.value);
+            createDropdownItems(countryDropdown, options, selectCountry, countryHighlightIndex);
+        });
+
+        countryInput.addEventListener('input', function () {
+            countryHighlightIndex = -1;
+            const options = filterOptions(countries, countryInput.value);
+            createDropdownItems(countryDropdown, options, selectCountry, countryHighlightIndex);
+            cityInput.value = '';
+            cities = [];
+            setCityEnabled(false);
+            cityHelp.textContent = 'Select a country first to load city suggestions.';
+        });
+
+        countryInput.addEventListener('blur', function () {
+            setTimeout(function () {
+                hideDropdown(countryDropdown);
+            }, 120);
+            if (countryInput.value.trim()) {
+                loadCities(countryInput.value.trim());
+            }
+        });
+
+        countryInput.addEventListener('keydown', function (event) {
+            const options = filterOptions(countries, countryInput.value);
+            handleKeyboardNav(
+                event,
+                options,
+                countryDropdown,
+                function () { return countryHighlightIndex; },
+                function (nextIndex) {
+                    countryHighlightIndex = nextIndex;
+                    createDropdownItems(countryDropdown, options, selectCountry, countryHighlightIndex);
+                },
+                selectCountry
+            );
+        });
+
+        cityInput.addEventListener('focus', function () {
+            const options = filterOptions(cities, cityInput.value);
+            createDropdownItems(cityDropdown, options, selectCity, cityHighlightIndex);
+        });
+
+        cityInput.addEventListener('input', function () {
+            cityHighlightIndex = -1;
+            const options = filterOptions(cities, cityInput.value);
+            createDropdownItems(cityDropdown, options, selectCity, cityHighlightIndex);
+        });
+
+        cityInput.addEventListener('blur', function () {
+            setTimeout(function () {
+                hideDropdown(cityDropdown);
+            }, 120);
+        });
+
+        cityInput.addEventListener('keydown', function (event) {
+            const options = filterOptions(cities, cityInput.value);
+            handleKeyboardNav(
+                event,
+                options,
+                cityDropdown,
+                function () { return cityHighlightIndex; },
+                function (nextIndex) {
+                    cityHighlightIndex = nextIndex;
+                    createDropdownItems(cityDropdown, options, selectCity, cityHighlightIndex);
+                },
+                selectCity
+            );
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('#country-autocomplete')) {
+                hideDropdown(countryDropdown);
+            }
+            if (!event.target.closest('#city-autocomplete')) {
+                hideDropdown(cityDropdown);
+            }
+        });
+
+        loadCountries();
+        setCityEnabled(false);
+        if (countryInput.value) {
+            loadCities(countryInput.value);
+        }
+    });
+</script>
 {% endblock %}
 
 {% block extra_css %}
@@ -128,6 +375,54 @@
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         color: #212529 !important;
         background-color: #fff !important;
+    }
+
+    .autocomplete-wrap {
+        position: relative;
+    }
+
+    .autocomplete-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #e6e9ef;
+        border-radius: 14px;
+        box-shadow: 0 12px 28px rgba(16, 24, 40, 0.1);
+        max-height: 260px;
+        overflow-y: auto;
+        padding: 6px;
+        z-index: 30;
+        display: none;
+    }
+
+    .autocomplete-dropdown.show {
+        display: block;
+    }
+
+    .autocomplete-item {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: #1f2937;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .autocomplete-item:hover,
+    .autocomplete-item.active {
+        background: #eef2ff;
+        color: #2f3aa2;
+    }
+
+    #{{ form.departure_city.id_for_label }}:disabled {
+        background: #f7f8fb !important;
+        border-color: #e5e7eb;
+        cursor: not-allowed;
     }
 </style>
 {% endblock %}

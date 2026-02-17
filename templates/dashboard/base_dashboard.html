@@ -19,21 +19,21 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
+                            50: '#f3f1ff',
+                            100: '#e7e3ff',
+                            200: '#cfc8ff',
+                            300: '#b2a6ff',
+                            400: '#8a78f2',
+                            500: '#4D40CA',
+                            600: '#4338b2',
+                            700: '#372f92',
+                            800: '#2d2775',
+                            900: '#241f5c',
                         },
                         secondary: {
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
-                            700: '#6d28d9',
+                            500: '#FB5B32',
+                            600: '#e64d22',
+                            700: '#c93f15',
                         },
                         navy: {
                             700: '#1e2a4a',
@@ -107,8 +107,8 @@
             border-radius: 0.5rem;
         }
         input:focus, select:focus, textarea:focus {
-            border-color: #0ea5e9 !important;
-            box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+            border-color: #4D40CA !important;
+            box-shadow: 0 0 0 2px rgba(77,64,202,0.2);
             outline: none;
         }
 
@@ -233,13 +233,9 @@
                     <div>
                         <p class="sidebar-section-label">General</p>
                         <div class="space-y-1">
-                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path %}active{% endif %}">
-                                <i class="fas fa-user sidebar-icon"></i>
-                                Profile
-                            </a>
-                            <a href="{% url 'dashboard_settings' %}" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
-                                <i class="fas fa-cog sidebar-icon"></i>
-                                Settings
+                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path or 'settings' in request.path %}active{% endif %}">
+                                <i class="fas fa-user-cog sidebar-icon"></i>
+                                Profile & Settings
                             </a>
                         </div>
                     </div>
@@ -360,13 +356,9 @@
                     <div>
                         <p class="sidebar-section-label">General</p>
                         <div class="space-y-1">
-                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path %}active{% endif %}">
-                                <i class="fas fa-user sidebar-icon"></i>
-                                Profile
-                            </a>
-                            <a href="{% url 'dashboard_settings' %}" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
-                                <i class="fas fa-cog sidebar-icon"></i>
-                                Settings
+                            <a href="{% url 'dashboard_profile' %}" class="sidebar-link {% if 'profile' in request.path or 'settings' in request.path %}active{% endif %}">
+                                <i class="fas fa-user-cog sidebar-icon"></i>
+                                Profile & Settings
                             </a>
                         </div>
                     </div>
@@ -456,12 +448,8 @@
                                     <p class="text-xs text-gray-500 mt-0.5">{{ user.email }}</p>
                                 </div>
                                 <a href="{% url 'dashboard_profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-user-circle w-4 text-gray-400"></i>
-                                    My Profile
-                                </a>
-                                <a href="{% url 'dashboard_settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-cog w-4 text-gray-400"></i>
-                                    Settings
+                                    <i class="fas fa-user-cog w-4 text-gray-400"></i>
+                                    Profile & Settings
                                 </a>
                                 <a href="/" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
                                     <i class="fas fa-arrow-left w-4 text-gray-400"></i>

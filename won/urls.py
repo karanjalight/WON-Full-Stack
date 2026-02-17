@@ -51,6 +51,10 @@ urlpatterns = [
     path('news/', views.news, name='news'),
     path('news/<int:pk>/', views.news_details, name='news-details'),
     
+    # Events
+    path('events/', views.events_list, name='events'),
+    path('events/<slug:slug>/', views.event_detail, name='event-detail'),
+    
     # Tutors
     path('tutors/', views.team, name='team'),
     path('tutors/<uuid:pk>/', views.team_details, name='team-details'),
@@ -83,6 +87,8 @@ urlpatterns = [
     path('travel-quote/<slug:slug>/', views.generate_travel_quote, name='generate-travel-quote-destination'),
     path('travel-quote/detail/<uuid:quote_id>/', views.travel_quote_detail, name='travel-quote-detail'),
     path('travel-quote/<uuid:quote_id>/download/', views.download_travel_quote_pdf, name='download-travel-quote-pdf'),
+    path('api/travel/departure-countries/', views.departure_countries_api, name='departure-countries-api'),
+    path('api/travel/departure-cities/', views.departure_cities_api, name='departure-cities-api'),
     
     # Subscriptions
     path('subscriptions/parents/', views.subscription_parents, name='subscription-parents'),

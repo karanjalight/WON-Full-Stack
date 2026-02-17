@@ -29,7 +29,7 @@ from .models import (
     # Tutoring & Sessions
     TutorSession, SessionReview,
     # Content & Resources
-    Resource, BlogPost, FAQ,
+    Resource, Event, BlogPost, FAQ,
     # Notifications
     EmailTemplate, Notification, ScheduledNotification,
     # Additional
@@ -582,6 +582,47 @@ class ResourceAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'views_count', 'downloads_count', 'created_at', 'updated_at')
     prepopulated_fields = {'slug': ('title',)}
     filter_horizontal = ('competitions',)
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'status',
+        'category',
+        'start_datetime',
+        'end_datetime',
+        'location',
+        'is_featured',
+        'is_published',
+        'created_at',
+    )
+    list_filter = (
+        'status',
+        'category',
+        'is_featured',
+        'is_published',
+        'start_datetime',
+        'created_at',
+    )
+    search_fields = ('title', 'summary', 'description', 'location')
+    readonly_fields = ('id', 'created_at', 'updated_at')
+    prepopulated_fields = {'slug': ('title',)}
+
+    fieldsets = (
+        ('Content', {
+            'fields': ('title', 'slug', 'summary', 'description', 'image')
+        }),
+        ('Schedule & Location', {
+            'fields': ('location', 'start_datetime', 'end_datetime')
+        }),
+        ('Status & Display', {
+            'fields': ('status', 'category', 'is_featured', 'is_published')
+        }),
+        ('Timestamps', {
+            'fields': ('id', 'created_at', 'updated_at')
+        }),
+    )
 
 
 @admin.register(BlogPost)

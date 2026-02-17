@@ -4,58 +4,32 @@
 {% block application_content %}
 <div class="step-content">
     <h3 class="mb-4">Application Information</h3>
-    <p class="text-muted mb-4">Please provide your basic information to start your application.</p>
+    <p class="text-muted mb-4">Your account details are auto-filled. Only provide application-specific information below.</p>
     
     <form method="post" id="applicationForm1">
         {% csrf_token %}
         {{ form.competition }}
         
+        <div class="alert alert-light border mb-4">
+            <h6 class="mb-2">Applicant Details (from your account)</h6>
+            <div class="row">
+                <div class="col-md-6"><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</div>
+                <div class="col-md-6"><strong>Email:</strong> {{ user.email|default:"Not provided" }}</div>
+                <div class="col-md-6"><strong>Phone:</strong> {{ user.phone|default:"Not provided" }}</div>
+                <div class="col-md-6">
+                    <strong>Date of Birth:</strong>
+                    {% if app_data.date_of_birth %}
+                        {% with dob=app_data.date_of_birth|slice:":10" %}
+                            {{ dob }}
+                        {% endwith %}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         <div class="row g-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} <span class="text-danger">*</span></label>
-                    {{ form.first_name }}
-                    {% if form.first_name.errors %}
-                        <div class="text-danger small">{{ form.first_name.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} <span class="text-danger">*</span></label>
-                    {{ form.last_name }}
-                    {% if form.last_name.errors %}
-                        <div class="text-danger small">{{ form.last_name.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="text-danger">*</span></label>
-                    {{ form.email }}
-                    {% if form.email.errors %}
-                        <div class="text-danger small">{{ form.email.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="text-danger">*</span></label>
-                    {{ form.phone }}
-                    {% if form.phone.errors %}
-                        <div class="text-danger small">{{ form.phone.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.date_of_birth.id_for_label }}">{{ form.date_of_birth.label }} <span class="text-danger">*</span></label>
-                    {{ form.date_of_birth }}
-                    {% if form.date_of_birth.errors %}
-                        <div class="text-danger small">{{ form.date_of_birth.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
             <div class="col-12">
                 <hr class="my-4">
                 <h5 class="mb-3">Emergency Contact</h5>

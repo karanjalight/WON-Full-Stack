@@ -6,726 +6,780 @@
 {% endblock %}
 
 {% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%), url('{% if tutor.user.profile_picture %}{{ tutor.user.profile_picture.url }}{% else %}{% static 'img/index/tutor1.jpg' %}{% endif %}'); background-size: cover; background-position: center;">
-            <div class="container-fluid">
-                <div class="page-heading">
-                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                        <li>
-                            <a href="{% url 'index' %}" style="color: rgba(255,255,255,0.9);">
-                            Home
-                            </a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
-                        </li>
-                        <li>
-                            <a href="{% url 'team' %}" style="color: rgba(255,255,255,0.9);">Tutors</a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash" style="color: rgba(255,255,255,0.7);"></i>
-                        </li>
-                        <li style="color: white;">
-                            {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                        </li>
-                    </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s" style="color: white; font-size: 48px; font-weight: 700; margin-top: 15px;">
-                        {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                    </h1>
-                </div>
+    <div class="breadcrumb-wrapper section-padding bg-cover tutor-details-breadcrumb">
+        <div class="container-fluid">
+            <div class="page-heading">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li><a href="{% url 'team' %}">Tutors</a></li>
+                    <li><i class="far fa-slash"></i></li>
+                    <li>{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}</li>
+                </ul>
+                <h1 class="wow fadeInUp" data-wow-delay=".5s">Tutor Profile</h1>
             </div>
         </div>
+    </div>
 
-        <!-- Tutor Details Section Start -->
-        <section class="tutor-details-section section-padding">
-            <div class="container">
-                <div class="tutor-details-wrapper">
-                    <div class="row g-5">
-                        <!-- Main Content -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="tutor-details-main">
-                                <!-- Tutor Header Card -->
-                                <div class="tutor-header-card mb-4">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 text-center">
-                                            <div class="tutor-profile-image-large">
-                                                {% if tutor.user.profile_picture %}
-                                                    <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name }}" class="tutor-large-image">
-                                                {% else %}
-                                                    <div class="tutor-image-placeholder-large">
-                                                        <i class="fas fa-user"></i>
-                                                    </div>
-                                                {% endif %}
-                                                {% if tutor.is_featured %}
-                                                <span class="featured-badge-large">
-                                                    <i class="fas fa-star"></i> Featured Tutor
-                                                </span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="tutor-header-info">
-                                                <h2 class="tutor-name-large">
-                                                    {% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}
-                                                </h2>
-                                                {% if tutor.specializations %}
-                                                <p class="tutor-specialization-large">
-                                                    <i class="fas fa-graduation-cap me-2"></i>{{ tutor.specializations }}
-                                                </p>
-                                                {% endif %}
-                                                
-                                                <!-- Rating -->
-                                                <div class="tutor-rating-large mb-3">
-                                                    {% if tutor.average_rating > 0 %}
-                                                    <div class="stars-large">
-                                                        {% with rating_int=tutor.average_rating|floatformat:0 %}
-                                                            {% if rating_int >= 1 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                            {% if rating_int >= 2 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                            {% if rating_int >= 3 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                            {% if rating_int >= 4 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                            {% if rating_int >= 5 %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
-                                                        {% endwith %}
-                                                    </div>
-                                                    <span class="rating-text-large">
-                                                        <strong>{{ tutor.average_rating|floatformat:1 }}</strong>
-                                                        <span class="text-muted">({{ tutor.total_reviews }} review{{ tutor.total_reviews|pluralize }})</span>
-                                                    </span>
-                                                    {% else %}
-                                                    <span class="text-muted">No ratings yet</span>
-                                                    {% endif %}
-                                                </div>
-                                                
-                                                <!-- Quick Stats -->
-                                                <div class="tutor-quick-stats">
-                                                    <div class="quick-stat-item">
-                                                        <i class="fas fa-clock"></i>
-                                                        <div>
-                                                            <strong>{{ tutor.experience_years }}+</strong>
-                                                            <span>Years Experience</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="quick-stat-item">
-                                                        <i class="fas fa-users"></i>
-                                                        <div>
-                                                            <strong>{{ tutor.total_sessions }}</strong>
-                                                            <span>Total Sessions</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="quick-stat-item">
-                                                        <i class="fas fa-dollar-sign"></i>
-                                                        <div>
-                                                            <strong>{{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}</strong>
-                                                            <span>Per Hour</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- About Section -->
-                                {% if tutor.qualifications %}
-                                <div class="tutor-section-card mb-4">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-user-graduate me-2"></i>Qualifications & Experience
-                                    </h3>
-                                    <div class="section-content">
-                                        {{ tutor.qualifications|linebreaks }}
-                                    </div>
-                                </div>
+    <section class="tutor-details-shell">
+        <div class="tutor-details-inner">
+            <!-- TutorOcean-style hero card -->
+            <article class="tutord-card tutord-hero">
+                <div class="tutord-hero-left">
+                    <div class="tutord-avatar-wrap">
+                        {% if tutor.user.profile_picture %}
+                            <img src="{{ tutor.user.profile_picture.url }}" alt="{{ tutor.user.get_full_name|default:tutor.user.username }}">
+                        {% else %}
+                            <div class="tutord-avatar-fallback">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"></circle>
+                                    <path d="M6 20a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                                </svg>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if tutor.experience_years %}
+                        <div class="tutord-pill-muted">
+                            {{ tutor.experience_years }}+ years of tutoring
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="tutord-hero-main">
+                    <div class="tutord-identity">
+                        {% if tutor.is_featured %}
+                            <span class="tutord-pill">Featured tutor</span>
+                        {% endif %}
+                        <h2>{% if tutor.title %}{{ tutor.title }} {% endif %}{{ tutor.user.get_full_name|default:tutor.user.username }}</h2>
+                        <p class="tutord-subtitle">
+                            {% if tutor.specializations %}
+                                {{ tutor.specializations }}
+                            {% else %}
+                                Expert Olympiad tutor offering focused one-on-one preparation and exam strategy.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="tutord-meta-row">
+                        <div class="tutord-meta-block">
+                            <span class="tutord-meta-label">Experience</span>
+                            <span class="tutord-meta-value">{{ tutor.experience_years }}+ years</span>
+                        </div>
+                        <div class="tutord-meta-block">
+                            <span class="tutord-meta-label">Sessions</span>
+                            <span class="tutord-meta-value">{{ tutor.total_sessions }}</span>
+                        </div>
+                        <div class="tutord-meta-block">
+                            <span class="tutord-meta-label">Rating</span>
+                            <span class="tutord-meta-value">
+                                {% if tutor.average_rating > 0 %}
+                                    <span class="tutord-stars">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span class="tutord-star-muted">★</span>
+                                    </span>
+                                    {{ tutor.average_rating|floatformat:1 }} ({{ tutor.total_reviews }})
+                                {% else %}
+                                    Not rated yet
                                 {% endif %}
-                                
-                                <!-- Subjects Taught -->
-                                {% if tutor_subjects %}
-                                <div class="tutor-section-card mb-4">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-book me-2"></i>Subjects Taught
-                                    </h3>
-                                    <div class="subjects-grid">
-                                        {% for tutor_subject in tutor_subjects %}
-                                        <div class="subject-card-detailed">
-                                            <div class="subject-header-detailed">
+                            </span>
+                        </div>
+                        <div class="tutord-meta-block">
+                            <span class="tutord-meta-label">Availability</span>
+                            <span class="tutord-meta-value">
+                                {% if tutor.is_accepting_students %}Accepting students{% else %}Limited{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="tutord-badges-row">
+                        {% if tutor_subjects %}
+                            {% for tutor_subject in tutor_subjects|slice:":3" %}
+                                <span class="tutord-chip">
+                                    {{ tutor_subject.subject.name }}
+                                </span>
+                            {% endfor %}
+                            {% if tutor_subjects|length > 3 %}
+                                <span class="tutord-chip">
+                                    +{{ tutor_subjects|length|add:"-3" }} more
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <aside class="tutord-hero-side">
+                    <div class="tutord-rate-card">
+                        <p class="tutord-rate-label">Hourly rate</p>
+                        <p class="tutord-rate-main">
+                            <span class="tutord-rate-currency">{{ tutor.currency }}</span>
+                            <span class="tutord-rate-amount">{{ tutor.hourly_rate|floatformat:0 }}</span>
+                            <span class="tutord-rate-unit">/ hour</span>
+                        </p>
+                        <ul class="tutord-rate-perks">
+                            <li><span>✓</span> 1:1 live online sessions</li>
+                            <li><span>✓</span> Olympiad exam preparation</li>
+                            <li><span>✓</span> Homework & assignment support</li>
+                        </ul>
+                        <div class="tutord-cta-stack">
+                            {% if tutor.is_accepting_students %}
+                                <a href="{% url 'book-tutor-session' tutor.user.id %}" class="tutord-btn-primary">
+                                    Book a session
+                                </a>
+                                {% if tutor.calendly_link %}
+                                    <a href="{{ tutor.calendly_link }}" target="_blank" class="tutord-btn-outline">
+                                        Schedule via Calendly
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="tutord-btn-primary">
+                                    Contact to book
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </aside>
+            </article>
+
+            <div class="tutord-main-grid">
+                <div class="tutord-main-column">
+                    {% if tutor.qualifications %}
+                        <article class="tutord-card">
+                            <header><h3>About & Qualifications</h3></header>
+                            <div class="tutord-body prose-body">{{ tutor.qualifications|linebreaks }}</div>
+                        </article>
+                    {% endif %}
+
+                    {% if tutor.specializations %}
+                        <article class="tutord-card">
+                            <header><h3>Specialization Focus</h3></header>
+                            <div class="tutord-body prose-body"><p>{{ tutor.specializations|linebreaks }}</p></div>
+                        </article>
+                    {% endif %}
+
+                    {% if tutor_subjects %}
+                        <article class="tutord-card">
+                            <header><h3>Subjects Taught</h3></header>
+                            <div class="tutord-body">
+                                <div class="tutord-subject-grid">
+                                    {% for tutor_subject in tutor_subjects %}
+                                        <article class="tutord-subject-tile">
+                                            <div class="tutord-subject-head">
                                                 {% if tutor_subject.subject.icon %}
-                                                    <img src="{{ tutor_subject.subject.icon.url }}" alt="{{ tutor_subject.subject.name }}" class="subject-icon-detailed">
+                                                    <img src="{{ tutor_subject.subject.icon.url }}" alt="{{ tutor_subject.subject.name }}">
                                                 {% endif %}
                                                 <h4>{{ tutor_subject.subject.name }}</h4>
                                             </div>
-                                            {% if tutor_subject.experience_years > 0 %}
-                                            <p class="subject-experience">
-                                                <i class="fas fa-clock me-1"></i>{{ tutor_subject.experience_years }} years experience
+                                            <p class="tutord-subject-meta">
+                                                {% if tutor_subject.experience_years > 0 %}
+                                                    {{ tutor_subject.experience_years }} years experience
+                                                {% else %}
+                                                    Personalized preparation support
+                                                {% endif %}
                                             </p>
-                                            {% endif %}
                                             {% if tutor_subject.specialization_notes %}
-                                            <p class="subject-notes">{{ tutor_subject.specialization_notes|truncatewords:30 }}</p>
+                                                <p class="tutord-subject-notes">{{ tutor_subject.specialization_notes|truncatewords:28 }}</p>
                                             {% endif %}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
+                                        </article>
+                                    {% endfor %}
                                 </div>
-                                {% endif %}
-                                
-                                <!-- Specializations -->
-                                {% if tutor.specializations %}
-                                <div class="tutor-section-card mb-4">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-star me-2"></i>Specializations
-                                    </h3>
-                                    <div class="section-content">
-                                        <p>{{ tutor.specializations|linebreaks }}</p>
-                                    </div>
-                                </div>
+                            </div>
+                        </article>
+                    {% endif %}
+                </div>
+
+                <aside class="tutord-side-column">
+                    <article class="tutord-card">
+                        <header><h3>Tutor snapshot</h3></header>
+                        <div class="tutord-body">
+                            <ul class="tutord-fact-list">
+                                <li><span>Availability</span><strong>{% if tutor.is_accepting_students %}Accepting students{% else %}Limited{% endif %}</strong></li>
+                                <li><span>Experience</span><strong>{{ tutor.experience_years }}+ years</strong></li>
+                                <li><span>Total sessions</span><strong>{{ tutor.total_sessions }}</strong></li>
+                                <li><span>Reviews</span><strong>{{ tutor.total_reviews }}</strong></li>
+                                <li><span>Subjects</span><strong>{{ tutor_subjects|length }}</strong></li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="tutord-card">
+                        <header><h3>Need help choosing?</h3></header>
+                        <div class="tutord-body">
+                            <p class="tutord-side-copy">
+                                Share your learning goals and we’ll help you map the best path and schedule with this tutor.
+                            </p>
+                            <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="theme-btn">
+                                <span>Contact us</span> <i class="far fa-long-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    {% if related_tutors %}
+        <section class="tutord-related">
+            <div class="tutord-related-inner">
+                <div class="tutord-related-head">
+                    <h3>Similar Tutors</h3>
+                    <p>Other tutors with overlapping subject expertise.</p>
+                </div>
+                <div class="tutord-related-grid">
+                    {% for related in related_tutors|slice:":3" %}
+                        <article class="tutord-related-tile">
+                            <div class="tutord-related-media">
+                                {% if related.user.profile_picture %}
+                                    <img src="{{ related.user.profile_picture.url }}" alt="{{ related.user.get_full_name|default:related.user.username }}">
+                                {% else %}
+                                    <div class="tutord-related-placeholder"><i class="fas fa-user"></i></div>
                                 {% endif %}
                             </div>
-                        </div>
-                        
-                        <!-- Sidebar -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="tutor-sidebar sticky-style">
-                                <!-- Booking Card -->
-                                <div class="sidebar-card booking-card mb-4">
-                                    <div class="booking-header">
-                                        <h4>
-                                            <i class="fas fa-calendar-check me-2"></i>Book a Session
-                                        </h4>
-                                    </div>
-                                    <div class="booking-body">
-                                        <div class="price-display">
-                                            <span class="price-label">Hourly Rate</span>
-                                            <div class="price-amount-large">
-                                                {{ tutor.currency }}{{ tutor.hourly_rate|floatformat:0 }}
-                                                <span class="price-unit-small">/hour</span>
-                                            </div>
-                                        </div>
-                                        
-                                        {% if tutor.is_accepting_students %}
-                                        <a href="{% url 'book-tutor-session' tutor.user.id %}" class="btn-book-now">
-                                            <i class="far fa-calendar-alt me-2"></i>Book a Session
-                                        </a>
-                                        {% if tutor.calendly_link %}
-                                        <a href="{{ tutor.calendly_link }}" target="_blank" class="btn-book-now" style="background: rgba(255,255,255,0.2); margin-top: 10px;">
-                                            <i class="fas fa-external-link-alt me-2"></i>Or Use Calendly
-                                        </a>
-                                        {% endif %}
-                                        {% else %}
-                                        <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="btn-book-now" style="background: rgba(255,255,255,0.3);">
-                                            <i class="fas fa-envelope me-2"></i>Contact to Book
-                                        </a>
-                                        {% endif %}
-                                        
-                                        <div class="availability-info">
-                                            <i class="fas fa-check-circle me-2"></i>
-                                            {% if tutor.is_accepting_students %}
-                                            <span class="text-success">Currently Accepting Students</span>
-                                            {% else %}
-                                            <span class="text-muted">Not Currently Accepting Students</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Quick Info Card -->
-                                <div class="sidebar-card info-card mb-4">
-                                    <h4 class="card-title">
-                                        <i class="fas fa-info-circle me-2"></i>Quick Info
-                                    </h4>
-                                    <ul class="info-list">
-                                        <li>
-                                            <strong>Experience:</strong>
-                                            <span>{{ tutor.experience_years }}+ years</span>
-                                        </li>
-                                        <li>
-                                            <strong>Total Sessions:</strong>
-                                            <span>{{ tutor.total_sessions }}</span>
-                                        </li>
-                                        <li>
-                                            <strong>Rating:</strong>
-                                            <span>
-                                                {% if tutor.average_rating > 0 %}
-                                                    {{ tutor.average_rating|floatformat:1 }}/5.0
-                                                {% else %}
-                                                    N/A
-                                                {% endif %}
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <strong>Reviews:</strong>
-                                            <span>{{ tutor.total_reviews }}</span>
-                                        </li>
-                                        <li>
-                                            <strong>Subjects:</strong>
-                                            <span>{{ tutor_subjects|length }}</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <!-- Contact Card -->
-                                <div class="sidebar-card contact-card">
-                                    <h4 class="card-title">
-                                        <i class="fas fa-envelope me-2"></i>Get in Touch
-                                    </h4>
-                                    <div class="contact-actions">
-                                        <a href="{% url 'contact' %}?tutor={{ tutor.user.id }}" class="btn-contact">
-                                            <i class="fas fa-envelope me-2"></i>Send Message
-                                        </a>
-                                    </div>
-                                </div>
-                                
-                                <!-- Related Tutors -->
-                                {% if related_tutors %}
-                                <div class="sidebar-card related-tutors-card mt-4">
-                                    <h4 class="card-title">
-                                        <i class="fas fa-users me-2"></i>Similar Tutors
-                                    </h4>
-                                    <div class="related-tutors-list">
-                                        {% for related in related_tutors|slice:":3" %}
-                                        <div class="related-tutor-item">
-                                            <a href="{% url 'team-details' related.user.id %}" class="d-flex align-items-center gap-3">
-                                                {% if related.user.profile_picture %}
-                                                <img src="{{ related.user.profile_picture.url }}" alt="{{ related.user.get_full_name }}" class="related-tutor-image">
-                                                {% else %}
-                                                <div class="related-tutor-placeholder">
-                                                    <i class="fas fa-user"></i>
-                                                </div>
-                                                {% endif %}
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-0">
-                                                        {% if related.title %}{{ related.title }} {% endif %}{{ related.user.get_full_name|default:related.user.username }}
-                                                    </h6>
-                                                    <p class="text-muted small mb-0">
-                                                        {{ related.currency }}{{ related.hourly_rate|floatformat:0 }}/hour
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
+                            <div class="tutord-related-body">
+                                <h4><a href="{% url 'team-details' related.user.id %}">{% if related.title %}{{ related.title }} {% endif %}{{ related.user.get_full_name|default:related.user.username }}</a></h4>
+                                <p>{{ related.currency }}{{ related.hourly_rate|floatformat:0 }} / hour</p>
+                                <a href="{% url 'team-details' related.user.id %}" class="theme-btn">
+                                    <span>View Profile</span> <i class="far fa-long-arrow-right"></i>
+                                </a>
                             </div>
-                        </div>
-                    </div>
+                        </article>
+                    {% endfor %}
                 </div>
             </div>
         </section>
+    {% endif %}
 
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .tutor-details-section {
-        background: #f8f9fa;
-        padding-top: 50px;
-        padding-bottom: 80px;
+    :root {
+        --tutord-bg: #f5f5f7;
+        --tutord-surface: #ffffff;
+        --tutord-border: rgba(209, 213, 219, 0.9);
+        --tutord-title: #111827;
+        --tutord-muted: #4b5563;
     }
-    
-    .sticky-style {
-        position: sticky;
-        top: 100px;
+
+    .tutor-details-breadcrumb {
+        background-image: url("{% static 'img/index/tutor1.jpg' %}");
+        background-position: center;
+        background-size: cover;
     }
-    
-    /* Tutor Header Card */
-    .tutor-header-card {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
+    .tutor-details-shell {
+        background: var(--tutord-bg);
+        padding: 32px 0 72px;
     }
-    
-    .tutor-profile-image-large {
-        position: relative;
-        margin-bottom: 20px;
+
+    .tutor-details-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
-    
-    .tutor-large-image {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #f0f0f0;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+    .tutord-card {
+        background: var(--tutord-surface);
+        border: 1px solid var(--tutord-border);
+        border-radius: 18px;
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
     }
-    
-    .tutor-image-placeholder-large {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .tutord-hero {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1.7fr) minmax(260px, 0.9fr);
+        gap: 18px;
+        padding: 18px 20px;
+        align-items: center;
+    }
+
+    .tutord-hero-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tutord-avatar-wrap {
+        width: 110px;
+        height: 110px;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 3px solid #e5e7eb;
+        background: #eef2ff;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-size: 72px;
-        margin: 0 auto;
-        border: 5px solid #f0f0f0;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
-    
-    .featured-badge-large {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 25px;
-        font-size: 12px;
-        font-weight: 700;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+
+    .tutord-avatar-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
-    
-    .tutor-name-large {
-        font-size: 32px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 10px;
-    }
-    
-    .tutor-specialization-large {
-        font-size: 16px;
-        color: #6c757d;
-        margin-bottom: 20px;
-    }
-    
-    .tutor-rating-large {
+
+    .tutord-avatar-fallback {
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
+        justify-content: center;
+        color: #4f46e5;
     }
-    
-    .stars-large {
+
+    .tutord-avatar-fallback svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .tutord-pill-muted {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #f3f4ff;
+        color: #4338ca;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .tutord-hero-main {
         display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tutord-pill {
+        display: inline-flex;
+        border-radius: 999px;
+        background: rgba(77, 64, 202, 0.12);
+        color: var(--theme-color);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 4px 10px;
+        margin-bottom: 6px;
+    }
+
+    .tutord-identity h2 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
+        color: var(--tutord-title);
+    }
+
+    .tutord-subtitle {
+        margin: 8px 0 0;
+        color: var(--tutord-muted);
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    .tutord-meta-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .tutord-meta-block {
+        border-radius: 12px;
+        border: 1px solid var(--tutord-border);
+        padding: 8px 10px;
+        background: #f9fafb;
+    }
+
+    .tutord-meta-label {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+    }
+
+    .tutord-meta-value {
+        display: block;
+        margin-top: 3px;
+        font-size: 14px;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .tutord-stars {
+        display: inline-flex;
+        gap: 2px;
+        font-size: 14px;
+        color: #facc15;
+        margin-right: 6px;
+    }
+
+    .tutord-star-muted {
+        color: #e5e7eb;
+    }
+
+    .tutord-badges-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .tutord-chip {
+        border-radius: 999px;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        padding: 4px 9px;
+        font-size: 11px;
+        color: #4b5563;
+        background: #ffffff;
+    }
+
+    .tutord-hero-side {
+        border-left: 1px solid rgba(229, 231, 235, 0.9);
+        padding-left: 18px;
+    }
+
+    .tutord-rate-card {
+        background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+        border-radius: 16px;
+        padding: 14px 14px 16px;
+        border: 1px solid rgba(129, 140, 248, 0.5);
+    }
+
+    .tutord-rate-label {
+        margin: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #4b5563;
+    }
+
+    .tutord-rate-main {
+        margin: 4px 0 6px;
+        display: flex;
+        align-items: baseline;
         gap: 4px;
     }
-    
-    .stars-large i {
-        color: #ffc107;
-        font-size: 18px;
+
+    .tutord-rate-currency {
+        font-size: 13px;
+        color: #1f2937;
     }
-    
-    .rating-text-large {
-        font-size: 16px;
+
+    .tutord-rate-amount {
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
     }
-    
-    .tutor-quick-stats {
+
+    .tutord-rate-unit {
+        font-size: 12px;
+        color: #4b5563;
+    }
+
+    .tutord-rate-perks {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 10px;
+        font-size: 12px;
+        color: #374151;
         display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-top: 20px;
+        flex-direction: column;
+        gap: 4px;
     }
-    
-    .quick-stat-item {
+
+    .tutord-rate-perks li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .tutord-rate-perks li span {
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #16a34a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+    }
+
+    .tutord-cta-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .tutord-btn-primary,
+    .tutord-btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        min-height: 40px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 0 14px;
+    }
+
+    .tutord-btn-primary {
+        border: none;
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        color: #f9fafb;
+        box-shadow: 0 12px 34px rgba(79, 70, 229, 0.35);
+    }
+
+    .tutord-btn-outline {
+        border: 1px solid #4f46e5;
+        background: #ffffff;
+        color: #4f46e5;
+    }
+
+    .tutord-main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+        gap: 16px;
+        align-items: start;
+    }
+
+    .tutord-main-column,
+    .tutord-side-column {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .tutord-card header {
+        padding: 14px 18px 10px;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        background: #f9fafb;
+    }
+
+    .tutord-card header h3 {
+        margin: 0;
+        font-size: 19px;
+        color: var(--tutord-title);
+    }
+
+    .tutord-body {
+        padding: 16px 18px 18px;
+    }
+
+    .prose-body {
+        color: #1f2937;
+        line-height: 1.75;
+        font-size: 15px;
+    }
+
+    .tutord-subject-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .tutord-subject-tile {
+        border: 1px solid var(--tutord-border);
+        border-radius: 12px;
+        padding: 12px;
+        background: #fff;
+    }
+
+    .tutord-subject-head {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 15px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        flex: 1;
-        min-width: 120px;
     }
-    
-    .quick-stat-item i {
-        font-size: 24px;
-        color: var(--theme-color, #667eea);
-    }
-    
-    .quick-stat-item strong {
-        display: block;
-        font-size: 20px;
-        color: #212529;
-        font-weight: 700;
-    }
-    
-    .quick-stat-item span {
-        font-size: 12px;
-        color: #6c757d;
-    }
-    
-    /* Section Cards */
-    .tutor-section-card {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
-    
-    .section-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-    
-    .section-title i {
-        color: var(--theme-color, #667eea);
-    }
-    
-    .section-content {
-        font-size: 16px;
-        line-height: 1.8;
-        color: #495057;
-    }
-    
-    /* Subjects Grid */
-    .subjects-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-    
-    .subject-card-detailed {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 20px;
-        transition: all 0.3s ease;
-    }
-    
-    .subject-card-detailed:hover {
-        background: #e9ecef;
-        transform: translateY(-3px);
-    }
-    
-    .subject-header-detailed {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 10px;
-    }
-    
-    .subject-icon-detailed {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
+
+    .tutord-subject-head img {
+        width: 34px;
+        height: 34px;
         object-fit: cover;
+        border-radius: 8px;
     }
-    
-    .subject-header-detailed h4 {
-        font-size: 18px;
-        font-weight: 700;
-        color: #212529;
+
+    .tutord-subject-head h4 {
         margin: 0;
+        font-size: 16px;
+        color: #111827;
     }
-    
-    .subject-experience {
+
+    .tutord-subject-meta {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .tutord-subject-notes {
+        margin: 8px 0 0;
         font-size: 13px;
-        color: #6c757d;
-        margin: 8px 0;
-    }
-    
-    .subject-notes {
-        font-size: 14px;
-        color: #495057;
-        margin: 0;
+        color: #374151;
         line-height: 1.6;
     }
-    
-    /* Sidebar Cards */
-    .sidebar-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
-    
-    .card-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-    
-    .card-title i {
-        color: var(--theme-color, #667eea);
-    }
-    
-    /* Booking Card */
-    .booking-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-    
-    .booking-header h4 {
-        color: white;
-        border-bottom: 2px solid rgba(255,255,255,0.2);
-        padding-bottom: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .price-display {
-        text-align: center;
-        margin-bottom: 25px;
-    }
-    
-    .price-label {
-        display: block;
-        font-size: 14px;
-        opacity: 0.9;
-        margin-bottom: 8px;
-    }
-    
-    .price-amount-large {
-        font-size: 42px;
-        font-weight: 700;
-        color: white;
-    }
-    
-    .price-unit-small {
-        font-size: 18px;
-        opacity: 0.9;
-    }
-    
-    .btn-book-now {
-        background: white;
-        color: #667eea;
-        padding: 15px 25px;
-        border-radius: 10px;
-        text-align: center;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 16px;
-        display: block;
-        transition: all 0.3s ease;
-        margin-bottom: 15px;
-    }
-    
-    .btn-book-now:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        color: #667eea;
-        text-decoration: none;
-    }
-    
-    .availability-info {
-        text-align: center;
-        font-size: 14px;
-    }
-    
-    /* Info List */
-    .info-list {
+
+    .tutord-fact-list {
         list-style: none;
         padding: 0;
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
-    
-    .info-list li {
-        padding: 12px 0;
-        border-bottom: 1px solid #f0f0f0;
+
+    .tutord-fact-list li {
+        border: 1px solid var(--tutord-border);
+        border-radius: 10px;
+        padding: 9px 10px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        gap: 12px;
     }
-    
-    .info-list li:last-child {
-        border-bottom: none;
+
+    .tutord-fact-list span {
+        color: #6b7280;
+        font-size: 12px;
     }
-    
-    .info-list strong {
-        color: #212529;
-        font-weight: 600;
+
+    .tutord-fact-list strong {
+        color: #111827;
+        font-size: 13px;
     }
-    
-    .info-list span {
-        color: #6c757d;
-    }
-    
-    /* Contact Card */
-    .btn-contact {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 10px;
-        text-align: center;
-        text-decoration: none;
-        font-weight: 600;
+
+    .tutord-side-copy {
+        margin: 0 0 12px;
+        color: var(--tutord-muted);
         font-size: 14px;
-        display: block;
-        transition: all 0.3s ease;
+        line-height: 1.6;
     }
-    
-    .btn-contact:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        color: white;
-        text-decoration: none;
+
+    .tutord-related {
+        background: #f9fafb;
+        padding: 56px 0 76px;
     }
-    
-    /* Related Tutors */
-    .related-tutors-list {
-        margin-top: 15px;
+
+    .tutord-related-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
     }
-    
-    .related-tutor-item {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #f0f0f0;
+
+    .tutord-related-head h3 {
+        margin: 0;
+        color: #111827;
+        font-size: 24px;
     }
-    
-    .related-tutor-item:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
+
+    .tutord-related-head p {
+        margin: 6px 0 0;
+        color: #6b7280;
     }
-    
-    .related-tutor-item a {
-        text-decoration: none;
-        color: #212529;
-        transition: all 0.3s ease;
+
+    .tutord-related-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
     }
-    
-    .related-tutor-item a:hover {
-        color: var(--theme-color, #667eea);
+
+    .tutord-related-tile {
+        border: 1px solid var(--tutord-border);
+        border-radius: 15px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
     }
-    
-    .related-tutor-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
+
+    .tutord-related-media {
+        height: 160px;
+    }
+
+    .tutord-related-media img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        border: 2px solid #f0f0f0;
+        display: block;
     }
-    
-    .related-tutor-placeholder {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .tutord-related-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-size: 24px;
-        border: 2px solid #f0f0f0;
+        color: #cbd5e1;
+        font-size: 52px;
     }
-    
-    .related-tutor-item h6 {
-        font-size: 16px;
-        font-weight: 600;
+
+    .tutord-related-body {
+        padding: 12px 13px 14px;
     }
-    
-    @media (max-width: 991px) {
-        .sticky-style {
-            position: relative;
-            top: 0;
-            margin-top: 30px;
+
+    .tutord-related-body h4 {
+        margin: 0;
+        font-size: 17px;
+    }
+
+    .tutord-related-body h4 a {
+        color: #111827;
+        text-decoration: none;
+    }
+
+    .tutord-related-body h4 a:hover {
+        color: var(--theme-color);
+    }
+
+    .tutord-related-body p {
+        margin: 6px 0 10px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .tutord-related-body .theme-btn {
+        padding: 8px 13px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 1023px) {
+        .tutord-hero {
+            grid-template-columns: minmax(0, 1fr);
+            align-items: flex-start;
         }
-        
-        .tutor-quick-stats {
-            flex-direction: column;
+
+        .tutord-hero-side {
+            border-left: none;
+            border-top: 1px solid rgba(229, 231, 235, 0.9);
+            padding-left: 0;
+            padding-top: 14px;
         }
-        
-        .quick-stat-item {
-            width: 100%;
+
+        .tutord-meta-row {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        
-        .subjects-grid {
-            grid-template-columns: 1fr;
+
+        .tutord-main-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .tutord-subject-grid,
+        .tutord-related-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .tutord-hero {
+            padding: 16px 14px;
+        }
+
+        .tutord-meta-row {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .tutord-subject-grid,
+        .tutord-related-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .tutord-identity h2 {
+            font-size: 24px;
         }
     }
 </style>
