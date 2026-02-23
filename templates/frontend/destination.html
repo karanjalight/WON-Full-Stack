@@ -5,132 +5,34 @@
 <title>Destinations - Explore Olympiad Travel Destinations | WON</title>
 {% endblock %}
 
-{% block content %}
-        <!--  Breadcrumb Section Start -->
-        <div class="breadcrumb-wrapper section-padding bg-cover destination-breadcrumb">
-            <div class="container-fluid">
-                <div class="page-heading">
-                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                        <li>
-                            <a href="{% url 'index' %}">
-                            Home
-                            </a>
-                        </li>
-                        <li>
-                            <i class="far fa-slash"></i>
-                        </li>
-                        <li>
-                            Destinations
-                        </li>
-                    </ul>
-                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Our Destinations</h1>
-                </div>
-            </div>
-            <div class="plane-shape float-bob-x">
-                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
-            </div>
-        </div>
-
-        <!-- Tour Section Start -->
-        <section class="tour-section fix section-padding">
-            <div class="container">
-                <div class="section-title text-center">
-                    <span class="wow fadeInUp">Popular Destinations</span>
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Explore Olympiad Destinations</h2>
-                    <p class="mt-3 mt-mb-0 wow fadeInUp" data-wow-delay=".5s">
-                        Explore top destinations hosting major Olympiad competitions. Find upcoming events, <br> travel packages, and accommodation options for your competition journey.
-                    </p>
-                </div>
-                
-                {% if destinations %}
-                <div class="row g-4">
-                    {% for item in destinations %}
-                    {% with dest=item.destination %}
-                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="{% cycle '.2s' '.4s' '.6s' '.8s' %}">
-                        <div class="tour-box-items">
-                            <div class="thumb">
-                                {% if dest.image %}
-                                    <img src="{{ dest.image.url }}" alt="{{ dest.name }}" style="height: 250px; object-fit: cover; width: 100%;">
-                                {% else %}
-                                    <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ dest.name }}" style="height: 250px; object-fit: cover; width: 100%;">
-                                {% endif %}
-                            </div>
-                            <div class="content">
-                                <span>{{ dest.country|upper }}</span>
-                                <h4>
-                                    <a href="{% url 'destination-details' dest.slug %}">
-                                        {{ dest.city }}, {{ dest.country }}
-                                    </a>
-                                </h4>
-                                <h6>
-                                    Package Range:
-                                    <span>
-                                        {% if dest.package_price_min and dest.package_price_max %}
-                                            {{ dest.currency }} {{ dest.package_price_min|floatformat:0 }} - {{ dest.currency }} {{ dest.package_price_max|floatformat:0 }}
-                                        {% elif dest.package_price_min %}
-                                            From {{ dest.currency }} {{ dest.package_price_min|floatformat:0 }}
-                                        {% elif dest.package_price_max %}
-                                            Up to {{ dest.currency }} {{ dest.package_price_max|floatformat:0 }}
-                                        {% else %}
-                                            Contact us
-                                        {% endif %}
-                                    </span>
-                                </h6>
-                               
-                                <a href="{% url 'destination-details' dest.slug %}" style="padding: 10px 20px !important;" class="theme-btn w-100 py-2 mt-3 destination-cta-btn">
-                                    <span>View Destination</span> 
-                                    <i class="far fa-long-arrow-right" style="font-size: 12px; color:#111827 !important;"></i>
-
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endwith %}
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <div class="no-results wow fadeInUp">
-                            <i class="fas fa-map-marked-alt" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
-                            <h3>No destinations found</h3>
-                            <p class="text-muted">Please try adjusting your search or filters.</p>
-                            <a href="{% url 'destination' %}" class="theme-btn mt-3">
-                                <span>View All Destinations</span> <i class="far fa-long-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                
-                <!-- Pagination -->
-                {% if destinations and destinations.has_other_pages %}
-                <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
-                    <ul>
-                        {% if destinations.has_previous %}
-                            <li><a class="page-numbers" href="?page={{ destinations.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">Previous</a></li>
-                        {% endif %}
-                        
-                        {% for num in destinations.paginator.page_range %}
-                            {% if destinations.number == num %}
-                                <li><a class="page-numbers current" href="#">{{ num }}</a></li>
-                            {% elif num > destinations.number|add:'-3' and num < destinations.number|add:'3' %}
-                                <li><a class="page-numbers" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">{{ num }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% if destinations.has_next %}
-                            <li><a class="page-numbers" href="?page={{ destinations.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">Next</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-        </section>
-
-{% endblock %}
-
 {% block extra_css %}
+{{ block.super }}
+<style>
+    /* Destinations: green theme, CTA contrast */
+    .tour-section .section-title span { color: #198754 !important; }
+    .tour-section .tour-box-items .content .theme-btn.destination-cta-btn {
+        background-color: #198754 !important;
+        color: #fff !important;
+    }
+    .tour-section .tour-box-items .content .theme-btn.destination-cta-btn span,
+    .tour-section .tour-box-items .content .theme-btn.destination-cta-btn i {
+        color: #fff !important;
+    }
+    .tour-section .tour-box-items .content .theme-btn.destination-cta-btn i {
+        background-color: rgba(255,255,255,0.25) !important;
+        color: #fff !important;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .tour-section .tour-box-items .content h4 a:hover { color: #198754 !important; }
+    .tour-section .page-nav-wrap .page-numbers:hover { background: #198754 !important; color: #fff !important; }
+    .tour-section .page-nav-wrap .page-numbers.current { background: #198754 !important; color: #fff !important; }
+</style>
 <style>
     .destination-breadcrumb {
         background-image: url("{% static 'img/hero/destinations.jpg' %}");
@@ -223,7 +125,7 @@
         background: #f8f9fa;
         padding: 80px 0;
     }
-    
+
     .destination-cards-container {
         display: flex;
         flex-direction: column;
@@ -231,7 +133,7 @@
         max-width: 1200px;
         margin: 0 auto;
     }
-    
+
     .destination-card-horizontal {
         display: flex;
         background: white;
@@ -241,33 +143,33 @@
         transition: all 0.3s ease;
         min-height: 320px;
     }
-    
+
     .destination-card-horizontal:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 50px rgba(0,0,0,0.15);
     }
-    
+
     /* Left Side: Image */
     .card-image-side {
         flex: 0 0 45%;
         position: relative;
         overflow: hidden;
     }
-    
+
     .card-image-wrapper {
         position: relative;
         width: 100%;
         height: 100%;
         min-height: 260px;
     }
-    
+
     .card-main-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
         filter: brightness(0.85);
     }
-    
+
     .image-overlay-text {
         position: absolute;
         top: 0;
@@ -276,13 +178,13 @@
         padding: 40px 30px;
         z-index: 2;
     }
-    
+
     .country-names {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .country-name-large {
         font-size: 48px;
         font-weight: 900;
@@ -291,7 +193,7 @@
         line-height: 1.1;
         letter-spacing: 2px;
     }
-    
+
     .featured-badge {
         margin-top: 20px;
         display: inline-block;
@@ -304,7 +206,7 @@
         letter-spacing: 1px;
         text-transform: uppercase;
     }
-    
+
     /* Bottom Overlay: Includes */
     .image-bottom-overlay {
         position: absolute;
@@ -315,7 +217,7 @@
         padding: 30px;
         z-index: 2;
     }
-    
+
     .overlay-heading {
         color: #FF6B35;
         font-size: 16px;
@@ -324,13 +226,13 @@
         text-transform: uppercase;
         letter-spacing: 1px;
     }
-    
+
     .includes-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
     }
-    
+
     .include-item {
         display: flex;
         align-items: center;
@@ -338,14 +240,14 @@
         color: white;
         font-size: 13px;
     }
-    
+
     .include-item i {
         font-size: 18px;
         color: #FF6B35;
         width: 24px;
         text-align: center;
     }
-    
+
     /* Right Side: Content */
     .card-content-side {
         flex: 1;
@@ -354,20 +256,20 @@
         display: flex;
         flex-direction: column;
     }
-    
+
     .card-content-wrapper {
         display: flex;
         flex-direction: column;
         height: 100%;
     }
-    
+
     .card-meta {
         display: flex;
         gap: 25px;
         margin-bottom: 20px;
         flex-wrap: wrap;
     }
-    
+
     .meta-item {
         display: flex;
         align-items: center;
@@ -375,16 +277,16 @@
         color: #6c757d;
         font-size: 14px;
     }
-    
+
     .meta-item i {
         color: var(--theme-color);
         font-size: 16px;
     }
-    
+
     .card-title {
         margin-bottom: 15px;
     }
-    
+
     .card-title a {
         color: #212529;
         font-size: 24px;
@@ -393,11 +295,11 @@
         line-height: 1.3;
         transition: color 0.3s ease;
     }
-    
+
     .card-title a:hover {
         color: var(--theme-color);
     }
-    
+
     .card-location {
         display: flex;
         align-items: center;
@@ -406,43 +308,43 @@
         font-size: 15px;
         margin-bottom: 15px;
     }
-    
+
     .card-location i {
         color: var(--theme-color);
     }
-    
+
     .card-rating {
         margin-bottom: 20px;
     }
-    
+
     .stars {
         display: flex;
         gap: 3px;
     }
-    
+
     .stars i {
         color: #28a745;
         font-size: 16px;
     }
-    
+
     .card-description {
         flex: 1;
         margin-bottom: 18px;
     }
-    
+
     .card-description p {
         color: #495057;
         font-size: 14px;
         line-height: 1.5;
         margin: 0;
         display: -webkit-box;
-        -webkit-line-clamp: 2;          /* show only 2 lines */
+        -webkit-line-clamp: 2;
         line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .card-footer {
         display: flex;
         justify-content: space-between;
@@ -450,12 +352,12 @@
         padding-top: 20px;
         border-top: 1px solid #e9ecef;
     }
-    
+
     .card-price {
         display: flex;
         flex-direction: column;
     }
-    
+
     .price-label {
         font-size: 12px;
         color: #6c757d;
@@ -463,14 +365,14 @@
         letter-spacing: 1px;
         margin-bottom: 5px;
     }
-    
+
     .price-amount {
         font-size: 36px;
         font-weight: 700;
         color: #dc3545;
         line-height: 1;
     }
-    
+
     .card-cta-btn {
         background: #FF6B35;
         color: white;
@@ -485,98 +387,222 @@
         transition: all 0.3s ease;
         border: none;
     }
-    
+
     .card-cta-btn:hover {
         background: #e55a2b;
         transform: translateX(5px);
         color: white;
     }
-    
+
     .card-cta-btn i {
         transition: transform 0.3s ease;
     }
-    
+
     .card-cta-btn:hover i {
         transform: translateX(3px);
     }
-    
+
     .no-results {
         padding: 60px 20px;
     }
-    
+
     .no-results h3 {
         color: #212529;
         margin-bottom: 10px;
     }
-    
+
     /* Responsive Design */
     @media (max-width: 991px) {
         .destination-card-horizontal {
             flex-direction: column;
             min-height: auto;
         }
-        
+
         .card-image-side {
             flex: 0 0 auto;
             min-height: 220px;
         }
-        
+
         .card-image-wrapper {
             min-height: 220px;
         }
-        
+
         .card-content-side {
             padding: 30px 25px;
         }
-        
+
         .country-name-large {
             font-size: 36px;
         }
-        
+
         .card-title a {
             font-size: 24px;
         }
-        
+
         .includes-grid {
             grid-template-columns: 1fr;
         }
-        
+
         .card-footer {
             flex-direction: column;
             gap: 20px;
             align-items: flex-start;
         }
-        
+
         .card-cta-btn {
             width: 100%;
             justify-content: center;
         }
     }
-    
+
     @media (max-width: 576px) {
         .card-content-side {
             padding: 25px 20px;
         }
-        
+
         .country-name-large {
             font-size: 28px;
         }
-        
+
         .card-title a {
             font-size: 20px;
         }
-        
+
         .price-amount {
             font-size: 28px;
         }
-        
+
         .image-overlay-text {
             padding: 25px 20px;
         }
-        
+
         .image-bottom-overlay {
             padding: 20px;
         }
     }
 </style>
+{% endblock %}
+
+{% block content %}
+        <!--  Breadcrumb Section Start -->
+        <div class="breadcrumb-wrapper section-padding bg-cover destination-breadcrumb">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                        <li>
+                            <a href="{% url 'index' %}">
+                            Home
+                            </a>
+                        </li>
+                        <li>
+                            <i class="far fa-slash"></i>
+                        </li>
+                        <li>
+                            Destinations
+                        </li>
+                    </ul>
+                    <h1 class="wow fadeInUp" data-wow-delay=".5s">Our Destinations</h1>
+                </div>
+            </div>
+            <div class="plane-shape float-bob-x">
+                <img src="{% static 'img/breadcrumb-plane.png' %}" alt="img">
+            </div>
+        </div>
+
+        <!-- Tour Section Start -->
+        <section class="tour-section fix section-padding">
+            <div class="container">
+                <div class="section-title text-center">
+                    <span class="wow fadeInUp">Popular Destinations</span>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Explore Olympiad Destinations</h2>
+                    <p class="mt-3 mt-mb-0 wow fadeInUp" data-wow-delay=".5s">
+                        Explore top destinations hosting major Olympiad competitions. Find upcoming events, <br> travel packages, and accommodation options for your competition journey.
+                    </p>
+                </div>
+                
+                {% if destinations %}
+                <div class="row g-4">
+                    {% for item in destinations %}
+                    {% with dest=item.destination %}
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="{% cycle '.2s' '.4s' '.6s' '.8s' %}">
+                        <div class="tour-box-items">
+                            <div class="thumb">
+                                {% if dest.image %}
+                                    <img src="{{ dest.image.url }}" alt="{{ dest.name }}" style="height: 250px; object-fit: cover; width: 100%;">
+                                {% else %}
+                                    <img src="{% static 'img/destinations/01.jpg' %}" alt="{{ dest.name }}" style="height: 250px; object-fit: cover; width: 100%;">
+                                {% endif %}
+                            </div>
+                            <div class="content">
+                                <span>{{ dest.country|upper }}</span>
+                                <h4>
+                                    <a href="{% url 'destination-details' dest.slug %}">
+                                        {{ dest.city }}, {{ dest.country }}
+                                    </a>
+                                </h4>
+                                <h6>
+                                    Package Range:
+                                    <span>
+                                        {% if dest.package_price_min and dest.package_price_max %}
+                                            {{ dest.currency }} {{ dest.package_price_min|floatformat:0 }} - {{ dest.currency }} {{ dest.package_price_max|floatformat:0 }}
+                                        {% elif dest.package_price_min %}
+                                            From {{ dest.currency }} {{ dest.package_price_min|floatformat:0 }}
+                                        {% elif dest.package_price_max %}
+                                            Up to {{ dest.currency }} {{ dest.package_price_max|floatformat:0 }}
+                                        {% else %}
+                                            Contact us
+                                        {% endif %}
+                                    </span>
+                                </h6>
+                               
+                                <a href="{% url 'destination-details' dest.slug %}" class="theme-btn w-100 py-2 mt-3 destination-cta-btn">
+                                    <span>View Destination</span>
+                                    <i class="far fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="no-results wow fadeInUp">
+                            <i class="fas fa-map-marked-alt" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
+                            <h3>No destinations found</h3>
+                            <p class="text-muted">Please try adjusting your search or filters.</p>
+                            <a href="{% url 'destination' %}" class="theme-btn mt-3">
+                                <span>View All Destinations</span> <i class="far fa-long-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Pagination -->
+                {% if destinations and destinations.has_other_pages %}
+                <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
+                    <ul>
+                        {% if destinations.has_previous %}
+                            <li><a class="page-numbers" href="?page={{ destinations.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">Previous</a></li>
+                        {% endif %}
+                        
+                        {% for num in destinations.paginator.page_range %}
+                            {% if destinations.number == num %}
+                                <li><a class="page-numbers current" href="#">{{ num }}</a></li>
+                            {% elif num > destinations.number|add:'-3' and num < destinations.number|add:'3' %}
+                                <li><a class="page-numbers" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if destinations.has_next %}
+                            <li><a class="page-numbers" href="?page={{ destinations.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
 {% endblock %}

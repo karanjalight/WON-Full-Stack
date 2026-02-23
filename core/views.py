@@ -1063,11 +1063,39 @@ def olympiads(request):
     
     # Order by featured first, then by application deadline
     competitions = competitions.order_by('-is_featured', 'application_deadline', 'start_date')
-    
-    # Pagination
-    paginator = Paginator(competitions, 12)  # Show 12 competitions per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+
+    # Subscription-aware gating:
+    # Authenticated users with an active/inherited subscription see the full paginated list.
+    # Others see the first 6 "preview" items only (no deep pagination).
+    active_subscription = None
+    has_full_access = False
+    if request.user.is_authenticated:
+        active_subscription, source_type, source_user = request.user.get_subscription_source()
+        has_full_access = bool(active_subscription and active_subscription.is_valid())
+
+    if has_full_access:
+        paginator = Paginator(competitions, 12)  # Full access: paginate as normal
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    else:
+        # Preview mode: show first 6 fully, next 3 as "locked" (total 9)
+        preview_slice = list(competitions[:9])
+        class SimplePage:
+            def __init__(self, items):
+                self.object_list = items
+                # Minimal paginator-like attributes used in the template
+                self.paginator = self
+                self.count = len(items)
+                self.start_index = 1 if items else 0
+                self.end_index = len(items)
+                self.has_other_pages = False
+                self.has_previous = False
+                self.has_next = False
+
+            def __iter__(self):
+                return iter(self.object_list)
+
+        page_obj = SimplePage(preview_slice)
     
     # Get all subjects and destinations for filters
     subjects = Subject.objects.filter(is_active=True).order_by('name')
@@ -1094,6 +1122,8 @@ def olympiads(request):
         'search_query': search_query,
         'region_choices': Destination.REGION_CHOICES,
         'age_group_options': ['4-9', '10-13', '14-16', '17-20', '21-30'],
+        'has_full_access': has_full_access,
+        'active_subscription': active_subscription,
     }
     
     return render(request, 'frontend/olympiads.html', context)

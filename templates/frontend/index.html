@@ -1,6 +1,251 @@
 {% extends 'frontend/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<style>
+/* ========== Landing: Green, Orange, Red premium theme ========== */
+:root {
+    --landing-green: #198754;
+    --landing-green-dark: #157347;
+    --landing-orange: #FD7E14;
+    --landing-orange-soft: #FF922B;
+    --landing-red: #DC3545;
+    --landing-red-soft: #E8596C;
+}
+/* Hero: accent line and badge */
+.hero-section.hero-4 .hero-items .hero-content h6 {
+    color: var(--landing-orange) !important;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+.hero-section.hero-4 .hero-items .hero-content h1 .shape-text::before {
+    background: linear-gradient(90deg, var(--landing-green) 0%, var(--landing-green-dark) 100%) !important;
+    border-radius: 4px;
+    opacity: 0.18;
+}
+.hero-section.hero-4 .booking-list-area-1 .theme-btn {
+    background-color: var(--landing-green) !important;
+    color: #fff !important;
+}
+.hero-section.hero-4 .booking-list-area-1 .theme-btn span,
+.hero-section.hero-4 .booking-list-area-1 .theme-btn i {
+    color: #fff !important;
+}
+.hero-section.hero-4 .booking-list-area-1 .theme-btn:hover {
+    background-color: var(--landing-green-dark) !important;
+}
+.hero-section.hero-4 .array-button .array-prev:hover,
+.hero-section.hero-4 .array-button .array-next:hover {
+    background-color: var(--landing-green) !important;
+}
+/* Section titles: green/orange accents */
+.trending-destinations .section-title span,
+.about-section .section-title span {
+    color: var(--landing-green) !important;
+    font-weight: 700;
+}
+.trending-destinations .theme-btn.theme-btn-2,
+.about-section .theme-btn {
+    background-color: var(--landing-green) !important;
+    color: #fff !important;
+}
+.trending-destinations .theme-btn.theme-btn-2 span {
+    color: #fff !important;
+}
+.about-section .theme-btn span {
+    color: #fff !important;
+}
+/* More About WON: icon visible on white circle — green arrow */
+.about-section .theme-btn i {
+    color: var(--landing-green) !important;
+    background-color: rgba(255,255,255,0.95) !important;
+}
+.trending-destinations .theme-btn.theme-btn-2:hover {
+    background-color: var(--landing-green-dark) !important;
+}
+/* Featured competition cards: price badge green */
+.trending-destinations .amazing-tour-items .post-box {
+    background: linear-gradient(135deg, var(--landing-green) 0%, var(--landing-green-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(25, 135, 84, 0.3);
+}
+.trending-destinations .amazing-tour-items .content .theme-btn {
+    background-color: var(--landing-green) !important;
+    color: #fff !important;
+}
+.trending-destinations .amazing-tour-items .content .theme-btn span {
+    color: #fff !important;
+}
+.trending-destinations .amazing-tour-items .content .theme-btn i {
+    background-color: rgba(255,255,255,0.25);
+    color: var(--landing-green) !important;
+}
+.trending-destinations .amazing-tour-items .content .theme-btn:hover {
+    background-color: var(--landing-green-dark) !important;
+}
+.trending-destinations .amazing-tour-items .content .theme-btn:hover span {
+    color: #fff !important;
+}
+.trending-destinations .amazing-tour-items .content .theme-btn:hover i {
+    color: var(--landing-green) !important;
+    background-color: rgba(255,255,255,0.35);
+}
+.trending-destinations .amazing-tour-items .list-items h6 {
+    background: var(--landing-orange);
+    color: #fff;
+    font-weight: 700;
+}
+/* About: checkmark icons green */
+.about-section .about-icon-items svg path {
+    fill: var(--landing-green) !important;
+}
+.about-section .about-sideber h5 {
+    border-left-color: var(--landing-green);
+    color: #1a1a1a;
+}
+/* Olympiad subjects: green/orange/red icon palette (index only) */
+.destination-feature-box .icon { background-color: var(--landing-green) !important; }
+.destination-feature-box .icon.bg-2 { background-color: var(--landing-orange) !important; }
+.destination-feature-box .icon.bg-3 { background-color: var(--landing-red) !important; }
+.destination-feature-box .icon.bg-4 { background-color: var(--landing-green-dark) !important; }
+.destination-feature-box .icon.bg-5 { background-color: var(--landing-orange) !important; }
+.destination-feature-box .icon.bg-6 { background-color: var(--landing-red) !important; }
+.destination-feature-box .icon.bg-7 { background-color: var(--landing-green) !important; }
+.destination-feature-box .icon.bg-8 { background-color: var(--landing-orange) !important; }
+.destination-feature-box .content span b {
+    color: var(--landing-green) !important;
+}
+/* Secondary CTA (Explore More) — orange button, icon visible on white circle */
+.section-title-area .theme-btn.theme-btn-2 {
+    background-color: var(--landing-orange) !important;
+    border-color: var(--landing-orange);
+    color: #fff !important;
+}
+.section-title-area .theme-btn.theme-btn-2 span {
+    color: #fff !important;
+}
+.section-title-area .theme-btn.theme-btn-2 i {
+    color: #c2410c !important;
+    background-color: rgba(255,255,255,0.95) !important;
+}
+.section-title-area .theme-btn.theme-btn-2:hover i {
+    color: #a03508 !important;
+}
+.section-title-area .theme-btn.theme-btn-2:hover {
+    background-color: #E8590C !important;
+    border-color: #E8590C;
+}
+/* Study resources / tour boxes */
+.tour-package-section .section-title span { color: var(--landing-orange) !important; }
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn {
+    background-color: var(--landing-green) !important;
+    color: #fff !important;
+}
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn span {
+    color: #fff !important;
+}
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn i {
+    background-color: rgba(255,255,255,0.25);
+    color: var(--landing-green) !important;
+}
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn:hover {
+    background-color: var(--landing-green-dark) !important;
+}
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn:hover span {
+    color: #fff !important;
+}
+.tour-package-section .tour-box-items-5 .tour-content .theme-btn:hover i {
+    color: var(--landing-green) !important;
+    background-color: rgba(255,255,255,0.35);
+}
+/* CTA “Special Offer” block: red/orange accent */
+.cta-wrapper-4 .section-title span {
+    color: var(--landing-red) !important;
+    font-weight: 700;
+}
+.cta-wrapper-4 .theme-btn {
+    background-color: var(--landing-orange) !important;
+    border-color: var(--landing-orange);
+    color: #fff !important;
+}
+.cta-wrapper-4 .theme-btn span,
+.cta-wrapper-4 .theme-btn i {
+    color: #fff !important;
+}
+.cta-wrapper-4 .theme-btn:hover {
+    background-color: #E8590C !important;
+    border-color: #E8590C;
+}
+
+/* ========== Events section: green/orange theme ========== */
+.tour-descover-section .section-title span {
+    color: var(--landing-green) !important;
+    font-weight: 700;
+}
+.tour-descover-section .tour-content .theme-btn {
+    background-color: var(--landing-green) !important;
+    color: #fff !important;
+}
+.tour-descover-section .tour-content .theme-btn span {
+    color: #fff !important;
+}
+.tour-descover-section .tour-content .theme-btn i {
+    color: var(--landing-green) !important;
+    background-color: rgba(255,255,255,0.95) !important;
+}
+.tour-descover-section .tour-content .theme-btn:hover {
+    background-color: var(--landing-green-dark) !important;
+}
+.tour-descover-section .tour-content .theme-btn:hover i {
+    color: var(--landing-green-dark) !important;
+}
+.tour-descover-section .tour-discover-wrapper .tour-card-item .tour-content h6 span {
+    color: var(--landing-green) !important;
+}
+.tour-descover-section .tour-discover-wrapper .tour-card-item .tour-content ul li i {
+    color: var(--landing-green) !important;
+}
+.tour-descover-section .tour-discover-wrapper .tour-card-item .tour-content .list ul li i {
+    color: var(--landing-orange) !important;
+}
+.tour-descover-section .tour-discover-wrapper .tour-card-item .tour-content .star i {
+    color: var(--landing-orange) !important;
+}
+.tour-descover-section .tour-discover-wrapper .tour-card-item .tour-content h4 a:hover {
+    color: var(--landing-green) !important;
+}
+.events-slider-controls button {
+    background: #fff;
+    color: var(--landing-green);
+    border: 2px solid var(--landing-green);
+}
+.events-slider-controls button:hover {
+    background: var(--landing-green);
+    color: #fff;
+    border-color: var(--landing-green);
+}
+
+/* Premium polish: section spacing and card shadows */
+.trending-destinations .amazing-tour-items {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.trending-destinations .amazing-tour-items:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+.about-section .about-box {
+    background: linear-gradient(135deg, var(--landing-green) 0%, var(--landing-green-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(25, 135, 84, 0.25);
+}
+</style>
+{% endblock %}
 
 {% block content %}
         <!-- Hero Section Start -->
@@ -325,22 +570,22 @@
                                     <ul class="wow fadeInUp" data-wow-delay=".3s">
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Global competition directory
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Application & document tracking
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Prep resources & tutor access
                                         </li>
@@ -348,29 +593,29 @@
                                     <ul class="wow fadeInUp" data-wow-delay=".5s">
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Travel quotes via Read Trips
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Premium subscriptions
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#4D40CA"/>
-                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#4D40CA"/>
+                                                <path d="M23.1017 4.53411L13.8817 13.7541C13.3324 14.3034 12.5865 14.6108 11.8089 14.6108C11.766 14.6108 11.7231 14.6108 11.6778 14.6085C10.8573 14.5701 10.0888 14.1904 9.56215 13.5575L7.0102 10.3003C6.68923 9.8776 6.76156 9.2786 7.1752 8.94633C7.59337 8.60954 8.20818 8.67507 8.54499 9.09552L11.0811 12.3323C11.2529 12.5313 11.5015 12.6511 11.766 12.6601C12.0418 12.6737 12.3085 12.5697 12.5006 12.3753L21.7229 3.15529C21.7297 3.14624 21.7387 3.13946 21.7477 3.13043C22.1343 2.7552 22.7513 2.76652 23.1266 3.15529C23.4995 3.54181 23.4905 4.15888 23.1017 4.53411Z" fill="#198754"/>
+                                                <path d="M20.0776 12.8161C19.8538 15.3364 18.6898 17.5651 16.947 19.1677C15.2065 20.7703 12.8874 21.7422 10.3558 21.7558C4.96711 21.7558 0.600098 17.3888 0.600098 12.0001C0.600098 6.61139 4.96711 2.24438 10.3558 2.24438C12.6478 2.24438 14.8652 3.05132 16.6215 4.52282C17.0374 4.86187 17.0985 5.47671 16.7594 5.89487C16.4181 6.31077 15.8033 6.37406 15.3851 6.03275C15.3783 6.02822 15.3738 6.02146 15.367 6.01694C12.0624 3.25026 7.13931 3.68649 4.3749 6.99114C1.60822 10.298 2.04447 15.2189 5.34911 17.9855C8.65376 20.7522 13.5768 20.3137 16.3435 17.009C17.3742 15.7772 18.0003 14.2559 18.1337 12.6556C18.1721 12.1222 18.6332 11.7221 19.1644 11.7605C19.1735 11.7605 19.1802 11.7628 19.187 11.7628C19.7227 11.8079 20.1228 12.2781 20.0776 12.8161Z" fill="#198754"/>
                                               </svg>
                                               Email alerts for key deadlines
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="about-btn">
-                                    <a href="about.html" class="theme-btn wow fadeInUp" data-wow-delay=".3s">
+                                    <a href="about" class="theme-btn wow fadeInUp" data-wow-delay=".3s">
                                         <span>More About WON</span> <i class="far fa-long-arrow-right"></i>
                                     </a>
                                     <!-- <div class="group-image wow fadeInUp" data-wow-delay=".5s">
@@ -449,7 +694,7 @@
                     </a>
                 </div>
                 <div class="row">
-                    {% if featured_subjects and featured_subjects|length >= 4 %}
+                    {% if featured_subjects and featured_subjects|length >= 20 %}
                     {% for subject in featured_subjects %}
                     <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                         <div class="destination-feature-box">
