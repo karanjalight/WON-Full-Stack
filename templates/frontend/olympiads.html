@@ -161,6 +161,14 @@
                 margin-left: 10px;
                 color: var(--white);
             }
+            /* Preview-mode locked cards: blur & dim only */
+            .olympiad-card--locked .thumb img {
+                filter: blur(3px);
+            }
+            .olympiad-card--locked .content {
+                opacity: 0.35;
+                pointer-events: none;
+            }
             @media (max-width: 1199px) {
                 .amazing-tour-section.olympiads-list-section {
                     padding-top: 64px;
@@ -304,19 +312,29 @@
                             {% endif %}
                             
                             <!-- Results Count -->
-                            <div class="results-header mb-3">
-                                <p class="text-muted">
+                            <div class="results-header mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <p class="text-muted mb-0">
                                     {% if competitions %}
-                                        Showing {{ competitions.start_index }} - {{ competitions.end_index }} of {{ competitions.paginator.count }} competition{{ competitions.paginator.count|pluralize }}
+                                        Showing {{ competitions.start_index }} - {{ competitions.end_index }} of {{ competitions.paginator.count|default:competitions.count }} competition{% if competitions.paginator.count|default:competitions.count != 1 %}s{% endif %}
                                     {% endif %}
                                 </p>
+                                {% if not has_full_access %}
+                                <div class="text-end">
+                                    <span class="badge bg-primary-subtle text-primary fw-semibold me-2">
+                                        Preview mode
+                                    </span>
+                                    <small class="text-muted d-block">
+                                        Create an account and subscribe to unlock all Olympiads.
+                                    </small>
+                                </div>
+                                {% endif %}
                             </div>
                             
                             <div class="row g-4">
                                 {% if competitions %}
                                     {% for competition in competitions %}
                                     <div class="col-xl-4 col-lg-6 col-md-6">
-                                        <div class="amazing-tour-items mt-0">
+                                        <div class="amazing-tour-items mt-0 position-relative {% if not has_full_access and forloop.counter > 6 %}olympiad-card--locked{% endif %}">
                                             <div class="thumb">
                                                 <div class="post-box">
                                                     <h4>$ {{ competition.base_price|floatformat:0 }}</h4>
@@ -344,14 +362,14 @@
                                             </div>
                                             <div class="content">
                                                 <h4>
-                                                <a href="{% url 'olympiad-details' competition.slug %}">{{ competition.name }}</a>
-                                            </h4>
-                                            <span class="location-icon">
-                                                <i class="far fa-map-marker-alt"></i>
-                                                {{ competition.destination.city }}, {{ competition.destination.country }}
-                                            </span>
-                                            <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn">
-                                                    <span>View Details</span> <i class="far fa-long-arrow-right"></i>
+                                                    <a href="{% url 'olympiad-details' competition.slug %}">{{ competition.name }}</a>
+                                                </h4>
+                                                <span class="location-icon">
+                                                    <i class="far fa-map-marker-alt"></i>
+                                                    {{ competition.destination.city }}, {{ competition.destination.country }}
+                                                </span>
+                                                <a href="{% url 'olympiad-details' competition.slug %}" class="theme-btn">
+                                                    <span>{% if has_full_access %}View Details{% elif forloop.counter <= 6 %}Preview Details{% else %}Locked{% endif %}</span> <i class="far fa-long-arrow-right"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -366,7 +384,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            {% if competitions.has_other_pages %}
+                            {% if has_full_access and competitions.has_other_pages %}
                             <div class="page-nav-wrap mt-5 text-center wow fadeInUp" data-wow-delay=".3s">
                                 <ul>
                                     {% if competitions.has_previous %}
@@ -385,6 +403,27 @@
                                         <li><a class="page-numbers" href="?page={{ competitions.next_page_number }}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_region %}&region={{ current_region }}{% endif %}{% if current_competition_date %}&competition_date={{ current_competition_date }}{% endif %}{% if current_age_group %}&age_group={{ current_age_group }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a></li>
                                     {% endif %}
                                 </ul>
+                            </div>
+                            {% elif not has_full_access and competitions.paginator.count > 0 %}
+                            <div class="mt-4 text-center">
+                                <div class="d-inline-block p-4 rounded-4 bg-light">
+                                    <h5 class="mb-2">Want to see more Olympiads?</h5>
+                                    <p class="mb-3 text-muted small">
+                                        You’re seeing a limited selection. Subscribe to unlock the full catalogue and apply to more competitions.
+                                    </p>
+                                    {% if user.is_authenticated %}
+                                        <a href="{% url 'dashboard_subscription' %}" class="theme-btn">
+                                            <span>View Subscription Plans</span> <i class="far fa-long-arrow-right"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'signup' %}" class="theme-btn me-2 mb-2">
+                                            <span>Create Free Account</span> <i class="far fa-user-plus"></i>
+                                        </a>
+                                        <a href="{% url 'login' %}" class="btn btn-link text-primary mb-2 p-0">
+                                            Already a member? Sign in
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
                             {% endif %}
                         </div>
