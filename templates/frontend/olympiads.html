@@ -56,16 +56,66 @@
             }
             .btn-outline {
                 background: transparent;
-                border: 2px solid #666;
-                color: #666;
+                border: 2px solid #198754;
+                color: #198754;
             }
             .btn-outline:hover {
-                background: #666;
+                background: #198754;
                 color: white;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn {
+                background-color: #198754 !important;
+                color: #fff !important;
+            }
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn span,
+            .olympiad-filter-wrap .booking-list-area-1 .theme-btn i {
+                color: #fff !important;
             }
             .results-header p {
                 margin: 0;
                 font-size: 0.9rem;
+            }
+            /* Price badge on cards: red (no indigo) */
+            .olympiads-list-section .amazing-tour-items .thumb .post-box {
+                background: linear-gradient(135deg, #DC3545 0%, #c82333 100%) !important;
+                color: #fff !important;
+                box-shadow: 0 4px 14px rgba(220, 53, 69, 0.35);
+            }
+            .olympiads-list-section .amazing-tour-items .thumb .post-box h4,
+            .olympiads-list-section .amazing-tour-items .thumb .post-box span {
+                color: #fff !important;
+            }
+            /* Card CTA: white text for contrast */
+            .olympiads-list-section .amazing-tour-items .content .theme-btn {
+                background-color: #198754 !important;
+                color: #fff !important;
+            }
+            .olympiads-list-section .amazing-tour-items .content .theme-btn span,
+            .olympiads-list-section .amazing-tour-items .content .theme-btn i {
+                color: #fff !important;
+            }
+            .olympiads-list-section .amazing-tour-items .content .theme-btn i {
+                background-color: rgba(255,255,255,0.2);
+            }
+            /* "Create Free Account" CTA: orange button, white text/icon */
+            .olympiad-cta-orange.theme-btn-2 {
+                background-color: #FD7E14 !important;
+                color: #fff !important;
+            }
+            .olympiad-cta-orange.theme-btn-2 span,
+            .olympiad-cta-orange.theme-btn-2 i {
+                color: #fff !important;
+            }
+            .olympiad-cta-orange.theme-btn-2 i {
+                background-color: rgba(255,255,255,0.25) !important;
+            }
+            .olympiad-cta-orange.theme-btn-2:hover {
+                background-color: #e56b0a !important;
+                color: #fff !important;
+            }
+            .olympiad-cta-orange.theme-btn-2:hover span,
+            .olympiad-cta-orange.theme-btn-2:hover i {
+                color: #fff !important;
             }
             .olympiads-list-section .amazing-tour-items .thumb img {
                 width: 100%;
@@ -416,7 +466,7 @@
                                             <span>View Subscription Plans</span> <i class="far fa-long-arrow-right"></i>
                                         </a>
                                     {% else %}
-                                        <a href="{% url 'signup' %}" class="theme-btn me-2 mb-2">
+                                        <a href="{% url 'signup' %}" class="theme-btn theme-btn-2 olympiad-cta-orange me-2 mb-2">
                                             <span>Create Free Account</span> <i class="far fa-user-plus"></i>
                                         </a>
                                         <a href="{% url 'login' %}" class="btn btn-link text-primary mb-2 p-0">

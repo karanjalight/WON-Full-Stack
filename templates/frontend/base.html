@@ -40,6 +40,39 @@
         <!--<< Custom Styles >>-->
         {% block extra_css %}
         <style>
+            /* ========== WON global theme: green, orange, red (all frontend pages) ========== */
+            :root {
+                --won-green: #198754;
+                --won-green-dark: #157347;
+                --won-orange: #FD7E14;
+                --won-red: #DC3545;
+            }
+            .section-title span { color: var(--won-green) !important; font-weight: 700; }
+            .breadcrumb-items a:hover { color: var(--won-green) !important; }
+            .page-heading .breadcrumb-items li a:hover { color: var(--won-green) !important; }
+            .tour-box-items .content h4 a:hover,
+            .amazing-tour-items .content h4 a:hover { color: var(--won-green) !important; }
+            .page-nav-wrap .page-numbers:hover { background-color: var(--won-green) !important; color: #fff !important; border-color: var(--won-green); }
+            .page-nav-wrap .page-numbers.current { background-color: var(--won-green) !important; border-color: var(--won-green); }
+            .footer-wrapper .footer-widget-items .list-items li a:hover { color: var(--won-green) !important; }
+            .destination-feature-box .content span b { color: var(--won-green) !important; }
+
+            /* Footer subscribe button: always green (overrides any theme variable) */
+            .footer-section .footer-newsletter-items .footer-input .newsletter-btn,
+            .footer-newsletter-items .footer-input .newsletter-btn {
+                background-color: #198754 !important;
+                color: #fff !important;
+            }
+            .footer-section .footer-newsletter-items .footer-input .newsletter-btn:hover,
+            .footer-newsletter-items .footer-input .newsletter-btn:hover {
+                background-color: #157347 !important;
+                color: #fff !important;
+            }
+            .footer-section .footer-newsletter-items .footer-input .newsletter-btn i,
+            .footer-newsletter-items .footer-input .newsletter-btn i {
+                color: #fff !important;
+            }
+
             /* Accessible skip link for keyboard users */
             .skip-link {
                 position: absolute;
@@ -225,7 +258,7 @@
 
 
         <!-- Preloader Start -->
-        <div id="preloader" class="preloader">
+        <!-- <div id="preloader" class="preloader">
             <div class="animation-preloader">
                 <div class="spinner">                
                 </div>
@@ -252,7 +285,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Back To Top start -->
         <!-- <button id="back-top" class="back-to-top" type="button" aria-label="Back to top">

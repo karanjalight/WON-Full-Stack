@@ -1061,13 +1061,30 @@ class UserProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone', 'profile_picture', 'bio', 'country', 'city']
         widgets = {
-            'first_name': forms.TextInput(),
-            'last_name': forms.TextInput(),
-            'email': forms.EmailInput(),
-            'phone': forms.TextInput(),
-            'profile_picture': forms.FileInput(),
-            'bio': forms.Textarea(attrs={'rows': 4}),
-            'country': forms.TextInput(),
-            'city': forms.TextInput(),
+            'first_name': forms.TextInput(attrs={
+                'class': 'w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'profile_picture': forms.FileInput(attrs={
+                'class': 'block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none'
+            }),
+            'bio': forms.Textarea(attrs={
+                'rows': 4,
+                'class': 'w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'country': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'city': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
         }
 

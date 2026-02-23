@@ -1,26 +1,94 @@
 {% load static %}
 <style>
-    /* Keep auth actions pill-shaped on every template that includes this partial */
+    /* Nav menu link hover: green (override any indigo) */
+    .header-1.header-4 .header-main .main-menu ul li a:hover {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .header-main .main-menu ul li:hover > a {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .header-main .main-menu ul li:hover > a::after {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .header-main .main-menu ul li .submenu li:hover > a {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover {
+        color: #fff !important;
+        background-color: #198754;
+    }
+    .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover::after {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .header-main .main-menu ul li .has-homemenu .homemenu-title a:hover {
+        color: #198754 !important;
+    }
+
+    /* Premium nav auth: pill-shaped, green/orange/red theme */
     .header-1.header-4 .theme-btn.nav-auth-pill {
         border-radius: 9999px;
-        padding: 15px 30px;
+        padding: 12px 24px;
         position: relative;
         overflow: hidden;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        transition: all 0.25s ease;
+        border: 2px solid transparent;
     }
     .header-1.header-4 .theme-btn.nav-auth-pill span {
         margin-right: 0;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
     .header-1.header-4 .theme-btn.nav-auth-pill span i {
         width: initial;
         height: initial;
         line-height: initial;
         background-color: transparent;
-        color: var(--white);
         border-radius: 0;
         font-size: 14px;
+    }
+    /* Sign In: outline style — green border, transparent bg */
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin {
+        background-color: transparent !important;
+        color: #198754 !important;
+        border-color: #198754;
+        box-shadow: none;
+    }
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin span i {
+        color: #198754 !important;
+    }
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin:hover {
+        background-color: #198754 !important;
+        color: #fff !important;
+        border-color: #198754;
+    }
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin:hover span i {
+        color: #fff !important;
+    }
+    /* Sign Up: solid green primary CTA, no shadow */
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup {
+        background-color: #198754 !important;
+        color: #fff !important;
+        border-color: #198754;
+        box-shadow: none;
+    }
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup span i {
+        color: #fff !important;
+    }
+    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup:hover {
+        background-color: #157347 !important;
+        border-color: #157347;
+        color: #fff !important;
+        box-shadow: none;
+    }
+    /* Logged-in user pill */
+    .header-1.header-4 .theme-btn.nav-auth-pill.dropdown-toggle {
+        background-color: #198754 !important;
+        color: #fff !important;
+        border-color: #198754;
     }
     .header-1.header-4 .theme-btn.nav-auth-pill.dropdown-toggle::after {
         display: none;
@@ -28,7 +96,7 @@
     .header-1.header-4 .nav-auth-actions {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
     }
     .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill {
         margin-left: 0;
@@ -64,7 +132,7 @@
                     <div class="header-left">
                         <div class="logo">
                             <a href="{% url 'index' %}" class="icon" aria-label="World Olympiad Network home">
-                                <img style="height: 80px;" src="{% static 'img/brand/logowon.png' %}" alt="World Olympiad Network logo">
+                                <img style="height: 80px;" src="{% static 'img/brand/logo.png' %}" alt="World Olympiad Network logo">
                             </a>
                         </div>
                     </div>
@@ -192,7 +260,7 @@
                         </div> -->
                         {% if user.is_authenticated %}
                             <div class="dropdown nav-user-dropdown">
-                                <a href="#" class="theme-btn nav-auth-pill dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #4D40CA;">
+                                <a href="#" class="theme-btn nav-auth-pill dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span>{{ user.get_full_name|default:user.username|truncatechars:15 }}  <i class="far fa-user"></i></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end nav-user-menu" aria-labelledby="userMenu">
@@ -204,10 +272,10 @@
                             </div>
                         {% else %}
                             <div class="nav-auth-actions">
-                                <a href="{% url 'login' %}" class="theme-btn nav-auth-pill">
-                                    <span>Sign In  <i class="far fa-sign-in-alt"></i></span>
+                                <a href="{% url 'login' %}" class="theme-btn nav-auth-pill nav-signin">
+                                    <span style="color: #157347;">Sign In  <i class="far fa-sign-in-alt"></i></span>
                                 </a>
-                                <a href="{% url 'signup' %}" class="theme-btn nav-auth-pill">
+                                <a href="{% url 'signup' %}" class="theme-btn nav-auth-pill nav-signup">
                                     <span>Sign Up  <i class="far fa-user-plus"></i></span>
                                 </a>
                             </div>
