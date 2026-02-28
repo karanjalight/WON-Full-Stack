@@ -331,10 +331,10 @@
         </main>
 
         <!-- Footer Section Start -->
-        <footer class="footer-section fix section-bg bg-cover" style="background-image: url('{% static 'img/footer/bg-image.jpg' %}');">
+        <footer class="footer-section fix section-bg bg-cover" style="background-color: #8bc77e !important;">
             <div class="container">
                 <div class="footer-newsletter-items">
-                    <h2>Stay Updated on Competition Deadlines & Opportunities</h2>
+                    <h2>Never Miss an Olympiad again</h2>
                     <form class="footer-input" action="#" method="post" novalidate>
                         {% csrf_token %}
                         <label for="footer-email" class="visually-hidden">Email address</label>
@@ -348,23 +348,15 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-7 col-md-12">
                             <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <a href="{% url 'index' %}" class="footer-logo text-logo" style="font-size: 24px; font-weight: 700; color: #000;">WON — World Olympiad Network</a>
+                                <div class="widget-title" style="display: flex; align-items: left; justify-content: left;">
+                                    <a href="{% url 'index' %}">
+                                        <img src="{% static 'img/brand/logo.png' %}" alt="World Olympiad Network logo" >
+                                    </a>
                                 </div>
                                 <div class="footer-content">
                                     <p style="color: #707070; margin-bottom: 20px;">"Scientia transcéndit términas" — Knowledge Transcends Borders</p>
-                                    <div class="contact-info-items">
-                                        <div class="contact-items">
-                                            <div class="icon">
-                                                <img src="{% static 'img/mail.png' %}" alt="" role="presentation">
-                                            </div>
-                                            <div class="content">
-                                                <span>Mail Us</span>
-                                                <h6><a href="mailto:info@won.org">info@won.org</a></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="app-text">Your Olympiad application & travel platform</h6>
+                                   
+                                    <!-- <h6 class="app-text">Your Olympiad application & travel platform</h6> -->
                                     <div class="apps-items" style="display:none;">
                                         <a href="{% url 'contact' %}">
                                             <img src="{% static 'img/apply-store.png' %}" alt="img">
@@ -387,50 +379,48 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-5 col-md-4 col-sm-6">
+                        <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+                            
                             <div class="footer-widget-items">
                                 <div class="widget-title">
                                     <h3>Useful Links</h3>
                                 </div>
                                 <ul class="list-items">
                                     <li>
-                                        <a href="{% url 'tour' %}">All Competitions</a>
+                                        <a href="/">Home</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'team' %}">Tutors</a>
+                                        <a href="/olympiads">Olympiads</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'destination' %}">Travel Packages</a>
+                                        <a href="/tutors">Tutors</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'news' %}">Resources</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'contact' %}">24/7 Support</a>
+                                        <a href="{% url 'destination' %}">Destinations</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+                            
                             <div class="footer-widget-items">
                                 <div class="widget-title">
                                     <h3>About WON</h3>
                                 </div>
                                 <ul class="list-items">
+                                   
                                     <li>
-                                        <a href="{% url 'about' %}">About Us</a>
+                                        <a href="/about">About Us</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/events">Events</a>
                                     </li>
                                     <li>
                                         <a href="{% url 'contact' %}">Contact Us</a>
                                     </li>
                                     <li>
                                         <a href="{% url 'faq' %}">FAQs</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'contact' %}">Terms & Conditions</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'contact' %}">Privacy Policy</a>
                                     </li>
                                 </ul>
                             </div>
@@ -443,23 +433,12 @@
                 <div class="container">
                     <div class="footer-bottom-wrapper">
                         <p class="wow fadeInUp" data-wow-delay=".3s">
-                            © 2026 WON — World Olympiad Network. All rights reserved. Powered by Paul Karanja.
+                            © 2026 World Olympiad Network
                         </p>
                         <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
+                            
                             <li>
-                                <a href="{% url 'contact' %}">
-                                    Privacy 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'contact' %}">
-                                    Terms 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'contact' %}">
-                                    Site Map
-                                </a>
+                                All rights reserved.
                             </li>
                         </ul>
                     </div>

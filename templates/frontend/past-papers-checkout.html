@@ -567,11 +567,11 @@ select.pp-form-input {
                         <div class="pp-order-totals">
                             <div class="pp-order-total-row">
                                 <span class="label">Subtotal</span>
-                                <span class="value" id="coSubtotal">KSh 0</span>
+                                <span class="value" id="coSubtotal">USD 0</span>
                             </div>
                             <div class="pp-order-total-row">
                                 <span class="label">Discount</span>
-                                <span class="value" style="color:#22c55e;">- KSh 0</span>
+                                <span class="value" style="color:#22c55e;">- USD 0</span>
                             </div>
                             <div class="pp-order-total-row">
                                 <span class="label">Delivery</span>
@@ -579,7 +579,7 @@ select.pp-form-input {
                             </div>
                             <div class="pp-order-total-row grand">
                                 <span class="label">Total</span>
-                                <span class="value" id="coTotal">KSh 0</span>
+                                <span class="value" id="coTotal">USD 0</span>
                             </div>
                         </div>
                         <button class="pp-place-order-btn" id="placeOrderBtn">
@@ -665,13 +665,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h5>${p.title}</h5>
                 <span>${p.category} &middot; Qty: ${item.qty}</span>
             </div>
-            <div class="pp-order-item-price">KSh ${subtotal.toLocaleString()}</div>
+            <div class="pp-order-item-price">USD ${subtotal.toLocaleString()}</div>
         </div>`;
     });
 
     document.getElementById('orderItems').innerHTML = itemsHtml;
-    document.getElementById('coSubtotal').textContent = 'KSh ' + total.toLocaleString();
-    document.getElementById('coTotal').textContent = 'KSh ' + total.toLocaleString();
+    document.getElementById('coSubtotal').textContent = 'USD ' + total.toLocaleString();
+    document.getElementById('coTotal').textContent = 'USD ' + total.toLocaleString();
 
     // Payment method switching
     const paymentOptions = document.querySelectorAll('.pp-payment-option');

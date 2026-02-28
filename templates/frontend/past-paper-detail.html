@@ -464,7 +464,7 @@
                             <span class="review-count" id="detailReviews"></span>
                         </div>
                         <div class="pp-detail-price" id="detailPrice"></div>
-                        <span class="pp-detail-currency">KES</span>
+                        <span class="pp-detail-currency">USD</span>
                         <p class="pp-detail-desc" id="detailDesc"></p>
                         <ul class="pp-features" id="detailFeatures"></ul>
                         <div class="pp-quantity-row">
@@ -614,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('detailBadge').querySelector('span').textContent = product.badge;
     document.getElementById('detailCategory').textContent = product.category;
     document.getElementById('detailTitle').textContent = product.title;
-    document.getElementById('detailPrice').textContent = 'KSh ' + product.price.toLocaleString() + '.00';
+    document.getElementById('detailPrice').textContent = 'USD ' + product.price.toLocaleString() + '.00';
     document.getElementById('detailDesc').textContent = product.desc;
     document.getElementById('detailReviews').textContent = '(' + product.reviews + ' reviews)';
     document.title = product.title + ' — WON Past Papers';
@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="pp-card-body">
                     <span class="pp-card-category">${p.category}</span>
                     <h4>${p.title}</h4>
-                    <span class="pp-card-price">KSh ${p.price.toLocaleString()}.00</span>
+                    <span class="pp-card-price">USD ${p.price.toLocaleString()}.00</span>
                     <a href="/past-papers/${p.id}/" class="pp-card-link">View Details <i class="far fa-arrow-right"></i></a>
                 </div>
             </div>
