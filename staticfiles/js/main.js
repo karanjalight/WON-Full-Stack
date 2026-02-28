@@ -160,43 +160,74 @@
             });
         }
 
-        //>> Tour Start <<//
+        //>> Tour Start (Swiper, for non-events sliders) <<//
         if($('.tour-slider').length > 0) {
-            const tourSlider = new Swiper(".tour-slider", {
-                spaceBetween: 30,
-                speed: 2000,
-                loop: true,
-                autoplay: {
-                    delay: 2000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: ".dot",
-                    clickable: true,
-                },
-                breakpoints: {
-                    1399: {
-                        slidesPerView: 3,
+            $('.tour-slider').each(function() {
+                const $slider = $(this);
+                // Skip the events slider; it uses custom scrolling
+                if ($slider.hasClass('events-slider')) {
+                    return;
+                }
+                new Swiper(this, {
+                    spaceBetween: 30,
+                    speed: 2000,
+                    loop: true,
+                    autoplay: {
+                        delay: 2000,
+                        disableOnInteraction: false,
                     },
-                    1199: {
-                        slidesPerView: 3,
+                    pagination: {
+                        el: ".dot",
+                        clickable: true,
                     },
-                    991: {
-                        slidesPerView: 2,
+                    breakpoints: {
+                        1399: {
+                            slidesPerView: 3,
+                        },
+                        1199: {
+                            slidesPerView: 3,
+                        },
+                        991: {
+                            slidesPerView: 2,
+                        },
+                        767: {
+                            slidesPerView: 2,
+                        },
+                        575: {
+                            slidesPerView: 1,
+                        },
+                        400: {
+                            slidesPerView: 1,
+                        },
+                        0: {
+                            slidesPerView: 1,
+                        },
                     },
-                    767: {
-                        slidesPerView: 2,
-                    },
-                    575: {
-                        slidesPerView: 1,
-                    },
-                    400: {
-                        slidesPerView: 1,
-                    },
-                    0: {
-                        slidesPerView: 1,
-                    },
-                },
+                });
+            });
+        }
+
+        // Custom horizontal scrolling for events slider
+        if ($('.events-slider').length > 0) {
+            const $eventsWrapper = $('.events-slider .swiper-wrapper');
+            const $eventsSlides = $('.events-slider .swiper-slide');
+
+            // Ensure wrapper can scroll horizontally
+            $eventsWrapper.scrollLeft(0);
+
+            function getScrollAmount() {
+                const $first = $eventsSlides.first();
+                return $first.outerWidth(true) || 320;
+            }
+
+            $('.events-next').on('click', function() {
+                const amount = getScrollAmount();
+                $eventsWrapper.animate({ scrollLeft: $eventsWrapper.scrollLeft() + amount }, 400);
+            });
+
+            $('.events-prev').on('click', function() {
+                const amount = getScrollAmount();
+                $eventsWrapper.animate({ scrollLeft: $eventsWrapper.scrollLeft() - amount }, 400);
             });
         }
 
