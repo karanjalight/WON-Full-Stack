@@ -1,0 +1,197 @@
+/**
+ * WON brand theme — primary #b9d533 (lime)
+ * Loaded after main.css to unify template + Travil theme tokens.
+ */
+:root {
+  --won-primary: #b9d533;
+  --won-primary-dark: #9fb82e;
+  --won-primary-darker: #8fad28;
+  --won-primary-darkest: #7a9622;
+  --won-primary-light: #d4e67a;
+  --won-primary-pale: #f4f9e0;
+  --won-on-primary: #1a2208;
+  --won-primary-rgb: 185, 213, 51;
+
+  /* Travil / Bootstrap theme tokens */
+  --theme-color: var(--won-primary);
+  --theme-color-2: var(--won-primary-darker);
+  --base: var(--won-primary);
+  --won-green: var(--won-primary);
+  --won-green-dark: var(--won-primary-dark);
+  --won-orange: var(--won-primary-darker);
+  --won-red: var(--won-primary-darkest);
+}
+
+/* Primary buttons & CTAs */
+.theme-btn,
+a.theme-btn,
+button.theme-btn {
+  background-color: var(--won-primary) !important;
+  border-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+  box-shadow: none;
+}
+.theme-btn:hover,
+a.theme-btn:hover,
+button.theme-btn:hover {
+  background-color: var(--won-primary-dark) !important;
+  border-color: var(--won-primary-dark) !important;
+  color: var(--won-on-primary) !important;
+}
+.theme-btn span,
+.theme-btn i {
+  color: inherit !important;
+}
+.theme-btn span i {
+  background-color: transparent !important;
+}
+
+/* Header variant buttons */
+.header-1.header-4 .theme-btn {
+  background-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+.header-1.header-4 .theme-btn span i {
+  color: var(--won-on-primary) !important;
+}
+
+/* Links & accents */
+a:hover,
+.section-title span,
+.breadcrumb-items a:hover,
+.page-heading .breadcrumb-items li a:hover {
+  color: var(--won-primary-dark);
+}
+.section-title span {
+  color: var(--won-primary) !important;
+}
+
+/* Navigation */
+.header-1.header-4 .header-main .main-menu ul li a:hover,
+.header-1.header-4 .header-main .main-menu ul li:hover > a,
+.header-1.header-4 .header-main .main-menu ul li .submenu li a:hover {
+  color: var(--won-primary) !important;
+}
+.header-1.header-4 .header-main .main-menu ul li .submenu li a:hover {
+  background-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+
+/* Pagination */
+.page-nav-wrap .page-numbers:hover,
+.page-nav-wrap .page-numbers.current {
+  background-color: var(--won-primary) !important;
+  border-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+
+/* Cards & tour boxes */
+.tour-box-items .content h4 a:hover,
+.amazing-tour-items .content h4 a:hover,
+.destination-feature-box .content span b {
+  color: var(--won-primary) !important;
+}
+
+/* Odometer / counters */
+.odometer-theme-default .odometer-value,
+.about-wrapper .about-content .counter-area .counter-items h2 {
+  color: var(--won-primary);
+}
+
+/* Form focus */
+input:focus,
+select:focus,
+textarea:focus,
+.form-control:focus {
+  border-color: var(--won-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(var(--won-primary-rgb), 0.25) !important;
+}
+
+/* Nice select, checkboxes */
+.nice-select:active,
+.nice-select.open,
+.nice-select:focus {
+  border-color: var(--won-primary);
+}
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  accent-color: var(--won-primary);
+}
+
+/* Progress / application steps */
+.application-progress .step-item.active .step-number,
+.application-progress .step-item.completed .step-number {
+  background: var(--won-primary) !important;
+  border-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+
+/* Footer newsletter (when using legacy classes) */
+.footer-section .newsletter-btn,
+.footer-newsletter-items .newsletter-btn {
+  background-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+
+/* Swiper pagination */
+.swiper-pagination-bullet-active {
+  background: var(--won-primary) !important;
+}
+
+/* Bootstrap overrides */
+.btn-primary,
+.bg-primary {
+  background-color: var(--won-primary) !important;
+  border-color: var(--won-primary) !important;
+  color: var(--won-on-primary) !important;
+}
+.btn-primary:hover {
+  background-color: var(--won-primary-dark) !important;
+  border-color: var(--won-primary-dark) !important;
+}
+.text-primary {
+  color: var(--won-primary) !important;
+}
+.border-primary {
+  border-color: var(--won-primary) !important;
+}
+
+/* Secondary / outline buttons using theme-color-2 */
+.theme-btn.theme-btn-2,
+.section-title-area .theme-btn.theme-btn-2,
+.cta-wrapper-4 .theme-btn {
+  background-color: var(--won-primary-darker) !important;
+  border-color: var(--won-primary-darker) !important;
+  color: var(--won-on-primary) !important;
+}
+.theme-btn.theme-btn-2:hover,
+.section-title-area .theme-btn.theme-btn-2:hover,
+.cta-wrapper-4 .theme-btn:hover {
+  background-color: var(--won-primary-dark) !important;
+  border-color: var(--won-primary-dark) !important;
+}
+
+/* Header top bar link hover */
+.header-top-section a:hover {
+  color: var(--won-primary-dark);
+}
+
+/* Nav auth pills — do not inherit global .theme-btn hover animation */
+.header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill:hover::before,
+.header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill:hover::after {
+  display: none !important;
+}
+.header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill:hover {
+  background-color: var(--won-primary-dark);
+}
+
+/* Mean menu / mobile */
+.mean-container a.meanmenu-reveal span {
+  background: var(--won-primary);
+}
+
+/* Selection highlight */
+::selection {
+  background: rgba(var(--won-primary-rgb), 0.35);
+  color: var(--won-on-primary);
+}

@@ -1,105 +1,134 @@
 {% load static %}
 <style>
-    /* Nav menu link hover: green (override any indigo) */
-    .header-1.header-4 .header-main .main-menu ul li a:hover {
-        color: #198754 !important;
-    }
-    .header-1.header-4 .header-main .main-menu ul li:hover > a {
-        color: #198754 !important;
-    }
-    .header-1.header-4 .header-main .main-menu ul li:hover > a::after {
-        color: #198754 !important;
-    }
-    .header-1.header-4 .header-main .main-menu ul li .submenu li:hover > a {
-        color: #198754 !important;
+    /* Nav — WON lime theme (#b9d533) */
+    .header-1.header-4 .header-main .main-menu ul li a:hover,
+    .header-1.header-4 .header-main .main-menu ul li:hover > a,
+    .header-1.header-4 .header-main .main-menu ul li:hover > a::after,
+    .header-1.header-4 .header-main .main-menu ul li .submenu li:hover > a,
+    .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover::after,
+    .header-1.header-4 .header-main .main-menu ul li .has-homemenu .homemenu-title a:hover {
+        color: var(--won-primary) !important;
     }
     .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover {
-        color: #fff !important;
-        background-color: #198754;
+        color: var(--won-on-primary) !important;
+        background-color: var(--won-primary);
     }
-    .header-1.header-4 .header-main .main-menu ul li .submenu li a:hover::after {
-        color: #198754 !important;
-    }
-    .header-1.header-4 .header-main .main-menu ul li .has-homemenu .homemenu-title a:hover {
-        color: #198754 !important;
-    }
-
-    /* Premium nav auth: pill-shaped, green/orange/red theme */
-    .header-1.header-4 .theme-btn.nav-auth-pill {
-        border-radius: 9999px;
-        padding: 12px 24px;
-        position: relative;
-        overflow: hidden;
-        font-weight: 700;
-        font-size: 15px;
-        letter-spacing: 0.02em;
-        transition: all 0.25s ease;
-        border: 2px solid transparent;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill span {
-        margin-right: 0;
+    /* Auth pills — equal height/padding (overrides global .theme-btn) */
+    .header-1.header-4 .nav-auth-actions,
+    .header-1.header-4 .nav-user-dropdown {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill span i {
-        width: initial;
-        height: initial;
-        line-height: initial;
-        background-color: transparent;
-        border-radius: 0;
-        font-size: 14px;
-    }
-    /* Sign In: outline style — green border, transparent bg */
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin {
-        background-color: transparent !important;
-        color: #198754 !important;
-        border-color: #198754;
-        box-shadow: none;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin span i {
-        color: #198754 !important;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin:hover {
-        background-color: #198754 !important;
-        color: #fff !important;
-        border-color: #198754;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signin:hover span i {
-        color: #fff !important;
-    }
-    /* Sign Up: solid green primary CTA, no shadow */
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup {
-        background-color: #198754 !important;
-        color: #fff !important;
-        border-color: #198754;
-        box-shadow: none;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup span i {
-        color: #fff !important;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.nav-signup:hover {
-        background-color: #157347 !important;
-        border-color: #157347;
-        color: #fff !important;
-        box-shadow: none;
-    }
-    /* Logged-in user pill */
-    .header-1.header-4 .theme-btn.nav-auth-pill.dropdown-toggle {
-        background-color: #198754 !important;
-        color: #fff !important;
-        border-color: #198754;
-    }
-    .header-1.header-4 .theme-btn.nav-auth-pill.dropdown-toggle::after {
-        display: none;
+        flex-shrink: 0;
     }
     .header-1.header-4 .nav-auth-actions {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
+        gap: 0.625rem;
     }
-    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill {
-        margin-left: 0;
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        min-height: 2.75rem !important;
+        height: 2.75rem !important;
+        padding: 0 1.25rem !important;
+        margin: 0 !important;
+        border-radius: 9999px !important;
+        border: 2px solid var(--won-primary) !important;
+        font-family: inherit !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        line-height: 1 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: none !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        vertical-align: middle !important;
+        overflow: visible !important;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+        box-shadow: none !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill::before,
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill::after,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill::before,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill::after {
+        display: none !important;
+        content: none !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill span,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill span {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        line-height: 1 !important;
+        position: static !important;
+        z-index: auto !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill span i,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill span i {
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        font-size: 0.8125rem !important;
+        flex-shrink: 0 !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin {
+        background-color: transparent !important;
+        color: var(--won-primary-dark) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin span,
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin span i {
+        color: var(--won-primary-dark) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin:hover {
+        background-color: var(--won-primary) !important;
+        border-color: var(--won-primary) !important;
+        color: var(--won-on-primary) !important;
+        box-shadow: 0 4px 14px rgba(185, 213, 51, 0.35) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin:hover span,
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signin:hover span i {
+        color: var(--won-on-primary) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signup,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill.dropdown-toggle {
+        background-color: var(--won-primary) !important;
+        color: var(--won-on-primary) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signup span,
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signup span i,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill.dropdown-toggle span,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill.dropdown-toggle span i {
+        color: var(--won-on-primary) !important;
+    }
+    .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill.nav-signup:hover,
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill.dropdown-toggle:hover {
+        background-color: var(--won-primary-dark) !important;
+        border-color: var(--won-primary-dark) !important;
+        color: var(--won-on-primary) !important;
+        box-shadow: 0 4px 14px rgba(185, 213, 51, 0.35) !important;
+    }
+    .header-1.header-4 .nav-user-dropdown .theme-btn.nav-auth-pill.dropdown-toggle::after {
+        display: none !important;
+    }
+    @media (max-width: 1199px) {
+        .header-1.header-4 .nav-auth-actions .theme-btn.nav-auth-pill {
+            min-height: 2.5rem !important;
+            height: 2.5rem !important;
+            padding: 0 1rem !important;
+            font-size: 0.8125rem !important;
+        }
+    }
+    .header-top-section .top-left a:hover {
+        color: var(--won-primary-dark);
     }
 </style>
 <!-- Header Section Start -->
@@ -110,13 +139,15 @@
                 <ul class="top-left">
                     <li>
                         <i class="far fa-envelope"></i>
-                        <a class="lowercase" s href="mailto:info@won.org">info@won.org</a>
+                        <a href="mailto:{{ won_support_email }}">{{ won_support_email }}</a>
+                    </li>
+                    <li>
+                        <i class="far fa-phone"></i>
+                        <a href="tel:{{ won_support_phone_tel }}">{{ won_support_phone }}</a>
                     </li>
                 </ul>
-                <div class="social-icon">
-                    <a href="https://instagram.com/worldolympiadnetwork"><i class="fab fa-instagram"></i></a>
-                    <a href="https://twitter.com/won_global"><i class="fab fa-twitter"></i></a>
-                    <a href="https://linkedin.com/company/world-olympiad-network"><i class="fab fa-linkedin-in"></i></a>
+                <div class="social-icon won-social-links">
+                    {% include 'partials/social_links.html' %}
                 </div>
             </div>
         </div>
@@ -128,7 +159,7 @@
                     <div class="header-left">
                         <div class="logo">
                             <a href="{% url 'index' %}" class="icon" aria-label="World Olympiad Network home">
-                                <img style="height: 80px;" src="{% static 'img/brand/logo.png' %}" alt="World Olympiad Network logo">
+                                <img style="height: 80px;" src="{% static 'img/brand/logo.jpeg' %}" alt="World Olympiad Network logo">
                             </a>
                         </div>
                     </div>
@@ -269,10 +300,10 @@
                         {% else %}
                             <div class="nav-auth-actions">
                                 <a href="{% url 'login' %}" class="theme-btn nav-auth-pill nav-signin">
-                                    <span style="color: #157347;">Sign In  <i class="far fa-sign-in-alt"></i></span>
+                                    <span>Sign In<i class="far fa-sign-in-alt" aria-hidden="true"></i></span>
                                 </a>
                                 <a href="{% url 'signup' %}" class="theme-btn nav-auth-pill nav-signup">
-                                    <span>Sign Up  <i class="far fa-user-plus"></i></span>
+                                    <span>Sign Up<i class="far fa-user-plus" aria-hidden="true"></i></span>
                                 </a>
                             </div>
                         {% endif %}

@@ -1,0 +1,413 @@
+{% load static %}
+<footer class="won-footer" aria-label="Site footer">
+    <div class="won-footer__accent" aria-hidden="true"></div>
+
+    <!-- Newsletter band -->
+    <div class="won-footer__newsletter">
+        <div class="container">
+            <div class="won-footer__newsletter-inner">
+                <div class="won-footer__newsletter-copy">
+                    <span class="won-footer__eyebrow">Stay in the loop</span>
+                    <h2 class="won-footer__newsletter-title">Never miss an Olympiad opportunity</h2>
+                    <p class="won-footer__newsletter-desc">Get competition updates, travel tips, and WON news delivered to your inbox.</p>
+                </div>
+                <form class="won-footer__newsletter-form" action="#" method="post" novalidate>
+                    {% csrf_token %}
+                    <label for="won-footer-email" class="visually-hidden">Email address</label>
+                    <div class="won-footer__input-wrap">
+                        <input type="email" id="won-footer-email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                        <button type="submit" class="won-footer__subscribe-btn">
+                            Subscribe <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="won-footer__main">
+        <div class="container">
+            <div class="row g-4 g-lg-5">
+                <!-- Brand -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="{% url 'index' %}" class="won-footer__logo">
+                        <img src="{% static 'img/brand/logo.jpeg' %}" alt="World Olympiad Network" width="160" height="auto">
+                    </a>
+                    <p class="won-footer__tagline"><em>Scientia transcendit terminos</em> — Knowledge transcends borders.</p>
+                    <p class="won-footer__about">Africa's gateway to global academic excellence. Discover Olympiads, apply with confidence, and access preparation plus travel support.</p>
+                    <div class="won-footer__social won-social-links">
+                        {% include 'partials/social_links.html' %}
+                        <a href="mailto:{{ won_support_email }}" aria-label="Email us">
+                            <i class="far fa-envelope" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Explore -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h3 class="won-footer__heading">Explore</h3>
+                    <ul class="won-footer__links">
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'olympiads' %}">Olympiads</a></li>
+                        <li><a href="{% url 'subjects' %}">Subjects</a></li>
+                        <li><a href="{% url 'destination' %}">Destinations</a></li>
+                        <li><a href="{% url 'team' %}">Tutors</a></li>
+                        <li><a href="{% url 'events' %}">Events</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h3 class="won-footer__heading">Resources</h3>
+                    <ul class="won-footer__links">
+                        <li><a href="{% url 'past_papers' %}">Past Papers</a></li>
+                        <li><a href="{% url 'news' %}">News</a></li>
+                        <li><a href="{% url 'generate-travel-quote' %}">Travel Quote</a></li>
+                        <li><a href="{% url 'onboarding-subscription' %}">Subscriptions</a></li>
+                        <li><a href="{% url 'faq' %}">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company & account -->
+                <div class="col-md-6 col-lg-4">
+                    <h3 class="won-footer__heading">Company</h3>
+                    <ul class="won-footer__links won-footer__links--two-col">
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'subscription-parents' %}">Parent Plans</a></li>
+                        <li><a href="{% url 'subscription-schools' %}">School Plans</a></li>
+                        <li><a href="{% url 'subscription-students' %}">Student Plans</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        {% else %}
+                        <li><a href="{% url 'login' %}">Sign In</a></li>
+                        <li><a href="{% url 'signup' %}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                    <div class="won-footer__contact-card">
+                        <i class="far fa-envelope" aria-hidden="true"></i>
+                        <div>
+                            <span class="won-footer__contact-label">Reach us</span>
+                            <a href="mailto:{{ won_support_email }}">{{ won_support_email }}</a>
+                            <br>
+                            <a href="tel:{{ won_support_phone_tel }}">{{ won_support_phone }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="won-footer__bottom">
+        <div class="container">
+            <div class="won-footer__bottom-inner">
+                <p class="won-footer__copyright">&copy; {% now "Y" %} World Olympiad Network. All rights reserved.</p>
+                <ul class="won-footer__legal">
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'faq' %}">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Premium white footer — scoped to .won-footer */
+.won-footer {
+    --won-ft-green: #b9d533;
+    --won-ft-green-dark: #9fb82e;
+    --won-ft-orange: #8fad28;
+    --won-ft-on-primary: #1a2208;
+    --won-ft-text: #1a1a1a;
+    --won-ft-muted: #5c6370;
+    --won-ft-border: rgba(0, 0, 0, 0.06);
+    --won-ft-white: #ffffff;
+    --won-ft-off: #f8faf9;
+    position: relative;
+    background: var(--won-ft-white);
+    color: var(--won-ft-text);
+    margin-top: 0;
+    font-family: inherit;
+    box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.04);
+}
+.won-footer__accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--won-ft-green) 0%, var(--won-ft-orange) 55%, var(--won-ft-green-dark) 100%);
+}
+.won-footer__newsletter {
+    background: linear-gradient(180deg, var(--won-ft-off) 0%, var(--won-ft-white) 100%);
+    border-bottom: 1px solid var(--won-ft-border);
+    padding: 3.5rem 0;
+}
+.won-footer__newsletter-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.won-footer__eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--won-ft-green);
+    margin-bottom: 0.5rem;
+}
+.won-footer__newsletter-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--won-ft-text);
+    margin: 0 0 0.5rem;
+    max-width: 28rem;
+}
+.won-footer__newsletter-desc {
+    color: var(--won-ft-muted);
+    margin: 0;
+    font-size: 0.95rem;
+    max-width: 26rem;
+}
+.won-footer__newsletter-form {
+    flex: 1;
+    min-width: min(100%, 380px);
+    max-width: 440px;
+}
+.won-footer__input-wrap {
+    display: flex;
+    background: var(--won-ft-white);
+    border: 1px solid var(--won-ft-border);
+    border-radius: 999px;
+    padding: 6px 6px 6px 1.25rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.won-footer__input-wrap:focus-within {
+    border-color: rgba(185, 213, 51, 0.55);
+    box-shadow: 0 8px 32px rgba(185, 213, 51, 0.2), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.won-footer__input-wrap input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 0.65rem 0.5rem;
+    color: var(--won-ft-text);
+    min-width: 0;
+}
+.won-footer__input-wrap input::placeholder {
+    color: #9ca3af;
+}
+.won-footer__input-wrap input:focus {
+    outline: none;
+}
+.won-footer__subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.75rem 1.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--won-ft-on-primary);
+    background: linear-gradient(135deg, var(--won-ft-green) 0%, var(--won-ft-green-dark) 100%);
+    white-space: nowrap;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.won-footer__subscribe-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(185, 213, 51, 0.45);
+    color: var(--won-ft-on-primary);
+}
+.won-footer__subscribe-btn i {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+.won-footer__subscribe-btn:hover i {
+    transform: translateX(3px);
+}
+.won-footer__main {
+    padding: 3.5rem 0 2.5rem;
+}
+.won-footer__logo {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
+.won-footer__logo img {
+    height: 72px;
+    width: auto;
+    object-fit: contain;
+}
+.won-footer__tagline {
+    font-size: 0.9rem;
+    color: var(--won-ft-green-dark);
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+}
+.won-footer__about {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--won-ft-muted);
+    margin: 0 0 1.5rem;
+    max-width: 22rem;
+}
+.won-footer__social {
+    display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+.won-footer__social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--won-ft-off);
+    border: 1px solid var(--won-ft-border);
+    color: var(--won-ft-text);
+    font-size: 1rem;
+    transition: all 0.22s ease;
+}
+.won-footer__social a:hover {
+    background: var(--won-ft-green);
+    border-color: var(--won-ft-green);
+    color: var(--won-ft-on-primary);
+    transform: translateY(-2px);
+}
+/* X (formerly Twitter) icon — Font Awesome 5 has no fa-x-twitter */
+.won-icon-x {
+    display: block;
+    width: 1em;
+    height: 1em;
+}
+.won-social-links .won-icon-x {
+    width: 0.95em;
+    height: 0.95em;
+}
+.header-1 .won-social-links .won-icon-x {
+    width: 14px;
+    height: 14px;
+}
+.won-footer__heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--won-ft-text);
+    margin: 0 0 1.25rem;
+}
+.won-footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.won-footer__links li {
+    margin-bottom: 0.65rem;
+}
+.won-footer__links a {
+    color: var(--won-ft-muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+    display: inline-block;
+}
+.won-footer__links a:hover {
+    color: var(--won-ft-green);
+    padding-left: 4px;
+}
+.won-footer__links--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+@media (max-width: 575px) {
+    .won-footer__links--two-col {
+        grid-template-columns: 1fr;
+    }
+}
+.won-footer__contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--won-ft-off);
+    border: 1px solid var(--won-ft-border);
+    border-radius: 14px;
+    max-width: 280px;
+}
+.won-footer__contact-card > i {
+    color: var(--won-ft-green);
+    font-size: 1.1rem;
+    margin-top: 2px;
+}
+.won-footer__contact-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--won-ft-muted);
+    margin-bottom: 0.15rem;
+}
+.won-footer__contact-card a {
+    font-weight: 600;
+    color: var(--won-ft-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+.won-footer__contact-card a:hover {
+    color: var(--won-ft-green);
+}
+.won-footer__bottom {
+    border-top: 1px solid var(--won-ft-border);
+    background: var(--won-ft-off);
+    padding: 1.25rem 0;
+}
+.won-footer__bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.won-footer__copyright {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--won-ft-muted);
+}
+.won-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.won-footer__legal a {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--won-ft-muted);
+    text-decoration: none;
+}
+.won-footer__legal a:hover {
+    color: var(--won-ft-green);
+}
+@media (max-width: 991px) {
+    .won-footer__newsletter-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .won-footer__newsletter-form {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+</style>

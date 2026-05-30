@@ -76,6 +76,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.google_tag_manager',
+                'core.context_processors.site_contact',
             ],
         },
     },
@@ -97,24 +99,26 @@ WSGI_APPLICATION = 'won.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+# Local dev: set USE_SQLITE=True in .env (uses db.sqlite3 in project root).
+# Production: USE_SQLITE=False and configure DB_* for PostgreSQL.
+if config('USE_SQLITE', default=False, cast=bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+        }
+    }
 
 
 AUTH_USER_MODEL = 'backend.User'
@@ -379,3 +383,24 @@ JAZZMIN_UI_TWEAKS = {
 # Paystack Configuration
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+
+# Google Tag Manager — Container ID from tagmanager.google.com (e.g. GTM-XXXXXXX)
+# Add GA4 and other tags inside the GTM workspace, not in Django templates.
+GOOGLE_TAG_MANAGER_ID = config('GOOGLE_TAG_MANAGER_ID', default='')
+# Set True in .env only if you want GTM off while developing (e.g. GOOGLE_TAG_MANAGER_DISABLED=True)
+GOOGLE_TAG_MANAGER_DISABLED = config('GOOGLE_TAG_MANAGER_DISABLED', default=False, cast=bool)
+
+# Public support contact (navbar, footer, contact page, PDFs)
+WON_SUPPORT_EMAIL = config('WON_SUPPORT_EMAIL', default='support@worldolympiads.org')
+WON_SUPPORT_PHONE = config('WON_SUPPORT_PHONE', default='0738509200')
+WON_SUPPORT_PHONE_TEL = config('WON_SUPPORT_PHONE_TEL', default='+254738509200')
+
+# Official social profiles (@won-olympiads / WON branding)
+WON_SOCIAL_INSTAGRAM = config('WON_SOCIAL_INSTAGRAM', default='https://www.instagram.com/worldolympiadnetwork/')
+WON_SOCIAL_X = config('WON_SOCIAL_X', default='https://x.com/won_olympiads')
+WON_SOCIAL_LINKEDIN = config('WON_SOCIAL_LINKEDIN', default='https://www.linkedin.com/company/world-olympiad-network/')
+WON_SOCIAL_FACEBOOK = config('WON_SOCIAL_FACEBOOK', default='')
+WON_SOCIAL_YOUTUBE = config('WON_SOCIAL_YOUTUBE', default='')
+
+# Brand color (lime) — used in PDFs; CSS uses assets/css/won-theme.css
+WON_BRAND_COLOR = config('WON_BRAND_COLOR', default='#b9d533')

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% include 'partials/google_tag_manager_head.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard{% endblock %} | World Olympiad Network</title>
@@ -19,21 +20,21 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#f3f1ff',
-                            100: '#e7e3ff',
-                            200: '#cfc8ff',
-                            300: '#b2a6ff',
-                            400: '#8a78f2',
-                            500: '#4D40CA',
-                            600: '#4338b2',
-                            700: '#372f92',
-                            800: '#2d2775',
-                            900: '#241f5c',
+                            50: '#f7fae8',
+                            100: '#eef5d1',
+                            200: '#ddebb3',
+                            300: '#d0e396',
+                            400: '#c4d965',
+                            500: '#b9d533',
+                            600: '#9fb82e',
+                            700: '#8fad28',
+                            800: '#7a9622',
+                            900: '#5c7219',
                         },
                         secondary: {
-                            500: '#FB5B32',
-                            600: '#e64d22',
-                            700: '#c93f15',
+                            500: '#8fad28',
+                            600: '#7a9622',
+                            700: '#657a1c',
                         },
                         navy: {
                             700: '#1e2a4a',
@@ -67,7 +68,7 @@
         }
         .sidebar-link:hover { background: #f3f4f6; }
         .sidebar-link.active {
-            background: #1e2a4a;
+            background: #7a9622;
             color: #fff;
         }
         .sidebar-link .sidebar-icon {
@@ -107,8 +108,8 @@
             border-radius: 0.5rem;
         }
         input:focus, select:focus, textarea:focus {
-            border-color: #198754 !important;
-            box-shadow: 0 0 0 2px rgba(77,64,202,0.2);
+            border-color: #b9d533 !important;
+            box-shadow: 0 0 0 2px rgba(185, 213, 51, 0.35);
             outline: none;
         }
 
@@ -135,7 +136,7 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50 font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">{% include 'partials/google_tag_manager_body.html' %}
     <div class="flex h-screen overflow-hidden">
         
         <!-- ===================== DESKTOP SIDEBAR ===================== -->

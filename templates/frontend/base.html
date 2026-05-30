@@ -3,6 +3,7 @@
 <html lang="en">
     <!--<< Header Area >>-->
      <head>
+        {% include 'partials/google_tag_manager_head.html' %}
         <!-- ========== Meta Tags ========== -->
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,40 +38,48 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
         <!--<< Style.css >>-->
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/won-theme.css' %}">
         <!--<< Custom Styles >>-->
         {% block extra_css %}
         <style>
-            /* ========== WON global theme: green, orange, red (all frontend pages) ========== */
+            /* WON brand tokens — primary #b9d533 (see assets/css/won-theme.css) */
             :root {
-                --won-green: #198754;
-                --won-green-dark: #157347;
-                --won-orange: #FD7E14;
-                --won-red: #DC3545;
+                --won-primary: #b9d533;
+                --won-primary-dark: #9fb82e;
+                --won-primary-darker: #8fad28;
+                --won-on-primary: #1a2208;
+                --won-green: var(--won-primary);
+                --won-green-dark: var(--won-primary-dark);
+                --won-orange: var(--won-primary-darker);
+                --won-red: #7a9622;
             }
-            .section-title span { color: var(--won-green) !important; font-weight: 700; }
-            .breadcrumb-items a:hover { color: var(--won-green) !important; }
-            .page-heading .breadcrumb-items li a:hover { color: var(--won-green) !important; }
+            .section-title span { color: var(--won-primary) !important; font-weight: 700; }
+            .breadcrumb-items a:hover { color: var(--won-primary-dark) !important; }
+            .page-heading .breadcrumb-items li a:hover { color: var(--won-primary-dark) !important; }
             .tour-box-items .content h4 a:hover,
-            .amazing-tour-items .content h4 a:hover { color: var(--won-green) !important; }
-            .page-nav-wrap .page-numbers:hover { background-color: var(--won-green) !important; color: #fff !important; border-color: var(--won-green); }
-            .page-nav-wrap .page-numbers.current { background-color: var(--won-green) !important; border-color: var(--won-green); }
-            .footer-wrapper .footer-widget-items .list-items li a:hover { color: var(--won-green) !important; }
-            .destination-feature-box .content span b { color: var(--won-green) !important; }
+            .amazing-tour-items .content h4 a:hover { color: var(--won-primary) !important; }
+            .page-nav-wrap .page-numbers:hover {
+                background-color: var(--won-primary) !important;
+                color: var(--won-on-primary) !important;
+                border-color: var(--won-primary);
+            }
+            .page-nav-wrap .page-numbers.current {
+                background-color: var(--won-primary) !important;
+                border-color: var(--won-primary);
+                color: var(--won-on-primary) !important;
+            }
+            .destination-feature-box .content span b { color: var(--won-primary) !important; }
 
-            /* Footer subscribe button: always green (overrides any theme variable) */
-            .footer-section .footer-newsletter-items .footer-input .newsletter-btn,
-            .footer-newsletter-items .footer-input .newsletter-btn {
-                background-color: #198754 !important;
-                color: #fff !important;
+            /* Social: X icon sizing in header */
+            .header-top-section .won-social-links .won-icon-x {
+                width: 14px;
+                height: 14px;
+                vertical-align: middle;
             }
-            .footer-section .footer-newsletter-items .footer-input .newsletter-btn:hover,
-            .footer-newsletter-items .footer-input .newsletter-btn:hover {
-                background-color: #157347 !important;
-                color: #fff !important;
-            }
-            .footer-section .footer-newsletter-items .footer-input .newsletter-btn i,
-            .footer-newsletter-items .footer-input .newsletter-btn i {
-                color: #fff !important;
+            .header-top-section .won-social-links a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
             }
 
             /* Accessible skip link for keyboard users */
@@ -139,20 +148,20 @@
                 color: #111;
             }
 
-            /* ── Nav auth buttons: match the Search theme-btn style ── */
-            .header-1.header-4 .theme-btn {
+            /* Header CTAs (not nav auth pills — styled in navbar.html) */
+            .header-1.header-4 .theme-btn:not(.nav-auth-pill) {
                 border-radius: 9999px;
                 padding: 15px 30px;
                 position: relative;
                 overflow: hidden;
             }
-            .header-1.header-4 .theme-btn span {
+            .header-1.header-4 .theme-btn:not(.nav-auth-pill) span {
                 margin-right: 0;
                 display: inline-flex;
                 align-items: center;
                 gap: 10px;
             }
-            .header-1.header-4 .theme-btn span i {
+            .header-1.header-4 .theme-btn:not(.nav-auth-pill) span i {
                 width: initial;
                 height: initial;
                 line-height: initial;
@@ -161,8 +170,7 @@
                 border-radius: 0;
                 font-size: 14px;
             }
-            /* Remove the default caret on dropdown-toggle inside theme-btn */
-            .header-1.header-4 .theme-btn.dropdown-toggle::after {
+            .header-1.header-4 .theme-btn.dropdown-toggle:not(.nav-auth-pill)::after {
                 display: none;
             }
 
@@ -219,12 +227,6 @@
                 color: #222222;
             }
 
-            /* Improve contrast for muted footer text */
-            .footer-content p,
-            .footer-bottom-wrapper p {
-                color: #444444;
-            }
-
             /* Improve contrast for small helper text */
             .header-search-bar p,
             .app-text,
@@ -254,8 +256,7 @@
         {% endblock %}
     </head>
 
-    <body>
-
+    <body>{% include 'partials/google_tag_manager_body.html' %}
 
         <!-- Preloader Start -->
         <!-- <div id="preloader" class="preloader">
@@ -300,7 +301,7 @@
                         <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                         <div class="offcanvas__logo">
                             <a href="{% url 'index' %}" class="header-logo">
-                                <img style="height: 60px;" src="{% static 'img/brand/logowon.png' %}" alt="World Olympiad Network logo">
+                                <img style="height: 60px;" src="{% static 'img/brand/logo.jpeg' %}" alt="World Olympiad Network logo">
                             </a>
                         </div>
                             <div class="offcanvas__close">
@@ -330,121 +331,7 @@
             {% endblock %}
         </main>
 
-        <!-- Footer Section Start -->
-        <footer class="footer-section fix section-bg bg-cover" style="background-color: #8bc77e !important;">
-            <div class="container">
-                <div class="footer-newsletter-items">
-                    <h2>Never Miss an Olympiad again</h2>
-                    <form class="footer-input" action="#" method="post" novalidate>
-                        {% csrf_token %}
-                        <label for="footer-email" class="visually-hidden">Email address</label>
-                        <input type="email" id="footer-email" name="email" placeholder="Enter your email">
-                        <button class="newsletter-btn" type="submit">
-                          Subscribe <i class="far fa-search" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                </div>
-                <div class="footer-wrapper">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-7 col-md-12">
-                            <div class="footer-widget-items">
-                                <div class="widget-title" style="display: flex; align-items: left; justify-content: left;">
-                                    <a href="{% url 'index' %}">
-                                        <img src="{% static 'img/brand/logo.png' %}" alt="World Olympiad Network logo" >
-                                    </a>
-                                </div>
-                                <div class="footer-content">
-                                    <p style="color: #707070; margin-bottom: 20px;">"Scientia transcéndit términas" — Knowledge Transcends Borders</p>
-                                   
-                                    <!-- <h6 class="app-text">Your Olympiad application & travel platform</h6> -->
-                                    <div class="apps-items" style="display:none;">
-                                        <a href="{% url 'contact' %}">
-                                            <img src="{% static 'img/apply-store.png' %}" alt="img">
-                                        </a>
-                                        <a href="{% url 'contact' %}">
-                                            <img src="{% static 'img/play-store.jpg' %}" alt="img">
-                                        </a>
-                                    </div>
-                                    <div class="social-icon">
-                                        <a href="https://instagram.com/worldolympiadnetwork" aria-label="WON on Instagram">
-                                            <i class="fab fa-instagram" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="https://twitter.com/won_global" aria-label="WON on Twitter">
-                                            <i class="fab fa-twitter" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="https://linkedin.com/company/world-olympiad-network" aria-label="WON on LinkedIn">
-                                            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                            
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>Useful Links</h3>
-                                </div>
-                                <ul class="list-items">
-                                    <li>
-                                        <a href="/">Home</a>
-                                    </li>
-                                    <li>
-                                        <a href="/olympiads">Olympiads</a>
-                                    </li>
-                                    <li>
-                                        <a href="/tutors">Tutors</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'destination' %}">Destinations</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                            
-                            <div class="footer-widget-items">
-                                <div class="widget-title">
-                                    <h3>About WON</h3>
-                                </div>
-                                <ul class="list-items">
-                                   
-                                    <li>
-                                        <a href="/about">About Us</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="/events">Events</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'contact' %}">Contact Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'faq' %}">FAQs</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom-1">
-                <div class="container">
-                    <div class="footer-bottom-wrapper">
-                        <p class="wow fadeInUp" data-wow-delay=".3s">
-                            © 2026 World Olympiad Network
-                        </p>
-                        <ul class="footer-menu wow fadeInUp" data-wow-delay=".5s">
-                            
-                            <li>
-                                All rights reserved.
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        {% include 'partials/footer.html' %}
 
         <!--<< All JS Plugins >>-->
         <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
