@@ -140,8 +140,35 @@
     background-color: #9fb82e !important;
     border-color: #9fb82e;
 }
-/* Study resources / tour boxes */
-.tour-package-section .section-title span { color: var(--landing-orange) !important; }
+/* Study resources — light section + high-contrast eyebrow */
+.tour-package-section.section-bg-2 {
+    background-color: #f3f6eb !important;
+}
+.tour-package-section .section-title span,
+.tour-package-section .won-section-eyebrow {
+    color: var(--landing-green-darkest) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    position: relative;
+    padding-left: 0.875rem;
+}
+.tour-package-section .won-section-eyebrow::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0.95em;
+    background: var(--landing-green);
+    border-radius: 2px;
+}
+.tour-package-section .section-title h2 {
+    color: #151415 !important;
+}
+.tour-package-section .section-title p {
+    color: #3d4238 !important;
+}
 .tour-package-section .tour-box-items-5 .tour-content .theme-btn {
     background-color: var(--landing-green) !important;
     color: #fff !important;
@@ -850,7 +877,7 @@
         <section class="tour-package-section fix mb-5 section-bg-2 section-padding">
             <div class="container">
                 <div class="section-title text-center">
-                    <span class="wow fadeInUp text-green" style="color: var(--landing-green) !important;">Prepare for your Olympiad</span>
+                    <span class="wow fadeInUp won-section-eyebrow">Prepare for your Olympiad</span>
                     <h2 class="wow fadeInUp" data-wow-delay=".3s">
                        Study Resources
                     </h2>

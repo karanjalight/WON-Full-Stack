@@ -31,7 +31,7 @@
                 <!-- Brand -->
                 <div class="col-lg-4 col-md-6">
                     <a href="{% url 'index' %}" class="won-footer__logo">
-                        <img src="{% static 'img/brand/logo.jpeg' %}" alt="World Olympiad Network" width="160" height="auto">
+                        {% include 'partials/brand_logo.html' with width='160px' %}
                     </a>
                     <p class="won-footer__tagline"><em>Scientia transcendit terminos</em> — Knowledge transcends borders.</p>
                     <p class="won-footer__about">Africa's gateway to global academic excellence. Discover Olympiads, apply with confidence, and access preparation plus travel support.</p>

@@ -12,6 +12,18 @@ def google_tag_manager(request):
     }
 
 
+def site_brand(request):
+    """Canonical logo path and alt text (navbar, footer, auth)."""
+    return {
+        'won_brand_logo': getattr(settings, 'WON_BRAND_LOGO', 'img/brand/logo.jpeg'),
+        'won_brand_logo_alt': getattr(
+            settings,
+            'WON_BRAND_LOGO_ALT',
+            'World Olympiad Network logo',
+        ),
+    }
+
+
 def site_contact(request):
     """Public support email and phone for templates."""
     phone = getattr(settings, 'WON_SUPPORT_PHONE', '0738509200')

@@ -77,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.google_tag_manager',
+                'core.context_processors.site_brand',
                 'core.context_processors.site_contact',
             ],
         },
@@ -404,3 +405,6 @@ WON_SOCIAL_YOUTUBE = config('WON_SOCIAL_YOUTUBE', default='')
 
 # Brand color (lime) — used in PDFs; CSS uses assets/css/won-theme.css
 WON_BRAND_COLOR = config('WON_BRAND_COLOR', default='#b9d533')
+# Logo (static path under assets/) — navbar, footer, login, signup
+WON_BRAND_LOGO = config('WON_BRAND_LOGO', default='img/brand/logo.jpeg')
+WON_BRAND_LOGO_ALT = config('WON_BRAND_LOGO_ALT', default='World Olympiad Network logo')

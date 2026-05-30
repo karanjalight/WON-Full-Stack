@@ -159,7 +159,7 @@
                     <div class="header-left">
                         <div class="logo">
                             <a href="{% url 'index' %}" class="icon" aria-label="World Olympiad Network home">
-                                <img style="height: 80px;" src="{% static 'img/brand/logo.jpeg' %}" alt="World Olympiad Network logo">
+                                {% include 'partials/brand_logo.html' with height='80px' loading='eager' %}
                             </a>
                         </div>
                     </div>
