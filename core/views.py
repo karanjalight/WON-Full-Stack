@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate, logout
@@ -1592,7 +1593,7 @@ def download_quotation_pdf(request, application_id):
 
     # Brand palette and base styles
     brand_primary = colors.HexColor('#1f2a44')
-    brand_accent = colors.HexColor('#4D40CA')
+    brand_accent = colors.HexColor('#b9d533')
     text_main = colors.HexColor('#111827')
     text_muted = colors.HexColor('#6b7280')
     border_soft = colors.HexColor('#d1d5db')
@@ -1671,8 +1672,8 @@ def download_quotation_pdf(request, application_id):
         "<b>WORLD OLYMPIAD NETWORK</b><br/>"
         "Travel & Participation Quotation<br/>"
         "Nairobi, Kenya<br/>"
-        "Email: info@readtrips.com<br/>"
-        "Phone: +254 700 000 000"
+        f"Email: {settings.WON_SUPPORT_EMAIL}<br/>"
+        f"Phone: {settings.WON_SUPPORT_PHONE}"
     )
     header_right = (
         f"<b>Quotation No.</b> {application.application_number or 'N/A'}<br/>"
@@ -1803,7 +1804,7 @@ def download_quotation_pdf(request, application_id):
         "- This quotation is valid for 30 calendar days from the issue date.<br/>"
         "- Pricing is provided for planning and may vary based on provider availability and policy updates.<br/>"
         "- The quotation follows fair-practice standards and does not include hidden charges.<br/>"
-        "- For support, contact info@readtrips.com or +254 700 000 000.",
+        f"- For support, contact {settings.WON_SUPPORT_EMAIL} or {settings.WON_SUPPORT_PHONE}.",
         note_style
     )
     elements.append(terms_title)
@@ -2115,8 +2116,8 @@ def download_travel_quote_pdf(request, quote_id):
     company_info = [
         ['<b>WON Travel Services</b>', ''],
         ['Travel & Tour Services', ''],
-        ['Email: info@won.com', ''],
-        ['Phone: +254 700 000 000', ''],
+        [f'Email: {settings.WON_SUPPORT_EMAIL}', ''],
+        [f'Phone: {settings.WON_SUPPORT_PHONE}', ''],
     ]
     
     company_table = Table(company_info, colWidths=[4*inch, 2*inch])
@@ -2271,7 +2272,7 @@ def download_travel_quote_pdf(request, quote_id):
     footer_text = Paragraph(
         "<i>This quote is valid until {}. "
         "Prices are estimates and may vary based on availability and booking date. "
-        "For any inquiries, please contact us at info@won.com or +254 700 000 000.</i>".format(
+        f"For any inquiries, please contact us at {settings.WON_SUPPORT_EMAIL} or {settings.WON_SUPPORT_PHONE}.</i>".format(
             quote.quote_valid_until.strftime('%B %d, %Y')
         ),
         ParagraphStyle(

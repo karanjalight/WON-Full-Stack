@@ -1,0 +1,16 @@
+{% load static %}
+{# Shared WON logo — same asset as navbar (won_brand_logo from context). #}
+{# Optional: href, link_class, height, width, img_class, alt, loading #}
+{% if href %}
+<a href="{{ href }}" class="{{ link_class|default:'' }}"{% if aria_label %} aria-label="{{ aria_label }}"{% endif %}>
+{% endif %}
+<img
+    src="{% static won_brand_logo %}"
+    alt="{{ alt|default:won_brand_logo_alt }}"
+    class="won-brand-logo {{ img_class|default:'' }}"
+    {% if height or width %}style="{% if height %}height: {{ height }};{% endif %}{% if width %}max-width: {{ width }};{% endif %} width: auto; object-fit: contain;"{% endif %}
+    {% if loading %}loading="{{ loading }}"{% else %}loading="lazy"{% endif %}
+>
+{% if href %}
+</a>
+{% endif %}

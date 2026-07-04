@@ -2,16 +2,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% include 'partials/google_tag_manager_head.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign Up - WON — World Olympiad Network</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/won-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/won-typography.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <style>
         :root {
-            --theme-color: #198754;
-            --theme-color-2: #FB5B32;
+            --theme-color: #b9d533;
+            --theme-color-2: #8fad28;
+            --won-on-primary: #1a2208;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +25,7 @@
         html, body {
             height: 100%;
             overflow: hidden;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--won-font, 'Outfit', system-ui, sans-serif);
             -webkit-font-smoothing: antialiased;
         }
 
@@ -57,12 +63,16 @@
             );
         }
         .auth-visual__logo {
+            display: block;
             position: relative;
             z-index: 2;
             margin-bottom: auto;
         }
-        .auth-visual__logo img {
-            height: 55px;
+        .auth-visual__logo .won-brand-logo {
+            max-height: 72px;
+            height: auto;
+            width: auto;
+            max-width: 220px;
         }
         .auth-visual__content {
             position: relative;
@@ -141,7 +151,7 @@
         .auth-back:hover {
             color: var(--theme-color);
             border-color: var(--theme-color);
-            box-shadow: 0 2px 8px rgba(77, 64, 202, 0.08);
+            box-shadow: 0 2px 8px rgba(185, 213, 51, 0.08);
         }
         .auth-back:hover i { transform: translateX(-3px); }
 
@@ -150,8 +160,11 @@
             display: block;
             margin-bottom: 24px;
         }
-        .auth-form-logo img {
-            height: 65px;
+        .auth-form-logo .won-brand-logo {
+            max-height: 80px;
+            height: auto;
+            width: auto;
+            max-width: 240px;
         }
 
         /* Heading */
@@ -221,12 +234,12 @@
             border-color: var(--theme-color);
             background: #fafaff;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(77, 64, 202, 0.08);
+            box-shadow: 0 4px 12px rgba(185, 213, 51, 0.08);
         }
         .type-card input[type="radio"]:checked + label {
             border-color: var(--theme-color);
-            background: rgba(77, 64, 202, 0.06);
-            box-shadow: 0 4px 16px rgba(77, 64, 202, 0.12);
+            background: rgba(185, 213, 51, 0.06);
+            box-shadow: 0 4px 16px rgba(185, 213, 51, 0.12);
         }
         .type-card input[type="radio"]:checked + label i {
             color: var(--theme-color);
@@ -354,7 +367,7 @@
         .auth-field select:focus {
             outline: none;
             border-color: var(--theme-color);
-            box-shadow: 0 0 0 4px rgba(77, 64, 202, 0.10);
+            box-shadow: 0 0 0 4px rgba(185, 213, 51, 0.10);
             background: #fafaff;
         }
         .auth-field .input-wrap:focus-within i.field-icon {
@@ -381,7 +394,7 @@
         }
         .toggle-pw:hover {
             color: var(--theme-color);
-            background: rgba(77, 64, 202, 0.08);
+            background: rgba(185, 213, 51, 0.08);
         }
 
         /* Password hint */
@@ -399,7 +412,7 @@
             border: none;
             border-radius: 9999px;
             background: var(--theme-color);
-            color: #fff;
+            color: var(--won-on-primary);
             font-size: 16px;
             font-weight: 600;
             letter-spacing: 0.3px;
@@ -409,17 +422,18 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 16px rgba(77, 64, 202, 0.25);
+            box-shadow: 0 4px 16px rgba(185, 213, 51, 0.25);
             margin-top: 8px;
         }
         .auth-submit:hover {
             background: var(--theme-color-2);
+            color: var(--won-on-primary);
             transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(251, 91, 50, 0.30);
+            box-shadow: 0 6px 24px rgba(185, 213, 51, 0.30);
         }
         .auth-submit:active {
             transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(77, 64, 202, 0.20);
+            box-shadow: 0 2px 8px rgba(185, 213, 51, 0.20);
         }
         .auth-submit i {
             font-size: 15px;
@@ -496,8 +510,10 @@
     </style>
 </head>
 <body>
+    {% include 'partials/google_tag_manager_body.html' %}
 
 <div class="auth-page">
+    {% url 'index' as brand_home_url %}
     <!-- Left visual panel -->
     <div class="auth-visual">
         <div class="bg-img"></div>
@@ -509,9 +525,7 @@
             <span></span><span></span><span></span><span></span><span></span>
         </div>
 
-        <a href="{% url 'index' %}" class="auth-visual__logo">
-            <img src="{% static 'img/brand/logo.png' %}" alt="WON logo">
-        </a>
+        {% include 'partials/brand_logo.html' with href=brand_home_url link_class='auth-visual__logo' loading='eager' %}
 
         <div class="auth-visual__content">
             <h2>Begin Your<br>Journey to Global<br>Excellence</h2>
@@ -526,9 +540,7 @@
                 <i class="far fa-long-arrow-left"></i> Back to home
             </a>
 
-            <a href="{% url 'index' %}" class="auth-form-logo">
-                <img src="{% static 'img/brand/logo.png' %}" alt="WON logo">
-            </a>
+            {% include 'partials/brand_logo.html' with href=brand_home_url link_class='auth-form-logo' loading='eager' %}
 
             <div class="auth-heading">
                 <h2>Create your account</h2>
@@ -637,7 +649,7 @@
                                 id="{{ form.phone.id_for_label }}"
                                 name="{{ form.phone.html_name }}"
                                 value="{{ form.phone.value|default_if_none:'' }}"
-                                placeholder="+254 700 000 000"
+                                placeholder="{{ won_support_phone }}"
                             >
                             <i class="far fa-phone field-icon"></i>
                         </div>

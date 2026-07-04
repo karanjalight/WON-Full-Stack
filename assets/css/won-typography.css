@@ -1,0 +1,311 @@
+/**
+ * WON typography — Outfit
+ * Loaded after main.css; overrides Prompt/Nunito scale.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --won-font: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Type scale */
+  --won-text-xs: 0.8125rem;   /* 13px — eyebrows, labels */
+  --won-text-sm: 0.875rem;    /* 14px */
+  --won-text-base: 1rem;      /* 16px — body */
+  --won-text-md: 1.0625rem;   /* 17px — lead */
+  --won-text-lg: 1.125rem;    /* 18px */
+  --won-text-xl: 1.25rem;      /* 20px — h4 */
+  --won-text-2xl: 1.5rem;     /* 24px — h3 */
+  --won-text-3xl: clamp(1.625rem, 2.5vw + 0.5rem, 2rem);     /* 26–32px — h2 sections */
+  --won-text-4xl: clamp(1.875rem, 3vw + 0.5rem, 2.5rem);   /* 30–40px — page titles */
+  --won-text-5xl: clamp(2.25rem, 4vw + 0.75rem, 3.25rem);  /* 36–52px — hero */
+  --won-leading-tight: 1.15;
+  --won-leading-snug: 1.3;
+  --won-leading-normal: 1.65;
+  --won-tracking-tight: -0.025em;
+  --won-tracking-wide: 0.08em;
+}
+
+/* ── Base ── */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-base);
+  font-weight: 400;
+  line-height: var(--won-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Headings (default scale — not oversized) ── */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--won-font) !important;
+  font-weight: 700;
+  line-height: var(--won-leading-tight);
+  letter-spacing: var(--won-tracking-tight);
+  color: var(--header, #151415);
+  text-transform: none;
+}
+
+h1, .h1 {
+  font-size: var(--won-text-4xl);
+  font-weight: 800;
+}
+
+h2, .h2 {
+  font-size: var(--won-text-3xl);
+  font-weight: 700;
+}
+
+h3, .h3 {
+  font-size: var(--won-text-2xl);
+  font-weight: 600;
+  line-height: var(--won-leading-snug);
+}
+
+h4, .h4 {
+  font-size: var(--won-text-xl);
+  font-weight: 600;
+}
+
+h5, .h5 {
+  font-size: var(--won-text-lg);
+  font-weight: 600;
+}
+
+h6, .h6 {
+  font-size: var(--won-text-base);
+  font-weight: 600;
+}
+
+/* ── Section blocks (span eyebrow + h2) ── */
+.section-title {
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+.section-title span {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-xs) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  margin-bottom: 0.75rem !important;
+  display: inline-block;
+}
+
+.section-title h2,
+.section-title h3,
+.section-title-area .section-title h2 {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-3xl) !important;
+  font-weight: 700 !important;
+  line-height: var(--won-leading-tight) !important;
+  letter-spacing: var(--won-tracking-tight) !important;
+  text-transform: none !important;
+  margin: 0 !important;
+}
+
+.section-title.text-center span,
+.section-title.text-center h2 {
+  display: block;
+}
+
+/* ── Hero (home landing) ── */
+.hero-4 .hero-items .hero-content h6 {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-xs) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+.hero-4 .hero-items .hero-content h1 {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-5xl) !important;
+  font-weight: 800 !important;
+  line-height: 1.08 !important;
+  letter-spacing: var(--won-tracking-tight) !important;
+  text-transform: none !important;
+}
+
+.hero-4 .hero-items .hero-content h1 span {
+  font-weight: 600;
+}
+
+.hero-4 .hero-items .hero-content p {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-md) !important;
+  font-weight: 400 !important;
+  line-height: var(--won-leading-normal) !important;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Page hero / breadcrumb ── */
+.breadcrumb-wrapper .page-heading h1 {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-4xl) !important;
+  font-weight: 800 !important;
+  line-height: var(--won-leading-tight) !important;
+  letter-spacing: var(--won-tracking-tight) !important;
+  text-transform: none !important;
+}
+
+.breadcrumb-wrapper .page-heading .breadcrumb-items li,
+.breadcrumb-wrapper .page-heading .breadcrumb-items li a {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-sm) !important;
+  font-weight: 500 !important;
+}
+
+/* ── Navigation ── */
+.header-1.header-4 .header-main .main-menu ul li a {
+  font-family: var(--won-font) !important;
+  font-size: 0.9375rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em;
+  text-transform: none !important;
+}
+
+.header-top-section,
+.header-top-section a {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-sm) !important;
+  font-weight: 500;
+}
+
+/* ── Cards & content titles ── */
+.amazing-tour-items .content h4,
+.amazing-tour-items .content h4 a,
+.tour-box-items .content h4,
+.tour-box-items .content h4 a,
+.tour-box-items-5 .tour-content h3,
+.tour-box-items-5 .tour-content h3 a,
+.destination-feature-box .content h5,
+.about-section .about-content h2,
+.contact-info-content h2,
+.contact-content h3,
+.faq-section .section-title h2,
+.widget-title h3 {
+  font-family: var(--won-font) !important;
+  text-transform: none !important;
+  letter-spacing: var(--won-tracking-tight);
+}
+
+.amazing-tour-items .content h4,
+.amazing-tour-items .content h4 a {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+}
+
+.tour-box-items .content h4,
+.tour-box-items .content h4 a {
+  font-size: 1.0625rem !important;
+  font-weight: 600 !important;
+}
+
+.about-section .about-content h2 {
+  font-size: var(--won-text-3xl) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Buttons (label only) ── */
+.theme-btn {
+  font-family: var(--won-font) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em;
+}
+
+/* ── Footer ── */
+.won-footer,
+.won-footer__heading,
+.won-footer__newsletter-title {
+  font-family: var(--won-font) !important;
+}
+
+.won-footer__newsletter-title {
+  font-size: clamp(1.375rem, 2vw, 1.75rem) !important;
+  font-weight: 700 !important;
+  line-height: var(--won-leading-tight) !important;
+}
+
+.won-footer__eyebrow {
+  font-size: var(--won-text-xs) !important;
+  letter-spacing: 0.14em !important;
+}
+
+/* ── Forms & UI copy ── */
+.form-clt label,
+.booking-list-area-1 .content h5,
+.contact-items .content span {
+  font-family: var(--won-font) !important;
+  font-weight: 600;
+}
+
+.contact-items .content h3,
+.contact-items .content h3 a {
+  font-family: var(--won-font) !important;
+  font-size: 1.0625rem !important;
+  font-weight: 600 !important;
+}
+
+/* ── Responsive tweaks ── */
+@media (max-width: 767px) {
+  .section-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title h2,
+  .section-title-area .section-title h2 {
+    font-size: clamp(1.5rem, 5vw, 1.75rem) !important;
+  }
+
+  .hero-4 .hero-items .hero-content h1 {
+    font-size: clamp(1.875rem, 7vw, 2.5rem) !important;
+  }
+
+  .breadcrumb-wrapper .page-heading h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem) !important;
+  }
+}
+
+@media (max-width: 575px) {
+  body {
+    font-size: 0.9375rem;
+  }
+}
+
+/* ── Auth pages (login / signup) ── */
+.auth-heading h2,
+.auth-panel h1,
+.auth-panel h2 {
+  font-family: var(--won-font) !important;
+  font-size: clamp(1.375rem, 3vw, 1.75rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: var(--won-tracking-tight) !important;
+  text-transform: none !important;
+}
+
+.auth-heading p,
+.auth-panel p {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-sm) !important;
+  line-height: var(--won-leading-normal) !important;
+}
+
+.auth-field label {
+  font-family: var(--won-font) !important;
+  font-size: var(--won-text-xs) !important;
+  font-weight: 600 !important;
+}

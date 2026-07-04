@@ -206,7 +206,7 @@
                                         </h5>
                                         <div id="wonFaq12" class="accordion-collapse collapse show" data-bs-parent="#wonFaqRight">
                                             <div class="accordion-body">
-                                                Use the contact form below or email us at <a href="mailto:info@won.org">info@won.org</a>. We respond as quickly as possible.
+                                                Use the contact form below or email us at <a href="mailto:{{ won_support_email }}">{{ won_support_email }}</a>. We respond as quickly as possible.
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +277,7 @@
                                         </div>
                                         <div class="content">
                                             <span>Email</span>
-                                            <h3><a href="mailto:info@won.org">info@won.org</a></h3>
+                                            <h3><a href="mailto:{{ won_support_email }}">{{ won_support_email }}</a></h3>
                                         </div>
                                     </div>
                                     <div class="contact-items mb-0">
@@ -285,8 +285,8 @@
                                             <img src="{% static 'img/call.png' %}" alt="phone">
                                         </div>
                                         <div class="content">
-                                            <span>Location</span>
-                                            <h3>Nairobi, Kenya</h3>
+                                            <span>Phone</span>
+                                            <h3><a href="tel:{{ won_support_phone_tel }}">{{ won_support_phone }}</a></h3>
                                         </div>
                                     </div>
                                 </div>
